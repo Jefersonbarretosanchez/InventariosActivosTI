@@ -16,7 +16,7 @@ class PersonaCreate(ModelForm):
         """""Modelo Persona"""
         model = Persona
         fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos',
-                  'correo_personal', 'correo_institucional','fecha_ingreso_empresa']
+                  'correo_personal', 'correo_institucional','fecha_ingreso_empresa','area',]
         widgets = {
             'fecha_ingreso_empresa': forms.DateInput(
                 format='%Y-%m-%d',
@@ -25,6 +25,11 @@ class PersonaCreate(ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Fecha Pruebas Req',
                     'id': 'id_fechaPruebas',
+                }
+            ),
+            'area':forms.Select(
+                attrs={
+                    'class':'form-select'
                 }
             ),
         }
