@@ -143,8 +143,10 @@ class CatAlianza(models.Model):
     usuario_actualizacion = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'cat_alianza'
+        
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatArea(models.Model):
@@ -156,8 +158,10 @@ class CatArea(models.Model):
     usuario_actualizacion = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'cat_area'
+    
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatCargo(models.Model):
@@ -169,8 +173,10 @@ class CatCargo(models.Model):
     usuario_actualizacion = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'cat_cargo'
+    
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatCoordinadores(models.Model):
@@ -247,8 +253,10 @@ class CatEstadoPersona(models.Model):
     usuario_actualizacion = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'cat_estado_persona'
+        
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatEstadoequipo(models.Model):
@@ -312,8 +320,10 @@ class CatRegion(models.Model):
     usuario_actualizacion = models.CharField(max_length=30)
 
     class Meta:
-        managed = False
         db_table = 'cat_region'
+    
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatSo(models.Model):

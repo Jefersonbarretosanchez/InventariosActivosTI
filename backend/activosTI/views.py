@@ -1,19 +1,33 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import PersonaCreate
 from .models import Persona, CatAlianza, CatArea, CatRegion, CatCargo, CatEstadoPersona
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView
-from django.contrib import messages  # Import for messages
+from django.urls import reverse_lazy
+
 # Create your views here.
 
 
 class PersonaCreate(CreateView):
     """"Vista Persona"""
     model = Persona
-    model = CatAlianza
     form_class = PersonaCreate
     template_name = 'personaCreate.html'
     context_object_name = 'personas'
+    success_url = reverse_lazy('list')    
+    
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            new_req = form.save(commit=False)
+            new_req.area = form.cleaned_data['area']
+            new_req.alianza = form.cleaned_data['alianza']
+            new_req.region = form.cleaned_data['region']
+            new_req.cargo = form.cleaned_data['cargo']
+            new_req.estado = form.cleaned_data['estado']
+            print(new_req)
+            new_req.save()
+            return redirect('list')
 
 
 class PersonaLista(ListView):
@@ -22,7 +36,9 @@ class PersonaLista(ListView):
     template_name = 'persona.html'
     context_object_name = 'personas'
 
+
 def persona(request):
+    form = PersonaCreate()
     persona = Persona.objects.all()
     alianza = CatAlianza.objects.all()
     area = CatArea.objects.all()
@@ -32,36 +48,33 @@ def persona(request):
     paginate_by = 10
 
     if request.method == 'GET':
-        context = {
+        print('Exito Get')
+        return render(request, 'personaCreate.html', {
             'persona': persona,
             'alianza': alianza,
             'area': area,
             'region': region,
             'cargo': cargo,
             'estado': estado,
-            'form': PersonaCreate
-        }
-        return render(request, 'personaCreate.html', context)
-
+            'form': PersonaCreate()
+        })
     else:
-        form = PersonaCreate(request.POST)
-        if form.is_valid():
-            selected_area_name = form.cleaned_data['area']
-            try:
-                selected_area = CatArea.objects.get(nombre=selected_area_name)
-                new_req = form.save(commit=False)
-                new_req.area = selected_area
-                new_req.save()
-                return redirect('list')
-            except CatArea.DoesNotExist:
-                messages.error(request, 'No esta la opcion')
-                context = {
-                    'persona': persona,
-                    'alianza': alianza,
-                    'area': area,
-                    'region': region,
-                    'cargo': cargo,
-                    'estado': estado,
-                    'form': PersonaCreate
-                }
-                return render(request, 'personaCreate.html', context)
+        try:
+            form = PersonaCreate(request.POST)
+            if form.is_valid():
+                persona = persona()
+                persona.alianza = form.cleaned_data['alianza']
+                persona.save()
+                print('Exito POST')
+                return redirect('list')            
+        except ValueError:
+            print('Error')
+            return render(request, 'personaCreate.html', {
+                'persona': persona,
+                'alianza': alianza,
+                'area': area,
+                'region': region,
+                'cargo': cargo,
+                'estado': estado,
+                'form': PersonaCreate
+            })
