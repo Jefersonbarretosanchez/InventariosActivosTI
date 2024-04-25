@@ -1,0 +1,36 @@
+<!-- Modal Eliminar -->
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <!-- <div class="modal-header">
+            <h1 class="modal-title fs-5 w-100 text-center"> {{ object }}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div> -->
+
+        <form action="{% url 'eliminar' object.id_trabajador %}" method="POST">
+            {% csrf_token %}
+            <div class="modal-body">
+                <img src="https://i.ibb.co/ws50NPY/image-17.png" alt="image-17" border="0" style="width: 30%;
+                position: relative;
+                top: 30%;
+                left: 35%;
+                ">
+                <h1 class="text-center">¿Esta Seguro?</h1>
+                <br>
+                <h5 class="text-center">Se eliminara de forma permanente este registro.</h5>
+                <br>
+                <div class="container text-center">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger btnEliminacion">Eliminar</button>
+                </div>
+            </div>
+            <!-- <div class="modal-footer"> -->
+            <!-- <button class="btn btn-primary d-none btnLoading" type="button" disabled id="loadingButton">
+                    <span class="spinner-border spinner-border-sm " aria-hidden="true"></span>
+                    <span role="status">Loading...</span>
+                </button> -->
+            <!-- </div> -->
+        </form>
+    </div>
+</div>
+</div>
+<!-- Fin del modal Creacion Requerimientos-->

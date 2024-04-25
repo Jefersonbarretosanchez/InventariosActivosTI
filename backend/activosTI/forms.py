@@ -1,22 +1,18 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Persona, CatAlianza,CatArea,CatCargo,CatRegion,CatEstadoPersona
+from .models import Persona
 
+# Formularios
 
 
 class PersonaCreate(ModelForm):
-    """" Formulario del modelo Personas"""
-    #FechaIngreso= forms.DateField(label="Fecha ingreso empresa")
-    area=forms.ModelChoiceField(queryset=CatArea.objects)
-    alianza=forms.ModelChoiceField(queryset=CatAlianza.objects)
-    region=forms.ModelChoiceField(queryset=CatRegion.objects)
-    cargo=forms.ModelChoiceField(queryset=CatCargo.objects)
-    estado=forms.ModelChoiceField(queryset=CatEstadoPersona.objects)
+    """"Formulario Para registro de persona"""
+
     class Meta:
-        """""Modelo Persona"""
+        """"Clase Meta Persona"""
         model = Persona
         fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos',
-                  'correo_personal', 'correo_institucional','fecha_ingreso_empresa','area',]
+                  'correo_personal', 'correo_institucional', 'fecha_ingreso_empresa', 'id_area', 'id_alianza', 'id_region', 'id_estado_persona', 'id_cargo']
         widgets = {
             'fecha_ingreso_empresa': forms.DateInput(
                 format='%Y-%m-%d',
@@ -27,7 +23,72 @@ class PersonaCreate(ModelForm):
                     'id': 'id_fechaPruebas',
                 }
             ),
-            'area':forms.Select(
+            'id_area':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_alianza':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_region':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_cargo':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_estado_persona':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+        }
+
+class PersonaUpdate(ModelForm):
+    """"Formulario Para registro de persona"""
+
+    class Meta:
+        """"Clase Meta Persona"""
+        model = Persona
+        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos',
+                  'correo_personal', 'correo_institucional', 'fecha_ingreso_empresa', 'id_area', 'id_alianza', 'id_region', 'id_estado_persona', 'id_cargo']
+        widgets = {
+            'fecha_ingreso_empresa': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control',
+                    'placeholder': 'Fecha Pruebas Req',
+                    'id': 'id_fechaPruebas',
+                }
+            ),
+            'id_area':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_alianza':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_region':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_cargo':forms.Select(
+                attrs={
+                    'class':'form-select'
+                }
+            ),
+            'id_estado_persona':forms.Select(
                 attrs={
                     'class':'form-select'
                 }
