@@ -1,3 +1,4 @@
+"""Importaciones"""
 from django import forms
 from django.forms import ModelForm
 from .models import Persona
@@ -5,14 +6,23 @@ from .models import Persona
 # Formularios
 
 
-class PersonaCreate(ModelForm):
+class PersonaCreacion(ModelForm):
     """"Formulario Para registro de persona"""
 
     class Meta:
         """"Clase Meta Persona"""
         model = Persona
-        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos',
-                  'correo_personal', 'correo_institucional', 'fecha_ingreso_empresa', 'id_area', 'id_alianza', 'id_region', 'id_estado_persona', 'id_cargo']
+        fields = ['id_trabajador',
+                  'identificacion', 
+                  'nombres', 
+                  'apellidos',
+                  'correo_personal', 
+                  'correo_institucional',
+                  'fecha_ingreso_empresa',
+                  'id_area', 'id_alianza', 
+                  'id_region', 
+                  'id_estado_persona', 
+                  'id_cargo']
         widgets = {
             'fecha_ingreso_empresa': forms.DateInput(
                 format='%Y-%m-%d',
@@ -23,41 +33,52 @@ class PersonaCreate(ModelForm):
                     'id': 'id_fechaPruebas',
                 }
             ),
-            'id_area':forms.Select(
+            'id_area': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_alianza':forms.Select(
+            'id_alianza': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_region':forms.Select(
+            'id_region': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_cargo':forms.Select(
+            'id_cargo': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_estado_persona':forms.Select(
+            'id_estado_persona': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
         }
 
-class PersonaUpdate(ModelForm):
+
+class PersonaActualizar(ModelForm):
     """"Formulario Para registro de persona"""
 
     class Meta:
         """"Clase Meta Persona"""
         model = Persona
-        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos',
-                  'correo_personal', 'correo_institucional', 'fecha_ingreso_empresa', 'id_area', 'id_alianza', 'id_region', 'id_estado_persona', 'id_cargo']
+        fields = ['id_trabajador',
+                  'identificacion',
+                  'nombres', 
+                  'apellidos',
+                  'correo_personal',
+                  'correo_institucional', 
+                  'fecha_ingreso_empresa',
+                  'id_area', 
+                  'id_alianza', 
+                  'id_region', 
+                  'id_estado_persona', 
+                  'id_cargo']
         widgets = {
             'fecha_ingreso_empresa': forms.DateInput(
                 format='%Y-%m-%d',
@@ -68,29 +89,29 @@ class PersonaUpdate(ModelForm):
                     'id': 'id_fechaPruebas',
                 }
             ),
-            'id_area':forms.Select(
+            'id_area': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_alianza':forms.Select(
+            'id_alianza': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_region':forms.Select(
+            'id_region': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_cargo':forms.Select(
+            'id_cargo': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
-            'id_estado_persona':forms.Select(
+            'id_estado_persona': forms.Select(
                 attrs={
-                    'class':'form-select'
+                    'class': 'form-select'
                 }
             ),
         }

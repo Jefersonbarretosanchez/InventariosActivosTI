@@ -13,6 +13,7 @@
         <table class="table table-striped table-hover t-resp">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Identificacion</th>
                     <th>nombres</th>
                     <th>apellidos</th>
@@ -28,16 +29,17 @@
             <tbody>
                 {% for reqs in personas %}
                 <tr>
+                    <td>{{reqs.id_trabajador}}</td>
                     <td>{{reqs.identificacion}}</td>
                     <td>{{reqs.nombres}}</td>
                     <td>{{reqs.apellidos}}</td>
                     <td>{{reqs.correo_personal}}</td>
                     <td>{{reqs.correo_institucional}}</td>
-                    <td>{{reqs.alianza}}</td>
-                    <td>{{reqs.cargo}}</td>
-                    <td>{{reqs.estado}}</td>
-                    <td>{{reqs.area}}</td>
-                    <td>{{reqs.region}}</td>
+                    <td>{{reqs.id_alianza}}</td>
+                    <td>{{reqs.id_cargo}}</td>
+                    <td>{{reqs.id_estado_persona}}</td>
+                    <td>{{reqs.id_area}}</td>
+                    <td>{{reqs.id_region}}</td>
                     <td class="col-md-1 text-center">
                         <a href="{% url 'editar' reqs.id_trabajador %}" class="btn"><i
                                 class="fa-solid fa-pen-to-square"></i></a>
