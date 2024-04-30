@@ -1,0 +1,99 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+img {
+    height: 60%;
+    width: 60%;
+}
+
+.contenedor {
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+}
+
+.inicio {
+    margin-top: 50px;
+}
+
+
+.grupos-input {
+    margin-top: 30px;
+}
+
+input[type=email],
+input[type=password] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+
+}
+
+#password,
+#email {
+    margin-top: -3px;
+}
+
+.editemail {
+    margin-left: -200px;
+}
+
+.editpass {
+    margin-left: -225px;
+    margin-top: 2px;
+}
+
+.forgot-password {
+    float: right;
+    color: #007BFF;
+    text-decoration: none;
+    margin-left: 25px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.checkboxs {
+    font-size: small;
+    margin-right: 50px;
+}
+
+.buttons {
+    margin-top: 30px;
+}
+
+button {
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    color: white;
+    background: linear-gradient(to right, #14ADD6, #384295);
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to right, #384295, #14ADD6);
+}
+
+.botonreg {
+    background: none;
+    color: #14ADD6;
+}
+
+.botonreg:hover {
+    background: none;
+}
