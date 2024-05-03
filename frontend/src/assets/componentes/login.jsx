@@ -10,7 +10,7 @@ export default function Login() {
             </div>
             <div className='inicio'>
                 <h2>Bienvenido</h2>
-                <p>por favor ingrese usuario y contraseña</p>
+                <p>Por favor ingrese Usuario y Contraseña</p>
             </div>
             <form action='#' method="post">
                 <div className='grupos-input'>
@@ -25,8 +25,8 @@ export default function Login() {
                     <a href='#' className='forgot-password'> I forgot my password</a>
                 </div>
                 <div className='buttons'>
-                    <button type='submit'>Iniciar Sesión</button>
-                    <button type="button" className="botonreg">Registrar</button>
+                    <button className='button1' type='submit'>Iniciar Sesión</button>
+                    <button type="submit" className="botonreg">Registrar</button>
                 </div>
             </form>
         </div>
