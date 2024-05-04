@@ -10,8 +10,8 @@ html {
 }
 
 img {
-    height: 60%;
-    width: 60%;
+    height: 70%;
+    width: 70%;
 }
 
 .contenedor {
@@ -21,12 +21,12 @@ img {
 }
 
 .inicio {
-    margin-top: 50px;
+    margin-top: 40px;
 }
 
 
 .grupos-input {
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 input[type=email],
@@ -62,6 +62,7 @@ input[type=password] {
 }
 
 .forgot-password:hover {
+    color: #007BFF;
     text-decoration: underline;
 }
 
@@ -90,10 +91,15 @@ button:hover {
 }
 
 .botonreg {
-    background: none;
-    color: #14ADD6;
+    background: -webkit-linear-gradient(#384295, #14ADD6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
+
+
 .botonreg:hover {
-    background: none;
+    background: -webkit-linear-gradient(#384295, #14ADD6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }

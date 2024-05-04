@@ -1,0 +1,262 @@
+body,
+html {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f4f6;
+}
+
+header {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    align-items: center;
+    width: 103.3%;
+    margin-top: -0.5%;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+header p {
+    margin: 5px 0;
+}
+
+.menu-login {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+}
+
+.boton-usuario {
+    background-color: #ffffff;
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 20px;
+}
+
+.boton-usuario:hover {
+    background-color: #f8f8f8;
+}
+
+.imagen-usuario {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.usuario-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.nombre-usuario {
+    font-weight: bold;
+}
+
+.cargo-usuario {
+    font-size: smaller;
+    color: gray;
+}
+
+.icono-desplegable {
+    font-size: 12px;
+    color: gray;
+}
+
+.contenido-desplegable {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.contenido-desplegable a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.contenido-desplegable a:hover {
+    background-color: #f1f1f1
+}
+
+.menu-login:hover .contenido-desplegable {
+    display: block;
+}
+
+.menu-lateral {
+    width: 0;
+    overflow-x: hidden;
+    transition: width 0.5s;
+    position: fixed;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 3px 0 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.menu-lateral .logo {
+    text-align: center;
+    padding: 20px;
+    height: 60px;
+    margin-top: -8%;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.menu-lateral nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-lateral nav ul li {
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.menu-lateral nav ul li i {
+    margin-right: 10px;
+}
+
+.menu-lateral nav ul li:hover {
+    background-color: #f0f0f0;
+}
+
+.menu-lateral:hover {
+    width: 400px;
+}
+
+.icono {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-size: cover;
+}
+
+.active-icono {
+    background-image: url('path_to_active_icon_image');
+}
+
+.estadisticas {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.tarjeta-estadisticas {
+    background-color: #ffffff;
+    box-shadow: 0 1px 5px rgb(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    width: 200px;
+    margin-left: 60px;
+}
+
+.icono-estatisticas {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.icono-estatisticas img {
+    width: 30px;
+    height: 30px;
+}
+
+.estadisticas-info {
+    text-align: left;
+    padding-top: 10px;
+    padding-right: 60px;
+}
+
+.estadisticas-numero {
+    font-size: 24px;
+    font-weight: bold;
+    padding-right: 4px;
+    margin-top: 100px;
+}
+
+.estadisticas-descripcion {
+    font-size: 14px;
+    color: #666;
+}
+
+.contenedor-tabla {
+    background-color: #ffffff;
+    border-radius: 20px;
+}
+
+.contenedor-tabla h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.btn-detail {
+    width: 0%;
+}
+
+.img-btn {
+    width: 12%;
+    height: 12%;
+}
+
+.footer {
+    background-color: #f3f4f6;
+    padding: 10px 20px;
+    margin-top: 19%;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 10px;
+}
+
+.pagina-link {
+    margin: 0 5px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #384295;
+    border: 1px solid #384295;
+    border-radius: 5px;
+}
+
+.pagina-link.active {
+    background: linear-gradient(to right, #14ADD6, #384295);
+    color: white;
+}
+
+.pagina-link:hover {
+    background: linear-gradient(to right, #14ADD6, #384295);
+    color: white;
+    border-color: #384295;
+}
+
+.copyright {
+    display: block;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
