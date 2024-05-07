@@ -9,8 +9,8 @@ class PersonaSerializer(serializers.ModelSerializer):
     """Serializador para el modelo Persona"""
     class Meta:
         model = Persona
-        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos', 'correo_personal', 'correo_institucional',
-                  'fecha_ingreso_empresa', 'id_area', 'id_alianza', 'id_region', 'id_estado_persona', 'id_cargo']
+        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos', 'correo_personal', 'correo_institucional', 'id_alianza',
+                  'id_area', 'id_region', 'id_cargo', 'fecha_ingreso_empresa', 'id_estado_persona']
 
 
 class UserSerializer(serializers.ModelSerializer):
