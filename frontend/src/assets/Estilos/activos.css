@@ -12,23 +12,27 @@ header {
     justify-content: space-between;
     padding: 10px 20px;
     align-items: center;
-    width: 103.3%;
-    margin-top: -0.5%;
+    width: 96.3%;
+    margin-top: -3%;
+    margin-left: 3.5%;
 }
 
 header h1 {
     margin: 0;
     font-size: 20px;
+    margin-left: 6px;
 }
 
 header p {
     margin: 5px 0;
+    margin-left: 6px;
 }
 
 .menu-login {
     position: relative;
     display: inline-block;
     font-family: Arial, sans-serif;
+    margin-right: -20px;
 }
 
 .boton-usuario {
@@ -104,28 +108,28 @@ header p {
     overflow-x: hidden;
     transition: width 0.5s;
     position: fixed;
-    height: 100vh;
-    background-color: #fff;
+    height: 120%;
+    background-color: #ffffff;
     box-shadow: 3px 0 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 100;
+    margin-left: -6px;
+    margin-top: -6%;
 }
 
-.menu-lateral .logo {
-    text-align: center;
-    padding: 20px;
-    height: 60px;
-    margin-top: -8%;
-    border-bottom: 1px solid #eaeaea;
+.logo {
+    margin-top: 11px;
 }
 
 .menu-lateral nav ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    margin-top: 40px;
 }
 
 .menu-lateral nav ul li {
-    padding: 10px 20px;
+    padding: 13px 11px;
+    margin-left: 3px;
     cursor: pointer;
     transition: background-color 0.3s;
     display: flex;
@@ -133,15 +137,12 @@ header p {
 }
 
 .menu-lateral nav ul li i {
-    margin-right: 10px;
+    margin-right: 15.8px;
 }
 
 .menu-lateral nav ul li:hover {
-    background-color: #f0f0f0;
-}
-
-.menu-lateral:hover {
-    width: 400px;
+    background-color: #a4a5bc;
+    color: white
 }
 
 .icono {
@@ -149,11 +150,15 @@ header p {
     height: 20px;
     display: inline-block;
     background-size: cover;
+    margin-top: -10px;
 }
 
+
 .active-icono {
-    background-image: url('path_to_active_icon_image');
+    background-color: #545c8c;
+    color: #f96c15;
 }
+
 
 .estadisticas {
     display: flex;
@@ -168,7 +173,7 @@ header p {
     padding: 20px;
     position: relative;
     width: 200px;
-    margin-left: 60px;
+    margin-left: 70px;
 }
 
 .icono-estatisticas {
@@ -178,21 +183,22 @@ header p {
 }
 
 .icono-estatisticas img {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
+    margin-top: -3px;
 }
 
 .estadisticas-info {
     text-align: left;
     padding-top: 10px;
-    padding-right: 60px;
+    padding-right: 39px;
 }
 
 .estadisticas-numero {
     font-size: 24px;
     font-weight: bold;
     padding-right: 4px;
-    margin-top: 100px;
+
 }
 
 .estadisticas-descripcion {
@@ -200,18 +206,87 @@ header p {
     color: #666;
 }
 
-.contenedor-tabla {
+.contenedor-activos {
     background-color: #ffffff;
     border-radius: 20px;
+    margin-left: 87px;
+    padding: 10px 20px 20px 30px;
+    width: 88%;
 }
 
-.contenedor-tabla h1 {
+.contenedor-activos h1 {
     margin: 0;
     font-size: 25px;
 }
 
+.contenedor-tabla {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    /* background-color: #14ADD6; */
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.activos {
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 13px;
+}
+
+.buscador {
+    padding: 8px;
+    margin-bottom: 20px;
+    width: 20%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 120px;
+    margin-top: 9px;
+}
+
+.buscador-icon {
+    position: absolute;
+    margin-left: -22px;
+    margin-top: 17px;
+}
+
+.agregar {
+    position: absolute;
+    margin-left: 350px;
+    margin-top: -44px;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+}
+
+.table th {
+    background-color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #ddd;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}
+
 .btn-detail {
-    width: 0%;
+    background-color: #ffffff;
 }
 
 .img-btn {
@@ -222,10 +297,11 @@ header p {
 .footer {
     background-color: #f3f4f6;
     padding: 10px 20px;
-    margin-top: 19%;
-    width: 100%;
+    margin-top: 1%;
+    width: 90%;
     bottom: 0;
     left: 0;
+    margin-left: 5%;
 }
 
 .paginacion {
