@@ -7,9 +7,6 @@
 # from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework import serializers
-
-# from rest_framework.views import APIView
-# from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
@@ -97,7 +94,6 @@ class PersonaViewSet(viewsets.ModelViewSet):
     """Clase vista persona API"""
     queryset=Persona.objects.all()
     serializer_class=PersonaSerializer
-    authentication_classes=(TokenAuthentication)
   
 # class LoginView(APIView):
 #     permission_classes = [AllowAny]
