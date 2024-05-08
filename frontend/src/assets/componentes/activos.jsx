@@ -1,19 +1,19 @@
 
 import React from 'react'
-import Header from './subcomponentes/header';
 import '../Estilos/activos.css'
-import Sidebar from '../componentes/subcomponentes/sidebar';
-import Statistics from './subcomponentes/statistics';
-import ActiveUsers from './subcomponentes/activeusers';
-import Footer from './subcomponentes/footer';
+import TarjetasActivos from '../subcomponentes/activos/tarjetasActivos';
+import TablaActivos from '../subcomponentes/activos/tablaActivos';
+import Header from '../subcomponentes/generales/header';
+import Sidebar from '../subcomponentes/generales/sidebar';
+import Footer from '../subcomponentes/generales/footer';
 
 export default function Activos() {
     return (
         <div className="Activos">
             <Header />
             <Sidebar />
-            <Statistics />
-            <ActiveUsers />
+            <TarjetasActivos />
+            <TablaActivos />
             <Footer />
         </div>
     );

@@ -1,10 +1,9 @@
-Statistics.jsx
 import React from 'react';
 import inactivos from "../../imagenes/equipos_stock.webp";
 import activos from "../../imagenes/personas.webp";
 import equipos from "../../imagenes/equipos.webp";
 import licencias from "../../imagenes/licencias.webp";
-function Statistics() {
+function TarjetasActivos() {
     return (
         <div className="estadisticas">
             <div className="tarjeta-estadisticas">
@@ -58,4 +57,4 @@ function Statistics() {
         </div>
     );
 }
-export default Statistics;
+export default TarjetasActivos;

@@ -1,12 +1,11 @@
 import React from "react";
-import detalle from "../../imagenes/detalle_btn.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
-import "../../Estilos/activos.css";
+import "../../Estilos/activos.css"
 
-function ActiveUsers() {
+function TablaActivos() {
     return (
         <div className="contenedor-activos">
             <div className="row">
@@ -81,4 +80,4 @@ function ActiveUsers() {
     );
 }
 
-export default ActiveUsers;
+export default TablaActivos;
