@@ -50,9 +50,9 @@ const Sidebar = () => {
     ];
 
     return (
-        <aside id="menu-lateral" className="menu-lateral" style={{ width }}>
-            <div className="logo">
-                <img src={imagen} alt="Logo Scala" className="logo" style={{ width: imagenWith, height: imagenHigth, marginLeft: posicionimg }} />
+        <aside id="menu-lateral" className="menu-lateral-gen" style={{ width }}>
+            <div className="logo-menulateral">
+                <img src={imagen} alt="Logo Scala" style={{ width: imagenWith, height: imagenHigth, marginLeft: posicionimg }} />
             </div>
             <nav>
                 <ul>

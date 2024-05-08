@@ -3,24 +3,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
-import "../../Estilos/activos.css"
+
 
 function TablaActivos() {
     return (
         <div className="contenedor-activos">
-            <div className="row">
+            <div className="row-activos">
                 <div className="activos">
                     <h1>Activos</h1>
                 </div>
-                <div className="contbuscador">
-                    <input className='buscador' type="text" placeholder="Buscar" />
-                    <FontAwesomeIcon icon={faMagnifyingGlass} className="buscador-icon" />
+                <div className="contbuscador-activos">
+                    <input className='buscador-activos' type="text" placeholder="Buscar" />
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className="buscador-icon-activos" />
                 </div>
                 <div>
-                    <FontAwesomeIcon className="agregar" icon={faPlus} />
+                    <FontAwesomeIcon className="agregar-activos" icon={faPlus} />
                 </div>
-                <div className="contenedor-tabla">
-                    <table className="table table-striped table-hover">
+                <div className="contenedor-tabla-activos">
+                    <table className="table-activos">
                         <thead>
                             <th>ID</th>
                             <th>Nombres y Apellidos</th>
@@ -41,7 +41,7 @@ function TablaActivos() {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button class="btn-detail">
+                                    <button className="btn-detail-activos">
                                         <FontAwesomeIcon icon={faFileLines} />
                                     </button>
                                 </td>
@@ -54,7 +54,7 @@ function TablaActivos() {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button class="btn-detail">
+                                    <button className="btn-detail-activos">
                                         <FontAwesomeIcon icon={faFileLines} />
                                     </button>
                                 </td>
@@ -67,7 +67,7 @@ function TablaActivos() {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button class="btn-detail">
+                                    <button className="btn-detail-activos">
                                         <FontAwesomeIcon icon={faFileLines} />
                                     </button>
                                 </td>

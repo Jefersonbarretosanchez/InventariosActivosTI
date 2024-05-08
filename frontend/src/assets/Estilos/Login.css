@@ -6,26 +6,25 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
 }
 
-img {
-    height: 70%;
-    width: 70%;
+.logo-login {
+    height: 80%;
+    width: 80%;
 }
 
-.contenedor {
+.contenedor-login {
     width: 300px;
     padding: 20px;
     text-align: center;
 }
 
-.inicio {
+.inicio-login {
     margin-top: 40px;
 }
 
 
-.grupos-input {
+.grupos-input-login {
     margin-top: 40px;
 }
 
@@ -40,21 +39,21 @@ input[type=password] {
 
 }
 
-#password,
-#email {
+#password-login,
+#email-login {
     margin-top: -3px;
 }
 
-.editemail {
+.editemail-login {
     margin-left: -200px;
 }
 
-.editpass {
+.editpass-login {
     margin-left: -225px;
     margin-top: 2px;
 }
 
-.forgot-password {
+.forgot-password-login {
     float: right;
     color: #007BFF;
     text-decoration: none;
@@ -66,16 +65,16 @@ input[type=password] {
     text-decoration: underline;
 }
 
-.checkboxs {
+.checkboxs-login {
     font-size: small;
     margin-right: 50px;
 }
 
-.buttons {
+.buttons-login {
     margin-top: 30px;
 }
 
-button {
+.button1-login {
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
@@ -86,11 +85,11 @@ button {
     transition: background 0.3s ease;
 }
 
-button:hover {
+.button1-login:hover {
     background: linear-gradient(to right, #384295, #14ADD6);
 }
 
-.botonreg {
+.botonreg-login {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -98,7 +97,7 @@ button:hover {
 
 
 
-.botonreg:hover {
+.botonreg-login:hover {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

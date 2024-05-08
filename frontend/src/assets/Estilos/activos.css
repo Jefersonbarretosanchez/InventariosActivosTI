@@ -1,29 +1,22 @@
-body,
-html {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f3f4f6;
-}
-
-header {
+.header {
     background-color: white;
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
     align-items: center;
-    width: 96.3%;
-    margin-top: -3%;
-    margin-left: 3.5%;
+    width: 93.9%;
+    margin-top: -0.5%;
+    margin-left: 3%;
 }
 
-header h1 {
+.header h1 {
     margin: 0;
     font-size: 20px;
     margin-left: 6px;
+    margin-top: 8px;
 }
 
-header p {
+.header p {
     margin: 5px 0;
     margin-left: 6px;
 }
@@ -32,10 +25,10 @@ header p {
     position: relative;
     display: inline-block;
     font-family: Arial, sans-serif;
-    margin-right: -20px;
+    margin-right: -21px;
 }
 
-.boton-usuario {
+.boton-usuario-gen {
     background-color: #ffffff;
     color: black;
     border: none;
@@ -48,7 +41,7 @@ header p {
     border-radius: 20px;
 }
 
-.boton-usuario:hover {
+.boton-usuario-gen:hover {
     background-color: #f8f8f8;
 }
 
@@ -58,27 +51,27 @@ header p {
     border-radius: 50%;
 }
 
-.usuario-info {
+.usuario-info-princ {
     display: flex;
     flex-direction: column;
     text-align: left;
 }
 
-.nombre-usuario {
+.nombre-usuario-princ {
     font-weight: bold;
 }
 
-.cargo-usuario {
+.cargo-usuario-princ {
     font-size: smaller;
     color: gray;
 }
 
-.icono-desplegable {
+.icono-desplegable-princ {
     font-size: 12px;
     color: gray;
 }
 
-.contenido-desplegable {
+.contenido-desplegable-princ {
     display: none;
     position: absolute;
     right: 0;
@@ -88,46 +81,46 @@ header p {
     z-index: 1;
 }
 
-.contenido-desplegable a {
+.contenido-desplegable-princ a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
 
-.contenido-desplegable a:hover {
+.contenido-desplegable-princ a:hover {
     background-color: #f1f1f1
 }
 
-.menu-login:hover .contenido-desplegable {
+.menu-login:hover .contenido-desplegable-princ {
     display: block;
 }
 
-.menu-lateral {
+.menu-lateral-gen {
     width: 0;
     overflow-x: hidden;
     transition: width 0.5s;
     position: fixed;
-    height: 120%;
+    height: 110%;
     background-color: #ffffff;
     box-shadow: 3px 0 6px rgba(0, 0, 0, 0.1);
     z-index: 100;
-    margin-left: -6px;
+    margin-left: -10px;
     margin-top: -6%;
 }
 
-.logo {
-    margin-top: 11px;
+.logo-menulateral {
+    margin-top: 20px;
 }
 
-.menu-lateral nav ul {
+.menu-lateral-gen nav ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
     margin-top: 40px;
 }
 
-.menu-lateral nav ul li {
+.menu-lateral-gen nav ul li {
     padding: 13px 11px;
     margin-left: 3px;
     cursor: pointer;
@@ -136,11 +129,11 @@ header p {
     align-items: center;
 }
 
-.menu-lateral nav ul li i {
+.menu-lateral-gen nav ul li i {
     margin-right: 15.8px;
 }
 
-.menu-lateral nav ul li:hover {
+.menu-lateral-gen nav ul li:hover {
     background-color: #a4a5bc;
     color: white
 }
@@ -160,13 +153,14 @@ header p {
 }
 
 
-.estadisticas {
+.estadisticas-activos {
     display: flex;
     justify-content: space-around;
     padding: 20px;
+    margin-right: 23.9px;
 }
 
-.tarjeta-estadisticas {
+.tarjeta-estadisticas-activos {
     background-color: #ffffff;
     box-shadow: 0 1px 5px rgb(0, 0, 0, 0.1);
     border-radius: 10px;
@@ -176,32 +170,32 @@ header p {
     margin-left: 70px;
 }
 
-.icono-estatisticas {
+.icono-estatisticas-activos {
     position: absolute;
     top: 10px;
     right: 10px;
 }
 
-.icono-estatisticas img {
+.icono-estatisticas-activos img {
     width: 50px;
     height: 50px;
     margin-top: -2px;
 }
 
-.estadisticas-info {
+.estadisticas-info-activos {
     text-align: left;
     padding-top: 10px;
     padding-right: 39px;
 }
 
-.estadisticas-numero {
+.estadisticas-numero-activos {
     font-size: 24px;
     font-weight: bold;
     padding-right: 4px;
 
 }
 
-.estadisticas-descripcion {
+.estadisticas-descripcion-activos {
     font-size: 14px;
     color: #666;
 }
@@ -211,7 +205,7 @@ header p {
     border-radius: 20px;
     margin-left: 87px;
     padding: 10px 20px 20px 30px;
-    width: 88%;
+    width: 86%;
 }
 
 .contenedor-activos h1 {
@@ -219,13 +213,13 @@ header p {
     font-size: 25px;
 }
 
-.contenedor-tabla {
+.contenedor-tabla-activos {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.table {
+.table-activos {
     /* background-color: #14ADD6; */
     width: 100%;
     border-collapse: collapse;
@@ -238,7 +232,7 @@ header p {
     margin-top: 13px;
 }
 
-.buscador {
+.buscador-activos {
     padding: 8px;
     margin-bottom: 20px;
     width: 20%;
@@ -250,42 +244,42 @@ header p {
     margin-top: 9px;
 }
 
-.buscador-icon {
+.buscador-icon-activos {
     position: absolute;
     margin-left: -22px;
     margin-top: 17px;
 }
 
-.agregar {
+.agregar-activos {
     position: absolute;
     margin-left: 350px;
     margin-top: -44px;
 }
 
-.table th,
-.table td {
-    padding: 8px;
+.table-activos th,
+.table-activos td {
+    padding: 8px 10px 10px 10px;
 }
 
-.table th {
+.table-activos th {
     background-color: #ffffff;
     font-weight: bold;
     text-align: left;
 }
 
-.table tbody tr {
+.table-activos tbody tr {
     border-bottom: 1px solid #ddd;
 }
 
-.table-hover tbody tr:hover {
+.table-activos tbody tr:hover {
     background-color: #ddd;
 }
 
-.table tr:hover {
+.table-activos tr:hover {
     background-color: #f1f1f1;
 }
 
-.btn-detail {
+.btn-detail-activos {
     background-color: #ffffff;
 }
 
@@ -335,4 +329,5 @@ header p {
     text-align: center;
     color: #666;
     font-size: 12px;
+    margin-top: 2%;
 }

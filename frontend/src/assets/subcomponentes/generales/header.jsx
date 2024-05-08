@@ -3,21 +3,21 @@ import { faUserTie } from "@fortawesome/free-solid-svg-icons/faUserTie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Header() {
     return (
-        <header>
+        <header className="header">
             <div>
                 <h1>Bienvenido, Fabrizzio Garzon</h1>
                 <p>Lunes, 08 de Abril 2024</p>
             </div>
             <div class="menu-login">
-                <button class="boton-usuario ">
+                <button class="boton-usuario-gen">
                     <FontAwesomeIcon icon={faUserTie} size='2xl' style={{}} />
-                    <div class="usuario-info">
-                        <div class="nombre-usuario">Fabrizzio Garzon</div>
-                        <div class="cargo-usuario">Gerente de Tecnologia</div>
+                    <div class="usuario-info-princ">
+                        <div class="nombre-usuario-princ">Fabrizzio Garzon</div>
+                        <div class="cargo-usuario-princ">Gerente de Tecnologia</div>
                     </div>
-                    <i class="icono-desplegable">▼</i>
+                    <i class="icono-desplegable-princ">▼</i>
                 </button>
-                <div class="contenido-desplegable">
+                <div class="contenido-desplegable-princ">
                     <a href="#" ><FontAwesomeIcon icon={faUser} style={{ width: '30px' }} />Profile</a>
                     <a href="#"><FontAwesomeIcon icon={faGears} style={{ width: '30px' }} />Settings</a>
                     <a href="#" style={{ color: 'red' }}><FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout</a>
