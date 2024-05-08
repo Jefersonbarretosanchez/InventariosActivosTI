@@ -3,11 +3,20 @@
 # from django.http import HttpResponse
 # from django.shortcuts import render,redirect
 # from django.contrib.auth.mixins import LoginRequiredMixin
-import datetime
+# from django.contrib.auth import authenticate
+# from django.contrib.auth.models import User
+from rest_framework import viewsets
+from rest_framework import serializers
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 from .forms import PersonaCreacion, PersonaActualizar
+from .serializers import PersonaSerializer,UserSerializer
 from .models import Historicos, Persona
+
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 # Create your views here.
 
@@ -28,7 +37,7 @@ class PersonaCreate(CreateView):
             correo_usuario=self.request.user.email,
             tipo_cambio="Creacion",
             tipo_activo="Persona",
-            activo_modificado="",
+            activo_modificado=form.instance.id_trabajador,#id de la persona
             descripcion=f'Se creo el "trabajador" "{
                 form.instance.nombres} {form.instance.apellidos}"'
         )
@@ -75,3 +84,34 @@ class PersonaDelete(DeleteView):
     model = Persona
     template_name = 'persona_confirm_delete.html'
     success_url = reverse_lazy('list')
+  
+class UserViewSet(viewsets.ModelViewSet):
+    """Clase de vista del usuario"""
+    queryset=User.objects.all()
+    serializer_class=UserSerializer
+    
+class PersonaViewSet(viewsets.ModelViewSet):
+    """Clase vista persona API"""
+    queryset=Persona.objects.all()
+    serializer_class=PersonaSerializer
+  
+# class LoginView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request):
+#         serializer = UserSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+
+#         user = authenticate(username=serializer.validated_data['email'], password=serializer.validated_data['password'])
+
+#         if user:
+#             token = RefreshToken.for_user(user)
+#             return JSONResponse({
+#                 'user': UserSerializer(user).data,
+#                 'token': {
+#                     'access': token.access_token,
+#                     'refresh': token.refresh_token
+#                 }
+#             }, status=status.HTTP_200_OK)
+
+#         return JSONResponse({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
