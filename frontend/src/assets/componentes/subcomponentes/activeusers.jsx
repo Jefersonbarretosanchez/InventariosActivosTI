@@ -35,6 +35,7 @@ function ActiveUsers() {
                             {/* Incluir For para la interaccion fila por fila */}
                             <tr>
                                 <td></td>
+
                                 <td></td>
                                 <td></td>
                                 <td></td>
