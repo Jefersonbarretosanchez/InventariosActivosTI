@@ -18,14 +18,14 @@ const Sidebar = () => {
     useEffect(() => {
         const handleMouseMovement = (e) => {
             if (e.clientX < 50) {
-                setWidth('250px');
+                setWidth('20vw');
                 setIconWidth('130%');
                 setImagen(logo);
                 setimagenHigth('80%');
                 setimagenWith('80%');
                 setposicionimg('30px');
             } else {
-                setWidth('50px');
+                setWidth('3.2vw');
                 setIconWidth('30px');
                 setImagen(nuevaimagen);
                 setimagenHigth('60px');

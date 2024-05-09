@@ -1,6 +1,6 @@
 import React from 'react';
 import activos from "../../imagenes/personas.webp";
-import inactivos from "../../imagenes/Alertas.png";
+import inactivos from "../../imagenes/alertas.png";
 import equipos from "../../imagenes/equipos.webp";
 import licencias from "../../imagenes/licencias.webp";
 
