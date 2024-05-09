@@ -9,12 +9,12 @@ function TablaPersonas() {
   return (
     <div className="contenedor-activos">
       <div className="row-activos">
-        <div className="activos">
-          <h1>Activos</h1>
+        <div className="Personas">
+          <h1>Personas</h1>
         </div>
-        <div className="contbuscador-activos">
+        <div className="contbuscador-personas">
           <input
-            className="buscador-activos"
+            className="buscador-personas"
             type="text"
             placeholder="Buscar"
           />
@@ -24,7 +24,7 @@ function TablaPersonas() {
           />
         </div>
         <div>
-          <FontAwesomeIcon className="agregar-activos" icon={faPlus} />
+          <FontAwesomeIcon className="agregar-personas" icon={faPlus} />
         </div>
         <div className="contenedor-tabla-activos">
           <table className="table-activos">

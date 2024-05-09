@@ -1,0 +1,23 @@
+.Personas {
+    position: absolute;
+    margin-left: 0.5%;
+    margin-top: 13px;
+}
+
+.buscador-personas {
+    padding: 8px;
+    margin-bottom: 20px;
+    width: 20%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 11.5%;
+    margin-top: 9px;
+}
+
+.agregar-personas {
+    position: absolute;
+    margin-left: 28%;
+    margin-top: -44px;
+}

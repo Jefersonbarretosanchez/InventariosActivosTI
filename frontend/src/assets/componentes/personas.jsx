@@ -5,15 +5,16 @@ import TablaPersonas from "../subcomponentes/personas/tablaPersonas";
 import Header from "../subcomponentes/generales/header";
 import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
+import "../Estilos/personas.css"
 
 export default function Personas() {
-  return (
-    <div className="PersonasBody">
-      <Header />
-      <Sidebar />
-      <TarjetasPersonas />
-      <TablaPersonas />
-      <Footer />
-    </div>
-  );
+    return (
+        <div className="PersonasBody">
+            <Header />
+            <Sidebar />
+            <TarjetasPersonas />
+            <TablaPersonas />
+            <Footer />
+        </div>
+    );
 }

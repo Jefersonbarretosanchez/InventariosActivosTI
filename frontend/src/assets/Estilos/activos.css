@@ -2,7 +2,7 @@
     background-color: white;
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 1% 1.5%;
     align-items: center;
     width: 93.9%;
     margin-top: -0.5%;
@@ -11,28 +11,26 @@
 
 .header h1 {
     margin: 0;
-    font-size: 20px;
-    margin-left: 6px;
-    margin-top: 8px;
+    font-size: 125%;
 }
 
 .header p {
-    margin: 5px 0;
-    margin-left: 6px;
+    margin: 1.5%;
+    margin-left: 0.1%;
 }
 
 .menu-login {
     position: relative;
     display: inline-block;
     font-family: Arial, sans-serif;
-    margin-right: -21px;
+    margin-right: -1.7%;
 }
 
 .boton-usuario-gen {
     background-color: #ffffff;
     color: black;
     border: none;
-    padding: 10px;
+    padding: 1px;
     font-size: 16px;
     cursor: pointer;
     display: flex;
@@ -294,7 +292,7 @@
     border: none;
 }
 
-.btn-accion:hover{
+.btn-accion:hover {
     transform: scale(1.5);
 }
 
