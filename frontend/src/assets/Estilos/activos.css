@@ -254,6 +254,15 @@
     position: absolute;
     margin-left: 350px;
     margin-top: -44px;
+    cursor: pointer;
+}
+
+.agregar-activos:hover {
+    position: absolute;
+    margin-left: 350px;
+    margin-top: -44px;
+    cursor: pointer;
+    transform: scale(1.8);
 }
 
 .table-activos th,
@@ -279,13 +288,14 @@
     background-color: #f1f1f1;
 }
 
-.btn-detail-activos {
-    background-color: #ffffff;
+.btn-accion {
+    background: transparent;
+    cursor: pointer;
+    border: none;
 }
 
-.img-btn {
-    width: 12%;
-    height: 12%;
+.btn-accion:hover{
+    transform: scale(1.5);
 }
 
 .footer {

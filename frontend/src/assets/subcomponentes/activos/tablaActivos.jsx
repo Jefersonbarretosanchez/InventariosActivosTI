@@ -41,7 +41,7 @@ function TablaActivos() {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button className="btn-detail-activos">
+                                    <button className="btn-accion">
                                         <FontAwesomeIcon icon={faFileLines} />
                                     </button>
                                 </td>
@@ -54,7 +54,7 @@ function TablaActivos() {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button className="btn-detail-activos">
+                                    <button className="btn-accion">
                                         <FontAwesomeIcon icon={faFileLines} />
                                     </button>
                                 </td>
@@ -67,7 +67,7 @@ function TablaActivos() {
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button className="btn-detail-activos">
+                                    <button className="btn-accion">
                                         <FontAwesomeIcon icon={faFileLines} />
                                     </button>
                                 </td>

@@ -1,6 +1,8 @@
 import { faArrowRightToBracket, faGears, faUser } from "@fortawesome/free-solid-svg-icons";
 import { faUserTie } from "@fortawesome/free-solid-svg-icons/faUserTie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+
 function Header() {
     return (
         <header className="header">
@@ -20,7 +22,9 @@ function Header() {
                 <div class="contenido-desplegable-princ">
                     <a href="#" ><FontAwesomeIcon icon={faUser} style={{ width: '30px' }} />Profile</a>
                     <a href="#"><FontAwesomeIcon icon={faGears} style={{ width: '30px' }} />Settings</a>
+                    <Link to="/" >
                     <a href="#" style={{ color: 'red' }}><FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout</a>
+                    </Link>
                 </div>
             </div>
         </header>
