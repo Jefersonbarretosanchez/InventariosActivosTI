@@ -18,17 +18,15 @@
 
 .agregar-personas {
     position: absolute;
-    margin-left: 25.1vw;
-    margin-top: -6.7vh;
+    margin-left: 26.5vw;
+    margin-top: -6.2vh;
     cursor: pointer;
 }
 
 .agregar-personas:hover {
     position: absolute;
-    margin-left: 25.1vw;
-    margin-top: -6.7vh;
     cursor: pointer;
-    transform: scale(1.5);
+    transform: scale(1.6);
 }
 
 .table-personas th {

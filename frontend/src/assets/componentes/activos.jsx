@@ -7,6 +7,7 @@ import TablaActivos from '../subcomponentes/activos/tablaActivos';
 import Header from '../subcomponentes/generales/header';
 import Sidebar from '../subcomponentes/generales/sidebar';
 import Footer from '../subcomponentes/generales/footer';
+import Paginate from '../subcomponentes/generales/paginate';
 
 export default function Activos() {
     return (
@@ -15,6 +16,7 @@ export default function Activos() {
             <Sidebar />
             <TarjetasActivos />
             <TablaActivos />
+            <Paginate/>
             <Footer />
         </div>
     );

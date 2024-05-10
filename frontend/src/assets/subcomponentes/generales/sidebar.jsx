@@ -18,19 +18,19 @@ const Sidebar = () => {
     useEffect(() => {
         const handleMouseMovement = (e) => {
             if (e.clientX < 50) {
-                setWidth('20vw');
-                setIconWidth('130%');
+                setWidth('17vw');
+                setIconWidth('2.2vw');
                 setImagen(logo);
-                setimagenHigth('80%');
-                setimagenWith('80%');
-                setposicionimg('30px');
+                setimagenHigth('9.5vh');
+                setimagenWith('13vw');
+                setposicionimg('2vw');
             } else {
                 setWidth('3.75vw');
-                setIconWidth('30px');
+                setIconWidth('2.2vw');
                 setImagen(nuevaimagen);
-                setimagenHigth('60px');
-                setimagenWith('52px');
-                setposicionimg('1px');
+                setimagenHigth('10.6vh');
+                setimagenWith('3.5vw');
+                setposicionimg('.3vw');
             }
         };
 
