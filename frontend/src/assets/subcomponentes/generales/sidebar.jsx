@@ -25,7 +25,7 @@ const Sidebar = () => {
                 setimagenWith('80%');
                 setposicionimg('30px');
             } else {
-                setWidth('3.2vw');
+                setWidth('3.75vw');
                 setIconWidth('30px');
                 setImagen(nuevaimagen);
                 setimagenHigth('60px');

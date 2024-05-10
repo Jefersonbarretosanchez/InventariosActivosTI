@@ -27,7 +27,7 @@ function TablaPersonas() {
           <FontAwesomeIcon className="agregar-personas" icon={faPlus} />
         </div>
         <div className="contenedor-tabla-activos">
-          <table className="table-activos">
+          <table className="table-personas">
             <thead>
               <th>ID</th>
               <th>Nombres y Apellidos</th>

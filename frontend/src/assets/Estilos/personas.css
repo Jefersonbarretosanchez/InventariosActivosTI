@@ -1,23 +1,65 @@
 .Personas {
     position: absolute;
-    margin-left: 0.5%;
-    margin-top: 13px;
+    margin-left: -0.1vw;
+    margin-top: 1.5vh;
 }
 
 .buscador-personas {
-    padding: 8px;
-    margin-bottom: 20px;
-    width: 20%;
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 000.1vh solid #ccc;
     border-radius: 10px;
     position: relative;
-    margin-left: 11.5%;
-    margin-top: 9px;
+    margin-left: 19.5vh;
+    margin-top: 1.5vh;
 }
 
 .agregar-personas {
     position: absolute;
-    margin-left: 28%;
-    margin-top: -44px;
+    margin-left: 25.1vw;
+    margin-top: -6.7vh;
+    cursor: pointer;
+}
+
+.agregar-personas:hover {
+    position: absolute;
+    margin-left: 25.1vw;
+    margin-top: -6.7vh;
+    cursor: pointer;
+    transform: scale(1.5);
+}
+
+.table-personas th {
+    padding: 1.5vh -0vw 1.6vh 8vh;
+}
+
+.table-personas td {
+    padding: 1.5vh -0vw 1.6vh 6vh;
+}
+
+.table-personas th {
+    background-color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.table-personas tbody tr {
+    border-bottom: 0.1vh solid #ddd;
+}
+
+.table-personas tbody tr:hover {
+    background-color: #ddd;
+}
+
+.table-personas tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-personas {
+    /* background-color: #14ADD6; */
+    width: 100vw;
+    border-collapse: collapse;
+    margin-bottom: 2vh;
 }
