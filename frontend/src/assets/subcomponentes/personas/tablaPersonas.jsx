@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -28,7 +28,7 @@ function TablaPersonas() {
             />
           </div>
           <div>
-            <FontAwesomeIcon onClick={() => cambiarEstadoModal1(!estadoModal1)} className="agregar-personas" icon={faPlus}/>
+            <FontAwesomeIcon onClick={() => cambiarEstadoModal1(!estadoModal1)} className="agregar-personas" icon={faPlus} />
           </div>
           <div className="contenedor-tabla-activos">
             <table className="table-personas">

@@ -28,8 +28,8 @@ html {
     margin-top: 40px;
 }
 
-input[type=email],
-input[type=password] {
+.username,
+.password{
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -45,7 +45,7 @@ input[type=password] {
 }
 
 .editemail-login {
-    margin-left: -200px;
+    margin-left: -230px;
 }
 
 .editpass-login {

@@ -3,19 +3,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-const Modal = ({ children, estado, cambiarEstado }) => {
+const Modal = ({ children, estado, cambiarEstado,titulo }) => {
   return (
     <>
       {estado && (
         <Overlay>
           <ContenedorModal>
             <ModalHeader>
-              <h3>Titulo</h3>
+              <h3>{titulo}</h3>
             </ModalHeader>
-            <BotonCerrar onClick={()=>cambiarEstado(false)}>
+            <BotonCerrar onClick={() => cambiarEstado(false)}>
               <FontAwesomeIcon icon={faX} className="btn-cerrar" />
             </BotonCerrar>
-            {children}
+            <ModalBody scrollable={estado}>
+              {children}
+            </ModalBody>
           </ContenedorModal>
         </Overlay>
       )}
@@ -39,8 +41,9 @@ const Overlay = styled.div`
 `;
 
 const ContenedorModal = styled.div`
-  width: 500px;
-  min-height: 100px;
+  width: 30vw;
+  height: 80vh;
+  /* min-height: 100px; */
   background: #fff;
   position: relative;
   border-radius: 1.2vw;
@@ -53,7 +56,7 @@ const ModalHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
   border-bottom: 1px solid #e8e8e8;
 
   h3 {
@@ -85,4 +88,16 @@ const BotonCerrar = styled.button`
     border: none;
     transform: scale(1.2);
   }
+`;
+
+const ModalBody = styled.div`
+  height: calc(100% - 100px); /* Calcula el alto restante para el cuerpo */
+  overflow-y: auto; /* Activa el desplazamiento vertical */
+  padding: 0 20px; /* Mantiene el margen interno en el área desplazable */
+  /* Aplica estilos condicionalmente según la prop 'scrollable' */
+  ${(props) =>
+    props.scrollable &&
+    `
+      background: #ffffff; /* Color de fondo sutil para contenido desplazable */
+    `}
 `;
