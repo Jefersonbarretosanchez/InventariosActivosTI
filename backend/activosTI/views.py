@@ -1,21 +1,22 @@
 """Importaciones"""
 # from django.forms import BaseModelForm
 # from django.http import HttpResponse
-# from django.shortcuts import render,redirect
+
 # from django.contrib.auth.mixins import LoginRequiredMixin
 # from django.contrib.auth import authenticate
 # from django.contrib.auth.models import User
-from rest_framework import viewsets
-from rest_framework import serializers
+# from rest_framework import viewsets
+from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from .forms import PersonaCreacion, PersonaActualizar
-from .serializers import PersonaSerializer,UserSerializer
-from .models import Historicos, Persona
+from django.urls import reverse_lazy
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from .forms import PersonaCreacion, PersonaActualizar
+from .serializers import UserSerializer, PersonaSerializer
+from .models import Historicos, Persona
+# from rest_framework.authentication import TokenAuthentication
 
 
 # Create your views here.
@@ -37,7 +38,7 @@ class PersonaCreate(CreateView):
             correo_usuario=self.request.user.email,
             tipo_cambio="Creacion",
             tipo_activo="Persona",
-            activo_modificado=form.instance.id_trabajador,#id de la persona
+            activo_modificado=form.instance.id_trabajador,  # id de la persona
             descripcion=f'Se creo el "trabajador" "{
                 form.instance.nombres} {form.instance.apellidos}"'
         )
@@ -75,26 +76,61 @@ class PersonaUpdate(UpdateView):
                     # updated_field,  # Desempaqueta el diccionario con los detalles del campo
                     valor_anterior=original_value,
                     valor_nuevo=current_value,
-                    descripcion=f'Cambio en {field}: de {original_value} a {current_value}'
+                    descripcion=f'Cambio en {field}: de {
+                        original_value} a {current_value}'
                 )
         return super().form_valid(form)
+
 
 class PersonaDelete(DeleteView):
     """"Vista para eliminar Personas"""
     model = Persona
     template_name = 'persona_confirm_delete.html'
     success_url = reverse_lazy('list')
-  
-class UserViewSet(viewsets.ModelViewSet):
-    """Clase de vista del usuario"""
-    queryset=User.objects.all()
-    serializer_class=UserSerializer
-    
-class PersonaViewSet(viewsets.ModelViewSet):
-    """Clase vista persona API"""
-    queryset=Persona.objects.all()
-    serializer_class=PersonaSerializer
-  
+
+
+class PersonaListCreate(generics.ListCreateAPIView):
+    """P"""
+    serializer_class = PersonaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # user = self.request.user
+        return Persona.objects.all()
+
+    # def perform_create(self, serializer):
+    #     if serializer.is_valid():
+    #         serializer.save(nombres=self.request.user)
+    #     else:
+    #         print(serializer.errors)
+
+
+class PersonasDelete(generics.DestroyAPIView):
+    """ND"""
+    serializer_class = PersonaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Persona.objects.filter(nombres=user)
+
+
+class CreateUserView(generics.CreateAPIView):
+    """CU"""
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     """Clase de vista del usuario"""
+#     queryset=User.objects.all()
+#     serializer_class=UserSerializer
+
+# class PersonaViewSet(viewsets.ModelViewSet):
+#     """Clase vista persona API"""
+#     queryset=Persona.objects.all()
+#     serializer_class=PersonaSerializer
+
 # class LoginView(APIView):
 #     permission_classes = [AllowAny]
 

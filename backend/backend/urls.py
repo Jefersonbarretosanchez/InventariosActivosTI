@@ -17,15 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from activosTI.views import *
-from rest_framework.authtoken.views import obtain_auth_token
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('activosTI.urls')),
-    path('auth/',obtain_auth_token),
+    # path('',include('activosTI.urls')),
+    # path('auth/',obtain_auth_token),
     path('',PersonaCreate.as_view(), name='create'),
     path('list/',PersonaLista.as_view(),name='list'),
     path('editar/<int:pk>/',PersonaUpdate.as_view(), name='editar'),
     path('eliminar/<int:pk>/',PersonaDelete.as_view(),name='eliminar'),
     #    path('api/login/', LoginView.as_view(), name='login'),
+    
+    path("api/user/register/", CreateUserView.as_view(), name="register"),
+    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
+    path("api-auth/", include("rest_framework.urls")),
+    path("api/", include("activosTI.urls")),
 ]
