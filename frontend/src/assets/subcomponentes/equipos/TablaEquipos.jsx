@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFile, faFileLines } from "@fortawesome/free-solid-svg-icons";
-// import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFile,
+  faFileLines,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
-import Form from "./formActivos";
+import Form from "../activos/formActivos";
 
-function TablaActivos() {
+function TablaEquipos() {
   const [estadoModal1, cambiarEstadoModal1] = useState(false);
   return (
     <>
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="activos">
-            <h1>Activos</h1>
+            <h1>Equipos</h1>
           </div>
           <div className="contbuscador-activos">
             <input
@@ -28,30 +32,37 @@ function TablaActivos() {
             />
           </div>
           <div>
-            {/* <FontAwesomeIcon className="agregar-activos" icon={faPlus} /> */}
+            <FontAwesomeIcon
+              onClick={() => cambiarEstadoModal1(!estadoModal1)}
+              className="agregar-personas"
+              icon={faPlus}
+            />
           </div>
           <div className="contenedor-tabla-activos">
             <table className="table-activos">
               <thead>
                 <th>ID</th>
-                <th>Nombres y Apellidos</th>
-                <th>Numero Identificación</th>
-                <th>Correo Institucional</th>
-                <th>Alianza</th>
-                <th>Equipo</th>
-                <th>Accion</th>
+                <th>Nombre Equipo</th>
+                <th>Serial</th>
+                <th>Tipo Equipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
               </thead>
               <tbody>
                 {/* Incluir For para la interaccion fila por fila */}
                 <tr>
-                  <td></td>
-
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td>
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
                     <button
                       className="btn-accion"
                       onClick={() => cambiarEstadoModal1(!estadoModal1)}
@@ -66,9 +77,17 @@ function TablaActivos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -79,9 +98,17 @@ function TablaActivos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -98,14 +125,14 @@ function TablaActivos() {
         titulo="Detalle Activos"
       >
         <Contenido>
-            <Form />
+          <Form />
         </Contenido>
       </Modal>
     </>
   );
 }
 
-export default TablaActivos;
+export default TablaEquipos;
 
 const Boton = styled.button`
   display: block;

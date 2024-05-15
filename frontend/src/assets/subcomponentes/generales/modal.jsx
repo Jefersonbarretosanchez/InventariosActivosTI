@@ -45,7 +45,7 @@ const ContenedorModal = styled.div`
   height: 80vh;
   /* min-height: 100px; */
   background: #fff;
-  position: relative;
+  position: absolute;
   border-radius: 1.2vw;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 20px;

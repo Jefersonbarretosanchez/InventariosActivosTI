@@ -26,7 +26,7 @@ export default function Login() {
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
         navigate("/activos");
       } else {
-        navigate("/e");
+        navigate("/");
       }
     } catch (error) {
       alert(error);
