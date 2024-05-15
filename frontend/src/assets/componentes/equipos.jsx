@@ -6,7 +6,7 @@ import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import TarjetasEquipos from "../subcomponentes/equipos/tarjetasEquipos";
 import TablaEquipos from "../subcomponentes/equipos/TablaEquipos";
-import "../Estilos/personas.css"
+import "../Estilos/equipos.css"
 
 
 export default function Equipos() {

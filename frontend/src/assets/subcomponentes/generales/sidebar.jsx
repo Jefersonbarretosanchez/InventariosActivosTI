@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard, faDesktop, faGlobe, faIdCard, faTruckRampBox, faUsers, faUsersLine } from "@fortawesome/free-solid-svg-icons";
+import { faBoxesStacked, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../imagenes/login.png';
 import nuevaimagen from '../../imagenes/logopeq.jpg';
-import { faBoxesStacked } from '@fortawesome/free-solid-svg-icons/faBoxesStacked';
-import { faUserTie } from '@fortawesome/free-solid-svg-icons/faUserTie';
 
-const Sidebar = () => {
-    const [width, setWidth] = useState('0');
-    const [iconWidth, setIconWidth] = useState('0');
+function Sidebar() {
+    const [width, setWidth] = useState('17vw');
+    const [iconWidth, setIconWidth] = useState('2.2vw');
     const [imagen, setImagen] = useState(logo);
-    const [imagenWith, setimagenWith] = useState('0');
-    const [imagenHigth, setimagenHigth] = useState('0');
-    const [posicionimg, setposicionimg] = useState('0');
-    const [activeItem, setActiveItem] = useState('Activos');
+    const [imagenWidth, setImagenWidth] = useState('13vw');
+    const [imagenHeight, setImagenHeight] = useState('9.5vh');
+    const [posicionImg, setPosicionImg] = useState('2vw');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const handleMouseMovement = (e) => {
+        const handleMouseMovement = e => {
             if (e.clientX < 50) {
                 setWidth('17vw');
                 setIconWidth('2.2vw');
                 setImagen(logo);
-                setimagenHigth('9.5vh');
-                setimagenWith('13vw');
-                setposicionimg('2vw');
+                setImagenHeight('9.5vh');
+                setImagenWidth('13vw');
+                setPosicionImg('2vw');
             } else {
                 setWidth('3.75vw');
                 setIconWidth('2.2vw');
                 setImagen(nuevaimagen);
-                setimagenHigth('10.6vh');
-                setimagenWith('3.5vw');
-                setposicionimg('.3vw');
+                setImagenHeight('10.6vh');
+                setImagenWidth('3.5vw');
+                setPosicionImg('.3vw');
             }
         };
 
@@ -39,26 +39,28 @@ const Sidebar = () => {
     }, []);
 
     const menuItems = [
-        { name: 'Activos', icon: faGlobe },
-        { name: 'Personas', icon: faUsersLine },
-        { name: 'Equipos', icon: faDesktop },
-        { name: 'Asignación Equipos', icon: faTruckRampBox },
-        { name: 'Licencias', icon: faIdCard },
-        { name: 'Asignación Licencias', icon: faBoxesStacked },
-        { name: 'Historico Logs', icon: faClipboard },
-        { name: 'Administración', icon: faUserTie },
+        { name: 'Activos', icon: faGlobe, route: '/activos' },
+        { name: 'Personas', icon: faUsersLine, route: '/personas' },
+        { name: 'Equipos', icon: faDesktop, route: '/equipos' },
+        { name: 'Asignación Equipos', icon: faTruckRampBox, route: '/asignacion-equipos' },
+        { name: 'Licencias', icon: faIdCard, route: '/licencias' },
+        { name: 'Asignación Licencias', icon: faBoxesStacked, route: '/asignacion-licencias' },
+        { name: 'Historico Logs', icon: faClipboard, route: '/historico-logs' },
+        { name: 'Administración', icon: faUserTie, route: '/administracion' },
     ];
 
     return (
         <aside id="menu-lateral" className="menu-lateral-gen" style={{ width }}>
             <div className="logo-menulateral">
-                <img src={imagen} alt="Logo Scala" style={{ width: imagenWith, height: imagenHigth, marginLeft: posicionimg }} />
+                <img src={imagen} alt="Logo Scala" style={{ width: imagenWidth, height: imagenHeight, marginLeft: posicionImg }} />
             </div>
             <nav>
                 <ul>
                     {menuItems.map(item => (
-                        <li key={item.name} className={activeItem === item.name ? 'active-icono' : ''}
-                            onClick={() => setActiveItem(item.name)}>
+                        <li key={item.name} className={location.pathname === item.route ? 'active-icono' : ''}
+                            onClick={() => {
+                                navigate(item.route);
+                            }}>
                             <i className="icono"><FontAwesomeIcon icon={item.icon} style={{ width: iconWidth, height: iconWidth }} /></i>
                             {item.name}
                         </li>

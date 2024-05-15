@@ -90,7 +90,7 @@
 .menu-lateral-gen {
     width: 0;
     overflow-x: hidden;
-    transition: width 0.5s;
+    transition: width 0.4s;
     position: fixed;
     height: 100vh;
     background-color: #ffffff;

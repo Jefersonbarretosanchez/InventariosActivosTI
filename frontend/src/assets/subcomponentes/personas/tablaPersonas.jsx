@@ -6,6 +6,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
+import Form from "../activos/formActivos";
 
 function TablaPersonas() {
   const [estadoModal1, cambiarEstadoModal1] = useState(false);
@@ -33,8 +34,8 @@ function TablaPersonas() {
           <div className="contenedor-tabla-activos">
             <table className="table-personas">
               <thead>
-                <th>Id Trabajador</th>
-                <th>Nombres y Apellidos</th>
+                <th>ID Trabajador</th>
+                <th>Nombres</th>
                 <th>Numero Identificación</th>
                 <th>Correo Institucional</th>
                 <th>Estado</th>
@@ -44,16 +45,21 @@ function TablaPersonas() {
                 {/* Incluir For para la interaccion fila por fila */}
                 <tr>
                   <td></td>
-
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td>
-                    <button className="btn-accion" onClick={() => cambiarEstadoModal1(!estadoModal1)}>
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -65,10 +71,16 @@ function TablaPersonas() {
                   <td></td>
                   <td></td>
                   <td>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -80,10 +92,16 @@ function TablaPersonas() {
                   <td></td>
                   <td></td>
                   <td>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -94,12 +112,13 @@ function TablaPersonas() {
         </div>
       </div>
 
-      <Modal estado={estadoModal1} cambiarEstado={cambiarEstadoModal1}>
+      <Modal
+        estado={estadoModal1}
+        cambiarEstado={cambiarEstadoModal1}
+        titulo="Agregar Trabajador"
+      >
         <Contenido>
-          <h1>hola</h1>
-          <button onClick={() => cambiarEstadoModal1(!estadoModal1)}>
-            Cerrar
-          </button>
+          <Form />
         </Contenido>
       </Modal>
     </>

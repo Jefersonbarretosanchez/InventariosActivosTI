@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFile,
-  faFileLines,
-  faPenToSquare,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFile, faFileLines, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -17,12 +13,12 @@ function TablaEquipos() {
     <>
       <div className="contenedor-activos">
         <div className="row-activos">
-          <div className="activos">
+          <div className="equipos">
             <h1>Equipos</h1>
           </div>
-          <div className="contbuscador-activos">
+          <div className="contbuscador-equipos">
             <input
-              className="buscador-activos"
+              className="buscador-equipos"
               type="text"
               placeholder="Buscar"
             />
@@ -32,17 +28,13 @@ function TablaEquipos() {
             />
           </div>
           <div>
-            <FontAwesomeIcon
-              onClick={() => cambiarEstadoModal1(!estadoModal1)}
-              className="agregar-personas"
-              icon={faPlus}
-            />
+            <FontAwesomeIcon onClick={() => cambiarEstadoModal1(!estadoModal1)} className="agregar-equipos" icon={faPlus} />
           </div>
           <div className="contenedor-tabla-activos">
-            <table className="table-activos">
+            <table className="table-equipos">
               <thead>
-                <th>ID</th>
-                <th>Nombre Equipo</th>
+                <th>ID Equipo</th>
+                <th>Nombres Equipo</th>
                 <th>Serial</th>
                 <th>Tipo Equipo</th>
                 <th>Estado</th>
@@ -134,6 +126,7 @@ function TablaEquipos() {
 
 export default TablaEquipos;
 
+
 const Boton = styled.button`
   display: block;
   padding: 10px 30px;
@@ -157,3 +150,4 @@ const Contenido = styled.div`
     margin-bottom: 10px;
   }
 `;
+

@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-#import environ
+# import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # 'djoser',
-    # 'rest_framework_simplejwt',    
+    # 'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -148,7 +148,7 @@ USE_I18N = True
 
 USE_TZ = False
 
-CORS_ORIGIN_ALLOW_ALL=True
+CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 

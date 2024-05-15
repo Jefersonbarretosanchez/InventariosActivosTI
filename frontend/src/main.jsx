@@ -27,7 +27,7 @@ root.render(
         <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
         <Route path="/personas" element={<ProtectedRoute><Personas /></ProtectedRoute>} />
         <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
-        <Route path="/modal" element={<ContenidoModal /> } />
+        <Route path="/modal" element={<ContenidoModal />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
