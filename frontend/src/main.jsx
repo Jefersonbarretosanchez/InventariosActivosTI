@@ -3,12 +3,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Activos from './assets/componentes/activos'
 import Personas from "./assets/componentes/personas.jsx";
-import './index.css'
-import ContenidoModal from "./assets/subcomponentes/generales/contenidoModal.jsx";
 import ProtectedRoute from "./assets/paginas/protectedRoute.jsx";
 import Login from "./assets/componentes/login.jsx";
 import NotFound from "./assets/paginas/notFound.jsx";
 import Equipos from "./assets/componentes/equipos.jsx";
+import './index.css'
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -27,7 +26,6 @@ root.render(
         <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
         <Route path="/personas" element={<ProtectedRoute><Personas /></ProtectedRoute>} />
         <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
-        <Route path="/modal" element={<ContenidoModal />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

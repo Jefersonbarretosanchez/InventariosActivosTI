@@ -1,15 +1,31 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines } from "@fortawesome/free-solid-svg-icons";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines,faPlus,faPenToSquare,faMagnifyingGlass,} from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
-import Form from "../activos/formActivos";
+import { formFields, ALL_INPUT_IDS } from "./formConfig";
+import FormDinamico from "../generales/formDinamico";
 
 function TablaPersonas() {
-  const [estadoModal1, cambiarEstadoModal1] = useState(false);
+  const [estadoModal, cambiarEstadoModal] = useState(false);
+  const [modalConfig, cambiarModalConfig] = useState({
+    titulo: "",
+    contenido: null,
+  });
+
+  const abrirModal = (titulo, fields, disabledFields = []) => {
+    cambiarModalConfig({
+      titulo,
+      contenido: (
+        <FormDinamico
+          fields={fields}
+          disabledFields={disabledFields} // Pasar los campos deshabilitados al componente DynamicForm
+        />
+      ),
+    });
+    cambiarEstadoModal(true);
+  };
+
   return (
     <>
       <div className="contenedor-activos">
@@ -29,7 +45,11 @@ function TablaPersonas() {
             />
           </div>
           <div>
-            <FontAwesomeIcon onClick={() => cambiarEstadoModal1(!estadoModal1)} className="agregar-personas" icon={faPlus} />
+            <FontAwesomeIcon
+              className="agregar-equipos"
+              onClick={() => abrirModal("Agregar Persona", formFields, [])}
+              icon={faPlus}
+            />
           </div>
           <div className="contenedor-tabla-activos">
             <table className="table-personas">
@@ -52,13 +72,24 @@ function TablaPersonas() {
                   <td>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal("Editar {Nombres}", formFields, [
+                          "identificacion",
+                          "correo_institucional",
+                        ])
+                      }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal(
+                          "Información de {Nombres}",
+                          formFields,
+                          ALL_INPUT_IDS
+                        )
+                      }
                     >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
@@ -73,13 +104,24 @@ function TablaPersonas() {
                   <td>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal("Detalle 3 Activos", formFields, [
+                          "identificacion",
+                          "correo_institucional",
+                        ])
+                      }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal(
+                          "Detalle Personas",
+                          formFields,
+                          ALL_INPUT_IDS
+                        )
+                      }
                     >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
@@ -94,13 +136,24 @@ function TablaPersonas() {
                   <td>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal("Detalle 3 Activos", formFields, [
+                          "identificacion",
+                          "correo_institucional",
+                        ])
+                      }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal(
+                          "Detalle Personas",
+                          formFields,
+                          ALL_INPUT_IDS
+                        )
+                      }
                     >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
@@ -113,13 +166,11 @@ function TablaPersonas() {
       </div>
 
       <Modal
-        estado={estadoModal1}
-        cambiarEstado={cambiarEstadoModal1}
-        titulo="Agregar Trabajador"
+        estado={estadoModal}
+        cambiarEstado={cambiarEstadoModal}
+        titulo={modalConfig.titulo}
       >
-        <Contenido>
-          <Form />
-        </Contenido>
+        {modalConfig.contenido}
       </Modal>
     </>
   );

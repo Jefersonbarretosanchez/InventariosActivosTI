@@ -1,14 +1,34 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFile, faFileLines } from "@fortawesome/free-solid-svg-icons";
-// import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileLines,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
-import Form from "./formActivos";
+import { formFields, ALL_INPUT_IDS } from "./formConfig";
+import FormDinamico from "../generales/formDinamico";
 
 function TablaActivos() {
-  const [estadoModal1, cambiarEstadoModal1] = useState(false);
+  const [estadoModal, cambiarEstadoModal] = useState(false);
+  const [modalConfig, cambiarModalConfig] = useState({
+    titulo: "",
+    contenido: null,
+  });
+
+  const abrirModal = (titulo, fields, disabledFields = []) => {
+    cambiarModalConfig({
+      titulo,
+      contenido: (
+        <FormDinamico
+          fields={fields}
+          disabledFields={disabledFields} // Pasar los campos deshabilitados al componente DynamicForm
+        />
+      ),
+    });
+    cambiarEstadoModal(true);
+  };
+
   return (
     <>
       <div className="contenedor-activos">
@@ -54,7 +74,9 @@ function TablaActivos() {
                   <td>
                     <button
                       className="btn-accion"
-                      onClick={() => cambiarEstadoModal1(!estadoModal1)}
+                      onClick={() =>
+                        abrirModal("Detalles Activos", formFields, ALL_INPUT_IDS)
+                      }
                     >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
@@ -68,7 +90,16 @@ function TablaActivos() {
                   <td></td>
                   <td></td>
                   <td>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal(
+                          "Detalle 2 Activos",
+                          formFields,
+                          ALL_INPUT_IDS
+                        )
+                      }
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -81,7 +112,16 @@ function TablaActivos() {
                   <td></td>
                   <td></td>
                   <td>
-                    <button className="btn-accion">
+                    <button
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal(
+                          "Detalle 3 Activos",
+                          formFields,
+                          ALL_INPUT_IDS
+                        )
+                      }
+                    >
                       <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
@@ -93,13 +133,11 @@ function TablaActivos() {
       </div>
 
       <Modal
-        estado={estadoModal1}
-        cambiarEstado={cambiarEstadoModal1}
-        titulo="Detalle Activos"
+        estado={estadoModal}
+        cambiarEstado={cambiarEstadoModal}
+        titulo={modalConfig.titulo}
       >
-        <Contenido>
-            <Form />
-        </Contenido>
+        {modalConfig.contenido}
       </Modal>
     </>
   );
