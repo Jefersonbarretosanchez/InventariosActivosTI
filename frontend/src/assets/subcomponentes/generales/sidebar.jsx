@@ -42,7 +42,7 @@ function Sidebar() {
         { name: 'Activos', icon: faGlobe, route: '/activos' },
         { name: 'Personas', icon: faUsersLine, route: '/personas' },
         { name: 'Equipos', icon: faDesktop, route: '/equipos' },
-        { name: 'Asignación Equipos', icon: faTruckRampBox, route: '/asignacion-equipos' },
+        { name: 'Asignación Equipos', icon: faTruckRampBox, route: '/asigEquipos' },
         { name: 'Licencias', icon: faIdCard, route: '/licencias' },
         { name: 'Asignación Licencias', icon: faBoxesStacked, route: '/asignacion-licencias' },
         { name: 'Historico Logs', icon: faClipboard, route: '/historico-logs' },

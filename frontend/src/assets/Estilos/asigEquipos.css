@@ -1,0 +1,94 @@
+.asigEquipos {
+    position: absolute;
+    margin-left: -0.1vw;
+    margin-top: 1.5vh;
+
+}
+
+.buscador-asigEquipos {
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
+    box-sizing: border-box;
+    border: 000.1vh solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 46.5vh;
+    margin-top: 1.5vh;
+}
+
+.agregar-asigEquipos {
+    position: absolute;
+    margin-left: 38.5vw;
+    margin-top: -6.7vh;
+    cursor: pointer;
+}
+
+.agregar-asigEquipos:hover {
+    position: absolute;
+    cursor: pointer;
+    transform: scale(1.6);
+}
+
+.table-asigEquipos th {
+    padding: 1.5vh -0vw 1.6vh 8vh;
+}
+
+.table-asigEquipos td {
+    padding: 1.5vh -0vw 1.6vh 6vh;
+}
+
+.table-asigEquipos th {
+    background-color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.table-asigEquipos tbody tr {
+    border-bottom: 0.1vh solid #ddd;
+}
+
+.table-asigEquipos tbody tr:hover {
+    background-color: #ddd;
+}
+
+.table-asigEquipos tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-asigEquipos {
+    /* background-color: #14ADD6; */
+    width: 100vw;
+    border-collapse: collapse;
+    margin-bottom: 2vh;
+}
+
+.bar {
+    display: flex;
+    justify-content: left;
+    background-color: white;
+    padding: 1.4vh;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    margin-left: 6.4vw;
+    width: 88vw;
+    margin-top: -1.5vh;
+}
+
+.asignacionPerifericos,
+.asignacionEquipos {
+    padding: 1vh .7vw;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.asignacionPerifericos:hover,
+.asignacionEquipos:hover,
+.asignacionEquipos.active {
+    background: -webkit-linear-gradient(#384295, #14ADD6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*border-bottom: 2px solid #384295;*/
+
+}

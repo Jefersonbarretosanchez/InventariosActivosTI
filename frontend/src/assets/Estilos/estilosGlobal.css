@@ -24,3 +24,12 @@
     width: 100vw;
     height: 100vh;
 }
+
+.asigEquiposBody {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f3f4f6;
+    width: 100vw;
+    height: 100vh;
+}

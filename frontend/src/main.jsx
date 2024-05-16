@@ -8,6 +8,7 @@ import Login from "./assets/componentes/login.jsx";
 import NotFound from "./assets/paginas/notFound.jsx";
 import Equipos from "./assets/componentes/equipos.jsx";
 import './index.css'
+import AsigEquipos from "./assets/componentes/asigEquipos.jsx";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -26,6 +27,7 @@ root.render(
         <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
         <Route path="/personas" element={<ProtectedRoute><Personas /></ProtectedRoute>} />
         <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
+        <Route path="/asigEquipos" element={<ProtectedRoute><AsigEquipos /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
