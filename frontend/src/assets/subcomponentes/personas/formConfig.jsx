@@ -8,7 +8,8 @@ export const ALL_INPUT_IDS = [
     "id_alianza",
     "id_area",
     "id_region",
-    "id_cargo"
+    "id_cargo",
+    "id_estado_persona"
   ];
 
 export const formFields = [

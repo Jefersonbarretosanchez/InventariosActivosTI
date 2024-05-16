@@ -91,13 +91,24 @@ const BotonCerrar = styled.button`
 `;
 
 const ModalBody = styled.div`
-  height: calc(100% - 100px); /* Calcula el alto restante para el cuerpo */
-  overflow-y: auto; /* Activa el desplazamiento vertical */
-  padding: 0 20px; /* Mantiene el margen interno en el área desplazable */
-  /* Aplica estilos condicionalmente según la prop 'scrollable' */
+  height: calc(100% - 20vh);
+  overflow-y: auto;
+  padding: 0 2vw;
+  padding-right: 1vw;
+  margin-right: -1vw;
+
+  /* Estilos para ocultar el scrollbar */
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  /* Otras propiedades de estilo */
   ${(props) =>
     props.scrollable &&
     `
-      background: #ffffff; /* Color de fondo sutil para contenido desplazable */
+      background: #ffffff;
     `}
 `;
+
+
