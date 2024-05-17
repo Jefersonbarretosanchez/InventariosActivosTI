@@ -5,17 +5,20 @@
     padding: 1vw 1.5vw;
     align-items: center;
     width: 94.9%;
-    margin-top: -0.5vh;
+    height: 8vh;
+    margin-top: -1vh;
     margin-left: 2.01vw;
 }
 
 .header h1 {
-    margin: 0 2vh;
+    margin: 1vh 2vh;
     font-size: 3vh;
+    margin-left: 1.5vw;
 }
 
 .header p {
-    margin: 0.8vh 2vh;
+    margin: -0.5vh 2vh;
+    margin-left: 1.5vw;
 }
 
 .menu-login {
@@ -23,6 +26,7 @@
     display: inline-block;
     font-family: Arial, sans-serif;
     margin-right: -3vh;
+    margin-top: 1vh;
 }
 
 .boton-usuario-gen {
@@ -96,7 +100,7 @@
     background-color: #ffffff;
     box-shadow: 2vh 0 20vh rgba(0, 0, 0, 0.1);
     z-index: 100;
-    margin-top: -12.5vh;
+    margin-top: -11.5vh;
 }
 
 .logo-menulateral {
@@ -119,7 +123,7 @@
 }
 
 .menu-lateral-gen nav ul li i {
-    margin-right: 2.5vh;
+    margin-right: 3.5vh;
 }
 
 .menu-lateral-gen nav ul li:hover {

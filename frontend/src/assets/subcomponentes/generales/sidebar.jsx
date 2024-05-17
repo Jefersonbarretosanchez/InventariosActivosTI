@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard, faDesktop, faGlobe, faIdCard, faTruckRampBox, faUsers, faUsersLine } from "@fortawesome/free-solid-svg-icons";
 import { faBoxesStacked, faUserTie } from '@fortawesome/free-solid-svg-icons';
@@ -28,9 +28,9 @@ function Sidebar() {
                 setWidth('3.75vw');
                 setIconWidth('2.2vw');
                 setImagen(nuevaimagen);
-                setImagenHeight('10.6vh');
-                setImagenWidth('3.5vw');
-                setPosicionImg('.3vw');
+                setImagenHeight('9.6vh');
+                setImagenWidth('3.8vw');
+                setPosicionImg('.1vw');
             }
         };
 

@@ -1,4 +1,5 @@
-.asigEquipos {
+.asigEquipos,
+.asigPerifericos {
     position: absolute;
     margin-left: -0.1vw;
     margin-top: 1.5vh;
@@ -17,6 +18,19 @@
     margin-top: 1.5vh;
 }
 
+.buscador-asigPerifericos {
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
+    box-sizing: border-box;
+    border: 000.1vh solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 51.5vh;
+    margin-top: 1.5vh;
+}
+
+
 .agregar-asigEquipos {
     position: absolute;
     margin-left: 38.5vw;
@@ -24,7 +38,20 @@
     cursor: pointer;
 }
 
+.agregar-asigPerifericos {
+    position: absolute;
+    margin-left: 41.5vw;
+    margin-top: -6.7vh;
+    cursor: pointer;
+}
+
 .agregar-asigEquipos:hover {
+    position: absolute;
+    cursor: pointer;
+    transform: scale(1.6);
+}
+
+.agregar-asigPerifericos:hover {
     position: absolute;
     cursor: pointer;
     transform: scale(1.6);
@@ -75,20 +102,64 @@
     margin-top: -1.5vh;
 }
 
-.asignacionPerifericos,
-.asignacionEquipos {
+#asignacionPerifericos,
+#asignacionEquipos {
     padding: 1vh .7vw;
     cursor: pointer;
     margin: 0 5px;
     transition: background-color 0.3s, color 0.3s;
 }
 
-.asignacionPerifericos:hover,
-.asignacionEquipos:hover,
-.asignacionEquipos.active {
+#asignacionPerifericos:hover,
+#asignacionEquipos:hover {
+    transform: scale(1.05);
+}
+
+#asignacionEquipos.active,
+#asignacionPerifericos.active {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     /*border-bottom: 2px solid #384295;*/
+}
 
+.contenedor-tabla-perifericos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1vw;
+}
+
+.table-asigPerifericos tbody tr {
+    border-bottom: 0.1vh solid #ddd;
+}
+
+
+.table-asigPerifericos th {
+    padding: 1.5vh -0vw 1.6vh 8vh;
+}
+
+.table-asigPerifericos td {
+    padding: 1.5vh -0vw 1.6vh 6vh;
+}
+
+.table-asigPerifericos th {
+    background-color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+}
+
+.table-asigPerifericos tbody tr:hover {
+    background-color: #ddd;
+}
+
+.table-asigPerifericos tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-asigPerifericos {
+    /* background-color: #14ADD6; */
+    width: 100vw;
+    border-collapse: collapse;
+    margin-bottom: 2vh;
 }

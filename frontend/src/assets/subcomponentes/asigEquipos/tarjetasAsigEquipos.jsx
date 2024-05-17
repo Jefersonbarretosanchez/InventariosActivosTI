@@ -18,7 +18,7 @@ function TarjetasAsigEquipos() {
           <span className="estadisticas-numero-activos">250</span>
           <br />
           <span className="estadisticas-descripcion-activos">
-            Total Equipos Activos
+            Total Equipos Asignados
           </span>
         </div>
       </div>
@@ -42,7 +42,7 @@ function TarjetasAsigEquipos() {
           <span className="estadisticas-numero-activos">92</span>
           <br />
           <span className="estadisticas-descripcion-activos">
-            Total Equipos Asignados
+            Total Perifericos Asignados
           </span>
         </div>
       </div>
@@ -54,7 +54,7 @@ function TarjetasAsigEquipos() {
           <span className="estadisticas-numero-activos">88</span>
           <br />
           <span className="estadisticas-descripcion-activos">
-            Total Licencias Equipos
+            Total Perifericos Disponibles
           </span>
         </div>
       </div>
