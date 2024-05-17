@@ -10,8 +10,8 @@ function TarjetasActivos() {
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
         <div className="icono-estatisticas-activos">
-        <Link to="/personas">
-          <img src={activos} alt="Logo Scala" className="logo-activos" />
+          <Link to="/personas">
+            <img src={activos} alt="Logo Scala" className="logo-activos" />
           </Link>
         </div>
         <div className="estadisticas-info-activos">
@@ -22,6 +22,7 @@ function TarjetasActivos() {
           </span>
         </div>
       </div>
+
       <div className="tarjeta-estadisticas-activos">
         <div className="icono-estatisticas-activos">
           <img src={inactivos} alt="Logo Scala" className="logo-activos" />
@@ -36,7 +37,9 @@ function TarjetasActivos() {
       </div>
       <div className="tarjeta-estadisticas-activos">
         <div className="icono-estatisticas-activos">
-          <img src={equipos} alt="Logo Scala" className="logo-activos" />
+          <Link to="/equipos">
+            <img src={equipos} alt="Logo Scala" className="logo-activos" />
+          </Link>
         </div>
         <div className="estadisticas-info-activos">
           <span className="estadisticas-numero-activos">92</span>

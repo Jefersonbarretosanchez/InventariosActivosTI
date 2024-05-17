@@ -163,3 +163,26 @@
     border-collapse: collapse;
     margin-bottom: 2vh;
 }
+
+.tarjeta-estadisticas-equipos {
+    background-color: #ffffff;
+    box-shadow: 0 0.5vh 2vh rgb(0, 0, 0, 0.1);
+    border-radius: 2vh;
+    padding: 3vh 2.5vh;
+    position: relative;
+    width: 100vw;
+    height: 11vh;
+    margin-left: 10vh;
+}
+
+.estadisticas-descripcion-asigequipos {
+    font-size: 14px;
+    color: #666;
+}
+
+.estadisticas-info-asigequipos {
+    text-align: left;
+    padding-top: 1.7vh;
+    padding-right: 4vh;
+    margin-left: 0.4vh;
+}
