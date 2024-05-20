@@ -33,15 +33,15 @@
 
 .agregar-asigEquipos {
     position: absolute;
-    margin-left: 38.5vw;
-    margin-top: -6.7vh;
+    margin-left: 40.5vw;
+    margin-top: -6.2vh;
     cursor: pointer;
 }
 
 .agregar-asigPerifericos {
     position: absolute;
-    margin-left: 41.5vw;
-    margin-top: -6.7vh;
+    margin-left: 43vw;
+    margin-top: -6.2vh;
     cursor: pointer;
 }
 
@@ -94,11 +94,11 @@
     display: flex;
     justify-content: left;
     background-color: white;
-    padding: 1.4vh;
+    padding: 0.8vh;
     margin-bottom: 20px;
     border-radius: 20px;
     margin-left: 6.4vw;
-    width: 88vw;
+    width: 89vw;
     margin-top: -1.5vh;
 }
 
@@ -185,4 +185,8 @@
     padding-top: 1.7vh;
     padding-right: 4vh;
     margin-left: 0.4vh;
+}
+.logo-perifericos{
+    width: 10%;
+    height: 10%;
 }

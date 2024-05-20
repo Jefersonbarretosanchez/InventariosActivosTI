@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
+import perifericos from "../../imagenes/perifericos_general.webp";
 import { formFields, ALL_INPUT_IDS } from "../equipos/formConfig";
 import FormDinamico from "../generales/formDinamico";
 
@@ -71,7 +72,7 @@ function TablaAsigEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td><img src={perifericos} alt="Logo Scala" className="logo-perifericos" /></td>
                   <td>
                     <button
                       className="btn-accion"
