@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines,faPlus,faPenToSquare,faMagnifyingGlass,} from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
 import { formFields, ALL_INPUT_IDS } from "./formConfig";
@@ -46,7 +46,7 @@ function TablaPersonas() {
           </div>
           <div>
             <FontAwesomeIcon
-              className="agregar-equipos"
+              className="agregar-personas"
               onClick={() => abrirModal("Agregar Persona", formFields, [])}
               icon={faPlus}
             />

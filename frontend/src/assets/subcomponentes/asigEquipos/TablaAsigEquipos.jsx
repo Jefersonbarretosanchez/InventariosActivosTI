@@ -72,7 +72,13 @@ function TablaAsigEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><img src={perifericos} alt="Logo Scala" className="logo-perifericos" /></td>
+                  <td><img onClick={() =>
+                    abrirModal(
+                      "Información de {Nombres Equipo}",
+                      formFields,
+                      ALL_INPUT_IDS
+                    )
+                  } src={perifericos} className="logo-perifericos btn-accion" /></td>
                   <td>
                     <button
                       className="btn-accion"
@@ -106,7 +112,13 @@ function TablaAsigEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td><img onClick={() =>
+                    abrirModal(
+                      "Información de {Nombres Equipo}",
+                      formFields,
+                      ALL_INPUT_IDS
+                    )
+                  } src={perifericos} className="logo-perifericos btn-accion" /></td>
                   <td>
                     <button
                       className="btn-accion"
@@ -140,7 +152,13 @@ function TablaAsigEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <td><img onClick={() =>
+                    abrirModal(
+                      "Información de {Nombres Equipo}",
+                      formFields,
+                      ALL_INPUT_IDS
+                    )
+                  } src={perifericos} className="logo-perifericos btn-accion" /></td>
                   <td>
                     <button
                       className="btn-accion"

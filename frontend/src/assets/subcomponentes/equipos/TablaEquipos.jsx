@@ -203,6 +203,7 @@ const Contenido = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 100;
 
   h1 {
     font-size: 42px;

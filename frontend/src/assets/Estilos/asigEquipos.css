@@ -34,7 +34,7 @@
 .agregar-asigEquipos {
     position: absolute;
     margin-left: 40.5vw;
-    margin-top: -6.2vh;
+    margin-top: -6.5vh;
     cursor: pointer;
 }
 
@@ -96,9 +96,9 @@
     background-color: white;
     padding: 0.8vh;
     margin-bottom: 20px;
-    border-radius: 20px;
+    border-radius: 12px;
     margin-left: 6.4vw;
-    width: 89vw;
+    width: 88.7vw;
     margin-top: -1.5vh;
 }
 
@@ -186,7 +186,13 @@
     padding-right: 4vh;
     margin-left: 0.4vh;
 }
-.logo-perifericos{
-    width: 10%;
-    height: 10%;
+
+.logo-perifericos {
+    width: 4vw;
+    height: 4vh;
+    margin-left: 2.2vw;
+}
+
+.logo-perifericos:hover {
+    transform: scale(1.2);
 }
