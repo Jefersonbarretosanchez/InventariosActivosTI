@@ -1,0 +1,53 @@
+#licenciaPersonas,
+#licenciaEquipos {
+    padding: 1vh .7vw;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#licenciaPersonas:hover,
+#licenciaEquipos:hover {
+    transform: scale(1.05);
+}
+
+#licenciaEquipos.active,
+#licenciaPersonas.active {
+    background: -webkit-linear-gradient(#384295, #14ADD6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*border-bottom: 2px solid #384295;*/
+}
+
+
+.contbuscador-licenciasPer {
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
+    box-sizing: border-box;
+    border: 000.1vh solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 38.5vh;
+    margin-top: 1.5vh;
+}
+
+.contbuscador-licenciasEquip {
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
+    box-sizing: border-box;
+    border: 000.1vh solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 38.5vh;
+    margin-top: 1.5vh;
+}
+
+.agregar-licPersonas,
+.agregar-licEquipos {
+    position: absolute;
+    margin-left: 35.5vw;
+    margin-top: -6.5vh;
+    cursor: pointer;
+}

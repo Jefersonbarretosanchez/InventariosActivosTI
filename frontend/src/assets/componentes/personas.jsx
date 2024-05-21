@@ -7,6 +7,7 @@ import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/personas.css"
+import TablaPersonasBack from "../subcomponentes/personas/tablaPersonasBack";
 
 export default function Personas() {
     return (

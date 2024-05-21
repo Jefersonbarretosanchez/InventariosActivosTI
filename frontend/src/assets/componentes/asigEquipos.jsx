@@ -7,7 +7,7 @@ import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/asigEquipos.css";
 import TablaAsigEquipos from "../subcomponentes/asigEquipos/TablaAsigEquipos";
 import TarjetasAsigEquipos from "../subcomponentes/asigEquipos/tarjetasAsigEquipos";
-import Bar from "../subcomponentes/generales/bar";
+import Bar from "../subcomponentes/asigEquipos/bar";
 import TablaAsigPerifericos from "../subcomponentes/asigEquipos/TablaAsigPerifericos";
 
 export default function AsigEquipos() {
