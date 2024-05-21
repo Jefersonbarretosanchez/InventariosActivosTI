@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const FormDinamico = ({ fields, disabledFields = [] }) => {
+const FormDinamico = ({ fields, disabledFields = [], initialValues = {} }) => {
   return (
     <Formulario>
       {fields.map((field, index) => (
@@ -15,6 +15,7 @@ const FormDinamico = ({ fields, disabledFields = [] }) => {
               name={field.id}
               id={field.id}
               className="form-select"
+              defaultValue={initialValues[field.id] || ""}
               disabled={disabledFields.includes(field.id)}
             >
               {field.options.map((option, idx) => (
@@ -28,6 +29,7 @@ const FormDinamico = ({ fields, disabledFields = [] }) => {
               type={field.type}
               className="form-control"
               id={field.id}
+              defaultValue={initialValues[field.id] || ""}
               required={field.required}
               disabled={disabledFields.includes(field.id)}
             />

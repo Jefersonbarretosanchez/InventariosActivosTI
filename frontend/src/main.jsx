@@ -9,9 +9,6 @@ import NotFound from "./assets/paginas/notFound.jsx";
 import Equipos from "./assets/componentes/equipos.jsx";
 import './index.css'
 import AsigEquipos from "./assets/componentes/asigEquipos.jsx";
-import Header from "./assets/subcomponentes/generales/header.jsx";
-import Sidebar from "./assets/subcomponentes/generales/sidebar.jsx";
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -27,10 +24,10 @@ root.render(
         <Route path="/" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
-        <Route path="/personas" element={<ProtectedRoute><Personas /></ProtectedRoute>} />
+        <Route path="/personas" element={<ProtectedRoute><Personas /></ProtectedRoute>} />}
+        <Route path="/personas-back" element={<ProtectedRoute><Personas /></ProtectedRoute>} />
         <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
         <Route path="/asigEquipos" element={<ProtectedRoute><AsigEquipos /></ProtectedRoute>} />
-        <Route path="/perifericos" element={<Header /> && <Sidebar />} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

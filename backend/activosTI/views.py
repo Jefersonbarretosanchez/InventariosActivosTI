@@ -1,11 +1,4 @@
 """Importaciones"""
-# from django.forms import BaseModelForm
-# from django.http import HttpResponse
-
-# from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.contrib.auth import authenticate
-# from django.contrib.auth.models import User
-# from rest_framework import viewsets
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
@@ -16,8 +9,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .forms import PersonaCreacion, PersonaActualizar
 from .serializers import UserSerializer, PersonaSerializer
 from .models import Historicos, Persona
-# from rest_framework.authentication import TokenAuthentication
-
 
 # Create your views here.
 
@@ -92,17 +83,11 @@ class PersonaDelete(DeleteView):
 class PersonaListCreate(generics.ListCreateAPIView):
     """P"""
     serializer_class = PersonaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         # user = self.request.user
-        return Persona.objects.all()
-
-    # def perform_create(self, serializer):
-    #     if serializer.is_valid():
-    #         serializer.save(nombres=self.request.user)
-    #     else:
-    #         print(serializer.errors)
+        return Persona.objects.all().order_by('id_trabajador')
 
 
 class PersonasDelete(generics.DestroyAPIView):
@@ -120,34 +105,3 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     """Clase de vista del usuario"""
-#     queryset=User.objects.all()
-#     serializer_class=UserSerializer
-
-# class PersonaViewSet(viewsets.ModelViewSet):
-#     """Clase vista persona API"""
-#     queryset=Persona.objects.all()
-#     serializer_class=PersonaSerializer
-
-# class LoginView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         serializer = UserSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-
-#         user = authenticate(username=serializer.validated_data['email'], password=serializer.validated_data['password'])
-
-#         if user:
-#             token = RefreshToken.for_user(user)
-#             return JSONResponse({
-#                 'user': UserSerializer(user).data,
-#                 'token': {
-#                     'access': token.access_token,
-#                     'refresh': token.refresh_token
-#                 }
-#             }, status=status.HTTP_200_OK)
-
-#         return JSONResponse({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
