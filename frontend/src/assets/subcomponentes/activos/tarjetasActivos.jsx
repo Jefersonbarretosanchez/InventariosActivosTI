@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import inactivos from "../../imagenes/equipos_stock.webp";
-import activos from "../../imagenes/personas.webp";
+import activos from "../../imagenes/perfil-del-usuario.png";
 import equipos from "../../imagenes/equipos.webp";
-import licencias from "../../imagenes/licencias.webp";
+import licencias from "../../imagenes/license-icon.webp";
 
 function TarjetasActivos() {
   return (

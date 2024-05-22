@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 import inactivos from "../../imagenes/equipos_stock.webp";
 import activos from "../../imagenes/equipos_activos.webp";
 import equipos from "../../imagenes/equipos.webp";
-import licencias from "../../imagenes/licencias.webp";
+import licencias from "../../imagenes/softwareN.png";
 
 function TarjetasEquipos() {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
         <div className="icono-estatisticas-activos">
-        <Link to="/personas">
-          <img src={activos} alt="Logo Scala" className="logo-activos" />
+          <Link to="/personas">
+            <img src={activos} alt="Logo Scala" className="logo-activos" />
           </Link>
         </div>
         <div className="estadisticas-info-activos">

@@ -1,8 +1,8 @@
 import React from "react";
-import activos from "../../imagenes/personas.webp";
-import inactivos from "../../imagenes/alertas.png";
+import activos from "../../imagenes/perfil-del-usuario.png";
+import inactivos from "../../imagenes/borrar-usuario.png";
 import equipos from "../../imagenes/equipos.webp";
-import licencias from "../../imagenes/licencias.webp";
+import licencias from "../../imagenes/license-icon.webp";
 
 function TarjetasPersonas() {
   return (

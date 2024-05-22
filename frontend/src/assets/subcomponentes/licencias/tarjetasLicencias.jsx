@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import inactivos from "../../imagenes/equipos_stock.webp";
-import activos from "../../imagenes/perifericos.webp";
-import equipos from "../../imagenes/equipos.webp";
-import licencias from "../../imagenes/perifericos_asig.webp";
+import inactivos from "../../imagenes/analisis.png";
+import activos from "../../imagenes/pagina-web.png";
+import equipos from "../../imagenes/softwareN.png";
+import licencias from "../../imagenes/license-icon.webp";
 
 function TarjetasLicencias() {
   return (
@@ -11,7 +11,7 @@ function TarjetasLicencias() {
       <div className="tarjeta-estadisticas-equipos">
         <div className="icono-estatisticas-activos">
           <Link to="/personas">
-            <img src={equipos} alt="Logo Scala" className="logo-activos" />
+            <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </Link>
         </div>
         <div className="estadisticas-info-asigequipos">
@@ -48,7 +48,7 @@ function TarjetasLicencias() {
       </div>
       <div className="tarjeta-estadisticas-equipos">
         <div className="icono-estatisticas-activos">
-          <img src={licencias} alt="Logo Scala" className="logo-activos" />
+          <img src={equipos} alt="Logo Scala" className="logo-activos" />
         </div>
         <div className="estadisticas-info-asigequipos">
           <span className="estadisticas-numero-activos">88</span>
