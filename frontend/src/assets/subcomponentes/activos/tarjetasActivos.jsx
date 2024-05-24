@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import inactivos from "../../imagenes/equipos_stock.webp";
+import inactivos from "../../imagenes/screen.png";
 import activos from "../../imagenes/perfil-del-usuario.png";
-import equipos from "../../imagenes/equipos.webp";
+import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/license-icon.webp";
 
 function TarjetasActivos() {
@@ -25,27 +25,27 @@ function TarjetasActivos() {
 
       <div className="tarjeta-estadisticas-activos">
         <div className="icono-estatisticas-activos">
-          <img src={inactivos} alt="Logo Scala" className="logo-activos" />
+          <img src={equipos} alt="Logo Scala" className="logo-activos" />
         </div>
         <div className="estadisticas-info-activos">
           <span className="estadisticas-numero-activos">75</span>
           <br />
           <span className="estadisticas-descripcion-activos">
-            Total Equipos Disponibles
+            Total Equipos Asignados
           </span>
         </div>
       </div>
       <div className="tarjeta-estadisticas-activos">
         <div className="icono-estatisticas-activos">
           <Link to="/equipos">
-            <img src={equipos} alt="Logo Scala" className="logo-activos" />
+            <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </Link>
         </div>
         <div className="estadisticas-info-activos">
           <span className="estadisticas-numero-activos">92</span>
           <br />
           <span className="estadisticas-descripcion-activos">
-            Total Equipos Asignados
+            Total Equipos Disponibles
           </span>
         </div>
       </div>

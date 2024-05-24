@@ -44,7 +44,7 @@ function Sidebar() {
         { name: 'Equipos', icon: faDesktop, route: '/equipos' },
         { name: 'Asignación Equipos', icon: faTruckRampBox, route: '/asigEquipos' },
         { name: 'Licencias', icon: faIdCard, route: '/licencias' },
-        { name: 'Asignación Licencias', icon: faBoxesStacked, route: '/asignacion-licencias' },
+        { name: 'Asignación Licencias', icon: faBoxesStacked, route: '/asiglicencias' },
         { name: 'Historico Logs', icon: faClipboard, route: '/historico-logs' },
         { name: 'Administración', icon: faUserTie, route: '/administracion' },
     ];

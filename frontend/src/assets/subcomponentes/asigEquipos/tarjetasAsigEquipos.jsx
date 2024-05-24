@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import inactivos from "../../imagenes/equipos_stock.webp";
-import activos from "../../imagenes/perifericos.webp";
-import equipos from "../../imagenes/equipos.webp";
-import licencias from "../../imagenes/perifericos_asig.webp";
+import inactivos from "../../imagenes/screen.png";
+import activos from "../../imagenes/auricular.png";
+import equipos from "../../imagenes/computadora.png";
+import licencias from "../../imagenes/camara-web.png";
 
 function TarjetasAsigEquipos() {
   return (

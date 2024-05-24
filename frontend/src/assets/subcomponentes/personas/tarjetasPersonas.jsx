@@ -1,7 +1,7 @@
 import React from "react";
 import activos from "../../imagenes/perfil-del-usuario.png";
-import inactivos from "../../imagenes/borrar-usuario.png";
-import equipos from "../../imagenes/equipos.webp";
+import inactivos from "../../imagenes/ocupado.png";
+import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/license-icon.webp";
 
 function TarjetasPersonas() {

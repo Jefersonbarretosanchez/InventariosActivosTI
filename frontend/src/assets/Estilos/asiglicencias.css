@@ -1,0 +1,41 @@
+.contbuscador-asigLicenciasPer {
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
+    box-sizing: border-box;
+    border: 000.1vh solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 62.5vh;
+    margin-top: 1.5vh;
+}
+
+.contbuscador-asigLicenciasEquip {
+    padding: 1.1vh;
+    margin-bottom: 3vh;
+    width: 15vw;
+    box-sizing: border-box;
+    border: 000.1vh solid #ccc;
+    border-radius: 10px;
+    position: relative;
+    margin-left: 59.5vh;
+    margin-top: 1.5vh;
+}
+
+.agregar-asigLicenciasPer {
+    position: absolute;
+    margin-left: 46.8vw;
+    margin-top: -6.5vh;
+    cursor: pointer;
+}
+
+.agregar-asigLicenciasEquip {
+    position: absolute;
+    margin-left: 45.5vw;
+    margin-top: -6.5vh;
+    cursor: pointer;
+}
+
+.spanAsigLic {
+    padding-top: 0.5vh;
+}

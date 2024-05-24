@@ -5,9 +5,8 @@ import Modal from "../generales/modal";
 import styled from "styled-components";
 import { formFields, ALL_INPUT_IDS } from "../equipos/formConfig";
 import FormDinamico from "../generales/formDinamico";
-import perifericos from "../../imagenes/perifericos_general.webp";
 
-function TablaAsigPerifericos() {
+function TablaAsigLicEquipos() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -34,11 +33,11 @@ function TablaAsigPerifericos() {
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Asignacion de Perifericos</h1>
+            <h1>Asignacion Licencias Equipos</h1>
           </div>
           <div className="contbuscador-asigEquipos">
             <input
-              className="buscador-asigPerifericos"
+              className="contbuscador-asigLicenciasEquip"
               type="text"
               placeholder="Buscar"
             />
@@ -49,20 +48,18 @@ function TablaAsigPerifericos() {
           </div>
           <div>
             <FontAwesomeIcon
-              className="agregar-asigPerifericos"
+              className="agregar-asigLicenciasEquip "
               onClick={() => abrirModal("Agregar Equipo", formFields, [])}
               icon={faPlus}
             />
           </div>
-          <div className="contenedor-tabla-perifericos">
-            <table className="table-asigPerifericos">
+          <div className="contenedor-tabla-activos">
+            <table className="table-asigEquipos">
               <thead>
-                <th>ID Kit</th>
-                <th></th>
+                <th>ID </th>
                 <th>Equipo</th>
-                <th></th>
-                <th>Perifericos</th>
-                <th></th>
+                <th>ID Equipo</th>
+                <th>Ultima Fecha de Asignacion</th>
                 <th>Acciones</th>
               </thead>
               <tbody>
@@ -72,14 +69,6 @@ function TablaAsigPerifericos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><img onClick={() =>
-                    abrirModal(
-                      "Información de {Nombres Equipo}",
-                      formFields,
-                      ALL_INPUT_IDS
-                    )
-                  } src={perifericos} className="logo-perifericos btn-accion" /></td>
-                  <td></td>
                   <td>
                     <button
                       className="btn-accion"
@@ -112,14 +101,6 @@ function TablaAsigPerifericos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><img onClick={() =>
-                    abrirModal(
-                      "Información de {Nombres Equipo}",
-                      formFields,
-                      ALL_INPUT_IDS
-                    )
-                  } src={perifericos} className="logo-perifericos btn-accion" /></td>
-                  <td></td>
                   <td>
                     <button
                       className="btn-accion"
@@ -151,14 +132,6 @@ function TablaAsigPerifericos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td><img onClick={() =>
-                    abrirModal(
-                      "Información de {Nombres Equipo}",
-                      formFields,
-                      ALL_INPUT_IDS
-                    )
-                  } src={perifericos} className="logo-perifericos btn-accion" /></td>
                   <td></td>
                   <td>
                     <button
@@ -204,7 +177,7 @@ function TablaAsigPerifericos() {
   );
 }
 
-export default TablaAsigPerifericos;
+export default TablaAsigLicEquipos;
 
 const Boton = styled.button`
   display: block;
