@@ -15,6 +15,7 @@ function TablaPersonasBack() {
   });
   const [personas, setPersonas] = useState([]);
   const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
+  const [centroCostos, setCentroCostos] = useState([]);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/personas/')
@@ -24,14 +25,31 @@ function TablaPersonasBack() {
       .catch(error => {
         console.error("Error al obtener las personas", error);
       });
+
+    axios.get('http://localhost:8000/api/centro_costos/')
+      .then(response => {
+        setCentroCostos(response.data.map(item => ({ value: item.id, label: item.nombre })));
+      })
+      .catch(error => {
+        console.error("Error al obtener los centros de costo", error);
+      });
+
   }, []);
 
   const abrirModal = (titulo, fields, disabledFields = [], initialValues = {}) => {
+
+    const updatedFields = fields.map(field => {
+      if (field.id === "id_centro_costo") {
+        return { ...field, options: centroCostos };
+      }
+      return field;
+    });
+
     cambiarModalConfig({
       titulo,
       contenido: (
         <FormDinamico
-          fields={fields}
+          fields={updatedFields}
           disabledFields={disabledFields}
           initialValues={initialValues}
         />
@@ -89,7 +107,7 @@ function TablaPersonasBack() {
                     <td>{persona.nombres}</td>
                     <td>{persona.identificacion}</td>
                     <td>{persona.correo_institucional}</td>
-                    <td>{persona.id_estado_persona}</td>
+                    <td>{persona.estado_persona}</td>
                     <td>
                       <button
                         className="btn-accion"

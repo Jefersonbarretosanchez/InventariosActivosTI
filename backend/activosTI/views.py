@@ -7,8 +7,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import PersonaCreacion, PersonaActualizar
-from .serializers import UserSerializer, PersonaSerializer
-from .models import HistoricoGeneral, Persona
+from .serializers import UserSerializer, PersonaSerializer,CentroCostoSerializer
+from .models import HistoricoGeneral, Persona, CatCentroCosto
 
 # Create your views here.
 
@@ -104,4 +104,9 @@ class CreateUserView(generics.CreateAPIView):
     """CU"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    
+class CatCentroCostoViewSet(generics.ListCreateAPIView):
+    queryset = CatCentroCosto.objects.all()
+    serializer_class = CentroCostoSerializer
     permission_classes = [AllowAny]

@@ -5,7 +5,7 @@ export const ALL_INPUT_IDS = [
     "correo_personal",
     "correo_institucional",
     "fecha_ingreso_empresa",
-    "id_alianza",
+    "id_centro_costo",
     "id_area",
     "id_region",
     "id_cargo",
@@ -50,14 +50,11 @@ export const formFields = [
     required: true,
   },
   {
-    id: "id_alianza",
-    label: "Alianza",
+    id: "id_centro_costo",
+    label: "Centro de Costo",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_area",
