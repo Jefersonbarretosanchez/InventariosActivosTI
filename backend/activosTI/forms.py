@@ -19,7 +19,7 @@ class PersonaCreacion(ModelForm):
                   'correo_personal', 
                   'correo_institucional',
                   'fecha_ingreso_empresa',
-                  'id_area', 'id_alianza', 
+                  'id_area', 'id_centro_costo', 
                   'id_region', 
                   'id_estado_persona', 
                   'id_cargo']
@@ -38,7 +38,7 @@ class PersonaCreacion(ModelForm):
                     'class': 'form-select'
                 }
             ),
-            'id_alianza': forms.Select(
+            'id_centro_costo': forms.Select(
                 attrs={
                     'class': 'form-select'
                 }
@@ -75,7 +75,7 @@ class PersonaActualizar(ModelForm):
                   'correo_institucional', 
                   'fecha_ingreso_empresa',
                   'id_area', 
-                  'id_alianza', 
+                  'id_centro_costo', 
                   'id_region', 
                   'id_estado_persona', 
                   'id_cargo']
@@ -94,7 +94,7 @@ class PersonaActualizar(ModelForm):
                     'class': 'form-select'
                 }
             ),
-            'id_alianza': forms.Select(
+            'id_centro_costo': forms.Select(
                 attrs={
                     'class': 'form-select'
                 }

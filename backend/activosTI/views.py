@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import PersonaCreacion, PersonaActualizar
 from .serializers import UserSerializer, PersonaSerializer
-from .models import Historicos, Persona
+from .models import HistoricoGeneral, Persona
 
 # Create your views here.
 
@@ -24,7 +24,7 @@ class PersonaCreate(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
 
-        Historicos.objects.create(
+        HistoricoGeneral.objects.create(
             usuario=self.request.user,
             correo_usuario=self.request.user.email,
             tipo_cambio="Creacion",

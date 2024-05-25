@@ -139,9 +139,9 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='CatAlianza',
+            name='CatCentroCosto',
             fields=[
-                ('id_alianza', models.AutoField(primary_key=True, serialize=False)),
+                ('id_centro_costo', models.AutoField(primary_key=True, serialize=False)),
                 ('nombre', models.CharField(max_length=30)),
                 ('fecha_registro', models.DateField()),
                 ('fecha_actualizacion', models.DateField()),
@@ -149,7 +149,7 @@ class Migration(migrations.Migration):
                 ('usuario_actualizacion', models.CharField(max_length=30)),
             ],
             options={
-                'db_table': 'cat_alianza',
+                'db_table': 'cat_centro_costo',
                 'managed': False,
             },
         ),

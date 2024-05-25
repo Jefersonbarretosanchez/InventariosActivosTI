@@ -3,7 +3,7 @@ from .models import *
 
 class PersonaAdmin(admin.ModelAdmin):
     """Configuracion Modulo Admin Medio Carga"""
-    list_display = ["identificacion", 'nombres','id_estado_persona','id_alianza']
+    list_display = ["identificacion", 'nombres','id_estado_persona','id_centro_costo']
     #readonly_fields = ("fecharegistro", 'fecha_actualizacion')
     search_fields = ['identificacion', 'nombres']
     list_filter = ['id_estado_persona']

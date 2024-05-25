@@ -21,5 +21,5 @@ class PersonaSerializer(serializers.ModelSerializer):
     """Serializador para el modelo Persona"""
     class Meta:
         model = Persona
-        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos', 'correo_personal', 'correo_institucional', 'id_alianza',
+        fields = ['id_trabajador', 'identificacion', 'nombres', 'apellidos', 'correo_personal', 'correo_institucional', 'id_centro_costo',
                   'id_area', 'id_region', 'id_cargo', 'fecha_ingreso_empresa', 'id_estado_persona']

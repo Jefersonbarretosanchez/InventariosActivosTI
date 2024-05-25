@@ -14,21 +14,4 @@ class Migration(migrations.Migration):
             name='catcargo',
             options={},
         ),
-        migrations.RemoveField(
-            model_name='catalianza',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catalianza',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catalianza',
-            name='usuario_registro',
-        ),
-        migrations.AlterField(
-            model_name='catalianza',
-            name='fecha_registro',
-            field=models.DateTimeField(auto_now_add=True),
-        ),
     ]

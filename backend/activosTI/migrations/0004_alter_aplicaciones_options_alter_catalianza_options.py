@@ -14,8 +14,4 @@ class Migration(migrations.Migration):
             name='aplicaciones',
             options={},
         ),
-        migrations.AlterModelOptions(
-            name='catalianza',
-            options={},
-        ),
     ]
