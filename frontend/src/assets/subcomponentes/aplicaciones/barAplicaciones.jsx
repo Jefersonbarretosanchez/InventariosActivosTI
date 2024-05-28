@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 
-export default function BarLicencias({ onClickTabla }) {
+export default function BarAsigLicencias({ onClickTabla }) {
     const [tablaSeleccionada, setTablaSeleccionada] = useState('licenciaPersonas'); // Estado para la tabla seleccionada
 
     const handleTablaClick = (e) => {
@@ -12,9 +12,8 @@ export default function BarLicencias({ onClickTabla }) {
 
     return (
         <div className="bar">
-            <div id="licenciaPersonas" className={tablaSeleccionada === 'licenciaPersonas' ? 'active' : ''} onClick={handleTablaClick}>Licencias Personas</div>
-            <div id="licenciaEquipos" className={tablaSeleccionada === 'licenciaEquipos' ? 'active' : ''} onClick={handleTablaClick}>Licencias Equipos</div>
-            <div id="licenciaAreas" className={tablaSeleccionada === 'licenciaAreas' ? 'active' : ''} onClick={handleTablaClick}>Licencias Areas</div>
+            <div id="licenciaPersonas" className={tablaSeleccionada === 'licenciaPersonas' ? 'active' : ''} onClick={handleTablaClick}>Aplicaciones</div>
+            <div id="licenciaEquipos" className={tablaSeleccionada === 'licenciaEquipos' ? 'active' : ''} onClick={handleTablaClick}>Asignacion de aplicaciones</div>
         </div>
     );
 }

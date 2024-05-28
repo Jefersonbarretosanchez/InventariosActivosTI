@@ -29,6 +29,13 @@
     cursor: pointer;
 }
 
+.agregar-asigLicenciasEquip:hover,
+.agregar-asigLicenciasPer:hover {
+    position: absolute;
+    cursor: pointer;
+    transform: scale(1.6);
+}
+
 .agregar-asigLicenciasEquip {
     position: absolute;
     margin-left: 45.5vw;

@@ -11,6 +11,8 @@ import './index.css'
 import AsigEquipos from "./assets/componentes/asigEquipos.jsx";
 import Licencias from "./assets/componentes/licencias.jsx";
 import Asiglicencias from "./assets/componentes/asiglicencias.jsx";
+import Aplicaciones from "./assets/componentes/aplicaciones.jsx";
+import Contratos from "./assets/componentes/contratos.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -31,6 +33,8 @@ root.render(
         <Route path="/asigEquipos" element={<ProtectedRoute><AsigEquipos /></ProtectedRoute>} />
         <Route path="/licencias" element={<ProtectedRoute><Licencias /></ProtectedRoute>} />
         <Route path="/asiglicencias" element={<ProtectedRoute><Asiglicencias /></ProtectedRoute>} />
+        <Route path="/aplicaciones" element={<ProtectedRoute><Aplicaciones /></ProtectedRoute>} />
+        <Route path="/contratos" element={<ProtectedRoute><Contratos /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 #licenciaPersonas,
-#licenciaEquipos {
+#licenciaEquipos,
+#licenciaAreas {
     padding: 1vh .7vw;
     cursor: pointer;
     margin: 0 5px;
@@ -7,12 +8,14 @@
 }
 
 #licenciaPersonas:hover,
-#licenciaEquipos:hover {
+#licenciaEquipos:hover,
+#licenciaAreas:hover {
     transform: scale(1.05);
 }
 
 #licenciaEquipos.active,
-#licenciaPersonas.active {
+#licenciaPersonas.active,
+#licenciaAreas.active {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -50,4 +53,11 @@
     margin-left: 35.5vw;
     margin-top: -6.5vh;
     cursor: pointer;
+}
+
+.agregar-licPersonas:hover,
+.agregar-licEquipos:hover {
+    position: absolute;
+    cursor: pointer;
+    transform: scale(1.6);
 }

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard, faDesktop, faGlobe, faIdCard, faTruckRampBox, faUsers, faUsersLine } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard, faDesktop, faFileContract, faFileSignature, faGlobe, faIdCard, faPaste, faRectangleList, faTruckRampBox, faUserGear, faUsers, faUsersLine, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
 import { faBoxesStacked, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../imagenes/login.png';
 import nuevaimagen from '../../imagenes/logopeq.jpg';
+import { faMicrosoft } from '@fortawesome/free-brands-svg-icons';
 
 function Sidebar() {
     const [width, setWidth] = useState('17vw');
@@ -45,19 +46,21 @@ function Sidebar() {
         { name: 'Asignación Equipos', icon: faTruckRampBox, route: '/asigEquipos' },
         { name: 'Licencias', icon: faIdCard, route: '/licencias' },
         { name: 'Asignación Licencias', icon: faBoxesStacked, route: '/asiglicencias' },
-        { name: 'Historico Logs', icon: faClipboard, route: '/historico-logs' },
-        { name: 'Administración', icon: faUserTie, route: '/administracion' },
+        { name: 'Aplicaciones', icon: faMicrosoft, route: '/aplicaciones' },
+        { name: 'Contratos', icon: faFileContract, route: '/contratos' },
+        { name: 'Historico Logs', icon: faRectangleList, route: '/historico-logs' },
+        { name: 'Administración', icon: faUserGear, route: '/administracion' },
     ];
 
     return (
         <aside id="menu-lateral" className="menu-lateral-gen" style={{ width }}>
-            <div className="logo-menulateral">
+            <div className="logo-menulateral" >
                 <img src={imagen} alt="Logo Scala" style={{ width: imagenWidth, height: imagenHeight, marginLeft: posicionImg }} />
             </div>
             <nav>
-                <ul>
+                <ul >
                     {menuItems.map(item => (
-                        <li key={item.name} className={location.pathname === item.route ? 'active-icono' : ''}
+                        <li key={item.name} style={{ marginTop: '-2px', fontSize: '16.8px' }} className={location.pathname === item.route ? 'active-icono' : ''}
                             onClick={() => {
                                 navigate(item.route);
                             }}>

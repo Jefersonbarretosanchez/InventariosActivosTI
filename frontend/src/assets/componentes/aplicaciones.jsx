@@ -11,8 +11,12 @@ import TarjetasAsigLicencias from '../subcomponentes/asigLicencias/tarjetasAsigL
 import BarAsigLicencias from '../subcomponentes/asigLicencias/barAsigLicencias';
 import TablaAsigLicPersonas from '../subcomponentes/asigLicencias/TablaAsigLicPersonas';
 import TablaAsigLicEquipos from '../subcomponentes/asigLicencias/TablaAsigLicEquipos';
+import TarjetasAplicaciones from '../subcomponentes/aplicaciones/tarjetasAplicaciones';
+import BarAplicaciones from '../subcomponentes/aplicaciones/barAplicaciones';
+import TablaAplicaciones from '../subcomponentes/aplicaciones/TablaAplicaciones';
+import TablaAsigAplicaciones from '../subcomponentes/aplicaciones/TablaAsigAplicaciones';
 
-export default function Asiglicencias() {
+export default function Aplicaciones() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
 
     const handleTablaClick = (tabla) => {
@@ -23,9 +27,9 @@ export default function Asiglicencias() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <TarjetasAsigLicencias />
-            <BarAsigLicencias onClickTabla={handleTablaClick} />
-            {tablaActiva === 'licenciaPersonas' ? (<TablaAsigLicPersonas />) : (<TablaAsigLicEquipos />)}
+            <TarjetasAplicaciones />
+            <BarAplicaciones onClickTabla={handleTablaClick} />
+            {tablaActiva === 'licenciaPersonas' ? (<TablaAplicaciones />) : (<TablaAsigAplicaciones />)}
             <Paginate />
             <Footer />
         </div>

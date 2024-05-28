@@ -104,18 +104,19 @@
 }
 
 .logo-menulateral {
-    margin-top: 2vh;
+    margin-top: 1.6vh;
 }
 
 .menu-lateral-gen nav ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    margin-top: 5.17vh;
+    margin-top: 2vh;
+    margin-left: -0.1vw;
 }
 
 .menu-lateral-gen nav ul li {
-    padding: 2vh 2vh;
+    padding: 1.8vh 2vh;
     cursor: pointer;
     transition: background-color 0.3s;
     display: flex;
