@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../generales/modal";
+import Modal from "../../generales/modal";
 import styled from "styled-components";
-import { formFields, ALL_INPUT_IDS } from "../equipos/formConfig";
-import FormDinamico from "../generales/formDinamico";
+import { formFields, ALL_INPUT_IDS } from "../../equipos/formConfig";
+import FormDinamico from "../../generales/formDinamico";
 
-function TablaAsigLicEquipos() {
+function TablaCatArea() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -33,9 +33,9 @@ function TablaAsigLicEquipos() {
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Asignacion Licencias Equipos</h1>
+            <h1>Catalogo Areas</h1>
           </div>
-          <div className="contbuscador-asigEquipos">
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-14.5vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -48,18 +48,18 @@ function TablaAsigLicEquipos() {
           </div>
           <div>
             <FontAwesomeIcon
+              style={{ marginLeft: '30.5vw' }}
               className="agregar-asigLicenciasEquip "
               onClick={() => abrirModal("Agregar Equipo", formFields, [])}
               icon={faPlus}
             />
           </div>
-          <div className="contenedor-tabla-activos">
+          <div className="contenedor-tabla-activos" >
             <table className="table-asigEquipos">
               <thead>
-                <th style={{ padding: '0vw 0vw 0vw 6vw' }}>ID </th>
-                <th>Equipo</th>
-                <th>ID Equipo</th>
-                <th>Ultima Fecha de Asignacion</th>
+                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Area</th>
+                <th>Nombre</th>
+                <th>Fecha Creacion</th>
                 <th>Acciones</th>
               </thead>
               <tbody>
@@ -68,9 +68,8 @@ function TablaAsigLicEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td>
-                    <button
+                    <button style={{ marginLeft: '1.8vw' }}
                       className="btn-accion"
                       onClick={() =>
                         abrirModal("Editar {Nombres Equipo}", formFields, [
@@ -81,18 +80,6 @@ function TablaAsigLicEquipos() {
                       }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
-                    </button>
-                    <button
-                      className="btn-accion"
-                      onClick={() =>
-                        abrirModal(
-                          "Información de {Nombres Equipo}",
-                          formFields,
-                          ALL_INPUT_IDS
-                        )
-                      }
-                    >
-                      <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
                 </tr>
@@ -100,9 +87,8 @@ function TablaAsigLicEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td>
-                    <button
+                    <button style={{ marginLeft: '1.8vw' }}
                       className="btn-accion"
                       onClick={() =>
                         abrirModal("Editar {Nombres Equipo}", formFields, [
@@ -113,18 +99,6 @@ function TablaAsigLicEquipos() {
                       }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
-                    </button>
-                    <button
-                      className="btn-accion"
-                      onClick={() =>
-                        abrirModal(
-                          "Información de {Nombres Equipo}",
-                          formFields,
-                          ALL_INPUT_IDS
-                        )
-                      }
-                    >
-                      <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
                 </tr>
@@ -132,9 +106,8 @@ function TablaAsigLicEquipos() {
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                   <td>
-                    <button
+                    <button style={{ marginLeft: '1.8vw' }}
                       className="btn-accion"
                       onClick={() =>
                         abrirModal("Editar {Nombres Equipo}", formFields, [
@@ -145,18 +118,6 @@ function TablaAsigLicEquipos() {
                       }
                     >
                       <FontAwesomeIcon icon={faPenToSquare} />
-                    </button>
-                    <button
-                      className="btn-accion"
-                      onClick={() =>
-                        abrirModal(
-                          "Información de {Nombres Equipo}",
-                          formFields,
-                          ALL_INPUT_IDS
-                        )
-                      }
-                    >
-                      <FontAwesomeIcon icon={faFileLines} />
                     </button>
                   </td>
                 </tr>
@@ -177,7 +138,7 @@ function TablaAsigLicEquipos() {
   );
 }
 
-export default TablaAsigLicEquipos;
+export default TablaCatArea;
 
 const Boton = styled.button`
   display: block;

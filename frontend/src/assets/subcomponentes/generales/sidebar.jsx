@@ -48,7 +48,7 @@ function Sidebar() {
         { name: 'Asignación Licencias', icon: faBoxesStacked, route: '/asiglicencias' },
         { name: 'Aplicaciones', icon: faMicrosoft, route: '/aplicaciones' },
         { name: 'Contratos', icon: faFileContract, route: '/contratos' },
-        { name: 'Historico Logs', icon: faRectangleList, route: '/historico-logs' },
+        { name: 'Historico Logs', icon: faRectangleList, route: '/historicoLogs' },
         { name: 'Administración', icon: faUserGear, route: '/administracion' },
     ];
 

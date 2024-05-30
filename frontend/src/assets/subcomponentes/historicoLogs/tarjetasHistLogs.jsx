@@ -1,29 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import inactivos from "../../imagenes/screen.png";
-import activos from "../../imagenes/mensaje-recibido.png";
+import activos from "../../imagenes/perfil-del-usuario.png";
 import equipos from "../../imagenes/computadora.png";
-import licencias from "../../imagenes/laptop.png";
+import licencias from "../../imagenes/license-icon.webp";
 
-function TarjetasEquipos() {
+function tarjetasHistLogs() {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
-        <Link to="/equipos" style={{ color: 'black' }}>
+        <Link to="/personas" style={{ color: 'black' }}>
           <div className="icono-estatisticas-activos">
-            <Link to="/personas">
-              <img src={activos} alt="Logo Scala" className="logo-activos" />
-            </Link>
+            <img src={activos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
             <span className="estadisticas-numero-activos">250</span>
             <br />
             <span className="estadisticas-descripcion-activos">
-              Total Equipos Activos
+              Total Personas Activas
             </span>
           </div>
         </Link>
       </div>
+
       <div className="tarjeta-estadisticas-activos">
         <Link to="/asigEquipos" style={{ color: 'black' }}>
           <div className="icono-estatisticas-activos">
@@ -52,9 +51,8 @@ function TarjetasEquipos() {
           </div>
         </Link>
       </div>
-
       <div className="tarjeta-estadisticas-activos">
-        <Link to="/licencias" style={{ color: 'black' }}>
+        <Link to="/asiglicencias" style={{ color: 'black' }}>
           <div className="icono-estatisticas-activos">
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
@@ -62,7 +60,7 @@ function TarjetasEquipos() {
             <span className="estadisticas-numero-activos">88</span>
             <br />
             <span className="estadisticas-descripcion-activos">
-              Total Licencias Equipos
+              Total Licencias Asignadas
             </span>
           </div>
         </Link>
@@ -70,4 +68,4 @@ function TarjetasEquipos() {
     </div>
   );
 }
-export default TarjetasEquipos;
+export default tarjetasHistLogs;

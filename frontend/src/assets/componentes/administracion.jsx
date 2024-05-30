@@ -1,0 +1,36 @@
+
+
+import React, { useState } from 'react';
+import "../Estilos/activos.css";
+import Header from "../subcomponentes/generales/header";
+import Sidebar from "../subcomponentes/generales/sidebar";
+import Footer from "../subcomponentes/generales/footer";
+import Paginate from "../subcomponentes/generales/paginate";
+import "../Estilos/asiglicencias.css";
+import TarjetasAdmin from '../subcomponentes/administracion/tarjetasAdmin';
+import BarAdmin from '../subcomponentes/administracion/barAdmin';
+import TablaCatAlianza from '../subcomponentes/administracion/catalogos/TablaCatAlianza';
+import TablaCatArea from '../subcomponentes/administracion/catalogos/TablaCatArea';
+import TablaCatPuesto from '../subcomponentes/administracion/catalogos/TablaCatPuesto';
+import TablaCatUbicacion from '../subcomponentes/administracion/catalogos/TablaCatUbicacion';
+import TablaCatRegion from '../subcomponentes/administracion/catalogos/TablaCatRegion';
+
+export default function Administracion() {
+    const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
+
+    const handleTablaClick = (tabla) => {
+        setTablaActiva(tabla);
+    };
+
+    return (
+        <div className="LicenciasBody">
+            <Header />
+            <Sidebar />
+            <TarjetasAdmin />
+            <BarAdmin onClickTabla={handleTablaClick} />
+            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianza />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatArea />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuesto />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) : (<TablaCatRegion />)}
+            <Paginate />
+            <Footer />
+        </div>
+    );
+}

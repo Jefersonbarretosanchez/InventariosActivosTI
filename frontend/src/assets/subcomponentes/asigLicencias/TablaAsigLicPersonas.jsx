@@ -56,7 +56,7 @@ function TablaAsigLicPersonas() {
           <div className="contenedor-tabla-activos">
             <table className="table-asigEquipos">
               <thead>
-                <th>ID </th>
+                <th style={{ padding: '0vw 0vw 0vw 6vw' }}>ID </th>
                 <th>Empleado</th>
                 <th>Correo</th>
                 <th>Ultima Fecha de Asignacion</th>

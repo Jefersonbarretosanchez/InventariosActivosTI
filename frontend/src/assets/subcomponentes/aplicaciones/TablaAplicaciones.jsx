@@ -57,7 +57,7 @@ function TablaAplicaciones() {
           <div className="contenedor-tabla-activos">
             <table className="table-asigEquipos">
               <thead>
-                <th>ID </th>
+                <th style={{ padding: '0vw 0vw 0vw 5.5vw' }}>ID </th>
                 <th></th>
                 <th>Nombre Aplicativo</th>
                 <th>Fecha de instalacion</th>

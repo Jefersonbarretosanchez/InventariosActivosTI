@@ -13,6 +13,8 @@ import Licencias from "./assets/componentes/licencias.jsx";
 import Asiglicencias from "./assets/componentes/asiglicencias.jsx";
 import Aplicaciones from "./assets/componentes/aplicaciones.jsx";
 import Contratos from "./assets/componentes/contratos.jsx";
+import HistLogs from "./assets/componentes/histLogs.jsx";
+import Administracion from "./assets/componentes/administracion.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -35,6 +37,8 @@ root.render(
         <Route path="/asiglicencias" element={<ProtectedRoute><Asiglicencias /></ProtectedRoute>} />
         <Route path="/aplicaciones" element={<ProtectedRoute><Aplicaciones /></ProtectedRoute>} />
         <Route path="/contratos" element={<ProtectedRoute><Contratos /></ProtectedRoute>} />
+        <Route path="/historicoLogs" element={<ProtectedRoute><HistLogs /></ProtectedRoute>} />
+        <Route path="/administracion" element={<ProtectedRoute><Administracion /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

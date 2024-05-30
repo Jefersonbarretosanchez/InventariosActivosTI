@@ -12,6 +12,7 @@ import TablaLicPersonas from '../subcomponentes/licencias/TablaLicPersonas';
 import TablaLicEquipos from '../subcomponentes/licencias/TablaLicEquipos';
 import BarLicencias from '../subcomponentes/licencias/barLicencias';
 import TablaLicAreas from '../subcomponentes/licencias/TablaLicAreas';
+import BarHistLogs from '../subcomponentes/historicoLogs/barHistLogs';
 
 export default function Licencias() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -26,8 +27,7 @@ export default function Licencias() {
             <Sidebar />
             <TarjetasLicencias />
             <BarLicencias onClickTabla={handleTablaClick} />
-            {tablaActiva === 'licenciaPersonas' ? (<TablaLicPersonas />) : tablaActiva === 'licenciaEquipos' ? (
-                <TablaLicEquipos />) : (<TablaLicAreas />)}
+            {tablaActiva === 'licenciaPersonas' ? (<TablaLicPersonas />) : tablaActiva === 'licenciaEquipos' ? (<TablaLicEquipos />) : (<TablaLicAreas />)}
             <Paginate />
             <Footer />
         </div>

@@ -11,6 +11,10 @@
 #licenciaEquipos:hover,
 #licenciaAreas:hover {
     transform: scale(1.05);
+    background: -webkit-linear-gradient(#292929, #a0acaf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*border-bottom: 2px solid #384295;*/
 }
 
 #licenciaEquipos.active,

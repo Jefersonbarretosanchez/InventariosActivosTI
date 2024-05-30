@@ -165,6 +165,10 @@
     margin-left: 10vh;
 }
 
+.tarjeta-estadisticas-activos:hover {
+    transform: scale(1.05);
+}
+
 .icono-estatisticas-activos {
     position: absolute;
     top: 1vh;

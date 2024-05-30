@@ -57,21 +57,16 @@ function TablaAsigPerifericos() {
           <div className="contenedor-tabla-perifericos">
             <table className="table-asigPerifericos">
               <thead>
-                <th>ID Kit</th>
-                <th></th>
-                <th>Equipo</th>
-                <th></th>
-                <th>Perifericos</th>
-                <th></th>
-                <th>Acciones</th>
+                <th style={{ padding: '0vw 0vw 0vw 8vw' }} >ID Kit</th>
+                <th >Nombre Equipo</th>
+                <th >Perifericos</th>
+                <th style={{ padding: '0vw 0vw 0vw 4vw' }} >Acciones</th>
               </thead>
               <tbody>
                 {/* Incluir For para la interaccion fila por fila */}
                 <tr>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
                   <td><img onClick={() =>
                     abrirModal(
                       "Información de {Nombres Equipo}",
@@ -79,7 +74,6 @@ function TablaAsigPerifericos() {
                       ALL_INPUT_IDS
                     )
                   } src={perifericos} className="logo-perifericos btn-accion" /></td>
-                  <td></td>
                   <td>
                     <button
                       className="btn-accion"
@@ -110,8 +104,6 @@ function TablaAsigPerifericos() {
                 <tr>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
                   <td><img onClick={() =>
                     abrirModal(
                       "Información de {Nombres Equipo}",
@@ -119,7 +111,6 @@ function TablaAsigPerifericos() {
                       ALL_INPUT_IDS
                     )
                   } src={perifericos} className="logo-perifericos btn-accion" /></td>
-                  <td></td>
                   <td>
                     <button
                       className="btn-accion"
@@ -150,8 +141,6 @@ function TablaAsigPerifericos() {
                 <tr>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
                   <td><img onClick={() =>
                     abrirModal(
                       "Información de {Nombres Equipo}",
@@ -159,7 +148,6 @@ function TablaAsigPerifericos() {
                       ALL_INPUT_IDS
                     )
                   } src={perifericos} className="logo-perifericos btn-accion" /></td>
-                  <td></td>
                   <td>
                     <button
                       className="btn-accion"

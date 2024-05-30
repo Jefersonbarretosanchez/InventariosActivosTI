@@ -103,7 +103,8 @@
 }
 
 #asignacionPerifericos,
-#asignacionEquipos {
+#asignacionEquipos,
+#ubicacion {
     padding: 1vh .7vw;
     cursor: pointer;
     margin: 0 5px;
@@ -111,12 +112,18 @@
 }
 
 #asignacionPerifericos:hover,
-#asignacionEquipos:hover {
+#asignacionEquipos:hover,
+#ubicacion:hover {
     transform: scale(1.05);
+    background: -webkit-linear-gradient(#292929, #a0acaf);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*border-bottom: 2px solid #384295;*/
 }
 
 #asignacionEquipos.active,
-#asignacionPerifericos.active {
+#asignacionPerifericos.active,
+#ubicacion.active {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -173,6 +180,10 @@
     width: 100vw;
     height: 11vh;
     margin-left: 10vh;
+}
+
+.tarjeta-estadisticas-equipos:hover {
+    transform: scale(1.05);
 }
 
 .estadisticas-descripcion-asigequipos {

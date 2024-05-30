@@ -39,7 +39,7 @@ function TablaContratos() {
           <div className="equipos">
             <h1>Contratos</h1>
           </div>
-          <div className="contbuscador-equipos">
+          <div className="contbuscador-equipos" style={{ marginLeft: '0.5vw' }} >
             <input
               className="buscador-equipos"
               type="text"

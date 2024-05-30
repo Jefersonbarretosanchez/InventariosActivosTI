@@ -33,9 +33,9 @@ function TablaAsigAplicaciones() {
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Asignacion Aplicativos</h1>
+            <h1>Asignacion Aplicaciones</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-6.7vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-5.7vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -48,7 +48,7 @@ function TablaAsigAplicaciones() {
           </div>
           <div>
             <FontAwesomeIcon
-              style={{ marginLeft: '39vw' }}
+              style={{ marginLeft: '40vw' }}
               className="agregar-asigLicenciasEquip "
               onClick={() => abrirModal("Agregar Equipo", formFields, [])}
               icon={faPlus}
