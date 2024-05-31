@@ -14,6 +14,11 @@ import TablaCatArea from '../subcomponentes/administracion/catalogos/TablaCatAre
 import TablaCatPuesto from '../subcomponentes/administracion/catalogos/TablaCatPuesto';
 import TablaCatUbicacion from '../subcomponentes/administracion/catalogos/TablaCatUbicacion';
 import TablaCatRegion from '../subcomponentes/administracion/catalogos/TablaCatRegion';
+import TablaCatLicPersonas from '../subcomponentes/administracion/catalogos/TablaCatLicPersonas';
+import TablaCatLicEquipo from '../subcomponentes/administracion/catalogos/TablaCatLicEquipo';
+import TablaCatCoordinadores from '../subcomponentes/administracion/catalogos/TablaCatCoordinadores';
+import TablaCatMarcaEquipo from '../subcomponentes/administracion/catalogos/TablaCatMarcaEquipo';
+import TablaCatSO from '../subcomponentes/administracion/catalogos/TablaCatSO';
 
 export default function Administracion() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -26,9 +31,10 @@ export default function Administracion() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <TarjetasAdmin />
             <BarAdmin onClickTabla={handleTablaClick} />
-            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianza />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatArea />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuesto />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) : (<TablaCatRegion />)}
+            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianza />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatArea />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuesto />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) :
+                tablaActiva === 'region' ? (<TablaCatRegion />) : tablaActiva === 'licenciapersona' ? (<TablaCatLicPersonas />) : tablaActiva === 'licenciaequipo' ? (<TablaCatLicEquipo />) : tablaActiva === 'coordinador' ? (<TablaCatCoordinadores />) :
+                    tablaActiva === 'marcaequipo' ? (<TablaCatMarcaEquipo />) : (<TablaCatSO />)}
             <Paginate />
             <Footer />
         </div>

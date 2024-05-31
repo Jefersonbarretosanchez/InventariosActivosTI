@@ -30,7 +30,7 @@ function TablaHistoricos() {
   const [estadoModal1, cambiarEstadoModal1] = useState(false);
   return (
     <>
-      <div className="contenedor-activos">
+      <div className="contenedor-activos" style={{ marginTop: '5vh' }}>
         <div className="row-activos">
           <div className="asigPerifericos">
             <h1>Historicos</h1>
@@ -46,14 +46,6 @@ function TablaHistoricos() {
               className="buscador-icon-activos"
             />
           </div>
-          <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '26.5vw' }}
-              className="agregar-asigLicenciasEquip "
-              onClick={() => abrirModal("Agregar Equipo", formFields, [])}
-              icon={faPlus}
-            />
-          </div>
           <div className="contenedor-tabla-activos" >
             <table className="table-asigEquipos">
               <thead>
@@ -67,6 +59,50 @@ function TablaHistoricos() {
               </thead>
               <tbody>
                 {/* Incluir For para la interaccion fila por fila */}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '2.6vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faFileLines} />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '2.6vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faFileLines} />
+                    </button>
+                  </td>
+                </tr>
                 <tr>
                   <td></td>
                   <td></td>

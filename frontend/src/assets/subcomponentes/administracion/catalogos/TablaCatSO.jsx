@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { formFields, ALL_INPUT_IDS } from "../../equipos/formConfig";
 import FormDinamico from "../../generales/formDinamico";
 
-function TablaCatUbicacion() {
+function TablaCatSO() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -33,9 +33,9 @@ function TablaCatUbicacion() {
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Catalogo Ubicacion</h1>
+            <h1>Catalogo Sistemas Operativos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-10.5vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-0.2vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -48,7 +48,7 @@ function TablaCatUbicacion() {
           </div>
           <div>
             <FontAwesomeIcon
-              style={{ marginLeft: '34.5vw' }}
+              style={{ marginLeft: '45vw' }}
               className="agregar-asigLicenciasEquip "
               onClick={() => abrirModal("Agregar Equipo", formFields, [])}
               icon={faPlus}
@@ -57,7 +57,7 @@ function TablaCatUbicacion() {
           <div className="contenedor-tabla-activos" >
             <table className="table-asigEquipos">
               <thead>
-                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Puesto</th>
+                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID SO</th>
                 <th>Nombre</th>
                 <th>Fecha Creacion</th>
                 <th>Acciones</th>
@@ -176,7 +176,7 @@ function TablaCatUbicacion() {
   );
 }
 
-export default TablaCatUbicacion;
+export default TablaCatSO;
 
 const Boton = styled.button`
   display: block;

@@ -1,15 +1,27 @@
 #licenciaPersonas,
 #licenciaEquipos,
-#licenciaAreas {
-    padding: 1vh .7vw;
+#licenciaAreas,
+#region,
+#licenciapersona,
+#licenciaequipo,
+#coordinador,
+#marcaequipo,
+#so {
+    padding: 1vh .6vw;
     cursor: pointer;
-    margin: 0 5px;
+    margin: 0 4px;
     transition: background-color 0.3s, color 0.3s;
 }
 
 #licenciaPersonas:hover,
 #licenciaEquipos:hover,
-#licenciaAreas:hover {
+#licenciaAreas:hover,
+#region:hover,
+#licenciapersona:hover,
+#licenciaequipo:hover,
+#coordinador:hover,
+#marcaequipo:hover,
+#so:hover {
     transform: scale(1.05);
     background: -webkit-linear-gradient(#292929, #a0acaf);
     -webkit-background-clip: text;
@@ -19,7 +31,13 @@
 
 #licenciaEquipos.active,
 #licenciaPersonas.active,
-#licenciaAreas.active {
+#licenciaAreas.active,
+#region.active,
+#licenciapersona.active,
+#licenciaequipo.active,
+#coordinador.active,
+#marcaequipo.active,
+#so.active {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

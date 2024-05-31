@@ -21,7 +21,6 @@ export default function HistLogs() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <TarjetasHistLogs />
             <TablaHistPersonas />
             <Paginate />
             <Footer />

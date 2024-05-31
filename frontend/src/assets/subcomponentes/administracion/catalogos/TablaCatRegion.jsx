@@ -35,7 +35,7 @@ function TablaCatRegion() {
           <div className="asigPerifericos">
             <h1>Catalogo Region</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-12vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-13.4vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -48,7 +48,7 @@ function TablaCatRegion() {
           </div>
           <div>
             <FontAwesomeIcon
-              style={{ marginLeft: '33.5vw' }}
+              style={{ marginLeft: '31.7vw' }}
               className="agregar-asigLicenciasEquip "
               onClick={() => abrirModal("Agregar Equipo", formFields, [])}
               icon={faPlus}
@@ -57,13 +57,51 @@ function TablaCatRegion() {
           <div className="contenedor-tabla-activos" >
             <table className="table-asigEquipos">
               <thead>
-                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Puesto</th>
+                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Region</th>
                 <th>Nombre</th>
                 <th>Fecha Creacion</th>
                 <th>Acciones</th>
               </thead>
               <tbody>
                 {/* Incluir For para la interaccion fila por fila */}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
                 <tr>
                   <td></td>
                   <td></td>

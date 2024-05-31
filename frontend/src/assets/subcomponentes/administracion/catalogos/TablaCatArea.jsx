@@ -121,6 +121,44 @@ function TablaCatArea() {
                     </button>
                   </td>
                 </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

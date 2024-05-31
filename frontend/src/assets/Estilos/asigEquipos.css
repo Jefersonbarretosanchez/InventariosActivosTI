@@ -100,7 +100,41 @@
     margin-left: 6.4vw;
     width: 88.7vw;
     margin-top: -1.5vh;
+    overflow-x: hidden;
+    /* Ocultar la barra de desplazamiento */
+    white-space: nowrap;
+    /* Prevenir el salto de línea en los elementos internos */
 }
+
+.contenedor {
+    display: flex;
+    align-items: center;
+    margin-left: 6.4vw;
+    margin-top: 3vh;
+}
+
+.scroll-button {
+    width: 30px;
+    height: 30px;
+    background-color: #f3f4f6;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40%;
+    margin: 0 10px;
+
+
+}
+
+.scroll-button:active {
+    outline: none;
+    /* Eliminar el borde de enfoque */
+}
+
+
+
 
 #asignacionPerifericos,
 #asignacionEquipos,
@@ -115,7 +149,7 @@
 #asignacionEquipos:hover,
 #ubicacion:hover {
     transform: scale(1.05);
-    background: -webkit-linear-gradient(#292929, #a0acaf);
+    background: -webkit-linear-gradient(#292929, #d3e3e7);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     /*border-bottom: 2px solid #384295;*/

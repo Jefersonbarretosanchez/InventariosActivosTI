@@ -57,7 +57,7 @@ function TablaCatAlianza() {
           <div className="contenedor-tabla-activos" >
             <table className="table-asigEquipos">
               <thead>
-                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Catalogo</th>
+                <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Alianza</th>
                 <th>Nombre</th>
                 <th>Fecha Registro</th>
                 <th>Acciones</th>
@@ -121,6 +121,45 @@ function TablaCatAlianza() {
                     </button>
                   </td>
                 </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
+
               </tbody>
             </table>
           </div>

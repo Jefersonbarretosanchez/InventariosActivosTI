@@ -33,7 +33,7 @@ function TablaCatPuesto() {
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Catalogo Puestos</h1>
+            <h1>Catalogo Cargos</h1>
           </div>
           <div className="contbuscador-asigEquipos" style={{ marginLeft: '-12vw' }}>
             <input
@@ -64,6 +64,44 @@ function TablaCatPuesto() {
               </thead>
               <tbody>
                 {/* Incluir For para la interaccion fila por fila */}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <button style={{ marginLeft: '1.8vw' }}
+                      className="btn-accion"
+                      onClick={() =>
+                        abrirModal("Editar {Nombres Equipo}", formFields, [
+                          "nombre_equipo",
+                          "modelo",
+                          "sereal",
+                        ])
+                      }
+                    >
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button>
+                  </td>
+                </tr>
                 <tr>
                   <td></td>
                   <td></td>
