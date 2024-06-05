@@ -36,12 +36,11 @@ export default function BarAdmin({ onClickTabla }) {
                 <div id="licenciaAreas" className={tablaSeleccionada === 'licenciaAreas' ? 'active' : ''} onClick={handleTablaClick}>Cargos</div>
                 <div id="ubicacion" className={tablaSeleccionada === 'ubicacion' ? 'active' : ''} onClick={handleTablaClick}>Ubicacion</div>
                 <div id="region" className={tablaSeleccionada === 'region' ? 'active' : ''} onClick={handleTablaClick}>Region</div>
-                <div id="licenciapersona" className={tablaSeleccionada === 'licenciapersona' ? 'active' : ''} onClick={handleTablaClick}>Licencias Persona</div>
-                <div id="licenciaequipo" className={tablaSeleccionada === 'licenciaequipo' ? 'active' : ''} onClick={handleTablaClick}>Licencias Equipo</div>
                 <div id="coordinador" className={tablaSeleccionada === 'coordinador' ? 'active' : ''} onClick={handleTablaClick}>Coordinadores</div>
-                <div id="marcaequipo" className={tablaSeleccionada === 'marcaequipo' ? 'active' : ''} onClick={handleTablaClick}>Marca Equipos</div>
+                <div id="marcaequipo" className={tablaSeleccionada === 'marcaequipo' ? 'active' : ''} onClick={handleTablaClick}>Marcas Equipos</div>
                 <div id="so" className={tablaSeleccionada === 'so' ? 'active' : ''} onClick={handleTablaClick}>Sistemas Operativos</div>
-                <div id="so" className={tablaSeleccionada === 'so' ? 'active' : ''} onClick={handleTablaClick}>Sistemas Operativos</div>
+                <div id="discoduro" className={tablaSeleccionada === 'discoduro' ? 'active' : ''} onClick={handleTablaClick}>Discos Duros</div>
+                <div id="memoriaram" className={tablaSeleccionada === 'memoriaram' ? 'active' : ''} onClick={handleTablaClick}>Memorias Ram</div>
             </div>
             <div className="scroll-button right" style={{ marginLeft: '0vw', marginTop: '-4vh' }} onClick={handleScrollRight}><FontAwesomeIcon icon={faChevronRight} /></div>
         </div>

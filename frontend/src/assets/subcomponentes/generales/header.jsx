@@ -20,7 +20,7 @@ function Header() {
                     <i class="icono-desplegable-princ">▼</i>
                 </button>
                 <div class="contenido-desplegable-princ">
-                    <a href="#"><FontAwesomeIcon icon={faGears} style={{ width: '30px' }} />Settings</a>
+                    {/* <a href="#"><FontAwesomeIcon icon={faGears} style={{ width: '30px' }} />Settings</a> */}
                     <Link to="/logout" >
                         <a href="#" style={{ color: 'red' }}><FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout</a>
                     </Link>

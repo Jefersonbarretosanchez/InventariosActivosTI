@@ -6,7 +6,9 @@
 #licenciaequipo,
 #coordinador,
 #marcaequipo,
-#so {
+#so,
+#discoduro,
+#memoriaram {
     padding: 1vh .6vw;
     cursor: pointer;
     margin: 0 4px;
@@ -21,7 +23,9 @@
 #licenciaequipo:hover,
 #coordinador:hover,
 #marcaequipo:hover,
-#so:hover {
+#so:hover,
+#discoduro:hover,
+#memoriaram:hover {
     transform: scale(1.05);
     background: -webkit-linear-gradient(#292929, #a0acaf);
     -webkit-background-clip: text;
@@ -37,7 +41,9 @@
 #licenciaequipo.active,
 #coordinador.active,
 #marcaequipo.active,
-#so.active {
+#so.active,
+#discoduro.active,
+#memoriaram.active {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

@@ -19,6 +19,8 @@ import TablaCatLicEquipo from '../subcomponentes/administracion/catalogos/TablaC
 import TablaCatCoordinadores from '../subcomponentes/administracion/catalogos/TablaCatCoordinadores';
 import TablaCatMarcaEquipo from '../subcomponentes/administracion/catalogos/TablaCatMarcaEquipo';
 import TablaCatSO from '../subcomponentes/administracion/catalogos/TablaCatSO';
+import TablaCatDiscoDuro from '../subcomponentes/administracion/catalogos/TablaCatDiscoDuro';
+import TablaCatRam from '../subcomponentes/administracion/catalogos/TablaCatRam';
 
 export default function Administracion() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -34,7 +36,7 @@ export default function Administracion() {
             <BarAdmin onClickTabla={handleTablaClick} />
             {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianza />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatArea />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuesto />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) :
                 tablaActiva === 'region' ? (<TablaCatRegion />) : tablaActiva === 'licenciapersona' ? (<TablaCatLicPersonas />) : tablaActiva === 'licenciaequipo' ? (<TablaCatLicEquipo />) : tablaActiva === 'coordinador' ? (<TablaCatCoordinadores />) :
-                    tablaActiva === 'marcaequipo' ? (<TablaCatMarcaEquipo />) : (<TablaCatSO />)}
+                    tablaActiva === 'marcaequipo' ? (<TablaCatMarcaEquipo />) : tablaActiva === 'so' ? (<TablaCatSO />) : tablaActiva === 'discoduro' ? (<TablaCatDiscoDuro />) : (<TablaCatRam />)}
             <Paginate />
             <Footer />
         </div>
