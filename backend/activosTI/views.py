@@ -1,14 +1,15 @@
 """Importaciones"""
 from django.shortcuts import render
+from rest_framework.response import Response
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import PersonaCreacion, PersonaActualizar
-from .serializers import UserSerializer, PersonaSerializer,CentroCostoSerializer
-from .models import HistoricoGeneral, Persona, CatCentroCosto
+from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer
+from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
 
 # Create your views here.
 
@@ -24,7 +25,7 @@ class PersonaCreate(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
 
-        HistoricoGeneral.objects.create(
+        Historicos.objects.create(
             usuario=self.request.user,
             correo_usuario=self.request.user.email,
             tipo_cambio="Creacion",
@@ -65,8 +66,6 @@ class PersonaUpdate(UpdateView):
                     tipo_activo="Persona",
                     activo_modificado=field,
                     # updated_field,  # Desempaqueta el diccionario con los detalles del campo
-                    valor_anterior=original_value,
-                    valor_nuevo=current_value,
                     descripcion=f'Cambio en {field}: de {
                         original_value} a {current_value}'
                 )
@@ -81,14 +80,45 @@ class PersonaDelete(DeleteView):
 
 
 class PersonaListCreate(generics.ListCreateAPIView):
-    """P"""
     serializer_class = PersonaSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        # user = self.request.user
-        return Persona.objects.all().order_by('id_trabajador')
+        return Persona.objects.all().order_by('-id_trabajador')
 
+    def perform_create(self, serializer):
+        # Guardar la nueva persona
+        persona = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Persona",
+                activo_modificado=persona.id_trabajador,
+                descripcion=f'Se creó el trabajador "{
+                    persona.nombres} {persona.apellidos}"'
+            )
+            print("Registro histórico creado exitosamente.")
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return response
+
+class PersonasUpdate(generics.RetrieveUpdateAPIView):
+    """Actuaización Personas"""
+    serializer_class=PersonaSerializer
+    permission_classes=[AllowAny]
+    queryset = Persona.objects.all()
 
 class PersonasDelete(generics.DestroyAPIView):
     """ND"""
@@ -105,8 +135,33 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
-    
+
+
 class CatCentroCostoViewSet(generics.ListCreateAPIView):
     queryset = CatCentroCosto.objects.all()
     serializer_class = CentroCostoSerializer
+    permission_classes = [AllowAny]
+
+
+class CatAreaViewSet(generics.ListCreateAPIView):
+    queryset = CatArea.objects.all()
+    serializer_class = AreaSerializer
+    permission_classes = [AllowAny]
+
+
+class CatRegionViewSet(generics.ListCreateAPIView):
+    queryset = CatRegion.objects.all()
+    serializer_class = RegionSerializer
+    permission_classes = [AllowAny]
+
+
+class CatCargoViewSet(generics.ListCreateAPIView):
+    queryset = CatCargo.objects.all()
+    serializer_class = CargoSerializer
+    permission_classes = [AllowAny]
+
+
+class CatEstadoPersonaViewSet(generics.ListCreateAPIView):
+    queryset = CatEstadoPersona.objects.all()
+    serializer_class = EstadoPersonaSerializer
     permission_classes = [AllowAny]

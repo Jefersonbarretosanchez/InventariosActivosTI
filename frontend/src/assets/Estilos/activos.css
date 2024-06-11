@@ -46,6 +46,10 @@
     background-color: #f8f8f8;
 }
 
+.boton-usuario-gen:focus {
+    outline: none;
+}
+
 .usuario-info-princ {
     display: flex;
     flex-direction: column;

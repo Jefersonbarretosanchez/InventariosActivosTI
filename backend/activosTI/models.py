@@ -143,7 +143,9 @@ class CatArea(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_area'
-
+        
+    def __str__(self):
+        return str(self.nombre)
 
 class CatCargo(models.Model):
     id_cargo = models.AutoField(primary_key=True)
@@ -153,6 +155,9 @@ class CatCargo(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_cargo'
+        
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatCentroCosto(models.Model):
@@ -163,6 +168,9 @@ class CatCentroCosto(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_centro_costo'
+    
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatCoordinadores(models.Model):
@@ -223,6 +231,9 @@ class CatEstadoPersona(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_estado_persona'
+        
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatEstadoequipo(models.Model):
@@ -273,6 +284,9 @@ class CatRegion(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_region'
+        
+    def __str__(self):
+        return str(self.nombre)
 
 
 class CatSo(models.Model):
@@ -491,7 +505,7 @@ class UpgradeLicenciasArea(models.Model):
         managed = False
         db_table = 'upgrade_licencias_area'
         
-class HistoricoGeneral(models.Model):
+class Historicos(models.Model):
     """Modulo de registros de Logs de cambios"""
     id_historico = models.AutoField(primary_key=True)
     fecha_registro = models.DateTimeField(
@@ -504,16 +518,13 @@ class HistoricoGeneral(models.Model):
     tipo_activo = models.CharField(max_length=100, verbose_name="Tipo Activo")
     activo_modificado = models.CharField(
         max_length=100, verbose_name="Activo Modificado")
-    valor_anterior = models.CharField(
-        max_length=255, default="", verbose_name="Valor Anterior")
-    valor_nuevo = models.CharField(
-        max_length=255, default="", verbose_name="Valor Nuevo")
     descripcion = models.CharField(max_length=200, verbose_name="Descripcion")
 
     class Meta:
+        managed = False
         verbose_name_plural = 'Historicos'
         verbose_name = 'Historico'
-        db_table = 'historico_general'
+        db_table = 'historicos'
 
     def __str__(self):
         return str(self.correo_usuario)

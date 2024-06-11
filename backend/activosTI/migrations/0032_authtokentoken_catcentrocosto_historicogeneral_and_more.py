@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
                 ('valor_nuevo', models.CharField(max_length=255)),
             ],
             options={
-                'db_table': 'historico_general',
+                'db_table': 'historicos',
                 'managed': False,
             },
         ),

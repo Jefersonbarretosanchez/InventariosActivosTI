@@ -1,7 +1,9 @@
 venv
-activosTI/__pycache__
+backend/activosTI/__pycache__
+backend/backend/__pycache__
 __pycache__
 node_modules
 package-lock.json
 package.json
+backend/*.pyc
 *.pyc

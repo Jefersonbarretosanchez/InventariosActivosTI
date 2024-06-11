@@ -1,46 +1,45 @@
-import React from "react";
+import React from 'react';
 import styled from "styled-components";
 
-const FormDinamico = ({ fields, disabledFields = [], initialValues = {} }) => {
+const FormDinamico = ({ fields, disabledFields, initialValues,onInputChange }) => {
   return (
     <Formulario>
-      {fields.map((field, index) => (
-        <GrupoInput key={index}>
-          <LabelForms htmlFor={field.id}>
-            {field.label}
-            {field.required && <span className="text-danger"> *</span>}
-          </LabelForms>
+      {fields.map((field) => (
+        <div key={field.id}>
+          <label>{field.label}</label>
           {field.type === "select" ? (
             <select
-              name={field.id}
-              id={field.id}
               className="form-select"
-              defaultValue={initialValues[field.id] || ""}
+              name={field.id}
+              defaultValue={initialValues[field.id] || ''}
+              onChange={onInputChange}
               disabled={disabledFields.includes(field.id)}
             >
-              {field.options.map((option, idx) => (
-                <option key={idx} value={option.value}>
+              <option value="">Seleccione una opción</option>
+              {field.options.map((option) => (
+                <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             </select>
           ) : (
             <input
-              type={field.type}
               className="form-control"
-              id={field.id}
-              defaultValue={initialValues[field.id] || ""}
-              required={field.required}
+              type={field.type}
+              name={field.id}
+              defaultValue={initialValues[field.id] || ''}
+              onChange={onInputChange}
               disabled={disabledFields.includes(field.id)}
             />
           )}
-        </GrupoInput>
+        </div>
       ))}
     </Formulario>
   );
 };
 
 export default FormDinamico;
+
 
 const Formulario = styled.form`
   width: 90%;

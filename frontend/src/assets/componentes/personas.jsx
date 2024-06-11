@@ -8,6 +8,8 @@ import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/personas.css"
 import TablaPersonasBack from "../subcomponentes/personas/tablaPersonasBack";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Personas() {
     return (
@@ -15,7 +17,8 @@ export default function Personas() {
             <Header />
             <Sidebar />
             <TarjetasPersonas />
-            <TablaPersonas />
+            <TablaPersonasBack />
+            <ToastContainer />
             <Paginate />
             <Footer />
         </div>
