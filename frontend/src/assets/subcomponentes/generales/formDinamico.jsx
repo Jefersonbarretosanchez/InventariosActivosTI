@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 
-const FormDinamico = ({ fields, disabledFields, initialValues,onInputChange }) => {
+const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange }) => {
   return (
     <Formulario>
       {fields.map((field) => (

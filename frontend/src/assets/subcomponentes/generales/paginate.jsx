@@ -1,16 +1,36 @@
-import React from 'react'
+import React from 'react';
 
-function Paginate() {
+function Paginate({ currentPage, totalPages, onPageChange }) {
     const flechapag = ">>";
+
     return (
         <section>
             <div className='Paginacion'>
-                <a href='#' className='pagina-link active'>1</a>
-                <a href='#' className='pagina-link'>2</a>
-                <a href='#' className='pagina-link'>3</a>
-                <a href='#' className='pagina-link'>4</a>
-                <a href='#' className='pagina-link'>5</a>
-                <a href='#' className='pagina-link'>{flechapag}</a>
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <a
+                        href='#'
+                        key={index}
+                        className={`pagina-link ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onPageChange(index + 1);
+                        }}
+                    >
+                        {index + 1}
+                    </a>
+                ))}
+                {currentPage < totalPages && (
+                    <a
+                        href='#'
+                        className='pagina-link'
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onPageChange(currentPage + 1);
+                        }}
+                    >
+                        {flechapag}
+                    </a>
+                )}
             </div>
         </section>
     );

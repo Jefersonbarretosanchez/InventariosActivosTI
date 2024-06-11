@@ -1,11 +1,11 @@
 import React from "react";
-import activos from "../../imagenes/perfil-del-usuario.png";
-import inactivos from "../../imagenes/ocupado.png";
-import equipos from "../../imagenes/computadora.png";
-import licencias from "../../imagenes/license-icon.webp";
+import activosImg from "../../imagenes/perfil-del-usuario.png";
+import inactivosImg from "../../imagenes/ocupado.png";
+import equiposImg from "../../imagenes/computadora.png";
+import licenciasImg from "../../imagenes/license-icon.webp";
 import { Link } from "react-router-dom";
 
-function TarjetasPersonas( { totalActivos, totalInactivos } ) {
+function TarjetasPersonas({ totalActivos, totalInactivos }) {
   return (
     <>
       <div className="estadisticas-activos">
@@ -15,7 +15,7 @@ function TarjetasPersonas( { totalActivos, totalInactivos } ) {
             style={{ color: "black", transform: "scale(1.2)" }}
           >
             <div className="icono-estatisticas-activos">
-              <img src={activos} alt="Logo Scala" className="logo-activos" />
+              <img src={activosImg} alt="Logo Scala" className="logo-activos" />
             </div>
             <div className="estadisticas-info-activos">
               <span className="estadisticas-numero-activos">
@@ -31,7 +31,7 @@ function TarjetasPersonas( { totalActivos, totalInactivos } ) {
         <div className="tarjeta-estadisticas-activos">
           <Link to="/personas" style={{ color: "black" }}>
             <div className="icono-estatisticas-activos">
-              <img src={inactivos} alt="Logo Scala" className="logo-activos" />
+              <img src={inactivosImg} alt="Logo Scala" className="logo-activos" />
             </div>
             <div className="estadisticas-info-activos">
               <span className="estadisticas-numero-activos">
@@ -47,7 +47,7 @@ function TarjetasPersonas( { totalActivos, totalInactivos } ) {
         <div className="tarjeta-estadisticas-activos">
           <Link to="/equipos" style={{ color: "black" }}>
             <div className="icono-estatisticas-activos">
-              <img src={equipos} alt="Logo Scala" className="logo-activos" />
+              <img src={equiposImg} alt="Logo Scala" className="logo-activos" />
             </div>
             <div className="estadisticas-info-activos">
               <span className="estadisticas-numero-activos">92</span>
@@ -61,7 +61,7 @@ function TarjetasPersonas( { totalActivos, totalInactivos } ) {
         <div className="tarjeta-estadisticas-activos">
           <Link to="/licencias" style={{ color: "black" }}>
             <div className="icono-estatisticas-activos">
-              <img src={licencias} alt="Logo Scala" className="logo-activos" />
+              <img src={licenciasImg} alt="Logo Scala" className="logo-activos" />
             </div>
             <div className="estadisticas-info-activos">
               <span className="estadisticas-numero-activos">88</span>
@@ -76,4 +76,5 @@ function TarjetasPersonas( { totalActivos, totalInactivos } ) {
     </>
   );
 }
+
 export default TarjetasPersonas;

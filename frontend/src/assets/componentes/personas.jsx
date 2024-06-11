@@ -16,7 +16,6 @@ export default function Personas() {
         <div className="PersonasBody">
             <Header />
             <Sidebar />
-            <TarjetasPersonas />
             <TablaPersonasBack />
             <ToastContainer />
             <Paginate />

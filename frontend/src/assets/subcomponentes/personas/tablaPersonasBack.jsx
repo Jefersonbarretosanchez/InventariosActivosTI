@@ -13,6 +13,7 @@ import styled from "styled-components";
 import { formFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
 import TarjetasPersonas from "./tarjetasPersonas";
+import Paginate from "../generales/paginate"; // Asegúrate de que la ruta sea correcta
 
 function TablaPersonasBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
@@ -32,6 +33,38 @@ function TablaPersonasBack() {
   const [actionType, setActionType] = useState(""); // Nuevo estado para manejar el tipo de acción
   const [totalActivos, setTotalActivos] = useState(0);
   const [totalInactivos, setTotalInactivos] = useState(0);
+
+  // Estado para el término de búsqueda
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Estado de la página actual y número de registros por página
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage, setRecordsPerPage] = useState(3);
+
+  // Función para ajustar recordsPerPage basado en el tamaño de la pantalla
+  const handleResize = () => {
+    const width = window.innerWidth;
+    if (width < 1366) {
+      setRecordsPerPage(4);
+    } else if (width < 2800) {
+      setRecordsPerPage(6);
+    } else {
+      setRecordsPerPage(8);
+    }
+  };
+
+  // Ejecutar handleResize en el montaje y en el cambio de tamaño de la ventana
+  useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Calcular los registros que se mostrarán en la página actual
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = personas.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(personas.length / recordsPerPage);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,6 +150,10 @@ function TablaPersonasBack() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewPersonData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
   };
 
   const createPersona = async () => {
@@ -206,33 +243,29 @@ function TablaPersonasBack() {
     initialValues = {},
     action = ""
   ) => {
-    setNewPersonData(initialValues); // Inicializar con valores iniciales
-    setActionType(action); // Establecer el tipo de acción para mostrar los botones del form
-
-    const updatedFields = fields.map((field) => {
+    // Asignar opciones a los campos de selección en formFields
+    const fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_centro_costo") {
         return { ...field, options: centroCostos };
-      }
-      if (field.id === "id_area") {
+      } else if (field.id === "id_area") {
         return { ...field, options: area };
-      }
-      if (field.id === "id_region") {
+      } else if (field.id === "id_region") {
         return { ...field, options: region };
-      }
-      if (field.id === "id_cargo") {
+      } else if (field.id === "id_cargo") {
         return { ...field, options: cargo };
-      }
-      if (field.id === "id_estado_persona") {
+      } else if (field.id === "id_estado_persona") {
         return { ...field, options: estado };
       }
       return field;
     });
 
+    setNewPersonData(initialValues); // Inicializar con valores iniciales
+    setActionType(action); // Establecer el tipo de acción
     cambiarModalConfig({
-      titulo,
+      titulo: titulo,
       contenido: (
         <FormDinamico
-          fields={updatedFields}
+          fields={fieldsWithOptions}
           disabledFields={disabledFields}
           initialValues={initialValues}
           onInputChange={handleInputChange}
@@ -243,18 +276,18 @@ function TablaPersonasBack() {
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
+    setPersonaSeleccionada(null);
+    abrirModal("Crear Persona", formFields);
   };
 
   const handleEdit = (persona) => {
     setPersonaSeleccionada(persona);
-    setNewPersonData(persona); // Inicializar con los valores de la persona seleccionada
     abrirModal(
-      `Actualizar ${persona.nombres}  ${persona.apellidos}`,
+      "Editar Persona",
       formFields,
-      ["identificacion", "correo_institucional"],
+      ["id_trabajador"],
       persona,
-      "update"
+      "edit"
     );
   };
 
@@ -269,8 +302,19 @@ function TablaPersonasBack() {
     );
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Filtrar personas basadas en el término de búsqueda
+  const filteredPersonas = personas.filter((persona) => {
+    const searchString = `${persona.id_trabajador} ${persona.nombres} ${persona.identificacion} ${persona.correo_institucional} ${persona.nombre_estado_persona}`.toLowerCase();
+    return searchString.includes(searchTerm.toLowerCase());
+  });
+
   return (
     <>
+      <TarjetasPersonas totalActivos={totalActivos} totalInactivos={totalInactivos} />
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="Personas">
@@ -281,6 +325,8 @@ function TablaPersonasBack() {
               className="buscador-personas"
               type="text"
               placeholder="Buscar"
+              value={searchTerm}
+              onChange={handleSearchChange}
             />
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -298,22 +344,24 @@ function TablaPersonasBack() {
             <table className="table-personas">
               <thead>
                 <tr>
-                  <th>ID Trabajador</th>
-                  <th>Nombres</th>
-                  <th>Numero Identificación</th>
-                  <th>Correo Institucional</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
+                  <th style={{ paddingLeft: '0vw' }}>ID Trabajador</th>
+                  <th style={{ paddingLeft: '3.5vw' }}>Nombres</th>
+                  <th style={{ paddingLeft: '0vw' }}>Numero Identificación</th>
+                  <th style={{ paddingLeft: '5vw' }}>Correo Institucional</th>
+                  <th style={{ paddingLeft: '2.5vw' }}>Estado</th>
+                  <th style={{ paddingLeft: '4vw' }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <Spinner></Spinner>
-                    <span>Loading..</span>
+                    <Loading>
+                      <Spinner />
+                      <span>Loading..</span>
+                    </Loading>
                   </tr>
                 ) : (
-                  personas.map((persona) => (
+                  filteredPersonas.slice(indexOfFirstRecord, indexOfLastRecord).map((persona) => (
                     <tr key={persona.id_trabajador}>
                       <td>{persona.id_trabajador}</td>
                       <td>{persona.nombres}</td>
@@ -351,6 +399,11 @@ function TablaPersonasBack() {
           </div>
         </div>
       </div>
+      <Paginate
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       <Modal
         estado={estadoModal}
@@ -362,11 +415,6 @@ function TablaPersonasBack() {
       >
         {modalConfig.contenido}
       </Modal>
-
-      {/* <TarjetasPersonas
-        totalActivos={totalActivos}
-        totalInactivos={totalInactivos}
-      /> */}
     </>
   );
 }
@@ -406,7 +454,6 @@ const Spinner = styled.div`
     0% {
       transform: rotate(0deg);
     }
-
     100% {
       transform: rotate(360deg);
     }
@@ -422,5 +469,4 @@ const Contenido = styled.div`
     font-size: 42px;
     font-weight: 700;
     margin-bottom: 10px;
-  }
-`;
+  }`;
