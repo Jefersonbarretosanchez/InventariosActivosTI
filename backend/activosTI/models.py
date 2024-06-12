@@ -336,6 +336,8 @@ class Contratos(models.Model):
     fecha_inicio = models.DateField()
     fecha_vencimiento = models.DateField()
     cantidad_licencias = models.IntegerField()
+    costo_unitario = models.IntegerField()
+    costo_total = models.IntegerField()
 
     class Meta:
         managed = False
@@ -394,7 +396,6 @@ class Equipo(models.Model):
     sereal = models.CharField(max_length=30)
     id_marcaequipo = models.ForeignKey(CatMarcaequipo, models.DO_NOTHING, db_column='id_marcaequipo')
     id_so = models.ForeignKey(CatSo, models.DO_NOTHING, db_column='id_so')
-    id_procesador = models.ForeignKey(CatProcesador, models.DO_NOTHING, db_column='id_procesador')
     id_ram = models.ForeignKey(CatMemoriaram, models.DO_NOTHING, db_column='id_ram')
     id_discoduro = models.ForeignKey(CatDiscoduro, models.DO_NOTHING, db_column='id_discoduro')
     anydesk = models.CharField(max_length=30)
@@ -403,6 +404,9 @@ class Equipo(models.Model):
     id_estadoequipo = models.ForeignKey(CatEstadoequipo, models.DO_NOTHING, db_column='id_estadoequipo')
     id_coordinadores = models.ForeignKey(CatCoordinadores, models.DO_NOTHING, db_column='id_coordinadores')
     id_ubicacion = models.ForeignKey(CatUbicacion, models.DO_NOTHING, db_column='id_ubicacion')
+    procesador = models.CharField(max_length=50)
+    costo = models.IntegerField()
+    observacion = models.CharField(max_length=200)
 
     class Meta:
         managed = False
@@ -464,11 +468,12 @@ class LicenciasEquipo(models.Model):
 
 
 class Perifericos(models.Model):
-    id_perifericos = models.AutoField(primary_key=True)
-    nombre_periferico = models.CharField(max_length=30)
-    id_estado_periferico = models.ForeignKey(CatEstadoPeriferico, models.DO_NOTHING, db_column='id_estado_periferico')
+    id_perifericos = models.AutoField(primary_key=True)        
+    nombre_periferico = models.CharField(max_length=30)        
+    id_estado_periferico = models.ForeignKey(CatEstadoPeriferico, models.DO_NOTHING, db_column='id_estado_periferico')        
     modelo = models.CharField(max_length=30)
     sereal = models.CharField(max_length=30)
+    costo = models.IntegerField()
 
     class Meta:
         managed = False

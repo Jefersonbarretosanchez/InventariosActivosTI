@@ -47,7 +47,7 @@ function TablaPersonasBack() {
     if (width < 1366) {
       setRecordsPerPage(4);
     } else if (width < 2800) {
-      setRecordsPerPage(6);
+      setRecordsPerPage(5);
     } else {
       setRecordsPerPage(8);
     }
@@ -67,7 +67,7 @@ function TablaPersonasBack() {
   const totalPages = Math.ceil(personas.length / recordsPerPage);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPersonas = async () => {
       setIsLoading(true); // Set loading state to true
       try {
         const responsePersonas = await axios.get(
@@ -87,6 +87,28 @@ function TablaPersonasBack() {
 
         console.log("Total de registros activos:", activos);
         console.log("Total de registros inactivos:", inactivos);
+      } catch (error) {
+        toast.error("Hubo un error en la carga de datos de las personas");
+      } finally {
+        setIsLoading(false); // Set loading state to false after fetching
+      }
+    };
+    fetchPersonas();
+  }, []);
+
+  useEffect(() => {
+    const fetchCatalogos = async () => {
+      setIsLoading(true); // Set loading state to true
+      try {
+        const responseEstado = await axios.get(
+          "http://localhost:8000/api/estado_persona/"
+        );
+        setEstado(
+          responseEstado.data.map((item) => ({
+            value: item.id_estado_persona,
+            label: item.nombre,
+          }))
+        );
 
         const responseCentroCostos = await axios.get(
           "http://localhost:8000/api/centro_costos/"
@@ -127,24 +149,14 @@ function TablaPersonasBack() {
             label: item.nombre,
           }))
         );
-
-        const responseEstado = await axios.get(
-          "http://localhost:8000/api/estado_persona/"
-        );
-        setEstado(
-          responseEstado.data.map((item) => ({
-            value: item.id_estado_persona,
-            label: item.nombre,
-          }))
-        );
       } catch (error) {
-        console.error("Error al obtener los datos:", error);
+        toast.error("Hubo un error en la carga de datos de los catalogos.");
       } finally {
         setIsLoading(false); // Set loading state to false after fetching
       }
     };
 
-    fetchData();
+    fetchCatalogos();
   }, []);
 
   const handleInputChange = (event) => {
@@ -276,18 +288,17 @@ function TablaPersonasBack() {
   };
 
   const handleCreate = () => {
-    setPersonaSeleccionada(null);
-    abrirModal("Crear Persona", formFields);
+    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
   };
 
   const handleEdit = (persona) => {
     setPersonaSeleccionada(persona);
     abrirModal(
-      "Editar Persona",
+      `Actualizar ${persona.nombres}  ${persona.apellidos}`,
       formFields,
-      ["id_trabajador"],
+      ["identificacion", "correo_institucional"],
       persona,
-      "edit"
+      "update"
     );
   };
 
@@ -314,7 +325,10 @@ function TablaPersonasBack() {
 
   return (
     <>
-      <TarjetasPersonas totalActivos={totalActivos} totalInactivos={totalInactivos} />
+      <TarjetasPersonas
+        totalActivos={totalActivos}
+        totalInactivos={totalInactivos}
+      />
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="Personas">
@@ -344,12 +358,12 @@ function TablaPersonasBack() {
             <table className="table-personas">
               <thead>
                 <tr>
-                  <th style={{ paddingLeft: '0vw' }}>ID Trabajador</th>
-                  <th style={{ paddingLeft: '3.5vw' }}>Nombres</th>
-                  <th style={{ paddingLeft: '0vw' }}>Numero Identificación</th>
-                  <th style={{ paddingLeft: '5vw' }}>Correo Institucional</th>
-                  <th style={{ paddingLeft: '2.5vw' }}>Estado</th>
-                  <th style={{ paddingLeft: '4vw' }}>Acciones</th>
+                  <th style={{ paddingLeft: "0vw" }}>ID Trabajador</th>
+                  <th style={{ paddingLeft: "3.5vw" }}>Nombres</th>
+                  <th style={{ paddingLeft: "0vw" }}>Numero Identificación</th>
+                  <th style={{ paddingLeft: "5vw" }}>Correo Institucional</th>
+                  <th style={{ paddingLeft: "2.5vw" }}>Estado</th>
+                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -361,38 +375,40 @@ function TablaPersonasBack() {
                     </Loading>
                   </tr>
                 ) : (
-                  filteredPersonas.slice(indexOfFirstRecord, indexOfLastRecord).map((persona) => (
-                    <tr key={persona.id_trabajador}>
-                      <td>{persona.id_trabajador}</td>
-                      <td>{persona.nombres}</td>
-                      <td>{persona.identificacion}</td>
-                      <td>{persona.correo_institucional}</td>
-                      <td
-                        style={{
-                          color:
-                            persona.nombre_estado_persona === "Activo"
-                              ? "#10A142"
-                              : "#ff0000",
-                        }}
-                      >
-                        {persona.nombre_estado_persona}
-                      </td>
-                      <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(persona)}
+                  filteredPersonas
+                    .slice(indexOfFirstRecord, indexOfLastRecord)
+                    .map((persona) => (
+                      <tr key={persona.id_trabajador}>
+                        <td>{persona.id_trabajador}</td>
+                        <td>{persona.nombres}</td>
+                        <td>{persona.identificacion}</td>
+                        <td>{persona.correo_institucional}</td>
+                        <td
+                          style={{
+                            color:
+                              persona.nombre_estado_persona === "Activo"
+                                ? "#10A142"
+                                : "#ff0000",
+                          }}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(persona)}
-                        >
-                          <FontAwesomeIcon icon={faFileLines} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                          {persona.nombre_estado_persona}
+                        </td>
+                        <td>
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(persona)}
+                          >
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </button>
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(persona)}
+                          >
+                            <FontAwesomeIcon icon={faFileLines} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
                 )}
               </tbody>
             </table>
@@ -469,4 +485,5 @@ const Contenido = styled.div`
     font-size: 42px;
     font-weight: 700;
     margin-bottom: 10px;
-  }`;
+  }`
+  ;
