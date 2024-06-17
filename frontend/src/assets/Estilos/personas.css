@@ -29,6 +29,20 @@
     transform: scale(1.6);
 }
 
+.agregar-filtros {
+    position: fixed;
+    margin-left: 28.7vw;
+    margin-top: -6.5vh;
+    cursor: pointer;
+}
+
+.agregar-filtros:hover {
+    position: fixed;
+    cursor: pointer;
+    transform: scale(1.4);
+}
+
+
 .table-personas th {
     padding: 1.1vh -0vw 0.5vh 6vh;
 }

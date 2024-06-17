@@ -11,6 +11,7 @@ const Modal = ({
   actionType,
   onCreate,
   onUpdate,
+  onClear // filtros agregados
 }) => {
   return (
     <>
@@ -19,11 +20,11 @@ const Modal = ({
           <ContenedorModal>
             <ModalHeader>
               <h3>{titulo}</h3>
+              <BotonCerrar onClick={() => cambiarEstado(false)}>
+                <FontAwesomeIcon icon={faX} />
+              </BotonCerrar>
             </ModalHeader>
-            <BotonCerrar onClick={() => cambiarEstado(false)}>
-              <FontAwesomeIcon icon={faX} className="btn-cerrar" />
-            </BotonCerrar>
-            <ModalBody scrollable={estado}>{children}</ModalBody>
+            <ModalBody style={{ marginLeft: '1vw' }}>{children}</ModalBody>
             <ModalFooter>
               {(actionType === "create" || actionType === "update") && (
                 <BtnCancelar onClick={() => cambiarEstado(false)}>
@@ -35,6 +36,14 @@ const Modal = ({
               )}
               {actionType === "update" && (
                 <Boton onClick={onUpdate}>Actualizar</Boton>
+              )}
+              {actionType === "Clear" && (
+                <>
+                  <BtnCancelar style={{ marginTop: '1vh' }} onClick={() => cambiarEstado(false)}>
+                    <span>Salir</span>
+                  </BtnCancelar>
+                  <BtnLimpiar style={{ marginTop: '1vh' }} onClick={onClear}>Limpiar Filtros</BtnLimpiar> {/* filtros agregados */}
+                </>
               )}
             </ModalFooter>
           </ContenedorModal>
@@ -52,36 +61,36 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.2);
-
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
 const ContenedorModal = styled.div`
-  width: 30vw;
-  height: 80vh;
-  /* min-height: 100px; */
+  width: 25vw;
+  height: auto;
+  max-height: 90vh;
   background: #fff;
-  position: absolute;
-  border-radius: 1.2vw;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  position: relative;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
+  overflow: hidden;
 `;
 
 const ModalHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-left: 20px;
   margin-bottom: 15px;
   border-bottom: 1px solid #e8e8e8;
 
   h3 {
     font-weight: 500;
-    font-size: 16px;
+    font-size: 18px;
     color: #1766dc;
+    margin: 0;
   }
 `;
 
@@ -89,32 +98,26 @@ const BotonCerrar = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: 30px;
-  right: 20px;
-
   width: 30px;
   height: 30px;
   border: none;
   background: none;
   cursor: pointer;
   transition: 0.3s ease all;
-  border-radius: 5px;
   color: #f80707;
 
   &:hover {
-    background: none;
-    border: none;
     transform: scale(1.2);
   }
 `;
 
 const ModalBody = styled.div`
-  height: calc(100% - 25%);
+  overflow-x: hidden; /* Elimina el scroll horizontal */
   overflow-y: auto;
-  padding: 0 2vw;
-  padding-right: 1vw;
-  margin-right: -1vw;
+  padding: 20px 0;
+  max-height: calc(80vh - 120px); /* Ajusta según sea necesario */
+  width: 100%;
+  margin-right: -20px; /* Ajusta según sea necesario */
 
   /* Estilos para ocultar el scrollbar */
   &::-webkit-scrollbar {
@@ -134,17 +137,12 @@ const ModalBody = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: #3a9ee1;
   }
-
-  ${(props) =>
-    props.scrollable &&
-    `
-      background: #ffffff;
-    `}
 `;
+
 const ModalFooter = styled.div`
   display: flex;
   justify-content: center;
-  gap: 2%; // Espaciado entre los botones
+  gap: 2%;
   padding: 10px 0;
 `;
 
@@ -165,14 +163,13 @@ const Boton = styled.button`
 `;
 
 const BtnCancelar = styled.button`
-  padding: 14px 20px;
+  padding: 0px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
-  width: 45%;
+  width: auto;
+  height: auto;
   color: white;
-  /* background: linear-gradient(to right, #14add6, #384295); */
-  transition: background 0.3s ease;
   background: -webkit-linear-gradient(#ff0000, #fc5c00);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -182,6 +179,26 @@ const BtnCancelar = styled.button`
   }
 
   &:focus {
-    outline: none; // Eliminar el borde negro al hacer clic
+    outline: none;
+  }
+`;
+
+const BtnLimpiar = styled.button`
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 45%;
+  color: white;
+  background: -webkit-linear-gradient(#384295, #14ADD6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: none;
   }
 `;

@@ -5,7 +5,7 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange }) 
   return (
     <Formulario>
       {fields.map((field) => (
-        <div key={field.id}>
+        <div key={field.id} className="form-group">
           <label>{field.label}</label>
           {field.type === "select" ? (
             <select
@@ -39,7 +39,6 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange }) 
 };
 
 export default FormDinamico;
-
 
 const Formulario = styled.form`
   width: 90%;
@@ -81,21 +80,5 @@ const Formulario = styled.form`
   .form-select:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-`;
-
-const GrupoInput = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 10px;
-`;
-
-const LabelForms = styled.label`
-  width: fit-content;
-  margin-right: 0.9rem;
-
-  .text-danger {
-    color: #dc3545 !important;
   }
 `;

@@ -7,13 +7,16 @@ import {
   faPlus,
   faPenToSquare,
   faMagnifyingGlass,
+  faPlusCircle,
+  faBarsProgress,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
-import { formFields, ALL_INPUT_IDS } from "./formConfig";
+import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
 import TarjetasPersonas from "./tarjetasPersonas";
-import Paginate from "../generales/paginate"; // Asegúrate de que la ruta sea correcta
+import Paginate from "../generales/paginate";
+import FiltroDinamico from "../generales/filtroDinamico";
 
 function TablaPersonasBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
@@ -28,20 +31,23 @@ function TablaPersonasBack() {
   const [region, setRegion] = useState([]);
   const [cargo, setCargo] = useState([]);
   const [estado, setEstado] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [newPersonData, setNewPersonData] = useState({});
-  const [actionType, setActionType] = useState(""); // Nuevo estado para manejar el tipo de acción
+  const [actionType, setActionType] = useState("");
   const [totalActivos, setTotalActivos] = useState(0);
   const [totalInactivos, setTotalInactivos] = useState(0);
 
-  // Estado para el término de búsqueda
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Estado de la página actual y número de registros por página
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(3);
 
-  // Función para ajustar recordsPerPage basado en el tamaño de la pantalla
+  const [estadoModalFiltros, cambiarEstadoModalFiltros] = useState(false);
+  const [filtroValues, setFiltroValues] = useState({});
+  const [activeFilters, setActiveFilters] = useState([]);
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
+  const [showFilterOptions, setShowFilterOptions] = useState(false);
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width < 1366) {
@@ -53,52 +59,46 @@ function TablaPersonasBack() {
     }
   };
 
-  // Ejecutar handleResize en el montaje y en el cambio de tamaño de la ventana
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Calcular los registros que se mostrarán en la página actual
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = personas.slice(indexOfFirstRecord, indexOfLastRecord);
-  const totalPages = Math.ceil(personas.length / recordsPerPage);
+  const fetchPersonas = async () => {
+    setIsLoading(true);
+    try {
+      const responsePersonas = await axios.get(
+        "http://localhost:8000/api/personas/"
+      );
+      setPersonas(responsePersonas.data);
+
+      const activos = responsePersonas.data.filter(
+        (persona) => persona.nombre_estado_persona === "Activo"
+      ).length;
+      const inactivos = responsePersonas.data.filter(
+        (persona) => persona.nombre_estado_persona === "Inactivo"
+      ).length;
+
+      setTotalActivos(activos);
+      setTotalInactivos(inactivos);
+
+      console.log("Total de registros activos:", activos);
+      console.log("Total de registros inactivos:", inactivos);
+    } catch (error) {
+      toast.error("Hubo un error en la carga de datos de las personas");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPersonas = async () => {
-      setIsLoading(true); // Set loading state to true
-      try {
-        const responsePersonas = await axios.get(
-          "http://localhost:8000/api/personas/"
-        );
-        setPersonas(responsePersonas.data);
-
-        const activos = responsePersonas.data.filter(
-          (persona) => persona.nombre_estado_persona === "Activo"
-        ).length;
-        const inactivos = responsePersonas.data.filter(
-          (persona) => persona.nombre_estado_persona === "Inactivo"
-        ).length;
-
-        setTotalActivos(activos);
-        setTotalInactivos(inactivos);
-
-        console.log("Total de registros activos:", activos);
-        console.log("Total de registros inactivos:", inactivos);
-      } catch (error) {
-        toast.error("Hubo un error en la carga de datos de las personas");
-      } finally {
-        setIsLoading(false); // Set loading state to false after fetching
-      }
-    };
     fetchPersonas();
   }, []);
 
   useEffect(() => {
     const fetchCatalogos = async () => {
-      setIsLoading(true); // Set loading state to true
+      setIsLoading(true);
       try {
         const responseEstado = await axios.get(
           "http://localhost:8000/api/estado_persona/"
@@ -152,7 +152,7 @@ function TablaPersonasBack() {
       } catch (error) {
         toast.error("Hubo un error en la carga de datos de los catalogos.");
       } finally {
-        setIsLoading(false); // Set loading state to false after fetching
+        setIsLoading(false);
       }
     };
 
@@ -164,14 +164,21 @@ function TablaPersonasBack() {
     setNewPersonData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleFiltroChange = (event) => {
+    const { name, value } = event.target;
+    setFiltroValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1);
   };
 
   const createPersona = async () => {
     setIsLoading(true);
-
-    // Convertir valores de campos relacionados a enteros
     const formattedData = {
       ...newPersonData,
       id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
@@ -181,7 +188,7 @@ function TablaPersonasBack() {
       id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
     };
 
-    console.log("Datos a enviar:", formattedData); // Log para depuración
+    console.log("Datos a enviar:", formattedData);
 
     try {
       const response = await axios.post(
@@ -204,14 +211,11 @@ function TablaPersonasBack() {
 
   const updatePerson = async () => {
     setIsLoading(true);
-
-    // Combinar newPersonData con los datos actuales de la persona seleccionada
     const updatedData = {
       ...personaSeleccionada,
       ...newPersonData,
     };
 
-    // Convertir valores de campos relacionados a enteros
     const formattedData = {
       ...updatedData,
       id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
@@ -221,7 +225,7 @@ function TablaPersonasBack() {
       id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
     };
 
-    console.log("Datos a enviar:", formattedData); // Log para depuración
+    console.log("Datos a enviar:", formattedData);
 
     try {
       const response = await axios.put(
@@ -255,7 +259,6 @@ function TablaPersonasBack() {
     initialValues = {},
     action = ""
   ) => {
-    // Asignar opciones a los campos de selección en formFields
     const fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_centro_costo") {
         return { ...field, options: centroCostos };
@@ -271,8 +274,8 @@ function TablaPersonasBack() {
       return field;
     });
 
-    setNewPersonData(initialValues); // Inicializar con valores iniciales
-    setActionType(action); // Establecer el tipo de acción
+    setNewPersonData(initialValues);
+    setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
@@ -285,6 +288,65 @@ function TablaPersonasBack() {
       ),
     });
     cambiarEstadoModal(true);
+  };
+
+  const abrirModalFiltros = () => {
+    const fieldsWithOptions = filterFields.map((field) => {
+      if (field.id === "id_centro_costo") {
+        return { ...field, options: centroCostos };
+      } else if (field.id === "id_area") {
+        return { ...field, options: area };
+      } else if (field.id === "id_region") {
+        return { ...field, options: region };
+      } else if (field.id === "id_cargo") {
+        return { ...field, options: cargo };
+      } else if (field.id === "id_estado_persona") {
+        return { ...field, options: estado };
+      }
+      return field;
+    });
+
+    cambiarModalConfig({
+      titulo: "Agregar Filtros",
+      contenido: (
+        <FiltroDinamico
+          activeFilters={activeFilters}
+          onAddFilter={handleAddFilter}
+          onRemoveFilter={handleRemoveFilter}
+          onFiltroChange={handleFiltroChange}
+          filtroValues={filtroValues}
+          fieldsWithOptions={fieldsWithOptions}
+        />
+      ),
+    });
+    cambiarEstadoModalFiltros(true);
+  };
+
+  const applyFiltros = () => {
+    cambiarEstadoModalFiltros(false);
+  };
+
+  const clearFiltros = () => {
+    setFiltroValues({});
+    setActiveFilters([]);
+  };
+
+  const handleAddFilter = (filterId) => {
+    if (!activeFilters.includes(filterId)) {
+      setActiveFilters((prevFilters) => [...prevFilters, filterId]);
+      setTriggerUpdate((prev) => !prev);
+      setShowFilterOptions(false); // Ocultar opciones después de seleccionar una
+    }
+  };
+
+  const handleRemoveFilter = (filterId) => {
+    setActiveFilters((prevFilters) => prevFilters.filter((id) => id !== filterId));
+    setFiltroValues((prevValues) => {
+      const newValues = { ...prevValues };
+      delete newValues[filterId];
+      return newValues;
+    });
+    setTriggerUpdate((prev) => !prev);
   };
 
   const handleCreate = () => {
@@ -317,11 +379,25 @@ function TablaPersonasBack() {
     setCurrentPage(pageNumber);
   };
 
-  // Filtrar personas basadas en el término de búsqueda
   const filteredPersonas = personas.filter((persona) => {
     const searchString = `${persona.id_trabajador} ${persona.nombres} ${persona.identificacion} ${persona.correo_institucional} ${persona.nombre_estado_persona}`.toLowerCase();
-    return searchString.includes(searchTerm.toLowerCase());
+    const matchesSearch = searchString.includes(searchTerm.toLowerCase());
+
+    const matchesFilters = Object.keys(filtroValues).every((key) => {
+      if (!filtroValues[key]) return true;
+      console.log(`Comparing ${key}: ${persona[key]} === ${filtroValues[key]}`);
+      return String(persona[key]) === String(filtroValues[key]);
+    });
+
+    return matchesSearch && matchesFilters;
   });
+
+  console.log("Filtered Personas:", filteredPersonas);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredPersonas.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(filteredPersonas.length / recordsPerPage);
 
   return (
     <>
@@ -353,6 +429,8 @@ function TablaPersonasBack() {
               onClick={() => handleCreate()}
               icon={faPlus}
             />
+            //filtro dinamico
+            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
           </div>
           <div className="contenedor-tabla-activos">
             <table className="table-personas">
@@ -369,46 +447,51 @@ function TablaPersonasBack() {
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <Loading>
-                      <Spinner />
-                      <span>Loading..</span>
-                    </Loading>
+                    <td></td>
+                    <td style={{ paddingLeft: '13vw' }}></td>
+                    <td style={{ paddingLeft: '13vw' }}>
+                      <Loading>
+                        <Spinner />
+                        <span>Loading..</span>
+                      </Loading>
+                    </td>
+                    <td style={{ paddingLeft: '13vw' }}></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                 ) : (
-                  filteredPersonas
-                    .slice(indexOfFirstRecord, indexOfLastRecord)
-                    .map((persona) => (
-                      <tr key={persona.id_trabajador}>
-                        <td>{persona.id_trabajador}</td>
-                        <td>{persona.nombres}</td>
-                        <td>{persona.identificacion}</td>
-                        <td>{persona.correo_institucional}</td>
-                        <td
-                          style={{
-                            color:
-                              persona.nombre_estado_persona === "Activo"
-                                ? "#10A142"
-                                : "#ff0000",
-                          }}
+                  currentRecords.map((persona) => (
+                    <tr key={persona.id_trabajador}>
+                      <td>{persona.id_trabajador}</td>
+                      <td>{persona.nombres}</td>
+                      <td>{persona.identificacion}</td>
+                      <td>{persona.correo_institucional}</td>
+                      <td
+                        style={{
+                          color:
+                            persona.nombre_estado_persona === "Activo"
+                              ? "#10A142"
+                              : "#ff0000",
+                        }}
+                      >
+                        {persona.nombre_estado_persona}
+                      </td>
+                      <td>
+                        <button
+                          className="btn-accion"
+                          onClick={() => handleEdit(persona)}
                         >
-                          {persona.nombre_estado_persona}
-                        </td>
-                        <td>
-                          <button
-                            className="btn-accion"
-                            onClick={() => handleEdit(persona)}
-                          >
-                            <FontAwesomeIcon icon={faPenToSquare} />
-                          </button>
-                          <button
-                            className="btn-accion"
-                            onClick={() => handleInfo(persona)}
-                          >
-                            <FontAwesomeIcon icon={faFileLines} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                          <FontAwesomeIcon icon={faPenToSquare} />
+                        </button>
+                        <button
+                          className="btn-accion"
+                          onClick={() => handleInfo(persona)}
+                        >
+                          <FontAwesomeIcon icon={faFileLines} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 )}
               </tbody>
             </table>
@@ -425,11 +508,65 @@ function TablaPersonasBack() {
         estado={estadoModal}
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
-        actionType={actionType} // Pasar el tipo de acción al modal
-        onCreate={createPersona} // Pasar la función de creación
-        onUpdate={updatePerson} // Pasar la función de actualización
+        actionType={actionType}
+        onCreate={createPersona}
+        onUpdate={updatePerson}
       >
         {modalConfig.contenido}
+      </Modal>
+
+      <Modal
+        estado={estadoModalFiltros}
+        cambiarEstado={cambiarEstadoModalFiltros}
+        titulo="Agregar Filtros"
+        onCreate={applyFiltros}
+        onClear={clearFiltros}
+        actionType={'Clear'}
+      >
+        <FiltroDinamico
+          activeFilters={activeFilters}
+          onAddFilter={handleAddFilter}
+          onRemoveFilter={handleRemoveFilter}
+          onFiltroChange={handleFiltroChange}
+          filtroValues={filtroValues}
+          fieldsWithOptions={filterFields.map((field) => {
+            if (field.id === "id_centro_costo") {
+              return { ...field, options: centroCostos };
+            } else if (field.id === "id_area") {
+              return { ...field, options: area };
+            } else if (field.id === "id_region") {
+              return { ...field, options: region };
+            } else if (field.id === "id_cargo") {
+              return { ...field, options: cargo };
+            } else if (field.id === "id_estado_persona") {
+              return { ...field, options: estado };
+            }
+            return field;
+          })}
+        />
+        {showFilterOptions && (
+          <FilterOptions>
+            {filterFields
+              .filter((field) => !activeFilters.includes(field.id))
+              .map((field) => (
+                <FilterOptionButton
+                  style={{ marginLeft: '1vw' }}
+                  key={field.id}
+                  onClick={() => handleAddFilter(field.id)}
+                >
+                  {field.label}
+                </FilterOptionButton>
+              ))}
+          </FilterOptions>
+        )}
+        <AgregarFiltroContainer>
+          <FontAwesomeIcon
+            icon={faPlusCircle}
+            style={{ width: '4vw', height: '4vh', marginLeft: '-3.5vw' }}
+            className="add-filter-icon"
+            onClick={() => setShowFilterOptions((prev) => !prev)}
+          />
+        </AgregarFiltroContainer>
       </Modal>
     </>
   );
@@ -447,34 +584,47 @@ const Boton = styled.button`
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   transition: 0.3s ease all;
+`; const LoadingRow = styled.tr`
+height: 200px; /* Ajusta esta altura según sea necesario */
 `;
-const Loading = styled.tr`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+const LoadingCell = styled.td`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
+width: 100%;
+`;
+
+const Loading = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 `;
 
 const Spinner = styled.div`
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border-left-color: #09f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+border: 4px solid rgba(0, 0, 0, 0.1);
+width: 36px;
+height: 36px;
+border-radius: 50%;
+border-left-color: #09f;
+display: flex;
+align-items: center;
+justify-content: center;
 
-  animation: spin 1s ease infinite;
+animation: spin 1s ease infinite;
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 `;
+
 
 const Contenido = styled.div`
   display: flex;
@@ -485,5 +635,40 @@ const Contenido = styled.div`
     font-size: 42px;
     font-weight: 700;
     margin-bottom: 10px;
-  }`
-  ;
+  }
+`;
+
+const FilterOptions = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+`;
+
+const FilterOptionButton = styled.button`
+  background:linear-gradient(to right, #14ADD6, #384295);
+  width:20vw;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 9px;
+  margin: 4px 0;
+  cursor: pointer;
+  
+
+  &:hover {
+    background: linear-gradient(to right, #384295, #14ADD6);
+    transform: scale(1.05);
+     
+  }
+`;
+
+const AgregarFiltroContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  color:#384295;
+  cursor:pointer;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
