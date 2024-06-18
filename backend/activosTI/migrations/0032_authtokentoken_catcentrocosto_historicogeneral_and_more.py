@@ -155,7 +155,4 @@ class Migration(migrations.Migration):
             name='contratos',
             options={'managed': False},
         ),
-        migrations.DeleteModel(
-            name='Historicos',
-        ),
     ]

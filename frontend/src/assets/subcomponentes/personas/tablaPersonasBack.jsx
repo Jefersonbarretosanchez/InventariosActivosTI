@@ -83,8 +83,8 @@ function TablaPersonasBack() {
       setTotalActivos(activos);
       setTotalInactivos(inactivos);
 
-      console.log("Total de registros activos:", activos);
-      console.log("Total de registros inactivos:", inactivos);
+      // console.log("Total de registros activos:", activos);
+      // console.log("Total de registros inactivos:", inactivos);
     } catch (error) {
       toast.error("Hubo un error en la carga de datos de las personas");
     } finally {
@@ -179,6 +179,8 @@ function TablaPersonasBack() {
 
   const createPersona = async () => {
     setIsLoading(true);
+
+    // Convertir valores de campos relacionados a enteros
     const formattedData = {
       ...newPersonData,
       id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
@@ -188,7 +190,7 @@ function TablaPersonasBack() {
       id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
     };
 
-    console.log("Datos a enviar:", formattedData);
+    // console.log("Datos a enviar:", formattedData); // Log para depuración
 
     try {
       const response = await axios.post(
@@ -201,9 +203,34 @@ function TablaPersonasBack() {
       cambiarEstadoModal(false);
       toast.success("Persona creada exitosamente!");
     } catch (error) {
-      console.error("Error al crear persona:", error);
-      console.log("Datos Nueva Persona:", formattedData);
-      toast.error("Hubo un error al crear la persona.");
+      // console.error("Error al crear persona:", error);
+      // console.log("Datos Nueva Persona:", formattedData);
+
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
+      const statusCode = error.response ? error.response.status : 500;
+
+      if (error.response && error.response.data.errors) {
+        const specificErrors = error.response.data.errors;
+
+        const formattedErrors = Object.keys(specificErrors)
+          .map((key) => `${key}: ${specificErrors[key]}`)
+          .join("<br />");
+
+        toast.error(
+          <div>
+            {errorMessage} <br />
+            <strong>
+              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
+              <br />
+            </strong>
+            (Código de error: {statusCode})
+          </div>
+        );
+      } else {
+        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -225,7 +252,7 @@ function TablaPersonasBack() {
       id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
     };
 
-    console.log("Datos a enviar:", formattedData);
+    // console.log("Datos a enviar:", formattedData);
 
     try {
       const response = await axios.put(
@@ -244,8 +271,8 @@ function TablaPersonasBack() {
       cambiarEstadoModal(false);
       toast.success("Persona actualizada exitosamente!");
     } catch (error) {
-      console.error("Error al actualizar persona:", error);
-      console.log("Datos Nueva Persona:", formattedData);
+      // console.error("Error al actualizar persona:", error);
+      // console.log("Datos Nueva Persona:", formattedData);
       toast.error("Hubo un error al actualizar la persona.");
     } finally {
       setIsLoading(false);
@@ -340,7 +367,9 @@ function TablaPersonasBack() {
   };
 
   const handleRemoveFilter = (filterId) => {
-    setActiveFilters((prevFilters) => prevFilters.filter((id) => id !== filterId));
+    setActiveFilters((prevFilters) =>
+      prevFilters.filter((id) => id !== filterId)
+    );
     setFiltroValues((prevValues) => {
       const newValues = { ...prevValues };
       delete newValues[filterId];
@@ -358,7 +387,7 @@ function TablaPersonasBack() {
     abrirModal(
       `Actualizar ${persona.nombres}  ${persona.apellidos}`,
       formFields,
-      ["identificacion", "correo_institucional"],
+      ["identificacion","correo_personal","correo_institucional"],
       persona,
       "update"
     );
@@ -385,18 +414,21 @@ function TablaPersonasBack() {
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      console.log(`Comparing ${key}: ${persona[key]} === ${filtroValues[key]}`);
+      // console.log(`Comparing ${key}: ${persona[key]} === ${filtroValues[key]}`);
       return String(persona[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
   });
 
-  console.log("Filtered Personas:", filteredPersonas);
+  // console.log("Filtered Personas:", filteredPersonas);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredPersonas.slice(indexOfFirstRecord, indexOfLastRecord);
+  const currentRecords = filteredPersonas.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
   const totalPages = Math.ceil(filteredPersonas.length / recordsPerPage);
 
   return (
@@ -429,7 +461,7 @@ function TablaPersonasBack() {
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            //filtro dinamico
+            {/* filtro dinamico */}
             {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
           </div>
           <div className="contenedor-tabla-activos">
@@ -448,14 +480,14 @@ function TablaPersonasBack() {
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: '13vw' }}></td>
-                    <td style={{ paddingLeft: '13vw' }}>
+                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "13vw" }}>
                       <Loading>
                         <Spinner />
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: '13vw' }}></td>
+                    <td style={{ paddingLeft: "13vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -521,7 +553,7 @@ function TablaPersonasBack() {
         titulo="Agregar Filtros"
         onCreate={applyFiltros}
         onClear={clearFiltros}
-        actionType={'Clear'}
+        actionType={"Clear"}
       >
         <FiltroDinamico
           activeFilters={activeFilters}
@@ -550,7 +582,7 @@ function TablaPersonasBack() {
               .filter((field) => !activeFilters.includes(field.id))
               .map((field) => (
                 <FilterOptionButton
-                  style={{ marginLeft: '1vw' }}
+                  style={{ marginLeft: "1vw" }}
                   key={field.id}
                   onClick={() => handleAddFilter(field.id)}
                 >
@@ -562,7 +594,7 @@ function TablaPersonasBack() {
         <AgregarFiltroContainer>
           <FontAwesomeIcon
             icon={faPlusCircle}
-            style={{ width: '4vw', height: '4vh', marginLeft: '-3.5vw' }}
+            style={{ width: "4vw", height: "4vh", marginLeft: "-3.5vw" }}
             className="add-filter-icon"
             onClick={() => setShowFilterOptions((prev) => !prev)}
           />
@@ -584,47 +616,47 @@ const Boton = styled.button`
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   transition: 0.3s ease all;
-`; const LoadingRow = styled.tr`
-height: 200px; /* Ajusta esta altura según sea necesario */
+`;
+const LoadingRow = styled.tr`
+  height: 200px; /* Ajusta esta altura según sea necesario */
 `;
 
 const LoadingCell = styled.td`
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100%;
-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 `;
 
 const Loading = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Spinner = styled.div`
-border: 4px solid rgba(0, 0, 0, 0.1);
-width: 36px;
-height: 36px;
-border-radius: 50%;
-border-left-color: #09f;
-display: flex;
-align-items: center;
-justify-content: center;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-animation: spin 1s ease infinite;
+  animation: spin 1s ease infinite;
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 `;
-
 
 const Contenido = styled.div`
   display: flex;
@@ -645,30 +677,28 @@ const FilterOptions = styled.div`
 `;
 
 const FilterOptionButton = styled.button`
-  background:linear-gradient(to right, #14ADD6, #384295);
-  width:20vw;
+  background: linear-gradient(to right, #14add6, #384295);
+  width: 20vw;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 9px;
   margin: 4px 0;
   cursor: pointer;
-  
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14ADD6);
+    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
-     
   }
 `;
 
 const AgregarFiltroContainer = styled.div`
   display: flex;
   justify-content: center;
-  color:#384295;
-  cursor:pointer;
+  color: #384295;
+  cursor: pointer;
   transition: transform 0.3s ease;
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 `;

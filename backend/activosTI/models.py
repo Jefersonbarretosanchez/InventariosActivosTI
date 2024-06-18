@@ -482,11 +482,11 @@ class Perifericos(models.Model):
 
 class Persona(models.Model):
     id_trabajador = models.AutoField(primary_key=True)
-    identificacion = models.IntegerField()
+    identificacion = models.IntegerField(unique=True)
     nombres = models.CharField(max_length=30)
     apellidos = models.CharField(max_length=30)
-    correo_personal = models.CharField(max_length=50)
-    correo_institucional = models.CharField(max_length=50)
+    correo_personal = models.CharField(max_length=50,unique=True)
+    correo_institucional = models.CharField(max_length=50,unique=True)
     id_centro_costo = models.ForeignKey(CatCentroCosto, models.DO_NOTHING, db_column='id_centro_costo')
     id_area = models.ForeignKey(CatArea, models.DO_NOTHING, db_column='id_area')
     id_region = models.ForeignKey(CatRegion, models.DO_NOTHING, db_column='id_region')

@@ -1,10 +1,11 @@
 """Importaciones"""
 from django.shortcuts import render
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-from rest_framework import generics, status
+from rest_framework import generics, status,serializers
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .forms import PersonaCreacion, PersonaActualizar
@@ -111,14 +112,32 @@ class PersonaListCreate(generics.ListCreateAPIView):
             print(f'Error al crear el registro histórico: {e}')
 
     def create(self, request, *args, **kwargs):
-        response = super().create(request, *args, **kwargs)
-        return response
+        print("Solicitud de creación recibida.")
+        try:
+            response = super().create(request, *args, **kwargs)
+            print("Respuesta de creación enviada.")
+            return response
+        except serializers.ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {}
+            for field, messages in e.detail.items():
+                errors[field] = messages[0]  # Tomamos el primer mensaje de error para cada campo
+            customized_response = {
+                'message': 'Error al crear la persona',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        # except serializers.ValidationError as e:
+        #     return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class PersonasUpdate(generics.RetrieveUpdateAPIView):
     """Actuaización Personas"""
-    serializer_class=PersonaSerializer
-    permission_classes=[AllowAny]
+    serializer_class = PersonaSerializer
+    permission_classes = [AllowAny]
     queryset = Persona.objects.all()
+
 
 class PersonasDelete(generics.DestroyAPIView):
     """ND"""

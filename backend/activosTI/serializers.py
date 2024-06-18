@@ -1,7 +1,8 @@
 """Importaciones de datos requeridos"""
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Persona,CatCentroCosto,CatArea, CatRegion, CatCargo, CatEstadoPersona
+from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
+
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializador para el Usuario"""
@@ -16,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         # Token.objects.create(user=user)
         return user
+
 
 class BaseModel(serializers.ModelSerializer):
     fecha_registro = serializers.DateField()
@@ -55,11 +57,16 @@ class EstadoPersonaSerializer(serializers.ModelSerializer):
 
 
 class PersonaSerializer(serializers.ModelSerializer):
-    id_centro_costo = serializers.PrimaryKeyRelatedField(queryset=CatCentroCosto.objects.all())
-    id_area = serializers.PrimaryKeyRelatedField(queryset=CatArea.objects.all())
-    id_region = serializers.PrimaryKeyRelatedField(queryset=CatRegion.objects.all())
-    id_cargo = serializers.PrimaryKeyRelatedField(queryset=CatCargo.objects.all())
-    nombre_estado_persona = serializers.CharField(source='id_estado_persona.nombre', read_only=True)
+    id_centro_costo = serializers.PrimaryKeyRelatedField(
+        queryset=CatCentroCosto.objects.all())
+    id_area = serializers.PrimaryKeyRelatedField(
+        queryset=CatArea.objects.all())
+    id_region = serializers.PrimaryKeyRelatedField(
+        queryset=CatRegion.objects.all())
+    id_cargo = serializers.PrimaryKeyRelatedField(
+        queryset=CatCargo.objects.all())
+    nombre_estado_persona = serializers.CharField(
+        source='id_estado_persona.nombre', read_only=True)
 
     class Meta:
         model = Persona
@@ -80,22 +87,57 @@ class PersonaSerializer(serializers.ModelSerializer):
             'nombre_estado_persona',
         ]
 
+    def validate_identificacion(self, value):
+        if Persona.objects.filter(identificacion=value).exists():
+            raise serializers.ValidationError("Esta identificación ya existe.")
+        return value
+
+    def validate_correo_personal(self, value):
+        if Persona.objects.filter(correo_personal=value).exists():
+            raise serializers.ValidationError(
+                "Este correo personal ya existe.")
+        return value
+    
+    @staticmethod
+    def validate_correo_institucional(value):
+        validateExist=Persona.objects.filter(correo_institucional=value).exists()
+        if validateExist:
+            print("ingresa datos del error")
+            raise serializers.ValidationError(
+                "Este correo institucional ya existe.")
+        return value
+
+    # def create(self, validated_data):
+    #     valuePersona=super().create(validated_data)
+    #     identificacion = validated_data.get("identificacion")
+    #     if Persona.objects.filter(identificacion=identificacion).exists():
+    #         raise serializers.ValidationError("Esta identificación ya existe.")
+    #     return valuePersona
+    
     def create(self, validated_data):
         return Persona.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
-        instance.identificacion = validated_data.get('identificacion', instance.identificacion)
+        instance.identificacion = validated_data.get(
+            'identificacion', instance.identificacion)
         instance.nombres = validated_data.get('nombres', instance.nombres)
-        instance.apellidos = validated_data.get('apellidos', instance.apellidos)
-        instance.correo_personal = validated_data.get('correo_personal', instance.correo_personal)
-        instance.correo_institucional = validated_data.get('correo_institucional', instance.correo_institucional)
-        instance.fecha_ingreso_empresa = validated_data.get('fecha_ingreso_empresa', instance.fecha_ingreso_empresa)
-        instance.direccion = validated_data.get('direccion', instance.direccion)
-        instance.id_centro_costo = validated_data.get('id_centro_costo', instance.id_centro_costo)
+        instance.apellidos = validated_data.get(
+            'apellidos', instance.apellidos)
+        instance.correo_personal = validated_data.get(
+            'correo_personal', instance.correo_personal)
+        instance.correo_institucional = validated_data.get(
+            'correo_institucional', instance.correo_institucional)
+        instance.fecha_ingreso_empresa = validated_data.get(
+            'fecha_ingreso_empresa', instance.fecha_ingreso_empresa)
+        instance.direccion = validated_data.get(
+            'direccion', instance.direccion)
+        instance.id_centro_costo = validated_data.get(
+            'id_centro_costo', instance.id_centro_costo)
         instance.id_area = validated_data.get('id_area', instance.id_area)
-        instance.id_region = validated_data.get('id_region', instance.id_region)
+        instance.id_region = validated_data.get(
+            'id_region', instance.id_region)
         instance.id_cargo = validated_data.get('id_cargo', instance.id_cargo)
-        instance.id_estado_persona = validated_data.get('id_estado_persona', instance.id_estado_persona)
+        instance.id_estado_persona = validated_data.get(
+            'id_estado_persona', instance.id_estado_persona)
         instance.save()
         return instance
-    

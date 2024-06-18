@@ -9,6 +9,7 @@ export const ALL_INPUT_IDS = [
   "id_area",
   "id_region",
   "id_cargo",
+  "direccion",
   "id_estado_persona"
 ];
 
@@ -83,6 +84,13 @@ export const formFields = [
     type: "select",
     required: true,
     options: [],
+  },
+  {
+    name: "direccion",
+    id: "direccion",
+    label: "Dirección",
+    type: "text",
+    required: true,
   },
   {
     id: "id_estado_persona",
