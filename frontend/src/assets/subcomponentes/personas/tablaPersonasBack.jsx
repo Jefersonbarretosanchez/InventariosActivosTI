@@ -8,7 +8,6 @@ import {
   faPenToSquare,
   faMagnifyingGlass,
   faPlusCircle,
-  faBarsProgress,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import styled from "styled-components";
@@ -34,13 +33,13 @@ function TablaPersonasBack() {
   const [isLoading, setIsLoading] = useState(false);
   const [newPersonData, setNewPersonData] = useState({});
   const [actionType, setActionType] = useState("");
-  const [totalActivos, setTotalActivos] = useState(0);
-  const [totalInactivos, setTotalInactivos] = useState(0);
+  const [totalActivos, setTotalActivos] = useState(0); // Estado para el total de personas activas
+  const [totalInactivos, setTotalInactivos] = useState(0); // Estado para el total de personas inactivas
 
   const [searchTerm, setSearchTerm] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, setRecordsPerPage] = useState(3);
+  const [recordsPerPage, setRecordsPerPage] = useState(15); // Cambiado a 15
 
   const [estadoModalFiltros, cambiarEstadoModalFiltros] = useState(false);
   const [filtroValues, setFiltroValues] = useState({});
@@ -50,12 +49,8 @@ function TablaPersonasBack() {
 
   const handleResize = () => {
     const width = window.innerWidth;
-    if (width < 1366) {
-      setRecordsPerPage(4);
-    } else if (width < 2800) {
-      setRecordsPerPage(5);
-    } else {
-      setRecordsPerPage(8);
+    if (width > 0) {
+      setRecordsPerPage(20);
     }
   };
 
@@ -72,19 +67,6 @@ function TablaPersonasBack() {
         "http://localhost:8000/api/personas/"
       );
       setPersonas(responsePersonas.data);
-
-      const activos = responsePersonas.data.filter(
-        (persona) => persona.nombre_estado_persona === "Activo"
-      ).length;
-      const inactivos = responsePersonas.data.filter(
-        (persona) => persona.nombre_estado_persona === "Inactivo"
-      ).length;
-
-      setTotalActivos(activos);
-      setTotalInactivos(inactivos);
-
-      // console.log("Total de registros activos:", activos);
-      // console.log("Total de registros inactivos:", inactivos);
     } catch (error) {
       toast.error("Hubo un error en la carga de datos de las personas");
     } finally {
@@ -116,7 +98,7 @@ function TablaPersonasBack() {
         setCentroCostos(
           responseCentroCostos.data.map((item) => ({
             value: item.id_centro_costo,
-            label: item.nombre,
+            label: item.nombre, // Mantener el nombre original en el valor
           }))
         );
 
@@ -159,6 +141,19 @@ function TablaPersonasBack() {
     fetchCatalogos();
   }, []);
 
+  // Nuevo useEffect para actualizar los totales cada vez que cambie la lista de personas
+  useEffect(() => {
+    const activos = personas.filter(
+      (persona) => persona.nombre_estado_persona === "Activo"
+    ).length;
+    const inactivos = personas.filter(
+      (persona) => persona.nombre_estado_persona === "Inactivo"
+    ).length;
+
+    setTotalActivos(activos);
+    setTotalInactivos(inactivos);
+  }, [personas]);
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewPersonData((prevData) => ({ ...prevData, [name]: value }));
@@ -179,20 +174,16 @@ function TablaPersonasBack() {
 
   const createPersona = async () => {
     setIsLoading(true);
-
-    // Convertir valores de campos relacionados a enteros
-    const formattedData = {
-      ...newPersonData,
-      id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-      id_area: parseInt(newPersonData.id_area, 10),
-      id_region: parseInt(newPersonData.id_region, 10),
-      id_cargo: parseInt(newPersonData.id_cargo, 10),
-      id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
-    };
-
-    // console.log("Datos a enviar:", formattedData); // Log para depuración
-
     try {
+      const formattedData = {
+        ...newPersonData,
+        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
+        id_area: parseInt(newPersonData.id_area, 10),
+        id_region: parseInt(newPersonData.id_region, 10),
+        id_cargo: parseInt(newPersonData.id_cargo, 10),
+        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+      };
+
       const response = await axios.post(
         "http://localhost:8000/api/personas/",
         formattedData
@@ -203,9 +194,6 @@ function TablaPersonasBack() {
       cambiarEstadoModal(false);
       toast.success("Persona creada exitosamente!");
     } catch (error) {
-      // console.error("Error al crear persona:", error);
-      // console.log("Datos Nueva Persona:", formattedData);
-
       const errorMessage = error.response
         ? error.response.data.message
         : error.message;
@@ -238,23 +226,21 @@ function TablaPersonasBack() {
 
   const updatePerson = async () => {
     setIsLoading(true);
-    const updatedData = {
-      ...personaSeleccionada,
-      ...newPersonData,
-    };
-
-    const formattedData = {
-      ...updatedData,
-      id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-      id_area: parseInt(newPersonData.id_area, 10),
-      id_region: parseInt(newPersonData.id_region, 10),
-      id_cargo: parseInt(newPersonData.id_cargo, 10),
-      id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
-    };
-
-    // console.log("Datos a enviar:", formattedData);
-
     try {
+      const updatedData = {
+        ...personaSeleccionada,
+        ...newPersonData,
+      };
+
+      const formattedData = {
+        ...updatedData,
+        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
+        id_area: parseInt(newPersonData.id_area, 10),
+        id_region: parseInt(newPersonData.id_region, 10),
+        id_cargo: parseInt(newPersonData.id_cargo, 10),
+        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+      };
+
       const response = await axios.put(
         `http://localhost:8000/api/personas/${personaSeleccionada.id_trabajador}/`,
         formattedData
@@ -271,8 +257,6 @@ function TablaPersonasBack() {
       cambiarEstadoModal(false);
       toast.success("Persona actualizada exitosamente!");
     } catch (error) {
-      // console.error("Error al actualizar persona:", error);
-      // console.log("Datos Nueva Persona:", formattedData);
       toast.error("Hubo un error al actualizar la persona.");
     } finally {
       setIsLoading(false);
@@ -286,9 +270,9 @@ function TablaPersonasBack() {
     initialValues = {},
     action = ""
   ) => {
-    const fieldsWithOptions = fields.map((field) => {
+    let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_centro_costo") {
-        return { ...field, options: centroCostos };
+        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
       } else if (field.id === "id_area") {
         return { ...field, options: area };
       } else if (field.id === "id_region") {
@@ -300,6 +284,11 @@ function TablaPersonasBack() {
       }
       return field;
     });
+
+    if (action === "create") {
+      initialValues.id_estado_persona = estado.find(e => e.label === "Activo")?.value || "";
+      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_persona");
+    }
 
     setNewPersonData(initialValues);
     setActionType(action);
@@ -320,7 +309,7 @@ function TablaPersonasBack() {
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
       if (field.id === "id_centro_costo") {
-        return { ...field, options: centroCostos };
+        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
       } else if (field.id === "id_area") {
         return { ...field, options: area };
       } else if (field.id === "id_region") {
@@ -387,7 +376,7 @@ function TablaPersonasBack() {
     abrirModal(
       `Actualizar ${persona.nombres}  ${persona.apellidos}`,
       formFields,
-      ["identificacion","correo_personal","correo_institucional"],
+      ["identificacion", "correo_personal", "correo_institucional"],
       persona,
       "update"
     );
@@ -396,7 +385,7 @@ function TablaPersonasBack() {
   const handleInfo = (persona) => {
     setPersonaSeleccionada(persona);
     abrirModal(
-      `Información de ${persona.nombres} ${persona.apellidos}`,
+      `Información de ${persona.nombres}`,
       formFields,
       ALL_INPUT_IDS,
       persona,
@@ -414,14 +403,11 @@ function TablaPersonasBack() {
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      // console.log(`Comparing ${key}: ${persona[key]} === ${filtroValues[key]}`);
       return String(persona[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
   });
-
-  // console.log("Filtered Personas:", filteredPersonas);
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -434,8 +420,8 @@ function TablaPersonasBack() {
   return (
     <>
       <TarjetasPersonas
-        totalActivos={totalActivos}
-        totalInactivos={totalInactivos}
+        totalActivos={totalActivos} // Pasar el total de activos como props
+        totalInactivos={totalInactivos} // Pasar el total de inactivos como props
       />
       <div className="contenedor-activos">
         <div className="row-activos">
@@ -461,22 +447,20 @@ function TablaPersonasBack() {
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            {/* filtro dinamico */}
-            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
           </div>
-          <div className="contenedor-tabla-activos">
-            <table className="table-personas">
-              <thead>
+          <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+            <table style={{ width: "100%" }} className="table-personas">
+              <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
                   <th style={{ paddingLeft: "0vw" }}>ID Trabajador</th>
-                  <th style={{ paddingLeft: "3.5vw" }}>Nombres</th>
+                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Completo</th>
                   <th style={{ paddingLeft: "0vw" }}>Numero Identificación</th>
                   <th style={{ paddingLeft: "5vw" }}>Correo Institucional</th>
                   <th style={{ paddingLeft: "2.5vw" }}>Estado</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody >
                 {isLoading ? (
                   <tr>
                     <td></td>
@@ -495,7 +479,7 @@ function TablaPersonasBack() {
                   currentRecords.map((persona) => (
                     <tr key={persona.id_trabajador}>
                       <td>{persona.id_trabajador}</td>
-                      <td>{persona.nombres}</td>
+                      <td style={{ paddingLeft: "2vw" }}>{persona.nombres} {persona.apellidos}</td>
                       <td>{persona.identificacion}</td>
                       <td>{persona.correo_institucional}</td>
                       <td
@@ -527,7 +511,7 @@ function TablaPersonasBack() {
                 )}
               </tbody>
             </table>
-          </div>
+          </Divtabla>
         </div>
       </div>
       <Paginate
@@ -563,7 +547,7 @@ function TablaPersonasBack() {
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
             if (field.id === "id_centro_costo") {
-              return { ...field, options: centroCostos };
+              return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) }; // Renombrar a Alianza en la etiqueta
             } else if (field.id === "id_area") {
               return { ...field, options: area };
             } else if (field.id === "id_region") {
@@ -700,5 +684,27 @@ const AgregarFiltroContainer = styled.div`
   transition: transform 0.3s ease;
   &:hover {
     transform: scale(1.1);
+  }
+`;
+const Divtabla = styled.div`
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #72b1d8;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #3a9ee1;
   }
 `;

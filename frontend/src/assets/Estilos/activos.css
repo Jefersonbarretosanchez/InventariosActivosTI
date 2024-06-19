@@ -297,7 +297,7 @@ footer {
     padding: 1.5vh 1.2vw;
     width: 90vw;
     margin-left: 2vw;
-    margin-top: -6vh;
+    margin-top: -10vh;
     bottom: 0;
     display: block;
     text-align: right;
@@ -310,7 +310,7 @@ section {
     display: flex;
     justify-content: left;
     padding: 1.5vh 1.2vw;
-    margin-top: 2.1vh;
+    margin-top: 1vh;
     width: 90vw;
     bottom: 0;
     left: 0;

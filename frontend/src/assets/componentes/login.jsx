@@ -41,8 +41,7 @@ export default function Login() {
         <img src={logo} alt="Logo Scala" className="logo-login" />
       </div>
       <div className="inicio-login">
-        <h1>{name}</h1>
-        <h2>Bienvenido</h2>
+        <h2>Bienvenido a SIGS</h2>
         <p>Por favor ingrese Usuario y Contraseña</p>
       </div>
       <form onSubmit={handleSubmit} method="post">

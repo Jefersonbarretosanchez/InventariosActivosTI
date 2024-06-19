@@ -18,7 +18,7 @@ export const formFields = [
     name: "identificacion",
     id: "identificacion",
     label: "N° Documento",
-    type: "text",
+    type: "number",
     required: true,
   },
   {

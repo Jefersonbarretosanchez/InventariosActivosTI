@@ -4,11 +4,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 function Header() {
+    const today = new Date(); // Get the current date
+
+    const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    const day = dayNames[today.getDay()];
+    const date = today.getDate().toString().padStart(2, '0'); // Ensure two digits
+    const month = monthNames[today.getMonth()];
+    const year = today.getFullYear();
+
+    // Format the date string
+    const formattedDate = `${day}, ${date} de ${month} ${year}`;
     return (
         <header className="header">
             <div>
-                <h1>Bienvenido, Fabrizzio Garzon</h1>
-                <p>Lunes, 08 de Abril 2024</p>
+                <h1>Bienvenido al Sistema Integrado de Gestión Scala</h1>
+                <p>{formattedDate}</p>
             </div>
             <div class="menu-login">
                 <button class="boton-usuario-gen">

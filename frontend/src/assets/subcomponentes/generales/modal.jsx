@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -11,8 +11,49 @@ const Modal = ({
   actionType,
   onCreate,
   onUpdate,
-  onClear // filtros agregados
+  onClear
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const formElements = document.querySelectorAll('.form-control, .form-select');
+    const newErrors = {};
+    formElements.forEach(element => {
+      if (!element.value && !element.disabled) {
+        newErrors[element.name] = 'Campo obligatorio';
+      }
+      if ((element.name === 'nombres' || element.name === 'apellidos') && element.value && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(element.value)) {
+        newErrors[element.name] = 'Solo se permiten nombres en formato texto';
+      }
+      if ((element.name === 'correo_personal' || element.name === 'correo_institucional') && element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
+        newErrors[element.name] = 'Formato de correo inválido';
+      }
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCreate = async () => {
+    if (!validateForm()) return;
+    setIsLoading(true);
+    await onCreate();
+    setIsLoading(false);
+  };
+
+  const handleUpdate = async () => {
+    if (!validateForm()) return;
+    setIsLoading(true);
+    await onUpdate();
+    setIsLoading(false);
+  };
+
+  const handleClear = async () => {
+    setIsLoading(true);
+    await onClear();
+    setIsLoading(false);
+  };
+
   return (
     <>
       {estado && (
@@ -24,25 +65,27 @@ const Modal = ({
                 <FontAwesomeIcon icon={faX} />
               </BotonCerrar>
             </ModalHeader>
-            <ModalBody style={{ marginLeft: '1vw' }}>{children}</ModalBody>
+            <ModalBody style={{ marginLeft: '1vw' }}>
+              {React.cloneElement(children, { errors, setErrors })}
+            </ModalBody>
             <ModalFooter>
               {(actionType === "create" || actionType === "update") && (
-                <BtnCancelar onClick={() => cambiarEstado(false)}>
+                <BtnCancelar onClick={() => cambiarEstado(false)} disabled={isLoading}>
                   <span>Cancelar</span>
                 </BtnCancelar>
               )}
               {actionType === "create" && (
-                <Boton onClick={onCreate}>Registrar</Boton>
+                <Boton onClick={handleCreate} disabled={isLoading}>Registrar</Boton>
               )}
               {actionType === "update" && (
-                <Boton onClick={onUpdate}>Actualizar</Boton>
+                <Boton onClick={handleUpdate} disabled={isLoading}>Actualizar</Boton>
               )}
               {actionType === "Clear" && (
                 <>
-                  <BtnCancelar style={{ marginTop: '1vh' }} onClick={() => cambiarEstado(false)}>
+                  <BtnCancelar style={{ marginTop: '1vh' }} onClick={() => cambiarEstado(false)} disabled={isLoading}>
                     <span>Salir</span>
                   </BtnCancelar>
-                  <BtnLimpiar style={{ marginTop: '1vh' }} onClick={onClear}>Limpiar Filtros</BtnLimpiar> {/* filtros agregados */}
+                  <BtnLimpiar style={{ marginTop: '1vh' }} onClick={handleClear} disabled={isLoading}>Limpiar Filtros</BtnLimpiar>
                 </>
               )}
             </ModalFooter>
@@ -112,14 +155,13 @@ const BotonCerrar = styled.button`
 `;
 
 const ModalBody = styled.div`
-  overflow-x: hidden; /* Elimina el scroll horizontal */
+  overflow-x: hidden;
   overflow-y: auto;
   padding: 20px 0;
-  max-height: calc(80vh - 120px); /* Ajusta según sea necesario */
+  max-height: calc(80vh - 120px);
   width: 100%;
-  margin-right: -20px; /* Ajusta según sea necesario */
+  margin-right: -20px;
 
-  /* Estilos para ocultar el scrollbar */
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -160,6 +202,11 @@ const Boton = styled.button`
     background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const BtnCancelar = styled.button`
@@ -181,6 +228,11 @@ const BtnCancelar = styled.button`
   &:focus {
     outline: none;
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const BtnLimpiar = styled.button`
@@ -200,5 +252,10 @@ const BtnLimpiar = styled.button`
 
   &:focus {
     outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;

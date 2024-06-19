@@ -2,10 +2,23 @@ import React from 'react';
 
 function Paginate({ currentPage, totalPages, onPageChange }) {
     const flechapag = ">>";
+    const flechapagant = "<<";
 
     return (
         <section>
             <div className='Paginacion'>
+                {currentPage > 1 && (
+                    <a
+                        href='#'
+                        className='pagina-link'
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onPageChange(currentPage - 1);
+                        }}
+                    >
+                        {flechapagant}
+                    </a>
+                )}
                 {Array.from({ length: totalPages }, (_, index) => (
                     <a
                         href='#'
