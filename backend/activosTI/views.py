@@ -1,17 +1,17 @@
 """Importaciones"""
-from django.shortcuts import render
-from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from rest_framework import generics, status,serializers
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+
+from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
 
 from .forms import PersonaCreacion, PersonaActualizar
+from .models import Historicos,Persona,CatCentroCosto,CatArea,CatRegion,CatCargo,CatEstadoPersona
 from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer
-from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
-
 # Create your views here.
 
 
@@ -42,9 +42,10 @@ class PersonaCreate(CreateView):
 
 class PersonaLista(ListView):
     """Lista personas"""
-    model = Persona
+    model = Historicos
     template_name = 'persona.html'
     context_object_name = 'personas'
+    queryset= Historicos.objects.all().order_by('-fecha_registro')
 
 
 class PersonaUpdate(UpdateView):
@@ -113,30 +114,93 @@ class PersonaListCreate(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         print("Solicitud de creación recibida.")
+
+        # Validaciones personalizadas
+        identificacion = request.data.get('identificacion')
+        correo_personal = request.data.get('correo_personal')
+        correo_institucional = request.data.get('correo_institucional')
+
+        errors = {}
+
+        if Persona.objects.filter(identificacion=identificacion).exists():
+            errors["Numero Identificación"] = identificacion
+        if Persona.objects.filter(correo_personal=correo_personal).exists():
+            errors["Correo Personal"] = correo_personal
+        if Persona.objects.filter(correo_institucional=correo_institucional).exists():
+            errors["Correo Institucional"] = correo_institucional
+
+        if errors:
+            return Response({'message': 'Error al crear la persona',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             response = super().create(request, *args, **kwargs)
             print("Respuesta de creación enviada.")
             return response
-        except serializers.ValidationError as e:
+        except ValidationError as e:
             print(e)
             # Construir la respuesta personalizada
-            errors = {}
-            for field, messages in e.detail.items():
-                errors[field] = messages[0]  # Tomamos el primer mensaje de error para cada campo
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
             customized_response = {
                 'message': 'Error al crear la persona',
                 'errors': errors
             }
             return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
-        # except serializers.ValidationError as e:
-        #     return Response({"message": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al crear la persona'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class PersonasUpdate(generics.RetrieveUpdateAPIView):
-    """Actuaización Personas"""
+    """Actualización Personas"""
     serializer_class = PersonaSerializer
     permission_classes = [AllowAny]
     queryset = Persona.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        # Validaciones personalizadas
+        identificacion = request.data.get(
+            'identificacion', instance.identificacion)
+        correo_personal = request.data.get(
+            'correo_personal', instance.correo_personal)
+        correo_institucional = request.data.get(
+            'correo_institucional', instance.correo_institucional)
+
+        errors = {}
+
+        if Persona.objects.filter(identificacion=identificacion).exclude(id_trabajador=instance.id_trabajador).exists():
+            errors["Numero Identificación"] = identificacion
+        if Persona.objects.filter(correo_personal=correo_personal).exclude(id_trabajador=instance.id_trabajador).exists():
+            errors["Correo Personal"] = correo_personal
+        if Persona.objects.filter(correo_institucional=correo_institucional).exclude(id_trabajador=instance.id_trabajador).exists():
+            errors["Correo Institucional"] = correo_institucional
+
+        if errors:
+            return Response({'message': 'Error Al Actualizar El Registro', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        except ValidationError as e:
+            # Captura otros errores de validación
+            errors = {field: [str(error) for error in messages]
+                      for field, messages in e.detail.items()}
+            customized_response = {
+                'message': 'Error Al Actualizar El Registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Manejar cualquier otra excepción aquí si es necesario
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al actualizar la persona'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class PersonasDelete(generics.DestroyAPIView):

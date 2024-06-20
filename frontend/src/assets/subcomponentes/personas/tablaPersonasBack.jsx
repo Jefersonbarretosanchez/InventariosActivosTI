@@ -209,16 +209,21 @@ function TablaPersonasBack() {
         toast.error(
           <div>
             {errorMessage} <br />
+            <br />
+            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
+            <br />
             <strong>
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            (Código de error: {statusCode})
-          </div>
+            {/* (Código de error: {statusCode}) */}
+          </div>,
+          {position:"bottom-center"}
         );
       } else {
         toast.error(`${errorMessage} (Código de error: ${statusCode})`);
       }
+      cambiarEstadoModal(false);
     } finally {
       setIsLoading(false);
     }
@@ -257,7 +262,36 @@ function TablaPersonasBack() {
       cambiarEstadoModal(false);
       toast.success("Persona actualizada exitosamente!");
     } catch (error) {
-      toast.error("Hubo un error al actualizar la persona.");
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
+      const statusCode = error.response ? error.response.status : 500;
+
+      if (error.response && error.response.data.errors) {
+        const specificErrors = error.response.data.errors;
+
+        const formattedErrors = Object.keys(specificErrors)
+          .map((key) => `${key}: ${specificErrors[key]}`)
+          .join("<br />");
+
+        toast.error(
+          <div>
+            {errorMessage} <br />
+            <br />
+            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
+            <br />
+            <strong>
+              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
+              <br />
+            </strong>
+            {/* (Código de error: {statusCode}) */}
+          </div>,
+          {position:"bottom-center",}
+        );
+      } else {
+        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
+      }
+      cambiarEstadoModal(false);
     } finally {
       setIsLoading(false);
     }
@@ -376,7 +410,7 @@ function TablaPersonasBack() {
     abrirModal(
       `Actualizar ${persona.nombres}  ${persona.apellidos}`,
       formFields,
-      ["identificacion", "correo_personal", "correo_institucional"],
+      ["identificacion", ],
       persona,
       "update"
     );

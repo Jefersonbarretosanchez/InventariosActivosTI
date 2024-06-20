@@ -87,36 +87,9 @@ class PersonaSerializer(serializers.ModelSerializer):
             'nombre_estado_persona',
         ]
 
-    def validate_identificacion(self, value):
-        if Persona.objects.filter(identificacion=value).exists():
-            raise serializers.ValidationError("Esta identificación ya existe.")
-        return value
-
-    def validate_correo_personal(self, value):
-        if Persona.objects.filter(correo_personal=value).exists():
-            raise serializers.ValidationError(
-                "Este correo personal ya existe.")
-        return value
-    
-    @staticmethod
-    def validate_correo_institucional(value):
-        validateExist=Persona.objects.filter(correo_institucional=value).exists()
-        if validateExist:
-            print("ingresa datos del error")
-            raise serializers.ValidationError(
-                "Este correo institucional ya existe.")
-        return value
-
-    # def create(self, validated_data):
-    #     valuePersona=super().create(validated_data)
-    #     identificacion = validated_data.get("identificacion")
-    #     if Persona.objects.filter(identificacion=identificacion).exists():
-    #         raise serializers.ValidationError("Esta identificación ya existe.")
-    #     return valuePersona
-    
     def create(self, validated_data):
         return Persona.objects.create(**validated_data)
-    
+
     def update(self, instance, validated_data):
         instance.identificacion = validated_data.get(
             'identificacion', instance.identificacion)
