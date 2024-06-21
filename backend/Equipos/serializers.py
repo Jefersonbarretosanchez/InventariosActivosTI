@@ -87,6 +87,7 @@ class EquipoSerializer(serializers.ModelSerializer):
         model = Equipo
         fields = [
             'id_equipo',
+            'nombre_equipo',
             'modelo',
             'sereal',
             'id_marcaequipo',
@@ -109,6 +110,8 @@ class EquipoSerializer(serializers.ModelSerializer):
         return Equipo.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        instance.nombre_equipo = validated_data.get(
+            'nombre_equipo', instance.nombre_equipo)
         instance.modelo = validated_data.get(
             'modelo', instance.modelo)
         instance.sereal = validated_data.get('sereal', instance.sereal)
