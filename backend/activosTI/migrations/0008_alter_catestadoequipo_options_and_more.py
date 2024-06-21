@@ -11,15 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='catestadoequipo',
-            options={},
-        ),
-        migrations.AlterModelOptions(
             name='catestadopersona',
-            options={},
-        ),
-        migrations.AlterModelOptions(
-            name='catmarcaequipo',
             options={},
         ),
         migrations.RemoveField(

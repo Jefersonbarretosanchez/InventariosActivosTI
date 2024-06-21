@@ -11,14 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='cattipopropiedad',
-            options={},
-        ),
-        migrations.AlterModelOptions(
-            name='catubicacion',
-            options={},
-        ),
-        migrations.AlterModelOptions(
             name='contratos',
             options={},
         ),

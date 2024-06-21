@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='equipo',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
             name='licenciapersona',
             options={'managed': False},
         ),

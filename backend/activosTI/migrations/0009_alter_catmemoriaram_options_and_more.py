@@ -11,14 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='catmemoriaram',
-            options={},
-        ),
-        migrations.AlterModelOptions(
-            name='catprocesador',
-            options={},
-        ),
-        migrations.AlterModelOptions(
             name='catregion',
             options={},
         ),
@@ -26,22 +18,6 @@ class Migration(migrations.Migration):
             name='catso',
             options={},
         ),
-        migrations.AlterModelOptions(
-            name='cattipoequipo',
-            options={},
-        ),
-        migrations.RemoveField(
-            model_name='catestadoequipo',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catestadoequipo',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catestadoequipo',
-            name='usuario_registro',
-        ),
         migrations.RemoveField(
             model_name='catestadopersona',
             name='fecha_actualizacion',
@@ -54,30 +30,8 @@ class Migration(migrations.Migration):
             model_name='catestadopersona',
             name='usuario_registro',
         ),
-        migrations.RemoveField(
-            model_name='catmarcaequipo',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catmarcaequipo',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catmarcaequipo',
-            name='usuario_registro',
-        ),
-        migrations.AlterField(
-            model_name='catestadoequipo',
-            name='fecha_registro',
-            field=models.DateField(auto_now_add=True),
-        ),
         migrations.AlterField(
             model_name='catestadopersona',
-            name='fecha_registro',
-            field=models.DateField(auto_now_add=True),
-        ),
-        migrations.AlterField(
-            model_name='catmarcaequipo',
             name='fecha_registro',
             field=models.DateField(auto_now_add=True),
         ),

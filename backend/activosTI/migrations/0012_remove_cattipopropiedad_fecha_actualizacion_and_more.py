@@ -10,38 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='cattipopropiedad',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='cattipopropiedad',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='cattipopropiedad',
-            name='usuario_registro',
-        ),
-        migrations.RemoveField(
-            model_name='catubicacion',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catubicacion',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catubicacion',
-            name='usuario_registro',
-        ),
-        migrations.AlterField(
-            model_name='cattipopropiedad',
-            name='fecha_registro',
-            field=models.DateField(auto_now_add=True),
-        ),
-        migrations.AlterField(
-            model_name='catubicacion',
-            name='fecha_registro',
-            field=models.DateField(auto_now_add=True),
-        ),
     ]

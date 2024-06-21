@@ -10,14 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='catcoordinadores',
-            options={},
-        ),
-        migrations.AlterModelOptions(
-            name='catdiscoduro',
-            options={},
-        ),
         migrations.RemoveField(
             model_name='catcargo',
             name='fecha_actualizacion',

@@ -52,6 +52,7 @@ SIMPLE_JWT = {
 INSTALLED_APPS = [
     'backend',
     'activosTI',
+    'Equipos',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

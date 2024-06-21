@@ -11,49 +11,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='catestadolicenciaequipo',
-            options={},
-        ),
-        migrations.AlterModelOptions(
             name='catestadolicenciapersona',
             options={},
         ),
         migrations.AlterModelOptions(
             name='catestadoperiferico',
             options={},
-        ),
-        migrations.RemoveField(
-            model_name='catcoordinadores',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catcoordinadores',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catcoordinadores',
-            name='usuario_registro',
-        ),
-        migrations.RemoveField(
-            model_name='catdiscoduro',
-            name='fecha_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catdiscoduro',
-            name='usuario_actualizacion',
-        ),
-        migrations.RemoveField(
-            model_name='catdiscoduro',
-            name='usuario_registro',
-        ),
-        migrations.AlterField(
-            model_name='catcoordinadores',
-            name='fecha_registro',
-            field=models.DateField(auto_now_add=True),
-        ),
-        migrations.AlterField(
-            model_name='catdiscoduro',
-            name='fecha_registro',
-            field=models.DateField(auto_now_add=True),
         ),
     ]

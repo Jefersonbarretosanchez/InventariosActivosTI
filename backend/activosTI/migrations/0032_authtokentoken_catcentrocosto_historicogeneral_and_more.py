@@ -92,18 +92,6 @@ class Migration(migrations.Migration):
             options={'managed': False},
         ),
         migrations.AlterModelOptions(
-            name='catcoordinadores',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='catdiscoduro',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='catestadoequipo',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
             name='catestadolicenciaequipo',
             options={'managed': False},
         ),
@@ -120,35 +108,7 @@ class Migration(migrations.Migration):
             options={'managed': False},
         ),
         migrations.AlterModelOptions(
-            name='catmarcaequipo',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='catmemoriaram',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='catprocesador',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
             name='catregion',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='catso',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='cattipoequipo',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='cattipopropiedad',
-            options={'managed': False},
-        ),
-        migrations.AlterModelOptions(
-            name='catubicacion',
             options={'managed': False},
         ),
         migrations.AlterModelOptions(
