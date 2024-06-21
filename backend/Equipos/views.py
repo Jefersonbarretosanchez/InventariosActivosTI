@@ -53,7 +53,7 @@ class EquipoListCreate(generics.ListCreateAPIView):
 
         errors = {}
 
-        if Equipo.objects.filter(identificacion=sereal).exists():
+        if Equipo.objects.filter(sereal=sereal).exists():
             errors["Serial"] = sereal
 
         if errors:

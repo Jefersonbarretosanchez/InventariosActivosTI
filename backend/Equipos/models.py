@@ -101,11 +101,10 @@ class CatCoordinadores(models.Model):
 
 class CatUbicacion(models.Model):
     id_ubicacion = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=100)
     fecha_registro = models.DateField()
 
     class Meta:
-        managed = False
         db_table = 'cat_ubicacion'
         
     def __str__(self):
@@ -126,7 +125,7 @@ class Equipo(models.Model):
     id_estadoequipo = models.ForeignKey(CatEstadoequipo, models.DO_NOTHING, db_column='id_estadoequipo')
     id_coordinadores = models.ForeignKey(CatCoordinadores, models.DO_NOTHING, db_column='id_coordinadores')
     id_ubicacion = models.ForeignKey(CatUbicacion, models.DO_NOTHING, db_column='id_ubicacion')
-    procesador = models.CharField(max_length=50)
+    procesador = models.CharField(max_length=100)
     costo = models.IntegerField()
     observacion = models.CharField(max_length=200)
 
