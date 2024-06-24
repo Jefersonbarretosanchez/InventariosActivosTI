@@ -8,35 +8,39 @@ import {
   faPenToSquare,
   faMagnifyingGlass,
   faPlusCircle,
-  faBarsProgress
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
-import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
 import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
-import TarjetasPersonas from "./tarjetasPersonas";
+import TarjetasEquipos from "./tarjetasEquipos";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
-function TablaPersonasBack() {
+
+function TablaEquiposBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [personas, setPersonas] = useState([]);
-  const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
-  const [centroCostos, setCentroCostos] = useState([]);
-  const [area, setArea] = useState([]);
-  const [region, setRegion] = useState([]);
-  const [cargo, setCargo] = useState([]);
-  const [estado, setEstado] = useState([]);
+
+  const [equipos, setEquipos] = useState([]);
+  const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
+  const [SO, setSO] = useState([]);
+  const [marcaEquipo, setMarcaEquipo] = useState([]);
+  const [memoriaRam, setMemoriaRam] = useState([]);
+  const [discoDuro, setDiscoDuro] = useState([]);
+  const [tipoPropiedad, setTipoPropiedad] = useState([]);
+  const [tipoEquipo, setTipoEquipo] = useState([]);
+  const [coordinadores, setCoordinadores] = useState([]);
+  const [ubicaciones, setUbicaciones] = useState([]);
+  const [estadoEquipo, setEstadoEquipo] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newPersonData, setNewPersonData] = useState({});
+  const [newEquipoData, setNewEquipoData] = useState({});
   const [actionType, setActionType] = useState("");
-  const [totalActivos, setTotalActivos] = useState(0); // Estado para el total de personas activas
-  const [totalInactivos, setTotalInactivos] = useState(0); // Estado para el total de personas inactivas
+  const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
+  const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -48,6 +52,7 @@ function TablaPersonasBack() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
+
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -62,74 +67,116 @@ function TablaPersonasBack() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchPersonas = async () => {
+
+  const fetchEquipos = async () => {
     setIsLoading(true);
     try {
-      const responsePersonas = await axios.get(
-        "http://localhost:8000/api/personas/"
+      const responseEquipos = await axios.get(
+        "http://localhost:8000/api/equipos/"
       );
-      setPersonas(responsePersonas.data);
+      setEquipos(responseEquipos.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de las personas");
+      toast.error("Hubo un error en la carga de datos de los equipos");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPersonas();
+    fetchEquipos();
   }, []);
+
 
   useEffect(() => {
     const fetchCatalogos = async () => {
       setIsLoading(true);
       try {
-        const responseEstado = await axios.get(
-          "http://localhost:8000/api/estado_persona/"
+        const responseEstadoEquipo = await axios.get(
+          "http://localhost:8000/api/estado_equipo/"
         );
-        setEstado(
-          responseEstado.data.map((item) => ({
-            value: item.id_estado_persona,
+        setEstadoEquipo(
+          responseEstadoEquipo.data.map((item) => ({
+            value: item.id_estadoequipo,
             label: item.nombre,
           }))
         );
 
-        const responseCentroCostos = await axios.get(
-          "http://localhost:8000/api/centro_costos/"
+        const responseSO = await axios.get(
+          "http://localhost:8000/api/so/"
         );
-        setCentroCostos(
-          responseCentroCostos.data.map((item) => ({
-            value: item.id_centro_costo,
-            label: item.nombre, // Mantener el nombre original en el valor
-          }))
-        );
-
-        const responseAreas = await axios.get(
-          "http://localhost:8000/api/area/"
-        );
-        setArea(
-          responseAreas.data.map((item) => ({
-            value: item.id_area,
+        setSO(
+          responseSO.data.map((item) => ({
+            value: item.id_so,
             label: item.nombre,
           }))
         );
 
-        const responseRegion = await axios.get(
-          "http://localhost:8000/api/region/"
+        const responseMarcaEquipo = await axios.get(
+          "http://localhost:8000/api/marca_equipo/"
         );
-        setRegion(
-          responseRegion.data.map((item) => ({
-            value: item.id_region,
+        setMarcaEquipo(
+          responseMarcaEquipo.data.map((item) => ({
+            value: item.id_marcaequipo,
             label: item.nombre,
           }))
         );
 
-        const responseCargo = await axios.get(
-          "http://localhost:8000/api/cargo/"
+        const responseMemoriaRam = await axios.get(
+          "http://localhost:8000/api/memoria_ram/"
         );
-        setCargo(
-          responseCargo.data.map((item) => ({
-            value: item.id_cargo,
+        setMemoriaRam(
+          responseMemoriaRam.data.map((item) => ({
+            value: item.id_ram,
+            label: item.nombre,
+          }))
+        );
+
+        const responseDiscoDuro = await axios.get(
+          "http://localhost:8000/api/disco_duro/"
+        );
+        setDiscoDuro(
+          responseDiscoDuro.data.map((item) => ({
+            value: item.id_discoduro,
+            label: item.nombre,
+          }))
+        );
+
+        const responseTipoPropiedad = await axios.get(
+          "http://localhost:8000/api/tipo_propiedad/"
+        );
+        setTipoPropiedad(
+          responseTipoPropiedad.data.map((item) => ({
+            value: item.id_tipopropiedad,
+            label: item.nombre,
+          }))
+        );
+
+        const responseTipoEquipo = await axios.get(
+          "http://localhost:8000/api/tipo_equipo/"
+        );
+        setTipoEquipo(
+          responseTipoEquipo.data.map((item) => ({
+            value: item.id_tipoequipo,
+            label: item.nombre,
+          }))
+        );
+
+        const responseCoordinadores = await axios.get(
+          "http://localhost:8000/api/coordinadores/"
+        );
+        setCoordinadores(
+          responseCoordinadores.data.map((item) => ({
+            value: item.id_coordinadores,
+            label: item.nombre,
+          }))
+        );
+
+        const responseUbicaciones = await axios.get(
+          "http://localhost:8000/api/ubicaciones/"
+        );
+        setUbicaciones(
+          responseUbicaciones.data.map((item) => ({
+            value: item.id_ubicacion,
             label: item.nombre,
           }))
         );
@@ -143,22 +190,21 @@ function TablaPersonasBack() {
     fetchCatalogos();
   }, []);
 
-  // Nuevo useEffect para actualizar los totales cada vez que cambie la lista de personas
   useEffect(() => {
-    const activos = personas.filter(
-      (persona) => persona.nombre_estado_persona === "Activo"
+    const equiposAsignados = equipos.filter(
+      (equipo) => equipo.nombre_estado_equipo === "Asignado"
     ).length;
-    const inactivos = personas.filter(
-      (persona) => persona.nombre_estado_persona === "Inactivo"
+    const equiposDisponibles = equipos.filter(
+      (equipo) => equipo.nombre_estado_equipo === "En Bodega"
     ).length;
 
-    setTotalActivos(activos);
-    setTotalInactivos(inactivos);
-  }, [personas]);
+    setTotalequiposAsignados(equiposAsignados);
+    setTotalEquiposDisponibles(equiposDisponibles);
+  }, [equipos]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewPersonData((prevData) => ({ ...prevData, [name]: value }));
+    setNewEquipoData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -174,27 +220,31 @@ function TablaPersonasBack() {
     setCurrentPage(1);
   };
 
-  const createPersona = async () => {
+  const createEquipo = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newPersonData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+        ...newEquipoData,
+        id_marcaequipo: parseInt(newEquipoData.id_marcaequipo, 10),
+        id_so: parseInt(newEquipoData.id_so, 10),
+        id_ram: parseInt(newEquipoData.id_ram, 10),
+        id_discoduro: parseInt(newEquipoData.id_discoduro, 10),
+        id_tipopropiedad: parseInt(newEquipoData.id_tipopropiedad, 10),
+        id_tipoequipo: parseInt(newEquipoData.id_tipoequipo, 10),
+        id_coordinadores: parseInt(newEquipoData.id_coordinadores, 10),
+        id_ubicacion: parseInt(newEquipoData.id_ubicacion, 10),
+        id_estadoequipo: parseInt(newEquipoData.id_estadoequipo, 10),
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/personas/",
+        "http://localhost:8000/api/equipos/",
         formattedData
       );
-      const nuevaPersona = response.data;
-      setPersonas([...personas, nuevaPersona]);
-      setNewPersonData({});
+      const nuevoEquipo = response.data;
+      setEquipos([...equipos, nuevoEquipo]);
+      setNewEquipoData({});
       cambiarEstadoModal(false);
-      toast.success("Persona creada exitosamente!");
+      toast.success("Equipo creado exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -231,38 +281,42 @@ function TablaPersonasBack() {
     }
   };
 
-  const updatePerson = async () => {
+  const updateEquipo = async () => {
     setIsLoading(true);
     try {
       const updatedData = {
-        ...personaSeleccionada,
-        ...newPersonData,
+        ...equipoSeleccionado,
+        ...newEquipoData,
       };
 
       const formattedData = {
         ...updatedData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+        id_marcaequipo: parseInt(newEquipoData.id_marcaequipo, 10),
+        id_so: parseInt(newEquipoData.id_so, 10),
+        id_ram: parseInt(newEquipoData.id_ram, 10),
+        id_discoduro: parseInt(newEquipoData.id_discoduro, 10),
+        id_tipopropiedad: parseInt(newEquipoData.id_tipopropiedad, 10),
+        id_tipoequipo: parseInt(newEquipoData.id_tipoequipo, 10),
+        id_coordinadores: parseInt(newEquipoData.id_coordinadores, 10),
+        id_ubicacion: parseInt(newEquipoData.id_ubicacion, 10),
+        id_estadoequipo: parseInt(newEquipoData.id_estadoequipo, 10),
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/personas/${personaSeleccionada.id_trabajador}/`,
+        `http://localhost:8000/api/equipos/${equipoSeleccionado.id_equipo}/`,
         formattedData
       );
-      const updatedPersona = response.data;
-      setPersonas(
-        personas.map((persona) =>
-          persona.id_trabajador === updatedPersona.id_trabajador
-            ? updatedPersona
-            : persona
+      const updatedEquipo = response.data;
+      setEquipos(
+        equipos.map((equipo) =>
+          equipo.id_equipo === updatedEquipo.id_equipo
+            ? updatedEquipo
+            : equipo
         )
       );
-      setNewPersonData({});
+      setNewEquipoData({});
       cambiarEstadoModal(false);
-      toast.success("Persona actualizada exitosamente!");
+      toast.success("Equipo actualizado exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -299,6 +353,8 @@ function TablaPersonasBack() {
     }
   };
 
+
+
   const abrirModal = (
     titulo,
     fields,
@@ -307,26 +363,34 @@ function TablaPersonasBack() {
     action = ""
   ) => {
     let fieldsWithOptions = fields.map((field) => {
-      if (field.id === "id_centro_costo") {
-        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
-      } else if (field.id === "id_area") {
-        return { ...field, options: area };
-      } else if (field.id === "id_region") {
-        return { ...field, options: region };
-      } else if (field.id === "id_cargo") {
-        return { ...field, options: cargo };
-      } else if (field.id === "id_estado_persona") {
-        return { ...field, options: estado };
+      if (field.id === "id_marcaequipo") {
+        return { ...field, options: marcaEquipo };
+      } else if (field.id === "id_so") {
+        return { ...field, options: SO };
+      } else if (field.id === "id_ram") {
+        return { ...field, options: memoriaRam };
+      } else if (field.id === "id_discoduro") {
+        return { ...field, options: discoDuro };
+      } else if (field.id === "id_tipopropiedad") {
+        return { ...field, options: tipoPropiedad };
+      } else if (field.id === "id_tipoequipo") {
+        return { ...field, options: tipoEquipo };
+      } else if (field.id === "id_estadoequipo") {
+        return { ...field, options: estadoEquipo };
+      } else if (field.id === "id_coordinadores") {
+        return { ...field, options: coordinadores };
+      } else if (field.id === "id_ubicacion") {
+        return { ...field, options: ubicaciones };
       }
       return field;
     });
 
     if (action === "create") {
-      initialValues.id_estado_persona = estado.find(e => e.label === "Activo")?.value || "";
-      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_persona");
+      initialValues.id_estadoequipo = estadoEquipo.find(e => e.label === "En Bodega")?.value || "";
+      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estadoequipo");
     }
 
-    setNewPersonData(initialValues);
+    setNewEquipoData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
@@ -344,16 +408,24 @@ function TablaPersonasBack() {
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
-      if (field.id === "id_centro_costo") {
-        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
-      } else if (field.id === "id_area") {
-        return { ...field, options: area };
-      } else if (field.id === "id_region") {
-        return { ...field, options: region };
-      } else if (field.id === "id_cargo") {
-        return { ...field, options: cargo };
-      } else if (field.id === "id_estado_persona") {
-        return { ...field, options: estado };
+      if (field.id === "id_marcaequipo") {
+        return { ...field, options: marcaEquipo };
+      } else if (field.id === "id_so") {
+        return { ...field, options: SO };
+      } else if (field.id === "id_ram") {
+        return { ...field, options: memoriaRam };
+      } else if (field.id === "id_discoduro") {
+        return { ...field, options: discoDuro };
+      } else if (field.id === "id_tipopropiedad") {
+        return { ...field, options: tipoPropiedad };
+      } else if (field.id === "id_tipoequipo") {
+        return { ...field, options: tipoEquipo };
+      } else if (field.id === "id_estadoequipo") {
+        return { ...field, options: estadoEquipo };
+      } else if (field.id === "id_coordinadores") {
+        return { ...field, options: coordinadores };
+      } else if (field.id === "id_ubicacion") {
+        return { ...field, options: ubicaciones };
       }
       return field;
     });
@@ -373,7 +445,6 @@ function TablaPersonasBack() {
     });
     cambiarEstadoModalFiltros(true);
   };
-
 
   const applyFiltros = () => {
     cambiarEstadoModalFiltros(false);
@@ -405,27 +476,29 @@ function TablaPersonasBack() {
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
+    abrirModal("Registrar Equipo", formFields, [], {}, "create");
   };
 
-  const handleEdit = (persona) => {
-    setPersonaSeleccionada(persona);
+
+  const handleEdit = (equipo) => {
+    setEquipoSeleccionado(equipo);
     abrirModal(
-      `Actualizar ${persona.nombres}  ${persona.apellidos}`,
+      `Actualizar ${equipo.nombre_equipo} `,
       formFields,
-      ["identificacion",],
-      persona,
+      ["nombre_equipo", "sereal"],
+      equipo,
       "update"
     );
   };
 
-  const handleInfo = (persona) => {
-    setPersonaSeleccionada(persona);
+
+  const handleInfo = (equipo) => {
+    setEquipoSeleccionado(equipo);
     abrirModal(
-      `Información de ${persona.nombres}`,
+      `Información de ${equipo.nombre_equipo}`,
       formFields,
       ALL_INPUT_IDS,
-      persona,
+      equipo,
       "detail"
     );
   };
@@ -434,13 +507,14 @@ function TablaPersonasBack() {
     setCurrentPage(pageNumber);
   };
 
-  const filteredPersonas = personas.filter((persona) => {
-    const searchString = `${persona.id_trabajador} ${persona.nombres} ${persona.identificacion} ${persona.correo_institucional} ${persona.nombre_estado_persona}`.toLowerCase();
+
+  const filteredEquipos = equipos.filter((equipo) => {
+    const searchString = `${equipo.id_equipo} ${equipo.nombre_equipo} ${equipo.modelo} ${equipo.sereal} ${equipo.nombre_estado_equipo}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(persona[key]) === String(filtroValues[key]);
+      return String(equipo[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -448,26 +522,27 @@ function TablaPersonasBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredPersonas.slice(
+  const currentRecords = filteredEquipos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredPersonas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredEquipos.length / recordsPerPage);
 
   return (
     <>
-      <TarjetasPersonas
-        totalActivos={totalActivos} // Pasar el total de activos como props
-        totalInactivos={totalInactivos} // Pasar el total de inactivos como props
+      <TarjetasEquipos
+        totalequiposAsignados={totalequiposAsignados}
+        totalEquiposDisponibles={totalEquiposDisponibles}
       />
+
       <div className="contenedor-activos">
         <div className="row-activos">
-          <div className="Personas">
-            <h1>Personas</h1>
+          <div className="equipos">
+            <h1>Equipos</h1>
           </div>
-          <div className="contbuscador-personas">
+          <div className="contbuscador-equipos">
             <input
-              className="buscador-personas"
+              className="buscador-equipos"
               type="text"
               placeholder="Buscar"
               value={searchTerm}
@@ -480,21 +555,20 @@ function TablaPersonasBack() {
           </div>
           <div>
             <FontAwesomeIcon
-              className="agregar-personas"
+              className="agregar-equipos"
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
           </div>
           <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "0vw" }}>ID Trabajador</th>
-                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Completo</th>
-                  <th style={{ paddingLeft: "0vw" }}>Numero Identificación</th>
-                  <th style={{ paddingLeft: "5vw" }}>Correo Institucional</th>
-                  <th style={{ paddingLeft: "2.5vw" }}>Estado</th>
+                  <th style={{ paddingLeft: "0vw" }}>ID Equipo</th>
+                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Equipo</th>
+                  <th style={{ paddingLeft: "6vw" }}>Numero Serial</th>
+                  <th style={{ paddingLeft: "2.6vw" }}>Modelo</th>
+                  <th style={{ paddingLeft: "0.5vw" }}>Estado</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
@@ -514,32 +588,33 @@ function TablaPersonasBack() {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((persona) => (
-                    <tr key={persona.id_trabajador}>
-                      <td>{persona.id_trabajador}</td>
-                      <td style={{ paddingLeft: "2vw" }}>{persona.nombres} {persona.apellidos}</td>
-                      <td>{persona.identificacion}</td>
-                      <td>{persona.correo_institucional}</td>
+                  currentRecords.map((equipo) => (
+                    <tr key={equipo.id_equipo}>
+                      <td>{equipo.id_equipo}</td>
+                      <td style={{ paddingLeft: "4vw" }}>{equipo.nombre_equipo}</td>
+                      <td>{equipo.sereal}</td>
+                      <td>{equipo.modelo}</td>
                       <td
                         style={{
                           color:
-                            persona.nombre_estado_persona === "Activo"
+                            equipo.nombre_estado_equipo === "Asignado"
                               ? "#10A142"
                               : "#ff0000",
+                          paddingLeft: "0vw"
                         }}
                       >
-                        {persona.nombre_estado_persona}
+                        {equipo.nombre_estado_equipo}
                       </td>
                       <td>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(persona)}
+                          onClick={() => handleEdit(equipo)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
-                          onClick={() => handleInfo(persona)}
+                          onClick={() => handleInfo(equipo)}
                         >
                           <FontAwesomeIcon icon={faFileLines} />
                         </button>
@@ -552,6 +627,7 @@ function TablaPersonasBack() {
           </Divtabla>
         </div>
       </div>
+
       <Paginate
         currentPage={currentPage}
         totalPages={totalPages}
@@ -563,13 +639,13 @@ function TablaPersonasBack() {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createPersona}
-        onUpdate={updatePerson}
+        onCreate={createEquipo}
+        onUpdate={updateEquipo}
       >
         {modalConfig.contenido}
       </Modal>
 
-      <ModalFiltros
+      <Modal
         estado={estadoModalFiltros}
         cambiarEstado={cambiarEstadoModalFiltros}
         titulo="Agregar Filtros"
@@ -584,16 +660,24 @@ function TablaPersonasBack() {
           onFiltroChange={handleFiltroChange}
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
-            if (field.id === "id_centro_costo") {
-              return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) }; // Renombrar a Alianza en la etiqueta
-            } else if (field.id === "id_area") {
-              return { ...field, options: area };
-            } else if (field.id === "id_region") {
-              return { ...field, options: region };
-            } else if (field.id === "id_cargo") {
-              return { ...field, options: cargo };
-            } else if (field.id === "id_estado_persona") {
-              return { ...field, options: estado };
+            if (field.id === "id_marcaequipo") {
+              return { ...field, options: marcaEquipo };
+            } else if (field.id === "id_so") {
+              return { ...field, options: SO };
+            } else if (field.id === "id_ram") {
+              return { ...field, options: memoriaRam };
+            } else if (field.id === "id_discoduro") {
+              return { ...field, options: discoDuro };
+            } else if (field.id === "id_tipopropiedad") {
+              return { ...field, options: tipoPropiedad };
+            } else if (field.id === "id_tipoequipo") {
+              return { ...field, options: tipoEquipo };
+            } else if (field.id === "id_estadoequipo") {
+              return { ...field, options: estadoEquipo };
+            } else if (field.id === "id_coordinadores") {
+              return { ...field, options: coordinadores };
+            } else if (field.id === "id_ubicacion") {
+              return { ...field, options: ubicaciones };
             }
             return field;
           })}
@@ -621,13 +705,12 @@ function TablaPersonasBack() {
             onClick={() => setShowFilterOptions((prev) => !prev)}
           />
         </AgregarFiltroContainer>
-      </ModalFiltros>
+      </Modal>
     </>
   );
 }
 
-export default TablaPersonasBack;
-
+export default TablaEquiposBack;
 const Boton = styled.button`
   display: block;
   padding: 10px 30px;
@@ -638,6 +721,7 @@ const Boton = styled.button`
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   transition: 0.3s ease all;
+
 `;
 const LoadingRow = styled.tr`
   height: 200px; /* Ajusta esta altura según sea necesario */

@@ -5,18 +5,18 @@ import activos from "../../imagenes/mensaje-recibido.png";
 import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/laptop.png";
 
-function TarjetasEquipos() {
+function TarjetasEquipos({ totalequiposAsignados, totalEquiposDisponibles }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
-        <Link to="/equipos" style={{ color: 'black' }}>
+        <Link to="/equipos" style={{ color: "black", transform: "scale(1.2)" }}>
           <div className="icono-estatisticas-activos">
             <Link to="/personas">
               <img src={activos} alt="Logo Scala" className="logo-activos" />
             </Link>
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">250</span>
+            <span className="estadisticas-numero-activos">{10}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Equipos Activos
@@ -25,12 +25,12 @@ function TarjetasEquipos() {
         </Link>
       </div>
       <div className="tarjeta-estadisticas-activos">
-        <Link to="/asigEquipos" style={{ color: 'black' }}>
+        <Link to="/asigEquipos" style={{ color: "black", transform: "scale(1.2)" }}>
           <div className="icono-estatisticas-activos">
             <img src={equipos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">75</span>
+            <span className="estadisticas-numero-activos">{totalequiposAsignados}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Equipos Asignados
@@ -39,12 +39,12 @@ function TarjetasEquipos() {
         </Link>
       </div>
       <div className="tarjeta-estadisticas-activos">
-        <Link to="/equipos" style={{ color: 'black' }}>
+        <Link to="/equipos" style={{ color: "black", transform: "scale(1.2)" }}>
           <div className="icono-estatisticas-activos">
             <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">92</span>
+            <span className="estadisticas-numero-activos">{totalEquiposDisponibles}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Equipos Disponibles
@@ -54,7 +54,7 @@ function TarjetasEquipos() {
       </div>
 
       <div className="tarjeta-estadisticas-activos">
-        <Link to="/licencias" style={{ color: 'black' }}>
+        <Link to="/licencias" style={{ color: "black", transform: "scale(1.2)" }}>
           <div className="icono-estatisticas-activos">
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
