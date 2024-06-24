@@ -32,7 +32,7 @@
                     <td>{{reqs.tipo_cambio}}</td>
                     <td>{{reqs.tipo_activo}}</td>
                     <td>{{reqs.activo_modificado}}</td>
-                    <td>{{reqs.descripcion}}</td>
+                    <td>{{reqs.descripcion|safe }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

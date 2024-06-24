@@ -186,7 +186,30 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
 
         try:
             serializer.is_valid(raise_exception=True)
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
             self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Persona",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
             return Response(serializer.data)
         except ValidationError as e:
             # Captura otros errores de validación

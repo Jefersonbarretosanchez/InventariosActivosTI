@@ -320,6 +320,8 @@ class LicenciaArea(models.Model):
 class LicenciaPersona(models.Model):
     id_licencia = models.AutoField(primary_key=True)
     nombre_licencia = models.CharField(max_length=50)
+    sereal = models.CharField(max_length=30, blank=True, null=True)
+    fecha_vencimiento = models.DateField(blank=True, null=True)
     id_estado_licencia = models.ForeignKey(CatEstadoLicenciapersona, models.DO_NOTHING, db_column='id_estado_licencia')
     id_contrato = models.ForeignKey(Contratos, models.DO_NOTHING, db_column='id_contrato')
     no_ticket = models.CharField(max_length=20)
@@ -360,18 +362,18 @@ class Perifericos(models.Model):
 
 class Persona(models.Model):
     id_trabajador = models.AutoField(primary_key=True)
-    identificacion = models.IntegerField(unique=True)
-    nombres = models.CharField(max_length=30)
-    apellidos = models.CharField(max_length=30)
-    correo_personal = models.CharField(max_length=50,unique=True)
-    correo_institucional = models.CharField(max_length=50,unique=True)
-    id_centro_costo = models.ForeignKey(CatCentroCosto, models.DO_NOTHING, db_column='id_centro_costo')
-    id_area = models.ForeignKey(CatArea, models.DO_NOTHING, db_column='id_area')
-    id_region = models.ForeignKey(CatRegion, models.DO_NOTHING, db_column='id_region')
-    id_cargo = models.ForeignKey(CatCargo, models.DO_NOTHING, db_column='id_cargo')
-    fecha_ingreso_empresa = models.DateField()
-    id_estado_persona = models.ForeignKey(CatEstadoPersona, models.DO_NOTHING, db_column='id_estado_persona')
-    direccion = models.CharField(max_length=100, blank=True, null=True)
+    identificacion = models.IntegerField(unique=True,verbose_name='Numero Identificación')
+    nombres = models.CharField(max_length=30,verbose_name='Nombres')
+    apellidos = models.CharField(max_length=30,verbose_name='Apellidos')
+    correo_personal = models.CharField(max_length=50,unique=True,verbose_name='Correo Personal')
+    correo_institucional = models.CharField(max_length=50,unique=True,verbose_name='Correo Institucional')
+    id_centro_costo = models.ForeignKey(CatCentroCosto, models.DO_NOTHING, db_column='id_centro_costo',verbose_name='Centro De Costo')
+    id_area = models.ForeignKey(CatArea, models.DO_NOTHING, db_column='id_area',verbose_name='Area')
+    id_region = models.ForeignKey(CatRegion, models.DO_NOTHING, db_column='id_region',verbose_name='Región')
+    id_cargo = models.ForeignKey(CatCargo, models.DO_NOTHING, db_column='id_cargo', verbose_name="Cargo")
+    fecha_ingreso_empresa = models.DateField(verbose_name='Fecha Ingreso')
+    id_estado_persona = models.ForeignKey(CatEstadoPersona, models.DO_NOTHING, db_column='id_estado_persona',verbose_name='Estado')
+    direccion = models.CharField(max_length=100, blank=True, null=True,verbose_name='Dirección Residencia')
 
     class Meta:
         managed = False
