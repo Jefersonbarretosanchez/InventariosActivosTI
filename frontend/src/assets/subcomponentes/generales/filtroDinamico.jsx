@@ -52,7 +52,7 @@ export default FiltroDinamico;
 const Formulario = styled.form`
   width: 90%;
 
-  .form-control {
+  .form-control, .form-select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -61,22 +61,12 @@ const Formulario = styled.form`
     font-size: 16px;
   }
 
-  .form-select {
-    appearance: none;
-    padding: 10px 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 100%;
-  }
-
   .form-control:focus {
     outline: none;
     border: 2px solid #5050c9;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
   }
-
+  
   .form-select:focus {
     border: 2px solid #5050c9;
   }

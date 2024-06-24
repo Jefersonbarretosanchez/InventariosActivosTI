@@ -1,19 +1,21 @@
 export const ALL_INPUT_IDS = [
-    "nombre_equipo",
-    "modelo",
-    "sereal",
-    "id_marca_equipo",
-    "id_so",
-    "id_procesador",
-    "id_ram",
-    "id_discoduro",
-    "anydesk",
-    "id_tipopropiedad",
-    "id_tipoequipo",
-    "id_estadoequipo",
-    "id_coordinadores",
-    "id_ubicacion"
-  ];
+  "nombre_equipo",
+  "modelo",
+  "sereal",
+  "id_marcaequipo",
+  "id_so",
+  "procesador",
+  "id_ram",
+  "id_discoduro",
+  "anydesk",
+  "id_tipopropiedad",
+  "id_tipoequipo",
+  "id_estadoequipo",
+  "id_coordinadores",
+  "id_ubicacion",
+  "costo",
+  "observacion",
+];
 
 export const formFields = [
   {
@@ -41,104 +43,90 @@ export const formFields = [
     required: true,
   },
   {
-    id: "id_marca_equipo",
+    id: "id_marcaequipo",
     label: "Marca Equipo",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_so",
     label: "Sistema Operativo",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
-    id: "id_procesador",
+    id: "procesador",
     label: "Procesador",
-    type: "select",
+    type: "text",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
   },
   {
     id: "id_ram",
     label: "Memoria RAM",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_discoduro",
     label: "Disco Duro",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_tipopropiedad",
-    label: "ATipo De Propiedad",
+    label: "Tipo De Propiedad",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_tipoequipo",
     label: "Tipo De Equipo",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_estadoequipo",
     label: "Estado Equipo",
     type: "select",
     required: true,
-    hidden:true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_coordinadores",
     label: "Coordinador Bodega",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
   },
   {
     id: "id_ubicacion",
     label: "Ubicación Bodega",
     type: "select",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
+    options: [],
+  },
+  {
+    id: "costo",
+    label: "Costo Adquisición",
+    type: "number",
+    required: true,
+  },
+  {
+    id: "observacion",
+    label: "Observaciones",
+    type: "text",
+    required: true,
   },
 ];
+
+
+export const filterFields = [
+
+];
+

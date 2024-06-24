@@ -7,6 +7,9 @@ import Paginate from "../subcomponentes/generales/paginate";
 import TarjetasEquipos from "../subcomponentes/equipos/tarjetasEquipos";
 import TablaEquipos from "../subcomponentes/equipos/TablaEquipos";
 import "../Estilos/equipos.css"
+import TablaEquiposBack from "../subcomponentes/equipos/TablaEquiposBack";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 export default function Equipos() {
@@ -14,10 +17,11 @@ export default function Equipos() {
         <div className="EquiposBody">
             <Header />
             <Sidebar />
-            <TarjetasEquipos />
-            <TablaEquipos />
-            <Paginate />
-            <Footer />
+            <TablaEquiposBack />
+            <ToastContainer />
+            <div style={{ marginTop: '3.5vh' }}>
+                <Footer />
+            </div>
         </div>
     );
 }
