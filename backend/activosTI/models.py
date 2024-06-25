@@ -36,27 +36,6 @@ class AsignacionEquipos(models.Model):
         managed = False
         db_table = 'asignacion_equipos'
 
-
-class AsignacionLicenciaPersona(models.Model):
-    id_trabajador = models.ForeignKey('Persona', models.DO_NOTHING, db_column='id_trabajador', blank=True, null=True)
-    id_licencia = models.ForeignKey('LicenciaPersona', models.DO_NOTHING, db_column='id_licencia')
-
-    class Meta:
-        managed = False
-        db_table = 'asignacion_licencia_persona'
-        unique_together = (('id_trabajador', 'id_licencia'),)
-
-
-class AsignacionLicenciasEquipo(models.Model):
-    id_equipo = models.ForeignKey(Equipo, models.DO_NOTHING, db_column='id_equipo')
-    id_licencia_equipo = models.ForeignKey('LicenciasEquipo', models.DO_NOTHING, db_column='id_licencia_equipo')
-
-    class Meta:
-        managed = False
-        db_table = 'asignacion_licencias_equipo'
-        unique_together = (('id_equipo', 'id_licencia_equipo'),)
-
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -173,25 +152,6 @@ class CatCentroCosto(models.Model):
     def __str__(self):
         return str(self.nombre)
 
-class CatEstadoLicenciaequipo(models.Model):
-    id_estado_licencia = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
-
-    class Meta:
-        managed = False
-        db_table = 'cat_estado_licenciaequipo'
-
-
-class CatEstadoLicenciapersona(models.Model):
-    id_estado_licencia = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
-
-    class Meta:
-        managed = False
-        db_table = 'cat_estado_licenciapersona'
-
 
 class CatEstadoPeriferico(models.Model):
     id_estado_periferico = models.AutoField(primary_key=True)
@@ -228,22 +188,6 @@ class CatRegion(models.Model):
         
     def __str__(self):
         return str(self.nombre)
-
-
-class Contratos(models.Model):
-    id_contrato = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=50)
-    serial_contrato = models.CharField(max_length=50)
-    fecha_inicio = models.DateField()
-    fecha_vencimiento = models.DateField()
-    cantidad_licencias = models.IntegerField()
-    costo_unitario = models.IntegerField()
-    costo_total = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'contratos'
-
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -299,54 +243,6 @@ class KitPerifericos(models.Model):
         managed = False
         db_table = 'kit_perifericos'
 
-
-class LicenciaArea(models.Model):
-    id_licencia_area = models.AutoField(primary_key=True)
-    nombre_licencia_area = models.CharField(max_length=50)
-    estado_licencia_area = models.ForeignKey(CatEstadoLicenciapersona, models.DO_NOTHING, db_column='estado_licencia_area')
-    id_contrato = models.ForeignKey(Contratos, models.DO_NOTHING, db_column='id_contrato')
-    sereal = models.CharField(max_length=50)
-    fecha_vencimiento = models.DateField()
-    no_ticket = models.CharField(max_length=20)
-    id_responsable = models.ForeignKey('Persona', models.DO_NOTHING, db_column='id_responsable')
-    id_ceco = models.ForeignKey(CatCentroCosto, models.DO_NOTHING, db_column='id_ceco')
-    cantidad = models.IntegerField()
-
-    class Meta:
-        managed = False
-        db_table = 'licencia_area'
-
-
-class LicenciaPersona(models.Model):
-    id_licencia = models.AutoField(primary_key=True)
-    nombre_licencia = models.CharField(max_length=50)
-    sereal = models.CharField(max_length=30, blank=True, null=True)
-    fecha_vencimiento = models.DateField(blank=True, null=True)
-    id_estado_licencia = models.ForeignKey(CatEstadoLicenciapersona, models.DO_NOTHING, db_column='id_estado_licencia')
-    id_contrato = models.ForeignKey(Contratos, models.DO_NOTHING, db_column='id_contrato')
-    no_ticket = models.CharField(max_length=20)
-    id_solicitante = models.ForeignKey('Persona', models.DO_NOTHING, db_column='id_solicitante')
-
-    class Meta:
-        managed = False
-        db_table = 'licencia_persona'
-
-
-class LicenciasEquipo(models.Model):
-    id_licencia_equipo = models.AutoField(primary_key=True)
-    nombre_licencia = models.CharField(max_length=50)
-    id_estado_licencia = models.ForeignKey(CatEstadoLicenciaequipo, models.DO_NOTHING, db_column='id_estado_licencia')
-    sereal = models.CharField(max_length=30, blank=True, null=True)
-    fecha_vencimiento = models.DateField(blank=True, null=True)
-    no_ticket = models.CharField(max_length=20)
-    id_solicitante = models.ForeignKey('Persona', models.DO_NOTHING, db_column='id_solicitante')
-    id_contrato = models.ForeignKey(Contratos, models.DO_NOTHING, db_column='id_contrato', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'licencias_equipo'
-
-
 class Perifericos(models.Model):
     id_perifericos = models.AutoField(primary_key=True)        
     nombre_periferico = models.CharField(max_length=30)        
@@ -378,17 +274,10 @@ class Persona(models.Model):
     class Meta:
         managed = False
         db_table = 'persona'
+        
+    def __str__(self):
+        return str(self.nombres) + ' ' +(self.apellidos)
 
-
-class UpgradeLicenciasArea(models.Model):
-    id_licencia_area = models.ForeignKey(LicenciaArea, models.DO_NOTHING, db_column='id_licencia_area')
-    numero_ticket = models.CharField(max_length=20)
-    cant_solicitada = models.IntegerField()
-    tipo_upgrade = models.CharField(max_length=20, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'upgrade_licencias_area'
         
 class Historicos(models.Model):
     """Modulo de registros de Logs de cambios"""
