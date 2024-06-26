@@ -27,6 +27,7 @@ function TablaEquiposBack() {
 
   const [equipos, setEquipos] = useState([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
+  const [TotalEquipos, setTotalEquipos] = useState([]);
   const [SO, setSO] = useState([]);
   const [marcaEquipo, setMarcaEquipo] = useState([]);
   const [memoriaRam, setMemoriaRam] = useState([]);
@@ -191,13 +192,14 @@ function TablaEquiposBack() {
   }, []);
 
   useEffect(() => {
+    const totalEquipos = equipos.length;
     const equiposAsignados = equipos.filter(
       (equipo) => equipo.nombre_estado_equipo === "Asignado"
     ).length;
     const equiposDisponibles = equipos.filter(
       (equipo) => equipo.nombre_estado_equipo === "En Bodega"
     ).length;
-
+    setTotalEquipos(totalEquipos);
     setTotalequiposAsignados(equiposAsignados);
     setTotalEquiposDisponibles(equiposDisponibles);
   }, [equipos]);
@@ -531,6 +533,7 @@ function TablaEquiposBack() {
   return (
     <>
       <TarjetasEquipos
+        TotalEquipos={TotalEquipos}
         totalequiposAsignados={totalequiposAsignados}
         totalEquiposDisponibles={totalEquiposDisponibles}
       />

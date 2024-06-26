@@ -2,38 +2,32 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFileLines,
-  faPlus,
-  faPenToSquare,
-  faMagnifyingGlass,
-  faPlusCircle,
-  faBarsProgress
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfig";
+import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfigLicAreas";
 import FormDinamico from "../generales/formDinamico";
-import TarjetasPersonas from "./tarjetasPersonas";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
+import TarjetasLicencias from './tarjetasLicencias';
 
-function TablaPersonasBack() {
+
+function TablaLicAreasBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [personas, setPersonas] = useState([]);
-  const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
-  const [centroCostos, setCentroCostos] = useState([]);
-  const [area, setArea] = useState([]);
-  const [region, setRegion] = useState([]);
-  const [cargo, setCargo] = useState([]);
-  const [estado, setEstado] = useState([]);
+
+  const [licareas, setLicAreas] = useState([]);
+  const [licareaSeleccionada, setLicareaSeleccionada] = useState(null);
+  const [contrato, setContrato] = useState([]);
+  const [ceco, setCentroCostos] = useState([]);
+  const [estadoLicencia, setEstadoLicencia] = useState([]);
+  const [responsable, setResponsable] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newPersonData, setNewPersonData] = useState({});
+  const [newLicAreaData, setNewLicAreaData] = useState({});
   const [actionType, setActionType] = useState("");
   const [totalActivos, setTotalActivos] = useState(0); // Estado para el total de personas activas
   const [totalInactivos, setTotalInactivos] = useState(0); // Estado para el total de personas inactivas
@@ -62,38 +56,28 @@ function TablaPersonasBack() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchPersonas = async () => {
+  const fetchlicAreas = async () => {
     setIsLoading(true);
     try {
-      const responsePersonas = await axios.get(
-        "http://localhost:8000/api/personas/"
+      const responselicAreas = await axios.get(
+        "http://localhost:8000/api/licencias/area/"
       );
-      setPersonas(responsePersonas.data);
+      setLicAreas(responselicAreas.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de las personas");
+      toast.error("Hubo un error en la carga de datos de Licencias Areas");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPersonas();
+    fetchlicAreas();
   }, []);
 
   useEffect(() => {
     const fetchCatalogos = async () => {
       setIsLoading(true);
       try {
-        const responseEstado = await axios.get(
-          "http://localhost:8000/api/estado_persona/"
-        );
-        setEstado(
-          responseEstado.data.map((item) => ({
-            value: item.id_estado_persona,
-            label: item.nombre,
-          }))
-        );
-
         const responseCentroCostos = await axios.get(
           "http://localhost:8000/api/centro_costos/"
         );
@@ -104,33 +88,33 @@ function TablaPersonasBack() {
           }))
         );
 
-        const responseAreas = await axios.get(
-          "http://localhost:8000/api/area/"
+        const responseContratos = await axios.get(
+          "http://localhost:8000/api/licencias/contratos/"
         );
-        setArea(
-          responseAreas.data.map((item) => ({
-            value: item.id_area,
-            label: item.nombre,
+        setContrato(
+          responseContratos.data.map((item) => ({
+            value: item.id_contrato,
+            label: item.nombre, // Mantener el nombre original en el valor
           }))
         );
 
-        const responseRegion = await axios.get(
-          "http://localhost:8000/api/region/"
+        const responseEstado = await axios.get(
+          "http://localhost:8000/api/licencias/estado/"
         );
-        setRegion(
-          responseRegion.data.map((item) => ({
-            value: item.id_region,
-            label: item.nombre,
+        setEstadoLicencia(
+          responseEstado.data.map((item) => ({
+            value: item.id_estado_licencia,
+            label: item.nombre, // Mantener el nombre original en el valor
           }))
         );
 
-        const responseCargo = await axios.get(
-          "http://localhost:8000/api/cargo/"
+        const responseSolicitante = await axios.get(
+          "http://localhost:8000/api/licencias/responsables/"
         );
-        setCargo(
-          responseCargo.data.map((item) => ({
-            value: item.id_cargo,
-            label: item.nombre,
+        setResponsable(
+          responseSolicitante.data.map((item) => ({
+            value: item.id_trabajador,
+            label: item.nombres + " " + item.apellidos,
           }))
         );
       } catch (error) {
@@ -143,22 +127,21 @@ function TablaPersonasBack() {
     fetchCatalogos();
   }, []);
 
-  // Nuevo useEffect para actualizar los totales cada vez que cambie la lista de personas
   useEffect(() => {
-    const activos = personas.filter(
-      (persona) => persona.nombre_estado_persona === "Activo"
+    const LicActivas = licareas.filter(
+      (licarea) => licarea.nombre_estado_licencia === "Activa"
     ).length;
-    const inactivos = personas.filter(
-      (persona) => persona.nombre_estado_persona === "Inactivo"
+    const LicInactivas = licareas.filter(
+      (licarea) => licarea.nombre_estado_licencia === "Inactiva"
     ).length;
 
-    setTotalActivos(activos);
-    setTotalInactivos(inactivos);
-  }, [personas]);
+    setTotalActivos(LicActivas);
+    setTotalInactivos(LicInactivas);
+  }, [licareas]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewPersonData((prevData) => ({ ...prevData, [name]: value }));
+    setNewLicAreaData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -174,27 +157,26 @@ function TablaPersonasBack() {
     setCurrentPage(1);
   };
 
-  const createPersona = async () => {
+  const createlicArea = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newPersonData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+        ...newLicAreaData,
+        id_centro_costo: parseInt(newLicAreaData.id_centro_costo, 10),
+        id_contrato: parseInt(newLicAreaData.id_contrato, 10),
+        id_estado_licencia: parseInt(newLicAreaData.id_estado_licencia, 10),
+        id_responsable: parseInt(newLicAreaData.id_responsable, 10),
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/personas/",
+        "http://localhost:8000/api/licencias/area/",
         formattedData
       );
-      const nuevaPersona = response.data;
-      setPersonas([...personas, nuevaPersona]);
-      setNewPersonData({});
+      const nuevalicArea = response.data;
+      setLicAreas([...licareas, nuevalicArea]);
+      setNewLicAreaData({});
       cambiarEstadoModal(false);
-      toast.success("Persona creada exitosamente!");
+      toast.success("Licencia Area creada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -231,38 +213,37 @@ function TablaPersonasBack() {
     }
   };
 
-  const updatePerson = async () => {
+  const updateLicArea = async () => {
     setIsLoading(true);
     try {
       const updatedData = {
-        ...personaSeleccionada,
-        ...newPersonData,
+        ...licareaSeleccionada,
+        ...newLicAreaData,
       };
 
       const formattedData = {
         ...updatedData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+        id_centro_costo: parseInt(newLicAreaData.id_centro_costo, 10),
+        id_contrato: parseInt(newLicAreaData.id_contrato, 10),
+        id_estado_licencia: parseInt(newLicAreaData.id_estado_licencia, 10),
+        id_responsable: parseInt(newLicAreaData.id_responsable, 10),
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/personas/${personaSeleccionada.id_trabajador}/`,
+        `http://localhost:8000/api/licencias/area/${licareaSeleccionada.id_licencia}/`,
         formattedData
       );
-      const updatedPersona = response.data;
-      setPersonas(
-        personas.map((persona) =>
-          persona.id_trabajador === updatedPersona.id_trabajador
-            ? updatedPersona
-            : persona
+      const updatedlicArea = response.data;
+      setLicAreas(
+        licareas.map((licarea) =>
+          licarea.id_licencia === updatedlicArea.id_licencia
+            ? updatedlicArea
+            : licarea
         )
       );
-      setNewPersonData({});
+      setNewLicAreaData({});
       cambiarEstadoModal(false);
-      toast.success("Persona actualizada exitosamente!");
+      toast.success("Licencia Area actualizada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -308,25 +289,23 @@ function TablaPersonasBack() {
   ) => {
     let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_centro_costo") {
-        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
-      } else if (field.id === "id_area") {
-        return { ...field, options: area };
-      } else if (field.id === "id_region") {
-        return { ...field, options: region };
-      } else if (field.id === "id_cargo") {
-        return { ...field, options: cargo };
-      } else if (field.id === "id_estado_persona") {
-        return { ...field, options: estado };
+        return { ...field, options: ceco };
+      } else if (field.id === "id_contrato") {
+        return { ...field, options: contrato };
+      } else if (field.id === "id_estado_licencia") {
+        return { ...field, options: estadoLicencia };
+      } else if (field.id === "id_responsable") {
+        return { ...field, options: responsable };
       }
       return field;
     });
 
     if (action === "create") {
-      initialValues.id_estado_persona = estado.find(e => e.label === "Activo")?.value || "";
-      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_persona");
+      initialValues.id_estado_licencia = estadoLicencia.find(e => e.label === "Activa")?.value || "";
+      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_licencia");
     }
 
-    setNewPersonData(initialValues);
+    setNewLicAreaData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
@@ -345,15 +324,13 @@ function TablaPersonasBack() {
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
       if (field.id === "id_centro_costo") {
-        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
-      } else if (field.id === "id_area") {
-        return { ...field, options: area };
-      } else if (field.id === "id_region") {
-        return { ...field, options: region };
-      } else if (field.id === "id_cargo") {
-        return { ...field, options: cargo };
-      } else if (field.id === "id_estado_persona") {
-        return { ...field, options: estado };
+        return { ...field, options: ceco };
+      } else if (field.id === "id_contrato") {
+        return { ...field, options: contrato };
+      } else if (field.id === "id_estado_licencia") {
+        return { ...field, options: estadoLicencia };
+      } else if (field.id === "id_responsable") {
+        return { ...field, options: responsable };
       }
       return field;
     });
@@ -405,27 +382,27 @@ function TablaPersonasBack() {
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
+    abrirModal("Registrar Licencia", formFields, [], {}, "create");
   };
 
-  const handleEdit = (persona) => {
-    setPersonaSeleccionada(persona);
+  const handleEdit = (licarea) => {
+    setLicareaSeleccionada(licarea);
     abrirModal(
-      `Actualizar ${persona.nombres}  ${persona.apellidos}`,
+      `Actualizar ${licarea.nombre_licencia}`,
       formFields,
-      ["identificacion", "correo_institucional", "correo_personal"],
-      persona,
+      ["sereal"],
+      licarea,
       "update"
     );
   };
 
-  const handleInfo = (persona) => {
-    setPersonaSeleccionada(persona);
+  const handleInfo = (licarea) => {
+    setLicareaSeleccionada(licarea);
     abrirModal(
-      `Información de ${persona.nombres}`,
+      `Información de ${licarea.nombre_licencia}`,
       formFields,
       ALL_INPUT_IDS,
-      persona,
+      licarea,
       "detail"
     );
   };
@@ -434,13 +411,13 @@ function TablaPersonasBack() {
     setCurrentPage(pageNumber);
   };
 
-  const filteredPersonas = personas.filter((persona) => {
-    const searchString = `${persona.id_trabajador} ${persona.nombres} ${persona.identificacion} ${persona.correo_institucional} ${persona.nombre_estado_persona}`.toLowerCase();
+  const filteredlicAreas = licareas.filter((licarea) => {
+    const searchString = `${licarea.id_licencia} ${licarea.nombre_licencia} ${licarea.sereal} ${licarea.no_ticket}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(persona[key]) === String(filtroValues[key]);
+      return String(licarea[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -448,26 +425,28 @@ function TablaPersonasBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredPersonas.slice(
+  const currentRecords = filteredlicAreas.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredPersonas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredlicAreas.length / recordsPerPage);
 
   return (
     <>
-      <TarjetasPersonas
-        totalActivos={totalActivos} // Pasar el total de activos como props
-        totalInactivos={totalInactivos} // Pasar el total de inactivos como props
-      />
-      <div className="contenedor-activos">
+      <div style={{ marginTop: '-2vh' }}>
+        <TarjetasLicencias
+          totalActivos={totalActivos} // Pasar el total de activos como props
+          totalInactivos={totalInactivos} // Pasar el total de inactivos como props
+        />
+      </div>
+      <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">
         <div className="row-activos">
-          <div className="Personas">
-            <h1>Personas</h1>
+          <div className="asigEquipos">
+            <h1>Licencias Areas</h1>
           </div>
-          <div className="contbuscador-personas">
+          <div className="contbuscador-asigEquipos">
             <input
-              className="buscador-personas"
+              className="contbuscador-licenciasPer"
               type="text"
               placeholder="Buscar"
               value={searchTerm}
@@ -480,21 +459,21 @@ function TablaPersonasBack() {
           </div>
           <div>
             <FontAwesomeIcon
-              className="agregar-personas"
+              className="agregar-licPersonas"
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
           </div>
-          <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+          <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "0vw" }}>ID Trabajador</th>
-                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Completo</th>
-                  <th style={{ paddingLeft: "0vw" }}>Numero Identificación</th>
-                  <th style={{ paddingLeft: "5vw" }}>Correo Institucional</th>
-                  <th style={{ paddingLeft: "2.5vw" }}>Estado</th>
+                  <th style={{ paddingLeft: "2.7vw" }}>ID</th>
+                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Licencia</th>
+                  <th style={{ paddingLeft: "2.6vw" }}>Numero Serial</th>
+                  <th style={{ paddingLeft: "2.8vw" }}>Contrato</th>
+                  <th style={{ paddingLeft: "0vw" }}>Fecha de Vencimiento</th>
+                  <th style={{ paddingLeft: "0vw" }}>Estado</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
@@ -514,32 +493,34 @@ function TablaPersonasBack() {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((persona) => (
-                    <tr key={persona.id_trabajador}>
-                      <td>{persona.id_trabajador}</td>
-                      <td style={{ paddingLeft: "2vw" }}>{persona.nombres} {persona.apellidos}</td>
-                      <td>{persona.identificacion}</td>
-                      <td>{persona.correo_institucional}</td>
+                  currentRecords.map((licarea) => (
+                    <tr key={licarea.id_licencia}>
+                      <td>{licarea.id_licencia}</td>
+                      <td style={{ paddingLeft: "4vw" }}>{licarea.nombre_licencia}</td>
+                      <td>{licarea.sereal}</td>
+                      <td>{licarea.nombre_contrato}</td>
+                      <td>{licarea.fecha_vencimiento}</td>
                       <td
                         style={{
                           color:
-                            persona.nombre_estado_persona === "Activo"
+                            licarea.nombre_estado_licencia === "Activa"
                               ? "#10A142"
                               : "#ff0000",
+                          paddingLeft: "0.3vw"
                         }}
                       >
-                        {persona.nombre_estado_persona}
+                        {licarea.nombre_estado_licencia}
                       </td>
                       <td>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(persona)}
+                          onClick={() => handleEdit(licarea)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
-                          onClick={() => handleInfo(persona)}
+                          onClick={() => handleInfo(licarea)}
                         >
                           <FontAwesomeIcon icon={faFileLines} />
                         </button>
@@ -552,6 +533,7 @@ function TablaPersonasBack() {
           </Divtabla>
         </div>
       </div>
+
       <Paginate
         currentPage={currentPage}
         totalPages={totalPages}
@@ -563,8 +545,8 @@ function TablaPersonasBack() {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createPersona}
-        onUpdate={updatePerson}
+        onCreate={createlicArea}
+        onUpdate={updateLicArea}
       >
         {modalConfig.contenido}
       </Modal>
@@ -584,16 +566,12 @@ function TablaPersonasBack() {
           onFiltroChange={handleFiltroChange}
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
-            if (field.id === "id_centro_costo") {
-              return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) }; // Renombrar a Alianza en la etiqueta
-            } else if (field.id === "id_area") {
-              return { ...field, options: area };
-            } else if (field.id === "id_region") {
-              return { ...field, options: region };
-            } else if (field.id === "id_cargo") {
-              return { ...field, options: cargo };
-            } else if (field.id === "id_estado_persona") {
-              return { ...field, options: estado };
+            if (field.id === "id_contrato") {
+              return { ...field, options: contrato };
+            } else if (field.id === "id_estado_licencia") {
+              return { ...field, options: estadoLicencia };
+            } else if (field.id === "id_responsable") {
+              return { ...field, options: responsable };
             }
             return field;
           })}
@@ -626,7 +604,7 @@ function TablaPersonasBack() {
   );
 }
 
-export default TablaPersonasBack;
+export default TablaLicAreasBack;
 
 const Boton = styled.button`
   display: block;
@@ -639,6 +617,19 @@ const Boton = styled.button`
   font-weight: 500;
   transition: 0.3s ease all;
 `;
+
+const Contenido = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+`;
+
 const LoadingRow = styled.tr`
   height: 200px; /* Ajusta esta altura según sea necesario */
 `;
@@ -680,17 +671,6 @@ const Spinner = styled.div`
   }
 `;
 
-const Contenido = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-`;
 
 const FilterOptions = styled.div`
   display: flex;

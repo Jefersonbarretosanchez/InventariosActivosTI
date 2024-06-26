@@ -5,7 +5,7 @@ import activos from "../../imagenes/mensaje-recibido.png";
 import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/laptop.png";
 
-function TarjetasEquipos({ totalequiposAsignados, totalEquiposDisponibles }) {
+function TarjetasEquipos({ TotalEquipos, totalequiposAsignados, totalEquiposDisponibles }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
@@ -16,10 +16,10 @@ function TarjetasEquipos({ totalequiposAsignados, totalEquiposDisponibles }) {
             </Link>
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">{10}</span>
+            <span className="estadisticas-numero-activos">{TotalEquipos}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
-              Total Equipos Activos
+              Total Equipos
             </span>
           </div>
         </Link>

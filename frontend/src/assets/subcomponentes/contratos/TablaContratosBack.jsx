@@ -15,30 +15,26 @@ import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
 import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
-import TarjetasPersonas from "./tarjetasPersonas";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
+import TarjetasContratos from "./tarjetasContratos";
 
-function TablaPersonasBack() {
+function TablaContratosBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [personas, setPersonas] = useState([]);
-  const [personaSeleccionada, setPersonaSeleccionada] = useState(null);
-  const [centroCostos, setCentroCostos] = useState([]);
-  const [area, setArea] = useState([]);
-  const [region, setRegion] = useState([]);
-  const [cargo, setCargo] = useState([]);
-  const [estado, setEstado] = useState([]);
+  const [contratos, setContratos] = useState([]);
+  const [contratoSeleccionado, setContratoSeleccionado] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [newPersonData, setNewPersonData] = useState({});
+  const [newContratoData, setNewContratoData] = useState({});
   const [actionType, setActionType] = useState("");
-  const [totalActivos, setTotalActivos] = useState(0); // Estado para el total de personas activas
-  const [totalInactivos, setTotalInactivos] = useState(0); // Estado para el total de personas inactivas
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [totalContratos, setTotalContratos] = useState("");
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15); // Cambiado a 15
@@ -62,103 +58,34 @@ function TablaPersonasBack() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchPersonas = async () => {
+  const fetchContratos = async () => {
     setIsLoading(true);
     try {
-      const responsePersonas = await axios.get(
-        "http://localhost:8000/api/personas/"
+      const responseContratos = await axios.get(
+        "http://localhost:8000/api/licencias/contratos/"
       );
-      setPersonas(responsePersonas.data);
+      setContratos(responseContratos.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de las personas");
+      toast.error("Hubo un error en la carga de datos de los Contratos");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPersonas();
+    fetchContratos();
   }, []);
 
   useEffect(() => {
-    const fetchCatalogos = async () => {
-      setIsLoading(true);
-      try {
-        const responseEstado = await axios.get(
-          "http://localhost:8000/api/estado_persona/"
-        );
-        setEstado(
-          responseEstado.data.map((item) => ({
-            value: item.id_estado_persona,
-            label: item.nombre,
-          }))
-        );
+    const ncontratos = contratos.length;
+    setTotalContratos(ncontratos);
+  }, [contratos]);
 
-        const responseCentroCostos = await axios.get(
-          "http://localhost:8000/api/centro_costos/"
-        );
-        setCentroCostos(
-          responseCentroCostos.data.map((item) => ({
-            value: item.id_centro_costo,
-            label: item.nombre, // Mantener el nombre original en el valor
-          }))
-        );
 
-        const responseAreas = await axios.get(
-          "http://localhost:8000/api/area/"
-        );
-        setArea(
-          responseAreas.data.map((item) => ({
-            value: item.id_area,
-            label: item.nombre,
-          }))
-        );
-
-        const responseRegion = await axios.get(
-          "http://localhost:8000/api/region/"
-        );
-        setRegion(
-          responseRegion.data.map((item) => ({
-            value: item.id_region,
-            label: item.nombre,
-          }))
-        );
-
-        const responseCargo = await axios.get(
-          "http://localhost:8000/api/cargo/"
-        );
-        setCargo(
-          responseCargo.data.map((item) => ({
-            value: item.id_cargo,
-            label: item.nombre,
-          }))
-        );
-      } catch (error) {
-        toast.error("Hubo un error en la carga de datos de los catalogos.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCatalogos();
-  }, []);
-
-  // Nuevo useEffect para actualizar los totales cada vez que cambie la lista de personas
-  useEffect(() => {
-    const activos = personas.filter(
-      (persona) => persona.nombre_estado_persona === "Activo"
-    ).length;
-    const inactivos = personas.filter(
-      (persona) => persona.nombre_estado_persona === "Inactivo"
-    ).length;
-
-    setTotalActivos(activos);
-    setTotalInactivos(inactivos);
-  }, [personas]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewPersonData((prevData) => ({ ...prevData, [name]: value }));
+    setNewContratoData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -174,27 +101,21 @@ function TablaPersonasBack() {
     setCurrentPage(1);
   };
 
-  const createPersona = async () => {
+  const createContrato = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newPersonData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
-      };
-
+        ...newContratoData,
+      }
       const response = await axios.post(
-        "http://localhost:8000/api/personas/",
+        "http://localhost:8000/api/licencias/contratos/",
         formattedData
       );
-      const nuevaPersona = response.data;
-      setPersonas([...personas, nuevaPersona]);
-      setNewPersonData({});
+      const nuevoContrato = response.data;
+      setContratos([...contratos, nuevoContrato]);
+      setNewContratoData({});
       cambiarEstadoModal(false);
-      toast.success("Persona creada exitosamente!");
+      toast.success("Contrato creado exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -231,38 +152,33 @@ function TablaPersonasBack() {
     }
   };
 
-  const updatePerson = async () => {
+  const updateContrato = async () => {
     setIsLoading(true);
     try {
       const updatedData = {
-        ...personaSeleccionada,
-        ...newPersonData,
+        ...contratoSeleccionado,
+        ...newContratoData,
       };
 
       const formattedData = {
-        ...updatedData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
+        ...updatedData
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/personas/${personaSeleccionada.id_trabajador}/`,
+        `http://localhost:8000/api/licencias/contratos/${contratoSeleccionado.id_contrato}/`,
         formattedData
       );
-      const updatedPersona = response.data;
-      setPersonas(
-        personas.map((persona) =>
-          persona.id_trabajador === updatedPersona.id_trabajador
-            ? updatedPersona
-            : persona
+      const updatedContrato = response.data;
+      setContratos(
+        contratos.map((contrato) =>
+          contrato.id_contrato === updatedContrato.id_contrato
+            ? updatedContrato
+            : contrato
         )
       );
-      setNewPersonData({});
+      setNewContratoData({});
       cambiarEstadoModal(false);
-      toast.success("Persona actualizada exitosamente!");
+      toast.success("Contrato actualizado exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -307,26 +223,10 @@ function TablaPersonasBack() {
     action = ""
   ) => {
     let fieldsWithOptions = fields.map((field) => {
-      if (field.id === "id_centro_costo") {
-        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
-      } else if (field.id === "id_area") {
-        return { ...field, options: area };
-      } else if (field.id === "id_region") {
-        return { ...field, options: region };
-      } else if (field.id === "id_cargo") {
-        return { ...field, options: cargo };
-      } else if (field.id === "id_estado_persona") {
-        return { ...field, options: estado };
-      }
       return field;
     });
 
-    if (action === "create") {
-      initialValues.id_estado_persona = estado.find(e => e.label === "Activo")?.value || "";
-      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_persona");
-    }
-
-    setNewPersonData(initialValues);
+    setNewContratoData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
@@ -344,17 +244,6 @@ function TablaPersonasBack() {
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
-      if (field.id === "id_centro_costo") {
-        return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
-      } else if (field.id === "id_area") {
-        return { ...field, options: area };
-      } else if (field.id === "id_region") {
-        return { ...field, options: region };
-      } else if (field.id === "id_cargo") {
-        return { ...field, options: cargo };
-      } else if (field.id === "id_estado_persona") {
-        return { ...field, options: estado };
-      }
       return field;
     });
 
@@ -408,24 +297,24 @@ function TablaPersonasBack() {
     abrirModal("Registrar Trabajador", formFields, [], {}, "create");
   };
 
-  const handleEdit = (persona) => {
-    setPersonaSeleccionada(persona);
+  const handleEdit = (contrato) => {
+    setContratoSeleccionado(contrato);
     abrirModal(
-      `Actualizar ${persona.nombres}  ${persona.apellidos}`,
+      `Actualizar ${contrato.nombre}`,
       formFields,
-      ["identificacion", "correo_institucional", "correo_personal"],
-      persona,
+      ["sereal"],
+      contrato,
       "update"
     );
   };
 
-  const handleInfo = (persona) => {
-    setPersonaSeleccionada(persona);
+  const handleInfo = (contrato) => {
+    setContratoSeleccionado(contrato);
     abrirModal(
-      `Información de ${persona.nombres}`,
+      `Información de ${contrato.nombre}`,
       formFields,
       ALL_INPUT_IDS,
-      persona,
+      contrato,
       "detail"
     );
   };
@@ -434,13 +323,13 @@ function TablaPersonasBack() {
     setCurrentPage(pageNumber);
   };
 
-  const filteredPersonas = personas.filter((persona) => {
-    const searchString = `${persona.id_trabajador} ${persona.nombres} ${persona.identificacion} ${persona.correo_institucional} ${persona.nombre_estado_persona}`.toLowerCase();
+  const filteredContratos = contratos.filter((contrato) => {
+    const searchString = `${contrato.id_contrato} ${contrato.sereal} ${contrato.costo_unitario} ${contrato.costo_total}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(persona[key]) === String(filtroValues[key]);
+      return String(contrato[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -448,22 +337,21 @@ function TablaPersonasBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredPersonas.slice(
+  const currentRecords = filteredContratos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredPersonas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredContratos.length / recordsPerPage);
 
   return (
     <>
-      <TarjetasPersonas
-        totalActivos={totalActivos} // Pasar el total de activos como props
-        totalInactivos={totalInactivos} // Pasar el total de inactivos como props
+      <TarjetasContratos
+        totalContratos={totalContratos} // Pasar el total de activos como props
       />
       <div className="contenedor-activos">
         <div className="row-activos">
           <div className="Personas">
-            <h1>Personas</h1>
+            <h1>Contratos</h1>
           </div>
           <div className="contbuscador-personas">
             <input
@@ -490,11 +378,11 @@ function TablaPersonasBack() {
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "0vw" }}>ID Trabajador</th>
-                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Completo</th>
-                  <th style={{ paddingLeft: "0vw" }}>Numero Identificación</th>
-                  <th style={{ paddingLeft: "5vw" }}>Correo Institucional</th>
-                  <th style={{ paddingLeft: "2.5vw" }}>Estado</th>
+                  <th style={{ paddingLeft: "0vw" }}>ID Contrato</th>
+                  <th style={{ paddingLeft: "3.5vw" }}>Contrato</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Vencimiento</th>
+                  <th>Cantidad</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
@@ -514,34 +402,19 @@ function TablaPersonasBack() {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((persona) => (
-                    <tr key={persona.id_trabajador}>
-                      <td>{persona.id_trabajador}</td>
-                      <td style={{ paddingLeft: "2vw" }}>{persona.nombres} {persona.apellidos}</td>
-                      <td>{persona.identificacion}</td>
-                      <td>{persona.correo_institucional}</td>
-                      <td
-                        style={{
-                          color:
-                            persona.nombre_estado_persona === "Activo"
-                              ? "#10A142"
-                              : "#ff0000",
-                        }}
-                      >
-                        {persona.nombre_estado_persona}
-                      </td>
-                      <td>
+                  currentRecords.map((contrato) => (
+                    <tr key={contrato.id_contrato}>
+                      <td>{contrato.id_contrato}</td>
+                      <td style={{ paddingLeft: "2vw" }}>{contrato.nombre}</td>
+                      <td style={{ paddingLeft: "3.4vw" }}>{contrato.fecha_inicio}</td>
+                      <td style={{ paddingLeft: "5vw" }}>{contrato.fecha_vencimiento}</td>
+                      <td style={{ paddingLeft: "5vw" }}>{contrato.cantidad_licencias}</td>
+                      <td style={{ paddingLeft: "4.5vw" }}>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(persona)}
+                          onClick={() => handleEdit(contrato)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(persona)}
-                        >
-                          <FontAwesomeIcon icon={faFileLines} />
                         </button>
                       </td>
                     </tr>
@@ -563,8 +436,8 @@ function TablaPersonasBack() {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createPersona}
-        onUpdate={updatePerson}
+        onCreate={createContrato}
+        onUpdate={updateContrato}
       >
         {modalConfig.contenido}
       </Modal>
@@ -584,17 +457,6 @@ function TablaPersonasBack() {
           onFiltroChange={handleFiltroChange}
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
-            if (field.id === "id_centro_costo") {
-              return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) }; // Renombrar a Alianza en la etiqueta
-            } else if (field.id === "id_area") {
-              return { ...field, options: area };
-            } else if (field.id === "id_region") {
-              return { ...field, options: region };
-            } else if (field.id === "id_cargo") {
-              return { ...field, options: cargo };
-            } else if (field.id === "id_estado_persona") {
-              return { ...field, options: estado };
-            }
             return field;
           })}
         />
@@ -626,7 +488,7 @@ function TablaPersonasBack() {
   );
 }
 
-export default TablaPersonasBack;
+export default TablaContratosBack;
 
 const Boton = styled.button`
   display: block;

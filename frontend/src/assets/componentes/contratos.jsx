@@ -7,6 +7,9 @@ import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/equipos.css"
 import TarjetasContratos from "../subcomponentes/contratos/tarjetasContratos";
 import TablaContratos from "../subcomponentes/contratos/TablaContratos";
+import TablaContratosBack from "../subcomponentes/contratos/TablaContratosBack";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 export default function Contratos() {
@@ -14,8 +17,8 @@ export default function Contratos() {
         <div className="EquiposBody">
             <Header />
             <Sidebar />
-            <TarjetasContratos />
-            <TablaContratos />
+            <TablaContratosBack />
+            <ToastContainer />
             <Paginate />
             <Footer />
         </div>
