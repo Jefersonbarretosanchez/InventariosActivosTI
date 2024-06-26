@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'activosTI',
     'Equipos',
     'Licencias',
+    'ComplementosActivos',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

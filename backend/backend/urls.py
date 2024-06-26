@@ -36,4 +36,5 @@ urlpatterns = [
     path("api/", include("activosTI.urls")),
     path("api/", include("Equipos.urls")),
     path("api/", include("Licencias.urls")),
+    path("api/", include("ComplementosActivos.urls")),
 ]

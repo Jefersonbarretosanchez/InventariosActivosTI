@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from activosTI.models import Persona
 # Create your models here.
 
 class CatMarcaequipo(models.Model):
@@ -132,3 +132,41 @@ class Equipo(models.Model):
     class Meta:
         managed = False
         db_table = 'equipo'
+        
+class CatEstadoPeriferico(models.Model):
+    id_estado_periferico = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=30)
+    fecha_registro = models.DateField()
+
+    class Meta:
+        db_table = 'cat_estado_periferico'
+        
+class Perifericos(models.Model):
+    id_perifericos = models.AutoField(primary_key=True)        
+    nombre_periferico = models.CharField(max_length=30)        
+    id_estado_periferico = models.ForeignKey(CatEstadoPeriferico, models.DO_NOTHING, db_column='id_estado_periferico')        
+    modelo = models.CharField(max_length=30)
+    sereal = models.CharField(max_length=30)
+    costo = models.IntegerField()
+
+    class Meta:
+        db_table = 'perifericos'
+        
+class KitPerifericos(models.Model):
+    id_kit_perifericos = models.AutoField(primary_key=True)
+    id_perifericos = models.ForeignKey(Perifericos, models.DO_NOTHING, db_column='id_perifericos')
+
+    class Meta:
+        db_table = 'kit_perifericos'
+        
+class AsignacionEquipos(models.Model):
+    id_asignacion = models.AutoField(primary_key=True)
+    id_trabajador = models.ForeignKey(Persona, models.DO_NOTHING, db_column='id_trabajador', blank=True, null=True)
+    id_equipo = models.ForeignKey(Equipo, models.DO_NOTHING, db_column='id_equipo', blank=True, null=True)
+    fecha_entrega_equipo = models.DateField()
+    fecha_devolucion_equipo = models.DateField()
+    id_kit_perifericos = models.ForeignKey(KitPerifericos, models.DO_NOTHING, db_column='id_kit_perifericos', blank=True, null=True)
+
+    class Meta:
+        db_table = 'asignacion_equipos'
+        

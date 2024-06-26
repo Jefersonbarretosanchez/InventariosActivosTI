@@ -37,7 +37,7 @@ class LicenciaPersonaListCreate(generics.ListCreateAPIView):
                 correo_usuario=usuario.email if usuario else 'anonimo@example.com',
                 tipo_cambio="Creacion",
                 tipo_activo="Licencia Persona",
-                activo_modificado=Equipo.sereal,
+                activo_modificado=LicenciaPersona.sereal,
                 descripcion=f'Se creó la licencia "{
                     LicenciaPersona.nombre_licencia}"'
             )
@@ -171,7 +171,7 @@ class LicenciasEquiposListCreate(generics.ListCreateAPIView):
                 correo_usuario=usuario.email if usuario else 'anonimo@example.com',
                 tipo_cambio="Creacion",
                 tipo_activo="Licencia Equipo",
-                activo_modificado=Equipo.sereal,
+                activo_modificado=LicenciasEquipo.sereal,
                 descripcion=f'Se creó la licencia "{
                     LicenciasEquipo.nombre_licencia}"'
             )
@@ -305,7 +305,7 @@ class LicenciasAreasListCreate(generics.ListCreateAPIView):
                 correo_usuario=usuario.email if usuario else 'anonimo@example.com',
                 tipo_cambio="Creacion",
                 tipo_activo="Licencia Area",
-                activo_modificado=Equipo.sereal,
+                activo_modificado=LicenciaArea.sereal,
                 descripcion=f'Se creó la licencia "{
                     LicenciaArea.nombre_licencia}"'
             )
