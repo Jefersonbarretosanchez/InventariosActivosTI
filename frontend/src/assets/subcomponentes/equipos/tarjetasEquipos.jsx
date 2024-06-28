@@ -5,7 +5,7 @@ import activos from "../../imagenes/mensaje-recibido.png";
 import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/laptop.png";
 
-function TarjetasEquipos({ TotalEquipos, totalequiposAsignados, totalEquiposDisponibles }) {
+function TarjetasEquipos({ TotalEquipos, totalequiposAsignados, totalEquiposDisponibles, totalLicenciasEquipos }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
@@ -59,7 +59,7 @@ function TarjetasEquipos({ TotalEquipos, totalequiposAsignados, totalEquiposDisp
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasEquipos}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Licencias Equipos

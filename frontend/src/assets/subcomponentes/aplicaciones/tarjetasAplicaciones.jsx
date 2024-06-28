@@ -5,7 +5,7 @@ import activos from "../../imagenes/perfil-del-usuario.png";
 import equipos from "../../imagenes/ocupado.png";
 import licencias from "../../imagenes/cuentacuentos.png";
 
-function TarjetasAplicaciones() {
+function TarjetasAplicaciones({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
@@ -14,7 +14,7 @@ function TarjetasAplicaciones() {
             <img src={activos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">250</span>
+            <span className="estadisticas-numero-activos">{totalPersonasActivas}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Personas Activas
@@ -28,7 +28,7 @@ function TarjetasAplicaciones() {
             <img src={equipos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">75</span>
+            <span className="estadisticas-numero-activos">{totalPersonasInactivas}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Personas Inactivas
@@ -42,7 +42,7 @@ function TarjetasAplicaciones() {
             <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">92</span>
+            <span className="estadisticas-numero-activos">{totalAplicaciones}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Aplicaciones

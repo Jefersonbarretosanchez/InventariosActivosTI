@@ -5,7 +5,7 @@ import activos from "../../imagenes/contrato.png";
 import equipos from "../../imagenes/license-icon.webp";
 import licencias from "../../imagenes/usuario.png";
 
-function TarjetasContratos({ totalContratos }) {
+function TarjetasContratos({ totalContratos, totalLicenciasEquipos, totalLicenciasPersonas, totalLicenciasAreas }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
@@ -30,7 +30,7 @@ function TarjetasContratos({ totalContratos }) {
             <img src={equipos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">75</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasEquipos}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Licencias Personas
@@ -44,7 +44,7 @@ function TarjetasContratos({ totalContratos }) {
             <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">92</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasPersonas}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Licencias Equipos
@@ -58,7 +58,7 @@ function TarjetasContratos({ totalContratos }) {
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasAreas}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Licencias Areas

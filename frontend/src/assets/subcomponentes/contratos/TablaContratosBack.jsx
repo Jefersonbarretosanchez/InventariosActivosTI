@@ -19,7 +19,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasContratos from "./tarjetasContratos";
 
-function TablaContratosBack() {
+function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, totalLicenciasAreas }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -324,7 +324,7 @@ function TablaContratosBack() {
   };
 
   const filteredContratos = contratos.filter((contrato) => {
-    const searchString = `${contrato.id_contrato} ${contrato.sereal} ${contrato.costo_unitario} ${contrato.costo_total}`.toLowerCase();
+    const searchString = `${contrato.id_contrato} ${contrato.nombre} ${contrato.sereal} ${contrato.costo_unitario} ${contrato.costo_total}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
@@ -347,6 +347,9 @@ function TablaContratosBack() {
     <>
       <TarjetasContratos
         totalContratos={totalContratos} // Pasar el total de activos como props
+        totalLicenciasEquipos={totalLicenciasEquipos}
+        totalLicenciasPersonas={totalLicenciasPersonas}
+        totalLicenciasAreas={totalLicenciasAreas}
       />
       <div className="contenedor-activos">
         <div className="row-activos">

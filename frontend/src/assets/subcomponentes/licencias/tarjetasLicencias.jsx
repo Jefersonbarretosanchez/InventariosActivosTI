@@ -5,7 +5,7 @@ import activos from "../../imagenes/pagina-web.png";
 import equipos from "../../imagenes/laptop.png";
 import licencias from "../../imagenes/licenciass.png";
 
-function TarjetasLicencias({ totalActivos, totalInactivos }) {
+function TarjetasLicencias({ totalActivos, totalInactivos, totalLicenciasPersonas, totalLicenciasEquipos }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-equipos">
@@ -44,7 +44,7 @@ function TarjetasLicencias({ totalActivos, totalInactivos }) {
             <img src={activos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos">
-            <span className="estadisticas-numero-activos">92</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasPersonas}</span> {/* Aquí muestra el total */}
             <br />
             <span className="estadisticas-descripcion-asigequipos">
               Total Licencias Personas
@@ -58,7 +58,7 @@ function TarjetasLicencias({ totalActivos, totalInactivos }) {
             <img src={equipos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos">
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasEquipos}</span> {/* Aquí muestra el total */}
             <br />
             <span className="estadisticas-descripcion-asigequipos">
               Total Licencias Equipos
@@ -69,4 +69,5 @@ function TarjetasLicencias({ totalActivos, totalInactivos }) {
     </div>
   );
 }
+
 export default TarjetasLicencias;

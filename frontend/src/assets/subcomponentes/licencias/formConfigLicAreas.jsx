@@ -19,7 +19,7 @@ export const formFields = [
   },
   {
     id: "sereal",
-    label: "Serial",
+    label: "Codigo Activacion",
     type: "text",
     required: true,
   },

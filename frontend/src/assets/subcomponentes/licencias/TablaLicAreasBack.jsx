@@ -13,7 +13,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasLicencias from './tarjetasLicencias';
 
 
-function TablaLicAreasBack() {
+function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -435,8 +435,10 @@ function TablaLicAreasBack() {
     <>
       <div style={{ marginTop: '-2vh' }}>
         <TarjetasLicencias
-          totalActivos={totalActivos} // Pasar el total de activos como props
-          totalInactivos={totalInactivos} // Pasar el total de inactivos como props
+          totalActivos={totalActivos}
+          totalInactivos={totalInactivos}
+          totalLicenciasPersonas={totalLicenciasPersonas}
+          totalLicenciasEquipos={totalLicenciasEquipos}
         />
       </div>
       <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">

@@ -8,42 +8,33 @@ import {
   faPenToSquare,
   faMagnifyingGlass,
   faPlusCircle,
+  faBarsProgress
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
+import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
 import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
-import TarjetasEquipos from "./tarjetasEquipos";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
+import TarjetasAplicaciones from "./tarjetasAplicaciones";
 
-
-function TablaEquiposBack({ totalLicenciasEquipos }) {
+function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
+  const [aplicaciones, setAplicaciones] = useState([]);
+  const [aplicacionSeleccionada, setAplicacionSeleccionada] = useState(null);
 
-  const [equipos, setEquipos] = useState([]);
-  const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
-  const [TotalEquipos, setTotalEquipos] = useState([]);
-  const [SO, setSO] = useState([]);
-  const [marcaEquipo, setMarcaEquipo] = useState([]);
-  const [memoriaRam, setMemoriaRam] = useState([]);
-  const [discoDuro, setDiscoDuro] = useState([]);
-  const [tipoPropiedad, setTipoPropiedad] = useState([]);
-  const [tipoEquipo, setTipoEquipo] = useState([]);
-  const [coordinadores, setCoordinadores] = useState([]);
-  const [ubicaciones, setUbicaciones] = useState([]);
-  const [estadoEquipo, setEstadoEquipo] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newEquipoData, setNewEquipoData] = useState({});
+  const [newAplicacionData, setNewAplicacionData] = useState({});
   const [actionType, setActionType] = useState("");
-  const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
-  const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [totalAplicaciones, setTotalAplicaciones] = useState("");
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15); // Cambiado a 15
@@ -53,7 +44,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
-
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -68,145 +58,34 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-  const fetchEquipos = async () => {
+  const fetchAplicaciones = async () => {
     setIsLoading(true);
     try {
-      const responseEquipos = await axios.get(
-        "http://localhost:8000/api/equipos/"
+      const responseAplicaciones = await axios.get(
+        "http://localhost:8000/api/aplicaciones/"
       );
-      setEquipos(responseEquipos.data);
+      setAplicaciones(responseAplicaciones.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de los equipos");
+      toast.error("Hubo un error en la carga de datos de las Aplicaciones");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchEquipos();
-  }, []);
-
-
-  useEffect(() => {
-    const fetchCatalogos = async () => {
-      setIsLoading(true);
-      try {
-        const responseEstadoEquipo = await axios.get(
-          "http://localhost:8000/api/estado_equipo/"
-        );
-        setEstadoEquipo(
-          responseEstadoEquipo.data.map((item) => ({
-            value: item.id_estadoequipo,
-            label: item.nombre,
-          }))
-        );
-
-        const responseSO = await axios.get(
-          "http://localhost:8000/api/so/"
-        );
-        setSO(
-          responseSO.data.map((item) => ({
-            value: item.id_so,
-            label: item.nombre,
-          }))
-        );
-
-        const responseMarcaEquipo = await axios.get(
-          "http://localhost:8000/api/marca_equipo/"
-        );
-        setMarcaEquipo(
-          responseMarcaEquipo.data.map((item) => ({
-            value: item.id_marcaequipo,
-            label: item.nombre,
-          }))
-        );
-
-        const responseMemoriaRam = await axios.get(
-          "http://localhost:8000/api/memoria_ram/"
-        );
-        setMemoriaRam(
-          responseMemoriaRam.data.map((item) => ({
-            value: item.id_ram,
-            label: item.nombre,
-          }))
-        );
-
-        const responseDiscoDuro = await axios.get(
-          "http://localhost:8000/api/disco_duro/"
-        );
-        setDiscoDuro(
-          responseDiscoDuro.data.map((item) => ({
-            value: item.id_discoduro,
-            label: item.nombre,
-          }))
-        );
-
-        const responseTipoPropiedad = await axios.get(
-          "http://localhost:8000/api/tipo_propiedad/"
-        );
-        setTipoPropiedad(
-          responseTipoPropiedad.data.map((item) => ({
-            value: item.id_tipopropiedad,
-            label: item.nombre,
-          }))
-        );
-
-        const responseTipoEquipo = await axios.get(
-          "http://localhost:8000/api/tipo_equipo/"
-        );
-        setTipoEquipo(
-          responseTipoEquipo.data.map((item) => ({
-            value: item.id_tipoequipo,
-            label: item.nombre,
-          }))
-        );
-
-        const responseCoordinadores = await axios.get(
-          "http://localhost:8000/api/coordinadores/"
-        );
-        setCoordinadores(
-          responseCoordinadores.data.map((item) => ({
-            value: item.id_coordinadores,
-            label: item.nombre,
-          }))
-        );
-
-        const responseUbicaciones = await axios.get(
-          "http://localhost:8000/api/ubicaciones/"
-        );
-        setUbicaciones(
-          responseUbicaciones.data.map((item) => ({
-            value: item.id_ubicacion,
-            label: item.nombre,
-          }))
-        );
-      } catch (error) {
-        toast.error("Hubo un error en la carga de datos de los catalogos.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCatalogos();
+    fetchAplicaciones();
   }, []);
 
   useEffect(() => {
-    const totalEquipos = equipos.length;
-    const equiposAsignados = equipos.filter(
-      (equipo) => equipo.nombre_estado_equipo === "Asignado"
-    ).length;
-    const equiposDisponibles = equipos.filter(
-      (equipo) => equipo.nombre_estado_equipo === "En Bodega"
-    ).length;
-    setTotalEquipos(totalEquipos);
-    setTotalequiposAsignados(equiposAsignados);
-    setTotalEquiposDisponibles(equiposDisponibles);
-  }, [equipos]);
+    const naplicaciones = aplicaciones.length;
+    setTotalAplicaciones(naplicaciones);
+  }, [aplicaciones]);
+
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewEquipoData((prevData) => ({ ...prevData, [name]: value }));
+    setNewAplicacionData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -222,31 +101,21 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     setCurrentPage(1);
   };
 
-  const createEquipo = async () => {
+  const createAplicacion = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newEquipoData,
-        id_marcaequipo: parseInt(newEquipoData.id_marcaequipo, 10),
-        id_so: parseInt(newEquipoData.id_so, 10),
-        id_ram: parseInt(newEquipoData.id_ram, 10),
-        id_discoduro: parseInt(newEquipoData.id_discoduro, 10),
-        id_tipopropiedad: parseInt(newEquipoData.id_tipopropiedad, 10),
-        id_tipoequipo: parseInt(newEquipoData.id_tipoequipo, 10),
-        id_coordinadores: parseInt(newEquipoData.id_coordinadores, 10),
-        id_ubicacion: parseInt(newEquipoData.id_ubicacion, 10),
-        id_estadoequipo: parseInt(newEquipoData.id_estadoequipo, 10),
-      };
-
+        ...newAplicacionData,
+      }
       const response = await axios.post(
-        "http://localhost:8000/api/equipos/",
+        "http://localhost:8000/api/aplicaciones/",
         formattedData
       );
-      const nuevoEquipo = response.data;
-      setEquipos([...equipos, nuevoEquipo]);
-      setNewEquipoData({});
+      const nuevaAplicacion = response.data;
+      setAplicaciones([...aplicaciones, nuevaAplicacion]);
+      setNewAplicacionData({});
       cambiarEstadoModal(false);
-      toast.success("Equipo creado exitosamente!");
+      toast.success("Aplicacion creada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -283,42 +152,33 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     }
   };
 
-  const updateEquipo = async () => {
+  const updateAplicacion = async () => {
     setIsLoading(true);
     try {
       const updatedData = {
-        ...equipoSeleccionado,
-        ...newEquipoData,
+        ...aplicacionSeleccionada,
+        ...newAplicacionData,
       };
 
       const formattedData = {
-        ...updatedData,
-        id_marcaequipo: parseInt(newEquipoData.id_marcaequipo, 10),
-        id_so: parseInt(newEquipoData.id_so, 10),
-        id_ram: parseInt(newEquipoData.id_ram, 10),
-        id_discoduro: parseInt(newEquipoData.id_discoduro, 10),
-        id_tipopropiedad: parseInt(newEquipoData.id_tipopropiedad, 10),
-        id_tipoequipo: parseInt(newEquipoData.id_tipoequipo, 10),
-        id_coordinadores: parseInt(newEquipoData.id_coordinadores, 10),
-        id_ubicacion: parseInt(newEquipoData.id_ubicacion, 10),
-        id_estadoequipo: parseInt(newEquipoData.id_estadoequipo, 10),
+        ...updatedData
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/equipos/${equipoSeleccionado.id_equipo}/`,
+        `http://localhost:8000/api/aplicaciones/${aplicacionSeleccionada.id_aplicacion}/`,
         formattedData
       );
-      const updatedEquipo = response.data;
-      setEquipos(
-        equipos.map((equipo) =>
-          equipo.id_equipo === updatedEquipo.id_equipo
-            ? updatedEquipo
-            : equipo
+      const updatedAplicacion = response.data;
+      setAplicaciones(
+        aplicaciones.map((aplicacion) =>
+          aplicacion.id_aplicacion === updatedAplicacion.id_aplicacion
+            ? updatedAplicacion
+            : aplicacion
         )
       );
-      setNewEquipoData({});
+      setNewAplicacionData({});
       cambiarEstadoModal(false);
-      toast.success("Equipo actualizado exitosamente!");
+      toast.success("Aplicacion actualizada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -355,8 +215,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     }
   };
 
-
-
   const abrirModal = (
     titulo,
     fields,
@@ -365,34 +223,10 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     action = ""
   ) => {
     let fieldsWithOptions = fields.map((field) => {
-      if (field.id === "id_marcaequipo") {
-        return { ...field, options: marcaEquipo };
-      } else if (field.id === "id_so") {
-        return { ...field, options: SO };
-      } else if (field.id === "id_ram") {
-        return { ...field, options: memoriaRam };
-      } else if (field.id === "id_discoduro") {
-        return { ...field, options: discoDuro };
-      } else if (field.id === "id_tipopropiedad") {
-        return { ...field, options: tipoPropiedad };
-      } else if (field.id === "id_tipoequipo") {
-        return { ...field, options: tipoEquipo };
-      } else if (field.id === "id_estadoequipo") {
-        return { ...field, options: estadoEquipo };
-      } else if (field.id === "id_coordinadores") {
-        return { ...field, options: coordinadores };
-      } else if (field.id === "id_ubicacion") {
-        return { ...field, options: ubicaciones };
-      }
       return field;
     });
 
-    if (action === "create") {
-      initialValues.id_estadoequipo = estadoEquipo.find(e => e.label === "En Bodega")?.value || "";
-      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estadoequipo");
-    }
-
-    setNewEquipoData(initialValues);
+    setNewAplicacionData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
@@ -410,25 +244,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
-      if (field.id === "id_marcaequipo") {
-        return { ...field, options: marcaEquipo };
-      } else if (field.id === "id_so") {
-        return { ...field, options: SO };
-      } else if (field.id === "id_ram") {
-        return { ...field, options: memoriaRam };
-      } else if (field.id === "id_discoduro") {
-        return { ...field, options: discoDuro };
-      } else if (field.id === "id_tipopropiedad") {
-        return { ...field, options: tipoPropiedad };
-      } else if (field.id === "id_tipoequipo") {
-        return { ...field, options: tipoEquipo };
-      } else if (field.id === "id_estadoequipo") {
-        return { ...field, options: estadoEquipo };
-      } else if (field.id === "id_coordinadores") {
-        return { ...field, options: coordinadores };
-      } else if (field.id === "id_ubicacion") {
-        return { ...field, options: ubicaciones };
-      }
       return field;
     });
 
@@ -447,6 +262,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     });
     cambiarEstadoModalFiltros(true);
   };
+
 
   const applyFiltros = () => {
     cambiarEstadoModalFiltros(false);
@@ -478,29 +294,27 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Equipo", formFields, [], {}, "create");
+    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
   };
 
-
-  const handleEdit = (equipo) => {
-    setEquipoSeleccionado(equipo);
+  const handleEdit = (aplicacion) => {
+    setAplicacionSeleccionada(aplicacion);
     abrirModal(
-      `Actualizar ${equipo.nombre_equipo} `,
+      `Actualizar ${aplicacion.nombre_aplicativo}`,
       formFields,
-      ["nombre_equipo", "sereal"],
-      equipo,
+      ["sereal"],
+      aplicacion,
       "update"
     );
   };
 
-
-  const handleInfo = (equipo) => {
-    setEquipoSeleccionado(equipo);
+  const handleInfo = (aplicacion) => {
+    setAplicacionSeleccionada(aplicacion);
     abrirModal(
-      `Información de ${equipo.nombre_equipo}`,
+      `Información de ${aplicacion.nombre_aplicativo}`,
       formFields,
       ALL_INPUT_IDS,
-      equipo,
+      aplicacion,
       "detail"
     );
   };
@@ -509,14 +323,13 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     setCurrentPage(pageNumber);
   };
 
-
-  const filteredEquipos = equipos.filter((equipo) => {
-    const searchString = `${equipo.id_equipo} ${equipo.nombre_equipo} ${equipo.modelo} ${equipo.sereal} ${equipo.nombre_estado_equipo}`.toLowerCase();
+  const filteredAplicaciones = aplicaciones.filter((aplicacion) => {
+    const searchString = `${aplicacion.id_aplicacion} ${aplicacion.nombre_aplicativo}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(equipo[key]) === String(filtroValues[key]);
+      return String(aplicacion[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -524,29 +337,28 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredEquipos.slice(
+  const currentRecords = filteredAplicaciones.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredEquipos.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredAplicaciones.length / recordsPerPage);
 
   return (
     <>
-      <TarjetasEquipos
-        TotalEquipos={TotalEquipos}
-        totalequiposAsignados={totalequiposAsignados}
-        totalEquiposDisponibles={totalEquiposDisponibles}
-        totalLicenciasEquipos={totalLicenciasEquipos}
-      />
-
-      <div className="contenedor-activos">
+      <div style={{ marginTop: '-2vh' }}>
+        <TarjetasAplicaciones
+          totalPersonasActivas={totalPersonasActivas}
+          totalPersonasInactivas={totalPersonasInactivas}
+          totalAplicaciones={totalAplicaciones} />
+      </div>
+      <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">
         <div className="row-activos">
-          <div className="equipos">
-            <h1>Equipos</h1>
+          <div className="Personas">
+            <h1>Aplicaciones</h1>
           </div>
-          <div className="contbuscador-equipos">
+          <div style={{ marginLeft: '3vw' }} className="contbuscador-personas">
             <input
-              className="buscador-equipos"
+              className="buscador-personas"
               type="text"
               placeholder="Buscar"
               value={searchTerm}
@@ -559,20 +371,20 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           </div>
           <div>
             <FontAwesomeIcon
-              className="agregar-equipos"
+              style={{ marginLeft: '29vw' }}
+              className="agregar-personas"
               onClick={() => handleCreate()}
               icon={faPlus}
             />
+            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
           </div>
-          <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+          <Divtabla style={{ maxHeight: "36.7vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "0vw" }}>ID Equipo</th>
-                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Equipo</th>
-                  <th style={{ paddingLeft: "6vw" }}>Numero Serial</th>
-                  <th style={{ paddingLeft: "2.6vw" }}>Modelo</th>
-                  <th style={{ paddingLeft: "0.5vw" }}>Estado</th>
+                  <th style={{ paddingLeft: "4vw" }}>ID</th>
+                  <th style={{ paddingLeft: "3.5vw" }}>Nombre Aplicativo</th>
+                  <th>Fecha de Instalacion</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
@@ -592,35 +404,17 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((equipo) => (
-                    <tr key={equipo.id_equipo}>
-                      <td>{equipo.id_equipo}</td>
-                      <td style={{ paddingLeft: "4vw" }}>{equipo.nombre_equipo}</td>
-                      <td>{equipo.sereal}</td>
-                      <td>{equipo.modelo}</td>
-                      <td
-                        style={{
-                          color:
-                            equipo.nombre_estado_equipo === "Asignado"
-                              ? "#10A142"
-                              : "#ff0000",
-                          paddingLeft: "0vw"
-                        }}
-                      >
-                        {equipo.nombre_estado_equipo}
-                      </td>
-                      <td>
+                  currentRecords.map((aplicacion) => (
+                    <tr key={aplicacion.id_aplicacion}>
+                      <td style={{ paddingLeft: "4.1vw" }}>{aplicacion.id_aplicacion}</td>
+                      <td style={{ paddingLeft: "3.3vw" }}>{aplicacion.nombre_aplicativo}</td>
+                      <td style={{ paddingLeft: "5.5vw" }}>{aplicacion.fecha_instalacion}</td>
+                      <td style={{ paddingLeft: "4.5vw" }}>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(equipo)}
+                          onClick={() => handleEdit(aplicacion)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(equipo)}
-                        >
-                          <FontAwesomeIcon icon={faFileLines} />
                         </button>
                       </td>
                     </tr>
@@ -631,7 +425,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           </Divtabla>
         </div>
       </div>
-
       <Paginate
         currentPage={currentPage}
         totalPages={totalPages}
@@ -643,13 +436,13 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createEquipo}
-        onUpdate={updateEquipo}
+        onCreate={createAplicacion}
+        onUpdate={updateAplicacion}
       >
         {modalConfig.contenido}
       </Modal>
 
-      <Modal
+      <ModalFiltros
         estado={estadoModalFiltros}
         cambiarEstado={cambiarEstadoModalFiltros}
         titulo="Agregar Filtros"
@@ -664,25 +457,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           onFiltroChange={handleFiltroChange}
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
-            if (field.id === "id_marcaequipo") {
-              return { ...field, options: marcaEquipo };
-            } else if (field.id === "id_so") {
-              return { ...field, options: SO };
-            } else if (field.id === "id_ram") {
-              return { ...field, options: memoriaRam };
-            } else if (field.id === "id_discoduro") {
-              return { ...field, options: discoDuro };
-            } else if (field.id === "id_tipopropiedad") {
-              return { ...field, options: tipoPropiedad };
-            } else if (field.id === "id_tipoequipo") {
-              return { ...field, options: tipoEquipo };
-            } else if (field.id === "id_estadoequipo") {
-              return { ...field, options: estadoEquipo };
-            } else if (field.id === "id_coordinadores") {
-              return { ...field, options: coordinadores };
-            } else if (field.id === "id_ubicacion") {
-              return { ...field, options: ubicaciones };
-            }
             return field;
           })}
         />
@@ -709,12 +483,13 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
             onClick={() => setShowFilterOptions((prev) => !prev)}
           />
         </AgregarFiltroContainer>
-      </Modal>
+      </ModalFiltros>
     </>
   );
 }
 
-export default TablaEquiposBack;
+export default TablaAplicacionesBack;
+
 const Boton = styled.button`
   display: block;
   padding: 10px 30px;
@@ -725,7 +500,6 @@ const Boton = styled.button`
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   transition: 0.3s ease all;
-
 `;
 const LoadingRow = styled.tr`
   height: 200px; /* Ajusta esta altura según sea necesario */

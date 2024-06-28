@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
@@ -12,8 +12,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasLicencias from './tarjetasLicencias';
 
-
-function TablaLicEquiposBack() {
+function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, setTotalLicenciasEquipos }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -123,9 +122,11 @@ function TablaLicEquiposBack() {
     const LicInactivas = licequipos.filter(
       (licequipo) => licequipo.nombre_estado_licencia === "Inactiva"
     ).length;
+    const TotalLicenciasEquipos = licequipos.length;
 
     setTotalActivos(LicActivas);
     setTotalInactivos(LicInactivas);
+    setTotalLicenciasEquipos(TotalLicenciasEquipos);
   }, [licequipos]);
 
   const handleInputChange = (event) => {
@@ -188,7 +189,6 @@ function TablaLicEquiposBack() {
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            {/* (Código de error: {statusCode}) */}
           </div>,
           { position: "bottom-center" }
         );
@@ -254,12 +254,11 @@ function TablaLicEquiposBack() {
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            {/* (Código de error: {statusCode}) */}
           </div>,
           { position: "bottom-center", }
         );
       } else {
-        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
+        toast.error(`${errorMessage} (Código de error: {statusCode})`);
       }
       cambiarEstadoModal(false);
     } finally {
@@ -418,8 +417,10 @@ function TablaLicEquiposBack() {
     <>
       <div style={{ marginTop: '-2vh' }}>
         <TarjetasLicencias
-          totalActivos={totalActivos} // Pasar el total de activos como props
-          totalInactivos={totalInactivos} // Pasar el total de inactivos como props
+          totalActivos={totalActivos}
+          totalInactivos={totalInactivos}
+          totalLicenciasPersonas={totalLicenciasPersonas}
+          totalLicenciasEquipos={totalLicenciasEquipos} // Pasar el total aquí
         />
       </div>
       <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">

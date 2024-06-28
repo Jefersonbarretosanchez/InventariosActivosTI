@@ -322,11 +322,8 @@ class LicenciasAreasListCreate(generics.ListCreateAPIView):
 
         errors = {}
 
-        if LicenciaArea.objects.filter(sereal=sereal).exists():
-            errors["Serial"] = sereal
-
-        # if errors:
-        #     return Response({'message': 'Error Al Crear La Licencia',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+        if errors:
+            return Response({'message': 'Error Al Crear La Licencia',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             response = super().create(request, *args, **kwargs)
