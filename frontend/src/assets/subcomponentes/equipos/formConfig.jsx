@@ -101,27 +101,27 @@ export const formFields = [
     id: "id_coordinadores",
     label: "Coordinador Bodega",
     type: "select",
-    required: true,
+    required: false,
     options: [],
   },
   {
     id: "id_ubicacion",
     label: "Ubicación Bodega",
     type: "select",
-    required: true,
+    required: false,
     options: [],
   },
   {
     id: "costo",
     label: "Costo Adquisición",
     type: "number",
-    required: true,
+    required: false,
   },
   {
     id: "observacion",
     label: "Observaciones",
     type: "text",
-    required: true,
+    required: false,
   },
 ];
 

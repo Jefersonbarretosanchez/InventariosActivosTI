@@ -486,7 +486,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
                       <td
                         style={{
                           color:
-                            licpersona.nombre_estado_licencia === "Activa"
+                            licpersona.nombre_estado_licencia === "Activa" || licpersona.nombre_estado_licencia === "Asignada"
                               ? "#10A142"
                               : "#ff0000",
                           paddingLeft: "1.5vw"
