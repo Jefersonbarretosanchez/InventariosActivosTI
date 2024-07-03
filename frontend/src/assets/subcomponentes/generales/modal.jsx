@@ -20,7 +20,7 @@ const Modal = ({
     const formElements = document.querySelectorAll('.form-control, .form-select');
     const newErrors = {};
     formElements.forEach(element => {
-      if (!element.value && !element.disabled) {
+      if (!element.value && !element.disabled && (element.name !== "costo" && element.name !== "observacion")) {
         newErrors[element.name] = 'Campo obligatorio';
       }
       if ((element.name === 'nombres' || element.name === 'apellidos') && element.value && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(element.value)) {
@@ -30,6 +30,19 @@ const Modal = ({
         newErrors[element.name] = 'Formato de correo inválido';
       }
     });
+
+    // Validación adicional para Autocomplete
+    const autocompleteElements = document.querySelectorAll('.autocomplete-control');
+    autocompleteElements.forEach(element => {
+      console.log(`Validating autocomplete: ${element.getAttribute('data-name')}`);
+      console.log(`Data value: ${element.getAttribute('data-value')}`);
+
+      if (!element.getAttribute('data-value') && (element.getAttribute('data-name') !== "id_ubicacion" && element.getAttribute('data-name') !== "id_coordinadores")) {
+        newErrors[element.getAttribute('data-name')] = 'Campo obligatorio';
+      }
+    });
+
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
