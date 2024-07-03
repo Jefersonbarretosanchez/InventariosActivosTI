@@ -75,9 +75,9 @@ class EquipoSerializer(serializers.ModelSerializer):
     id_tipoequipo = serializers.PrimaryKeyRelatedField(
         queryset=CatTipoequipo.objects.all())
     id_coordinadores = serializers.PrimaryKeyRelatedField(
-        queryset=CatCoordinadores.objects.all())
+        queryset=CatCoordinadores.objects.all(), allow_null=True)
     id_ubicacion = serializers.PrimaryKeyRelatedField(
-        queryset=CatUbicacion.objects.all())
+        queryset=CatUbicacion.objects.all(), allow_null=True)
     id_estadoequipo = serializers.PrimaryKeyRelatedField(
         queryset=CatEstadoequipo.objects.all())
     nombre_estado_equipo = serializers.CharField(
@@ -136,3 +136,74 @@ class EquipoSerializer(serializers.ModelSerializer):
         instance.observacion = validated_data.get('observacion', instance.observacion)
         instance.save()
         return instance
+    
+# Serializadores Modulo asignaciones
+class AsignacionEquiposSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= AsignacionEquipos
+        fields= ['id_asignacion', 'id_trabajador', 'id_equipo', 'fecha_entrega_equipo', 'id_kit_perifericos']
+        
+    def validate(self, data):
+        if self.instance is None:
+            # Comprobar si el equipo ya está asignado
+            asignacion_existente = AsignacionEquipos.objects.filter(id_equipo=data['id_equipo']).first()
+            if asignacion_existente:
+                usuario = asignacion_existente.id_trabajador
+                raise serializers.ValidationError({"id_equipo": f"El equipo ya está asignado a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."}
+            )
+            # Comprobar si el trabajador ya tiene un equipo asignado
+            trabajador_asignacion = AsignacionEquipos.objects.filter(id_trabajador=data['id_trabajador']).first()
+            if trabajador_asignacion:
+                equipo = trabajador_asignacion.id_equipo
+                raise serializers.ValidationError({"id_trabajador": f"El trabajador ya tiene un equipo asignado: {equipo.nombre_equipo} (ID: {equipo.id_equipo})."}
+            )
+        else:
+            # En la actualización, verificar si id_equipo ha cambiado y si el nuevo valor ya está asignado
+            if 'id_equipo' in data and self.instance.id_equipo != data['id_equipo']:
+                asignacion_existente = AsignacionEquipos.objects.filter(id_equipo=data['id_equipo']).first()
+                if asignacion_existente:
+                    usuario = asignacion_existente.id_trabajador
+                    raise serializers.ValidationError(
+                        f"El equipo ya está asignado a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."
+                    )
+        return data
+
+    def create(self, validated_data):
+        equipo = validated_data['id_equipo']
+        equipo.id_estadoequipo = CatEstadoequipo.objects.get(nombre="Asignado")
+        equipo.save()
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+class DesAsignacionEquiposSerializer(serializers.ModelSerializer):
+    id_coordinadores = serializers.PrimaryKeyRelatedField(queryset=CatCoordinadores.objects.all(), required=False, allow_null=True)
+    id_ubicacion = serializers.PrimaryKeyRelatedField(queryset=CatUbicacion.objects.all(), required=False, allow_null=True)
+
+    class Meta:
+        model = AsignacionEquipos
+        fields = '__all__'
+
+    def validate(self, data):
+        if data['id_equipo'].id_estadoequipo.nombre == "Asignado":
+            raise serializers.ValidationError("El equipo ya está asignado a otra persona.")
+        return data
+    
+    def create(self, validated_data):
+        equipo = validated_data['id_equipo']
+        equipo.id_estadoequipo = CatEstadoequipo.objects.get(nombre="Asignado")
+        validated_data.pop('id_coordinadores', None)
+        validated_data.pop('id_ubicacion', None)
+        equipo.save()
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'id_equipo' in validated_data:
+            equipo = validated_data['id_equipo']
+            equipo.id_estadoequipo = CatEstadoequipo.objects.get(nombre="En Bodega")
+            equipo.save()
+        return super().update(instance, validated_data)

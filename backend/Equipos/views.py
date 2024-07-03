@@ -195,3 +195,99 @@ class CatUbicacionViewSet(generics.ListCreateAPIView):
     queryset = CatUbicacion.objects.all()
     serializer_class = UbicacionSerializer
     permission_classes = [AllowAny]
+
+# Vistas Modulo Asignaciones
+class AsignarEquipoView(generics.ListCreateAPIView):
+    queryset = AsignacionEquipos.objects.all()
+    serializer_class = AsignacionEquiposSerializer
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        # Guardar la nueva asignación
+        AsignacionEquipos = serializer.save()
+        print("guarda Asignación")
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            print("Ingresa a Historico")
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Asignación",
+                tipo_activo="Equipo",
+                activo_modificado=AsignacionEquipos.id_equipo.nombre_equipo,
+                descripcion=f'Se asigno el equipo "{AsignacionEquipos.id_equipo.nombre_equipo} a {AsignacionEquipos.id_trabajador.nombres}"'
+            )
+            print("Registro histórico creado exitosamente.")
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+
+class ActualizarAsignacionView(generics.RetrieveUpdateAPIView):
+    serializer_class = AsignacionEquiposSerializer
+    permission_classes = [AllowAny]
+    queryset = AsignacionEquipos.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        if serializer.is_valid():
+            
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
+            self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Asignación Equipos",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DesasignarEquipoView(generics.RetrieveUpdateAPIView):
+    queryset = AsignacionEquipos.objects.all()
+    serializer_class = DesAsignacionEquiposSerializer
+    permission_classes = [AllowAny]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        data = request.data
+        id_coordinadores = data.get('id_coordinadores')
+        id_ubicacion = data.get('id_ubicacion')
+        
+        if not id_coordinadores or not id_ubicacion:
+            return Response({"detail": "Debe proporcionar el coordinador y la ubicación de la bodega."}, status=status.HTTP_400_BAD_REQUEST)
+
+        equipo = instance.id_equipo
+        equipo.id_estadoequipo = CatEstadoequipo.objects.get(nombre="En Bodega")
+        equipo.id_coordinadores_id = id_coordinadores
+        equipo.id_ubicacion_id = id_ubicacion
+        equipo.save()
+
+        # Eliminar el registro de la tabla AsignacionEquipos después de desasignar el equipo
+        instance.delete()
+
+        return Response({"detail": "El equipo ha sido desasignado y el registro ha sido eliminado."}, status=status.HTTP_204_NO_CONTENT)

@@ -14,4 +14,7 @@ urlpatterns = [
     path('estado_equipo/',views.CatEstadoEquipoViewSet.as_view(),name="estado_equipo"),
     path('coordinadores/',views.CatCoordinadoresViewSet.as_view(),name="coordinadores"),
     path('ubicaciones/',views.CatUbicacionViewSet.as_view(),name="ubicaciones"),
+    path('asignar_equipo/', views.AsignarEquipoView.as_view(), name='asignar-equipo'),
+    path('actualizar_asignacion_equipo/<int:pk>/', views.ActualizarAsignacionView.as_view(), name='actualizar_asignacion_equipo'),
+    path('desasignar_equipo/<int:pk>/', views.DesasignarEquipoView.as_view(), name='desasignar-equipo'),
 ]

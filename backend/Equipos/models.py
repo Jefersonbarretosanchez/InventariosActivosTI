@@ -133,6 +133,9 @@ class Equipo(models.Model):
         managed = False
         db_table = 'equipo'
         
+    def __str__(self):
+        return str(self.nombre_equipo)
+        
 class CatEstadoPeriferico(models.Model):
     id_estado_periferico = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
