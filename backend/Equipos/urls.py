@@ -22,6 +22,4 @@ urlpatterns = [
     path('estado_perifericos/', views.EstadoPerifericosView.as_view(), name='estado_perifericos_create'),
     path('kit_perifericos/', views.KitPerifericosListCreateView.as_view(), name='kit_perifericos_create'),
     path('kit_perifericos/<int:pk>/', views.KitPerifericosDetailView.as_view(), name='kit_perifericos_detail'),
-    
-    path('kits/', views.kits_list, name='kits_list'),
 ]
