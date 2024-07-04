@@ -228,7 +228,7 @@ class Historicos(models.Model):
     tipo_activo = models.CharField(max_length=100, verbose_name="Tipo Activo")
     activo_modificado = models.CharField(
         max_length=100, verbose_name="Activo Modificado")
-    descripcion = models.CharField(max_length=200, verbose_name="Descripcion")
+    descripcion = models.CharField(max_length=500, verbose_name="Descripcion")
 
     class Meta:
         managed = False

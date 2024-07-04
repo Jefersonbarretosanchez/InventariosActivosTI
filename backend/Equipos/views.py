@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.generic import DetailView
 
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
@@ -197,6 +198,11 @@ class CatUbicacionViewSet(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
 # Vistas Modulo Asignaciones
+class EquiposAsignacionViewSet(generics.ListAPIView):
+    queryset = Equipo.objects.all()
+    serializer_class = EquiposAsignacionSerializer
+    permission_classes = [AllowAny]
+
 class AsignarEquipoView(generics.ListCreateAPIView):
     queryset = AsignacionEquipos.objects.all()
     serializer_class = AsignacionEquiposSerializer
@@ -282,12 +288,75 @@ class DesasignarEquipoView(generics.RetrieveUpdateAPIView):
             return Response({"detail": "Debe proporcionar el coordinador y la ubicación de la bodega."}, status=status.HTTP_400_BAD_REQUEST)
 
         equipo = instance.id_equipo
+
+        # Guardar valores originales antes de la actualización
+        original_values = {
+            'id_coordinadores': equipo.id_coordinadores,
+            'id_ubicacion': equipo.id_ubicacion,
+            'id_estadoequipo': equipo.id_estadoequipo,
+        }
+
+        # Actualizar el equipo
         equipo.id_estadoequipo = CatEstadoequipo.objects.get(nombre="En Bodega")
         equipo.id_coordinadores_id = id_coordinadores
         equipo.id_ubicacion_id = id_ubicacion
         equipo.save()
 
+        # Guardar valores actualizados después de la actualización
+        updated_values = {
+            'id_coordinadores': equipo.id_coordinadores,
+            'id_ubicacion': equipo.id_ubicacion,
+            'id_estadoequipo': equipo.id_estadoequipo,
+        }
+
+        # Registrar los cambios en el historial
+        for field, original_value in original_values.items():
+            current_value = updated_values[field]
+            if original_value != current_value:
+                verbose_name = equipo._meta.get_field(field).verbose_name
+                Historicos.objects.create(
+                    usuario=self.request.user if self.request.user.is_authenticated else None,
+                    correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                    tipo_cambio="Actualización",
+                    tipo_activo="Equipo",
+                    activo_modificado=verbose_name,
+                    descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value} (Por Desasignacion Equipos)'
+                )
+
+        # Guardar el histórico de la desasignación
+        Historicos.objects.create(
+            usuario=self.request.user if self.request.user.is_authenticated else None,
+            correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+            tipo_cambio="Desasignación",
+            tipo_activo="Equipo",
+            activo_modificado=equipo.nombre_equipo,
+            descripcion=f'Se elimino la asignación del equipo "{equipo.nombre_equipo}" a {instance.id_trabajador.nombres} {instance.id_trabajador.apellidos}'
+        )
+
         # Eliminar el registro de la tabla AsignacionEquipos después de desasignar el equipo
         instance.delete()
 
         return Response({"detail": "El equipo ha sido desasignado y el registro ha sido eliminado."}, status=status.HTTP_204_NO_CONTENT)
+    
+# Vistas Perifericos
+class EstadoPerifericosView(generics.ListCreateAPIView):
+    queryset= CatEstadoPeriferico.objects.all()
+    serializer_class= EstadoPerifericosSerializer
+    permission_classes=[AllowAny]
+    
+class PerifericosListCreate(generics.ListCreateAPIView):
+    queryset=Perifericos.objects.all()
+    serializer_class= PerifericosSerializer
+    permission_classes=[AllowAny]
+
+class KitPerifericosListCreateView(generics.ListCreateAPIView):
+    queryset = KitPerifericos.objects.all()
+    serializer_class = KitPerifericosSerializer
+    permission_classes = [AllowAny]
+
+class KitPerifericosDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = KitPerifericos.objects.all()
+    serializer_class = KitPerifericosSerializer
+    permission_classes = [AllowAny]
+ 
+# vista para template basico de los datos del kit de perifericos    

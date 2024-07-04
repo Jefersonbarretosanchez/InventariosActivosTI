@@ -17,4 +17,11 @@ urlpatterns = [
     path('asignar_equipo/', views.AsignarEquipoView.as_view(), name='asignar-equipo'),
     path('actualizar_asignacion_equipo/<int:pk>/', views.ActualizarAsignacionView.as_view(), name='actualizar_asignacion_equipo'),
     path('desasignar_equipo/<int:pk>/', views.DesasignarEquipoView.as_view(), name='desasignar-equipo'),
+    path('equipos_asignacion/',views.EquiposAsignacionViewSet.as_view(),name="equipos_asignacion"),
+    path('perifericos/', views.PerifericosListCreate.as_view(), name='perifericos_create'),
+    path('estado_perifericos/', views.EstadoPerifericosView.as_view(), name='estado_perifericos_create'),
+    path('kit_perifericos/', views.KitPerifericosListCreateView.as_view(), name='kit_perifericos_create'),
+    path('kit_perifericos/<int:pk>/', views.KitPerifericosDetailView.as_view(), name='kit_perifericos_detail'),
+    
+    path('kits/', views.kits_list, name='kits_list'),
 ]

@@ -10,30 +10,25 @@ class BaseModel(serializers.ModelSerializer):
     class Meta:
         abstract = True
 
-
 class MarcaEquipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatMarcaequipo
         fields = ['id_marcaequipo', 'nombre', 'fecha_registro']
-
 
 class SoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatSo
         fields = ['id_so', 'nombre', 'fecha_registro']
 
-
 class MRamSerializer(BaseModel):
     class Meta:
         model = CatMemoriaram
         fields = ['id_ram', 'nombre', 'fecha_registro']
 
-
 class DiscoDuroSerializer(BaseModel):
     class Meta:
         model = CatDiscoduro
         fields = ['id_discoduro', 'nombre', 'fecha_registro']
-
 
 class TipoPropiedadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,7 +54,6 @@ class UbicacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatUbicacion
         fields = ['id_ubicacion', 'nombre','fecha_registro']
-
 
 class EquipoSerializer(serializers.ModelSerializer):
     id_marcaequipo = serializers.PrimaryKeyRelatedField(
@@ -138,6 +132,11 @@ class EquipoSerializer(serializers.ModelSerializer):
         return instance
     
 # Serializadores Modulo asignaciones
+class EquiposAsignacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Equipo
+        fields=['id_equipo','nombre_equipo']
+
 class AsignacionEquiposSerializer(serializers.ModelSerializer):
     class Meta:
         model= AsignacionEquipos
@@ -207,3 +206,34 @@ class DesAsignacionEquiposSerializer(serializers.ModelSerializer):
             equipo.id_estadoequipo = CatEstadoequipo.objects.get(nombre="En Bodega")
             equipo.save()
         return super().update(instance, validated_data)
+    
+# Serializadores Perifericos
+class EstadoPerifericosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=CatEstadoPeriferico
+        fields= '__all__'
+        
+class PerifericosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perifericos
+        fields = ['id_perifericos', 'nombre_periferico', 'id_estado_periferico', 'modelo', 'sereal', 'costo']
+
+class KitPerifericosSerializer(serializers.ModelSerializer):
+    nombre_periferico = serializers.CharField(source='id_periferico.nombre', read_only=True)
+    perifericos = serializers.PrimaryKeyRelatedField(queryset=Perifericos.objects.all(), many=True)
+
+    class Meta:
+        model = KitPerifericos
+        fields = ['id_kit_perifericos', 'perifericos','nombre_periferico']
+
+    def create(self, validated_data):
+        perifericos_data = validated_data.pop('perifericos')
+        kit_perifericos = KitPerifericos.objects.create(**validated_data)
+        kit_perifericos.perifericos.set(perifericos_data)
+        return kit_perifericos
+
+    def update(self, instance, validated_data):
+        perifericos_data = validated_data.pop('perifericos')
+        instance.perifericos.set(perifericos_data)
+        instance.save()
+        return instance
