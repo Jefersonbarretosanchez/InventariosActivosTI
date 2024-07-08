@@ -5,7 +5,7 @@ import activos from "../../imagenes/auricular.png";
 import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/camara-web.png";
 
-function TarjetasAsigEquipos() {
+function TarjetasAsigEquipos({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-equipos">
@@ -16,7 +16,7 @@ function TarjetasAsigEquipos() {
             </Link>
           </div>
           <div className="estadisticas-info-asigequipos">
-            <span className="estadisticas-numero-activos">250</span>
+            <span className="estadisticas-numero-activos">{totalequiposAsignados}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos">
               Total Equipos Asignados
@@ -30,7 +30,7 @@ function TarjetasAsigEquipos() {
             <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos">
-            <span className="estadisticas-numero-activos">75</span>
+            <span className="estadisticas-numero-activos">{totalEquiposDisponibles}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos">
               Total Equipos Disponibles
@@ -44,7 +44,7 @@ function TarjetasAsigEquipos() {
             <img src={activos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos">
-            <span className="estadisticas-numero-activos">92</span>
+            <span className="estadisticas-numero-activos">{totalperifericosAsignados}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos">
               Total Perifericos Asignados
@@ -58,7 +58,7 @@ function TarjetasAsigEquipos() {
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos">
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalperifericosDisponibles}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos">
               Total Perifericos Disponibles

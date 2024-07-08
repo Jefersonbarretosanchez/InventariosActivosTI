@@ -2,35 +2,41 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
+import ModalDesasignacion from "../generales/modalDesasignacion"
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfigLicAreas";
+import { formFields, formFields2, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
-import TarjetasLicencias from './tarjetasLicencias';
+import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
-
-function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
+function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
 
-  const [licareas, setLicAreas] = useState([]);
-  const [licareaSeleccionada, setLicareaSeleccionada] = useState(null);
-  const [contrato, setContrato] = useState([]);
-  const [ceco, setCentroCostos] = useState([]);
-  const [estadoLicencia, setEstadoLicencia] = useState([]);
-  const [responsable, setResponsable] = useState([]);
+  const [asigequipos, setAsigEquipos] = useState([]);
+  const [desasigequipos, setDesasigEquipos] = useState([]);
+  const [asigEquiposSeleccionado, setasigEquiposSeleccionado] = useState(null);
+  const [desasigEquiposSeleccionado, setDesasigEquiposSeleccionado] = useState(null);
+  const [equipo, setEquipo] = useState([]);
+  const [trabajador, setTrabajador] = useState([]);
+  const [perifericos, setPerifericos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newLicAreaData, setNewLicAreaData] = useState({});
+  const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
+  const [newAsigEquipoData, setnewAsigEquipoData] = useState({});
+  const [newDesasigEquipoData, setnewDesasigEquipoData] = useState({});
   const [actionType, setActionType] = useState("");
-  const [totalActivos, setTotalActivos] = useState(0); // Estado para el total de personas activas
-  const [totalInactivos, setTotalInactivos] = useState(0); // Estado para el total de personas inactivas
+
+
+  const [coordinadores, setCoordinadores] = useState([]);
+  const [ubicaciones, setUbicaciones] = useState([]);
+
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -38,12 +44,11 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   const [recordsPerPage, setRecordsPerPage] = useState(15); // Cambiado a 15
 
   const [estadoModalFiltros, cambiarEstadoModalFiltros] = useState(false);
+  const [estadoModalDesasignacion, cambiarEstadoModalDesasignacion] = useState(false);
   const [filtroValues, setFiltroValues] = useState({});
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
-  const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
-
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -58,68 +63,80 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchlicAreas = async () => {
+  const fetchasigEquipos = async () => {
     setIsLoading(true);
     try {
-      const responselicAreas = await axios.get(
-        "http://localhost:8000/api/licencias/area/"
+      const responseasigEquipos = await axios.get(
+        "http://localhost:8000/api/asignar_equipo/"
       );
-      setLicAreas(responselicAreas.data);
+      setAsigEquipos(responseasigEquipos.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de Licencias Areas");
+      toast.error("Hubo un error en la carga de datos de Asignacion Equipos");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchlicAreas();
+    fetchasigEquipos();
   }, []);
+
 
   useEffect(() => {
     const fetchCatalogos = async () => {
       setIsLoading(true);
       setIsCatalogsLoading(true);
       try {
-        const responseCentroCostos = await axios.get(
-          "http://localhost:8000/api/centro_costos/"
+        const responseEquipos = await axios.get(
+          "http://localhost:8000/api/equipos/"
         );
-        setCentroCostos(
-          responseCentroCostos.data.map((item) => ({
-            value: item.id_centro_costo,
-            label: item.nombre, // Mantener el nombre original en el valor
+        setEquipo(
+          responseEquipos.data.map((item) => ({
+            value: item.id_equipo,
+            label: item.nombre_equipo, // Mantener el nombre original en el valor
           }))
         );
 
-        const responseContratos = await axios.get(
-          "http://localhost:8000/api/licencias/contratos/"
-        );
-        setContrato(
-          responseContratos.data.map((item) => ({
-            value: item.id_contrato,
-            label: item.nombre, // Mantener el nombre original en el valor
-          }))
-        );
-
-        const responseEstado = await axios.get(
-          "http://localhost:8000/api/licencias/estado/"
-        );
-        setEstadoLicencia(
-          responseEstado.data.map((item) => ({
-            value: item.id_estado_licencia,
-            label: item.nombre, // Mantener el nombre original en el valor
-          }))
-        );
-
-        const responseSolicitante = await axios.get(
+        const responseTrabajador = await axios.get(
           "http://localhost:8000/api/licencias/responsables/"
         );
-        setResponsable(
-          responseSolicitante.data.map((item) => ({
+        setTrabajador(
+          responseTrabajador.data.map((item) => ({
             value: item.id_trabajador,
-            label: item.nombres + " " + item.apellidos,
+            label: item.nombres, // Mantener el nombre original en el valor
           }))
         );
+
+        const responsePerifericos = await axios.get(
+          "http://localhost:8000/api/kit_perifericos/"
+        );
+        setPerifericos(
+          responsePerifericos.data.map((item) => ({
+            value: item.id_kit_perifericos,
+            label: item.id_kit_perifericos,
+          }))
+        );
+
+        const responseCoordinadores = await axios.get(
+          "http://localhost:8000/api/coordinadores/"
+        );
+        setCoordinadores(
+          responseCoordinadores.data.map((item) => ({
+            value: item.id_coordinadores,
+            label: item.nombre,
+          }))
+        );
+
+        const responseUbicaciones = await axios.get(
+          "http://localhost:8000/api/ubicaciones/"
+        );
+        setUbicaciones(
+          responseUbicaciones.data.map((item) => ({
+            value: item.id_ubicacion,
+            label: item.nombre,
+          }))
+        );
+
       } catch (error) {
         toast.error("Hubo un error en la carga de datos de los catalogos.");
       } finally {
@@ -131,21 +148,9 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     fetchCatalogos();
   }, []);
 
-  useEffect(() => {
-    const LicActivas = licareas.filter(
-      (licarea) => licarea.nombre_estado_licencia === "Activa"
-    ).length;
-    const LicInactivas = licareas.filter(
-      (licarea) => licarea.nombre_estado_licencia === "Inactiva"
-    ).length;
-
-    setTotalActivos(LicActivas);
-    setTotalInactivos(LicInactivas);
-  }, [licareas]);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewLicAreaData((prevData) => ({ ...prevData, [name]: value }));
+    setnewAsigEquipoData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -161,26 +166,25 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     setCurrentPage(1);
   };
 
-  const createlicArea = async () => {
+  const createasigEquipo = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newLicAreaData,
-        id_centro_costo: parseInt(newLicAreaData.id_centro_costo, 10),
-        id_contrato: parseInt(newLicAreaData.id_contrato, 10),
-        id_estado_licencia: parseInt(newLicAreaData.id_estado_licencia, 10),
-        id_responsable: parseInt(newLicAreaData.id_responsable, 10),
+        ...newAsigEquipoData,
+        id_equipo: parseInt(newAsigEquipoData.id_equipo, 10),
+        id_trabajador: parseInt(newAsigEquipoData.id_trabajador, 10),
+        id_kit_perifericos: parseInt(newAsigEquipoData.id_kit_perifericos, 10),
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/licencias/area/",
+        "http://localhost:8000/api/asignar_equipo/",
         formattedData
       );
-      const nuevalicArea = response.data;
-      setLicAreas([...licareas, nuevalicArea]);
-      setNewLicAreaData({});
+      const nuevaasigEquipo = response.data;
+      setAsigEquipos([...asigequipos, nuevaasigEquipo]);
+      setnewAsigEquipoData({});
       cambiarEstadoModal(false);
-      toast.success("Licencia Area creada exitosamente!");
+      toast.success("La Asignacion de equipo creada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -204,7 +208,6 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            {/* (Código de error: {statusCode}) */}
           </div>,
           { position: "bottom-center" }
         );
@@ -217,37 +220,39 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     }
   };
 
-  const updateLicArea = async () => {
+  const createDesasigEquipo = async () => {
     setIsLoading(true);
     try {
+
       const updatedData = {
-        ...licareaSeleccionada,
-        ...newLicAreaData,
+        ...desasigEquiposSeleccionado,
+        ...newAsigEquipoData,
       };
 
       const formattedData = {
         ...updatedData,
-        id_centro_costo: parseInt(newLicAreaData.id_centro_costo, 10),
-        id_contrato: parseInt(newLicAreaData.id_contrato, 10),
-        id_estado_licencia: parseInt(newLicAreaData.id_estado_licencia, 10),
-        id_responsable: parseInt(newLicAreaData.id_responsable, 10),
+        id_equipo: parseInt(newAsigEquipoData.id_equipo, 10),
+        id_trabajador: parseInt(newAsigEquipoData.id_trabajador, 10),
+        id_coordinadores: parseInt(newAsigEquipoData.id_coordinadores, 10),
+        id_ubicacion: parseInt(newAsigEquipoData.id_ubicacion, 10),
       };
+      console.log("id equipo:" + formattedData.id_equipo);
 
       const response = await axios.put(
-        `http://localhost:8000/api/licencias/area/${licareaSeleccionada.id_licencia}/`,
+        `http://localhost:8000/api/desasignar_equipo/${desasigEquiposSeleccionado.id_asignacion}/`,
         formattedData
       );
-      const updatedlicArea = response.data;
-      setLicAreas(
-        licareas.map((licarea) =>
-          licarea.id_licencia === updatedlicArea.id_licencia
-            ? updatedlicArea
-            : licarea
-        )
-      );
-      setNewLicAreaData({});
-      cambiarEstadoModal(false);
-      toast.success("Licencia Area actualizada exitosamente!");
+
+      const nuevaDesasigEquipo = response.data;
+      setDesasigEquipos(
+        desasigequipos.map((desasigequipo) =>
+          desasigequipo.id_asignacion === nuevaDesasigEquipo.id_asignacion
+            ? nuevaDesasigEquipo
+            : desasigequipo
+        ));
+      setnewDesasigEquipoData({});
+      cambiarEstadoModalDesasignacion(false);
+      toast.success("La Desasignacion del equipo fue exitosa!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -271,7 +276,71 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            {/* (Código de error: {statusCode}) */}
+          </div>,
+          { position: "bottom-center" }
+        );
+      } else {
+        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
+      }
+      cambiarEstadoModalDesasignacion(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateAsigEquipo = async () => {
+    setIsLoading(true);
+    try {
+      const updatedData = {
+        ...asigEquiposSeleccionado,
+        ...newAsigEquipoData,
+      };
+
+      const formattedData = {
+        ...updatedData,
+        id_equipo: parseInt(newAsigEquipoData.id_equipo, 10),
+        id_trabajador: parseInt(newAsigEquipoData.id_trabajador, 10),
+        id_kit_perifericos: parseInt(newAsigEquipoData.id_kit_perifericos, 10),
+      };
+
+      const response = await axios.put(
+        `http://localhost:8000/api/actualizar_asignacion_equipo/${asigEquiposSeleccionado.id_asignacion}/`,
+        formattedData
+      );
+      const updatedasigEquipo = response.data;
+      setAsigEquipos(
+        asigequipos.map((asigequipo) =>
+          asigequipo.id_asignacion === updatedasigEquipo.id_asignacion
+            ? updatedasigEquipo
+            : asigequipo
+        )
+      );
+      setnewAsigEquipoData({});
+      cambiarEstadoModal(false);
+      toast.success("La Asignacion del equipo fue actualizada exitosamente!");
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
+      const statusCode = error.response ? error.response.status : 500;
+
+      if (error.response && error.response.data.errors) {
+        const specificErrors = error.response.data.errors;
+
+        const formattedErrors = Object.keys(specificErrors)
+          .map((key) => `${key}: ${specificErrors[key]}`)
+          .join("<br />");
+
+        toast.error(
+          <div>
+            {errorMessage} <br />
+            <br />
+            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
+            <br />
+            <strong>
+              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
+              <br />
+            </strong>
           </div>,
           { position: "bottom-center", }
         );
@@ -283,6 +352,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
       setIsLoading(false);
     }
   };
+
 
   const abrirModal = (
     titulo,
@@ -296,24 +366,22 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
       return;
     }
     let fieldsWithOptions = fields.map((field) => {
-      if (field.id === "id_centro_costo") {
-        return { ...field, options: ceco };
-      } else if (field.id === "id_contrato") {
-        return { ...field, options: contrato };
-      } else if (field.id === "id_estado_licencia") {
-        return { ...field, options: estadoLicencia };
-      } else if (field.id === "id_responsable") {
-        return { ...field, options: responsable };
+      if (field.id === "id_equipo") {
+        return { ...field, options: equipo };
+      } else if (field.id === "id_trabajador") {
+        return { ...field, options: trabajador };
+      } else if (field.id === "id_kit_perifericos") {
+        return { ...field, options: perifericos };
       }
       return field;
     });
 
-    if (action === "create") {
-      initialValues.id_estado_licencia = estadoLicencia.find(e => e.label === "Activa")?.value || "";
-      fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_licencia");
+    if (action === "degree") {
+      setnewDesasigEquipoData(initialValues);
+    } else {
+      setnewAsigEquipoData(initialValues);
     }
 
-    setNewLicAreaData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
@@ -326,19 +394,22 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         />
       ),
     });
-    cambiarEstadoModal(true);
+    if (action === "degree") {
+      cambiarEstadoModalDesasignacion(true);
+    } else {
+      cambiarEstadoModal(true);
+    }
+
   };
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
-      if (field.id === "id_centro_costo") {
-        return { ...field, options: ceco };
-      } else if (field.id === "id_contrato") {
-        return { ...field, options: contrato };
-      } else if (field.id === "id_estado_licencia") {
-        return { ...field, options: estadoLicencia };
-      } else if (field.id === "id_responsable") {
-        return { ...field, options: responsable };
+      if (field.id === "id_equipo") {
+        return { ...field, options: equipo };
+      } else if (field.id === "id_trabajador") {
+        return { ...field, options: trabajador };
+      } else if (field.id === "id_kit_perifericos") {
+        return { ...field, options: perifericos };
       }
       return field;
     });
@@ -390,27 +461,50 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Licencia", formFields, [], {}, "create");
+    abrirModal("Crear Asignacion Equipo", formFields, [], {}, "create");
   };
 
-  const handleEdit = (licarea) => {
-    setLicareaSeleccionada(licarea);
+  const handleDesgree = (desasigequipos) => {
+    setDesasigEquiposSeleccionado(desasigequipos);
     abrirModal(
-      `Actualizar ${licarea.nombre_licencia}`,
+      `Desasignar Equipo`,
+      formFields2.map((field) => {
+        if (field.id === "id_trabajador") {
+          return { ...field, options: trabajador };
+        } else if (field.id === "id_coordinadores") {
+          return { ...field, options: coordinadores };
+        } else if (field.id === "id_ubicacion") {
+          return { ...field, options: ubicaciones };
+        }
+        return field;
+      }),
+      ["id_trabajador", "id_equipo"],
+      desasigequipos,
+      "degree"
+    );
+  };
+
+
+
+
+  const handleEdit = (asigequipo) => {
+    setasigEquiposSeleccionado(asigequipo);
+    abrirModal(
+      `Actualizar ${asigequipo.id_asignacion}`,
       formFields,
-      ["sereal"],
-      licarea,
+      [""],
+      asigequipo,
       "update"
     );
   };
 
-  const handleInfo = (licarea) => {
-    setLicareaSeleccionada(licarea);
+  const handleInfo = (asigequipo) => {
+    setasigEquiposSeleccionado(asigequipo);
     abrirModal(
-      `Información de ${licarea.nombre_licencia}`,
+      `Información de ${asigequipo.id_asignacion}`,
       formFields,
       ALL_INPUT_IDS,
-      licarea,
+      asigequipo,
       "detail"
     );
   };
@@ -419,13 +513,13 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     setCurrentPage(pageNumber);
   };
 
-  const filteredlicAreas = licareas.filter((licarea) => {
-    const searchString = `${licarea.id_licencia} ${licarea.nombre_licencia} ${licarea.sereal} ${licarea.no_ticket}`.toLowerCase();
+  const filteredasigEquipos = asigequipos.filter((asigequipo) => {
+    const searchString = `${asigequipo.id_asignacion} ${asigequipo.id_equipo} ${asigequipo.id_trabajador} ${asigequipo.id_kit_perifericos}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(licarea[key]) === String(filtroValues[key]);
+      return String(asigequipo[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -433,28 +527,27 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredlicAreas.slice(
+  const currentRecords = filteredasigEquipos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredlicAreas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredasigEquipos.length / recordsPerPage);
 
   return (
     <>
       <div style={{ marginTop: '-2vh' }}>
-        <TarjetasLicencias
-          totalActivos={totalActivos}
-          totalInactivos={totalInactivos}
-          totalLicenciasPersonas={totalLicenciasPersonas}
-          totalLicenciasEquipos={totalLicenciasEquipos}
-        />
+        < TarjetasAsigEquipos
+          totalequiposAsignados={totalequiposAsignados}
+          totalEquiposDisponibles={totalEquiposDisponibles}
+          totalperifericosAsignados={totalperifericosAsignados}
+          totalperifericosDisponibles={totalperifericosDisponibles} />
       </div>
       <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">
         <div className="row-activos">
           <div className="asigEquipos">
-            <h1>Licencias Areas</h1>
+            <h1>Asignacion Equipos</h1>
           </div>
-          <div className="contbuscador-asigEquipos">
+          <div style={{ marginLeft: '0.5vw' }} className="contbuscador-asigEquipos">
             <input
               className="contbuscador-licenciasPer"
               type="text"
@@ -474,17 +567,16 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
               icon={faPlus}
             />
           </div>
+
           <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "2.7vw" }}>ID</th>
-                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Licencia</th>
-                  <th style={{ paddingLeft: "2.6vw" }}>Numero Serial</th>
-                  <th style={{ paddingLeft: "2.8vw" }}>Contrato</th>
-                  <th style={{ paddingLeft: "0vw" }}>Fecha de Vencimiento</th>
-                  <th style={{ paddingLeft: "0vw" }}>Estado</th>
-                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  <th style={{ paddingLeft: "5vw" }}>ID Asignacion</th>
+                  <th style={{ paddingLeft: "6vw" }}>Empleado</th>
+                  <th style={{ paddingLeft: "3vw" }}>Equipo</th>
+                  <th style={{ paddingLeft: "1vw" }}>Fecha Entrega</th>
+                  <th style={{ paddingLeft: "5.8vw" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody >
@@ -503,36 +595,32 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((licarea) => (
-                    <tr key={licarea.id_licencia}>
-                      <td>{licarea.id_licencia}</td>
-                      <td style={{ paddingLeft: "4vw" }}>{licarea.nombre_licencia}</td>
-                      <td>{licarea.sereal}</td>
-                      <td>{licarea.nombre_contrato}</td>
-                      <td>{licarea.fecha_vencimiento}</td>
-                      <td
-                        style={{
-                          color:
-                            licarea.nombre_estado_licencia === "Activa"
-                              ? "#10A142"
-                              : "#ff0000",
-                          paddingLeft: "0.3vw"
-                        }}
-                      >
-                        {licarea.nombre_estado_licencia}
-                      </td>
+                  currentRecords.map((asigequipo) => (
+                    <tr key={asigequipo.id_asignacion}>
+                      <td style={{ paddingLeft: "8.5vw" }}>{asigequipo.id_asignacion}</td>
+                      <td>{asigequipo.nombre_trabajador} {asigequipo.apellido_trabajador}</td>
+                      <td style={{ paddingLeft: "1vw" }}>{asigequipo.nombre_equipo}</td>
+                      <td style={{ paddingLeft: "2vw" }}>{asigequipo.fecha_entrega_equipo}</td>
                       <td>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(licarea)}
+                          onClick={() => handleEdit(asigequipo)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
-                          onClick={() => handleInfo(licarea)}
+                          onClick={() => handleInfo(asigequipo)}
                         >
                           <FontAwesomeIcon icon={faFileLines} />
+                        </button>
+
+                        <button
+                          className="btn-accion"
+                          onClick={() => handleDesgree(asigequipo)}
+
+                        >
+                          <FontAwesomeIcon icon={faMinus} />
                         </button>
                       </td>
                     </tr>
@@ -555,11 +643,24 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createlicArea}
-        onUpdate={updateLicArea}
+        onCreate={createasigEquipo}
+        onUpdate={updateAsigEquipo}
+        onDegree={createDesasigEquipo}
       >
         {modalConfig.contenido}
       </Modal>
+
+      <ModalDesasignacion
+        estado={estadoModalDesasignacion}
+        cambiarEstado={cambiarEstadoModalDesasignacion}
+        titulo={modalConfig.titulo}
+        actionType={actionType}
+        onCreate={createasigEquipo}
+        onUpdate={updateAsigEquipo}
+        onDegree={createDesasigEquipo}
+      >
+        {modalConfig.contenido}
+      </ModalDesasignacion>
 
       <ModalFiltros
         estado={estadoModalFiltros}
@@ -576,12 +677,12 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
           onFiltroChange={handleFiltroChange}
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
-            if (field.id === "id_contrato") {
-              return { ...field, options: contrato };
-            } else if (field.id === "id_estado_licencia") {
-              return { ...field, options: estadoLicencia };
-            } else if (field.id === "id_responsable") {
-              return { ...field, options: responsable };
+            if (field.id === "id_equipo") {
+              return { ...field, options: equipo };
+            } else if (field.id === "id_trabajador") {
+              return { ...field, options: trabajador };
+            } else if (field.id === "id_kit_perifericos") {
+              return { ...field, options: perifericos };
             }
             return field;
           })}
@@ -614,7 +715,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   );
 }
 
-export default TablaLicAreasBack;
+export default TablaAsigEquiposBack;
 
 const Boton = styled.button`
   display: block;

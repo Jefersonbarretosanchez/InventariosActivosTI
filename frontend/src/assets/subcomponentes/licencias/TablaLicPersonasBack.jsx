@@ -41,6 +41,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
+  const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -76,6 +77,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
   useEffect(() => {
     const fetchCatalogos = async () => {
       setIsLoading(true);
+      setIsCatalogsLoading(true);  // Añadido
       try {
         const responseContratos = await axios.get(
           "http://localhost:8000/api/licencias/contratos/"
@@ -110,6 +112,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
         toast.error("Hubo un error en la carga de datos de los catalogos.");
       } finally {
         setIsLoading(false);
+        setIsCatalogsLoading(false);
       }
     };
 
@@ -272,6 +275,10 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
     initialValues = {},
     action = ""
   ) => {
+    if (isCatalogsLoading) {
+      toast.info("Espere a que los datos se carguen completamente.");
+      return;
+    }
     let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_contrato") {
         return { ...field, options: contrato };

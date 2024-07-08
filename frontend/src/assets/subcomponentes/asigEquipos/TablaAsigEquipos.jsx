@@ -7,7 +7,7 @@ import perifericos from "../../imagenes/perifericos_general.webp";
 import { formFields, ALL_INPUT_IDS } from "../equipos/formConfig";
 import FormDinamico from "../generales/formDinamico";
 
-function TablaAsigEquipos() {
+function TablaAsigEquiposBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -203,7 +203,7 @@ function TablaAsigEquipos() {
   );
 }
 
-export default TablaAsigEquipos;
+export default TablaAsigEquiposBack;
 
 const Boton = styled.button`
   display: block;

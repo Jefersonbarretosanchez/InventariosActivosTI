@@ -45,6 +45,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas })
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {

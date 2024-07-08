@@ -17,7 +17,6 @@ import TarjetasEquipos from "./tarjetasEquipos";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
-
 function TablaEquiposBack({ totalLicenciasEquipos }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
@@ -38,6 +37,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const [ubicaciones, setUbicaciones] = useState([]);
   const [estadoEquipo, setEstadoEquipo] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCatalogsLoading, setIsCatalogsLoading] = useState(true); // Estado de carga de catálogos
   const [newEquipoData, setNewEquipoData] = useState({});
   const [actionType, setActionType] = useState("");
   const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
@@ -55,6 +55,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
 
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -67,7 +68,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   const fetchEquipos = async () => {
     setIsLoading(true);
@@ -87,10 +87,9 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     fetchEquipos();
   }, []);
 
-
   useEffect(() => {
     const fetchCatalogos = async () => {
-      setIsLoading(true);
+      setIsCatalogsLoading(true);
       try {
         const responseEstadoEquipo = await axios.get(
           "http://localhost:8000/api/estado_equipo/"
@@ -184,7 +183,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
       } catch (error) {
         toast.error("Hubo un error en la carga de datos de los catalogos.");
       } finally {
-        setIsLoading(false);
+        setIsCatalogsLoading(false);
       }
     };
 
@@ -237,6 +236,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         id_ubicacion: parseInt(newEquipoData.id_ubicacion, 10),
         id_estadoequipo: parseInt(newEquipoData.id_estadoequipo, 10),
       };
+
 
       const response = await axios.post(
         "http://localhost:8000/api/equipos/",
@@ -303,6 +303,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         id_ubicacion: parseInt(newEquipoData.id_ubicacion, 10),
         id_estadoequipo: parseInt(newEquipoData.id_estadoequipo, 10),
       };
+      console.log("id equipo:" + formattedData.id_coordinadores);
 
       const response = await axios.put(
         `http://localhost:8000/api/equipos/${equipoSeleccionado.id_equipo}/`,
@@ -355,8 +356,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     }
   };
 
-
-
   const abrirModal = (
     titulo,
     fields,
@@ -364,6 +363,11 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     initialValues = {},
     action = ""
   ) => {
+    if (isCatalogsLoading) {
+      toast.info("Espere a que los datos se carguen completamente.");
+      return;
+    }
+
     let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_marcaequipo") {
         return { ...field, options: marcaEquipo };
@@ -481,7 +485,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     abrirModal("Registrar Equipo", formFields, [], {}, "create");
   };
 
-
   const handleEdit = (equipo) => {
     setEquipoSeleccionado(equipo);
     abrirModal(
@@ -492,7 +495,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
       "update"
     );
   };
-
 
   const handleInfo = (equipo) => {
     setEquipoSeleccionado(equipo);
@@ -508,7 +510,6 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
 
   const filteredEquipos = equipos.filter((equipo) => {
     const searchString = `${equipo.id_equipo} ${equipo.nombre_equipo} ${equipo.modelo} ${equipo.sereal} ${equipo.nombre_estado_equipo}`.toLowerCase();
@@ -715,6 +716,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
 }
 
 export default TablaEquiposBack;
+
 const Boton = styled.button`
   display: block;
   padding: 10px 30px;
@@ -725,8 +727,8 @@ const Boton = styled.button`
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   transition: 0.3s ease all;
-
 `;
+
 const LoadingRow = styled.tr`
   height: 200px; /* Ajusta esta altura según sea necesario */
 `;
@@ -812,6 +814,7 @@ const AgregarFiltroContainer = styled.div`
     transform: scale(1.1);
   }
 `;
+
 const Divtabla = styled.div`
   overflow-x: hidden;
   overflow-y: auto;

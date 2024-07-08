@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { Autocomplete, TextField } from '@mui/material';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 
-const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors }) => {
+const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors, showAddPerifericoButton }) => {
+  const [perifericosFields, setPerifericosFields] = useState(initialValues.perifericos || [{ value: null, label: '' }]);
+
   useEffect(() => {
     const initialErrors = {};
     fields.forEach(field => {
@@ -12,7 +16,7 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
   }, [fields, setErrors]);
 
   const validateField = (name, value) => {
-    if (!value && (name !== "costo" && name !== "observacion" && name !== "id_ubicacion" && name !== "id_coordinadores")) {
+    if (!value && (name !== "costo" && name !== "observacion" && name !== "id_ubicacion" && name !== "id_coordinadores" && name !== "fecha_devolucion_equipo" && name !== "id_kit_perifericos")) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Campo obligatorio' }));
     } else if ((name === "nombres" || name === "apellidos") && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Solo se permiten nombres en formato texto' }));
@@ -50,7 +54,27 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
     onInputChange({ target: { name, value: value ? value.value : null } });
     validateField(name, value ? value.value : null);
   };
+  const handlePerifericoChange = (index, value) => {
+    const newFields = [...perifericosFields];
+    if (value) {
+      newFields[index] = value;
+    } else {
+      newFields[index] = { value: null, label: '' };
+    }
+    setPerifericosFields(newFields);
+    onInputChange({ target: { name: 'perifericos', value: newFields.map(field => field.value) } });
+  };
 
+
+  const addPerifericoField = () => {
+    setPerifericosFields([...perifericosFields, { value: null, label: '' }]);
+  };
+
+  const removePerifericoField = (index) => {
+    const newFields = perifericosFields.filter((_, i) => i !== index);
+    setPerifericosFields(newFields);
+    onInputChange({ target: { name: 'perifericos', value: newFields } });
+  };
 
   return (
     <Formulario>
@@ -61,7 +85,6 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
             <CostoWrapper>
               <span className="currency">$</span>
               <input
-
                 type="number"
                 name={field.id}
                 defaultValue={initialValues[field.id] || ''}
@@ -73,26 +96,59 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
             </CostoWrapper>
           ) : field.type === "select" ? (
             <>
-              <StyledAutocomplete
-                disablePortal
-                options={field.options}
-                getOptionLabel={(option) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
-                onChange={(event, value) => handleAutocompleteChange(event, value, field.id)}
-                defaultValue={field.options.find(option => option.value === initialValues[field.id]) || null}
-                renderInput={(params) => (
-                  <StyledTextField
-                    {...params}
-                    variant="outlined"
-                    placeholder="Seleccione una opción"
-                    className="autocomplete-control"
-                    data-name={field.id}
-                    data-value={initialValues[field.id] || ''}
+              {field.id === 'id_perifericos' ? (
+                perifericosFields.map((periferico, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <StyledAutocomplete style={{ width: '30vw' }}
+                      disablePortal
+                      options={field.options}
+                      getOptionLabel={(option) => option.label}
+                      isOptionEqualToValue={(option, value) => option.value === value}
+                      onChange={(event, value) => handlePerifericoChange(index, value)}
+                      value={periferico}
+                      renderInput={(params) => (
+                        <StyledTextField
+                          {...params}
+                          variant="outlined"
+                          placeholder="Seleccione una opción"
+                          className="autocomplete-control"
+                          data-name={field.id}
+                          data-value={periferico.value || ''}
+                        />
+                      )}
+                      disabled={disabledFields.includes(field.id)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faMinusCircle}
+                      style={{ marginLeft: '10px', cursor: 'pointer', height: '4vh' }}
+                      onClick={() => removePerifericoField(index)}
+                    />
+                  </div>
+                ))
+              ) : (
+                <>
+                  <StyledAutocomplete
+                    disablePortal
+                    options={field.options}
+                    getOptionLabel={(option) => option.label}
+                    isOptionEqualToValue={(option, value) => option.value === value}
+                    onChange={(event, value) => handleAutocompleteChange(event, value, field.id)}
+                    defaultValue={field.options.find(option => option.value === initialValues[field.id]) || null}
+                    renderInput={(params) => (
+                      <StyledTextField
+                        {...params}
+                        variant="outlined"
+                        placeholder="Seleccione una opción"
+                        className="autocomplete-control"
+                        data-name={field.id}
+                        data-value={initialValues[field.id] || ''}
+                      />
+                    )}
+                    disabled={disabledFields.includes(field.id)}
                   />
-                )}
-                disabled={disabledFields.includes(field.id)}
-              />
-              {errors[field.id] && <ErrorMsg>{errors[field.id]}</ErrorMsg>}
+                  {errors[field.id] && <ErrorMsg>{errors[field.id]}</ErrorMsg>}
+                </>
+              )}
             </>
           ) : (
             <>
@@ -109,6 +165,14 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
           )}
         </div>
       ))}
+      {showAddPerifericoButton && (
+        <FontAwesomeIcon
+          icon={faPlusCircle}
+          style={{ marginLeft: '9vw', position: 'fixed', height: '4vh', cursor: 'pointer' }}
+          onClick={addPerifericoField}
+        />
+      )}
+
     </Formulario>
   );
 };
@@ -173,6 +237,7 @@ const StyledAutocomplete = styled(Autocomplete)`
   .MuiOutlinedInput-root {
     padding: 0 !important;
     height: 40px; /* Asegura que la altura sea consistente */
+    width: 100%;
   }
 
   .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
@@ -182,11 +247,16 @@ const StyledAutocomplete = styled(Autocomplete)`
   .MuiInputBase-root {
     height: 40px; /* Asegura que la altura sea consistente */
     padding: 0;
+    width: 100%;
   }
 
   .MuiAutocomplete-endAdornment {
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  .MuiAutocomplete-popper {
+    z-index: 1300 !important; /* Asegura que el popper se sobreponga */
   }
 `;
 
@@ -194,12 +264,14 @@ const StyledTextField = styled(TextField)`
   .MuiOutlinedInput-input {
     padding: 10px; /* Ajusta el padding para que coincida con el input normal */
     height: 20px; /* Ajusta la altura del contenido */
+    width: 100%;
   }
 
   .MuiInputLabel-outlined {
     transform: translate(14px, 14px) scale(1);
   }
 `;
+
 
 const ErrorMsg = styled.span`
   color: #dc3545;

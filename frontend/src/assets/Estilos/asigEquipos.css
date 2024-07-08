@@ -138,7 +138,8 @@
 
 #asignacionPerifericos,
 #asignacionEquipos,
-#ubicacion {
+#ubicacion,
+#Perifericos {
     padding: 1vh .7vw;
     cursor: pointer;
     margin: 0 5px;
@@ -147,7 +148,8 @@
 
 #asignacionPerifericos:hover,
 #asignacionEquipos:hover,
-#ubicacion:hover {
+#ubicacion:hover,
+#Perifericos:hover {
     transform: scale(1.05);
     background: -webkit-linear-gradient(#292929, #d3e3e7);
     -webkit-background-clip: text;
@@ -157,7 +159,8 @@
 
 #asignacionEquipos.active,
 #asignacionPerifericos.active,
-#ubicacion.active {
+#ubicacion.active,
+#Perifericos.active {
     background: -webkit-linear-gradient(#384295, #14ADD6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

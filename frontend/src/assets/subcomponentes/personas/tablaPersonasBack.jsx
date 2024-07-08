@@ -48,6 +48,8 @@ function TablaPersonasBack() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
+  const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
+
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -83,6 +85,7 @@ function TablaPersonasBack() {
   useEffect(() => {
     const fetchCatalogos = async () => {
       setIsLoading(true);
+      setIsCatalogsLoading(true);
       try {
         const responseEstado = await axios.get(
           "http://localhost:8000/api/estado_persona/"
@@ -137,6 +140,7 @@ function TablaPersonasBack() {
         toast.error("Hubo un error en la carga de datos de los catalogos.");
       } finally {
         setIsLoading(false);
+        setIsCatalogsLoading(false);  // Añadido
       }
     };
 
@@ -306,6 +310,11 @@ function TablaPersonasBack() {
     initialValues = {},
     action = ""
   ) => {
+    if (isCatalogsLoading) {
+      toast.info("Espere a que los datos se carguen completamente.");
+      return;
+    }
+
     let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_centro_costo") {
         return { ...field, label: "Alianza", options: centroCostos.map(option => ({ ...option })) };
@@ -484,7 +493,7 @@ function TablaPersonasBack() {
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
+            <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
           </div>
           <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

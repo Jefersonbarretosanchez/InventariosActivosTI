@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-const Modal = ({
+const modalDesasignacion = ({
   children,
   estado,
   cambiarEstado,
@@ -11,7 +11,8 @@ const Modal = ({
   actionType,
   onCreate,
   onUpdate,
-  onClear
+  onClear,
+  onDegree
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -20,14 +21,8 @@ const Modal = ({
     const formElements = document.querySelectorAll('.form-control, .form-select');
     const newErrors = {};
     formElements.forEach(element => {
-      if (!element.value && !element.disabled && (element.name !== "costo" && element.name !== "observacion" && element.name !== "fecha_devolucion_equipo")) {
+      if (!element.value && !element.disabled) {
         newErrors[element.name] = 'Campo obligatorio';
-      }
-      if ((element.name === 'nombres' || element.name === 'apellidos') && element.value && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(element.value)) {
-        newErrors[element.name] = 'Solo se permiten nombres en formato texto';
-      }
-      if ((element.name === 'correo_personal' || element.name === 'correo_institucional') && element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
-        newErrors[element.name] = 'Formato de correo inválido';
       }
     });
 
@@ -37,7 +32,7 @@ const Modal = ({
       console.log(`Validating autocomplete: ${element.getAttribute('data-name')}`);
       console.log(`Data value: ${element.getAttribute('data-value')}`);
 
-      if (!element.getAttribute('data-value') && (element.getAttribute('data-name') !== "id_ubicacion" && element.getAttribute('data-name') !== "id_coordinadores" && element.getAttribute('data-name') !== "id_kit_perifericos")) {
+      if (!element.getAttribute('data-value')) {
         newErrors[element.getAttribute('data-name')] = 'Campo obligatorio';
       }
     });
@@ -51,6 +46,12 @@ const Modal = ({
     if (!validateForm()) return;
     setIsLoading(true);
     await onCreate();
+    setIsLoading(false);
+  };
+  const handleDegree = async () => {
+    if (!validateForm()) return;
+    setIsLoading(true);
+    await onDegree();
     setIsLoading(false);
   };
 
@@ -82,7 +83,7 @@ const Modal = ({
               {React.cloneElement(children, { errors, setErrors })}
             </ModalBody>
             <ModalFooter>
-              {(actionType === "create" || actionType === "update") && (
+              {(actionType === "create" || actionType === "update" || actionType === "degree") && (
                 <BtnCancelar onClick={() => cambiarEstado(false)} disabled={isLoading}>
                   <span>Cancelar</span>
                 </BtnCancelar>
@@ -92,6 +93,9 @@ const Modal = ({
               )}
               {actionType === "update" && (
                 <Boton onClick={handleUpdate} disabled={isLoading}>Actualizar</Boton>
+              )}
+              {actionType === "degree" && (
+                <Boton onClick={handleDegree} disabled={isLoading}>DesAsignar</Boton>
               )}
               {actionType === "Clear" && (
                 <>
@@ -109,7 +113,8 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default modalDesasignacion;
+
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -120,8 +125,8 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible; /* Permitir el desbordamiento visible */
 `;
+
 const ContenedorModal = styled.div`
   width: 25vw;
   height: auto;
@@ -131,10 +136,8 @@ const ContenedorModal = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
-  overflow: visible; /* Permitir el desbordamiento visible */
-  z-index: 1200; /* Asegura que el modal tenga un z-index menor que el popper */
+  overflow: hidden;
 `;
-
 
 const ModalHeader = styled.div`
   display: flex;

@@ -13,7 +13,8 @@ export default function Bar({ onClickTabla }) {
     return (
         <div className="bar">
             <div id="asignacionEquipos" className={tablaSeleccionada === 'asignacionEquipos' ? 'active' : ''} onClick={handleTablaClick}>Asignacion Equipos</div>
-            <div id="asignacionPerifericos" className={tablaSeleccionada === 'asignacionPerifericos' ? 'active' : ''} onClick={handleTablaClick}>Asignacion Perifericos</div>
+            <div id="asignacionPerifericos" className={tablaSeleccionada === 'asignacionPerifericos' ? 'active' : ''} onClick={handleTablaClick}>Kit Perifericos</div>
+            <div id="Perifericos" className={tablaSeleccionada === 'Perifericos' ? 'active' : ''} onClick={handleTablaClick}>Perifericos</div>
         </div>
     );
 }
