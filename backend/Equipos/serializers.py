@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
+from activosTI.models import Persona
 
 
 class BaseModel(serializers.ModelSerializer):
@@ -146,7 +147,19 @@ class EquipoSerializer(serializers.ModelSerializer):
         return instance
 
 # Serializadores Modulo asignaciones
+class PersonasAsigEquiposSerializer(serializers.ModelSerializer):
+    trabajadores_con_asignaciones = AsignacionEquipos.objects.values_list(
+        'id_trabajador', flat=True)
+    trabajadores_sin_asignaciones = Persona.objects.exclude(
+        id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
 
+    id_trabajador = serializers.PrimaryKeyRelatedField(
+        queryset=trabajadores_con_asignaciones)
+    
+    class Meta:
+        model = Persona
+        fields = ['id_trabajador', 'nombres','apellidos']
+        
 
 class EquiposAsignacionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -162,24 +175,24 @@ class AsignacionEquiposSerializer(serializers.ModelSerializer):
     nombre_equipo = serializers.CharField(
         source='id_equipo.nombre_equipo', read_only=True)
 
-    # ||Filtrar los equipos que esten en Bodega para mostrarlos en la lista.||
-    equipos_en_bodega = Equipo.objects.filter(
-        id_estadoequipo=CatEstadoequipo.objects.get(nombre="En Bodega"))
+    # # ||Filtrar los equipos que esten en Bodega para mostrarlos en la lista.||
+    # equipos_en_bodega = Equipo.objects.filter(
+    #     id_estadoequipo=CatEstadoequipo.objects.get(nombre="En Bodega"))
 
-    # ||Obtener la lista de trabajadores con asignaciones y excluirlos del listado que se muestra para asignar un equipo.||
-    trabajadores_con_asignaciones = AsignacionEquipos.objects.values_list(
-        'id_trabajador', flat=True)
-    trabajadores_sin_asignaciones = Persona.objects.exclude(
-        id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
+    # # ||Obtener la lista de trabajadores con asignaciones y excluirlos del listado que se muestra para asignar un equipo.||
+    # trabajadores_con_asignaciones = AsignacionEquipos.objects.values_list(
+    #     'id_trabajador', flat=True)
+    # trabajadores_sin_asignaciones = Persona.objects.exclude(
+    #     id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
 
-    id_equipo = serializers.PrimaryKeyRelatedField(queryset=equipos_en_bodega)
+    # id_equipo = serializers.PrimaryKeyRelatedField(queryset=equipos_en_bodega)
 
-    id_trabajador = serializers.PrimaryKeyRelatedField(
-        queryset=trabajadores_sin_asignaciones)
+    # id_trabajador = serializers.PrimaryKeyRelatedField(
+    #     queryset=trabajadores_sin_asignaciones)
 
     class Meta:
         model = AsignacionEquipos
-        fields = ['id_asignacion', 'id_trabajador', 'id_equipo',
+        fields = ['id_asignacion', 'id_trabajador','nombre_trabajador','apellido_trabajador','nombre_equipo', 'id_equipo',
                   'fecha_entrega_equipo', 'id_kit_perifericos']
 
     def validate(self, data):
@@ -272,23 +285,22 @@ class EstadoPerifericosSerializer(serializers.ModelSerializer):
 
 
 class PerifericosSerializer(serializers.ModelSerializer):
+    nombre_estado_periferico = serializers.CharField(
+        source='id_estado_periferico.nombre', read_only=True)
     class Meta:
         model = Perifericos
         fields = ['id_perifericos', 'nombre_periferico',
-                  'id_estado_periferico', 'modelo', 'sereal', 'costo']
+                  'id_estado_periferico', 'modelo', 'sereal', 'costo','nombre_estado_periferico']
 
 
 class KitPerifericosSerializer(serializers.ModelSerializer):
     nombre_periferico = serializers.CharField(
         source='id_periferico.nombre', read_only=True)
+    
+    # Filtramos los perifericos sin asignar de la manera correcta
+    perifericos_sin_asignar = Perifericos.objects.filter(id_estado_periferico=CatEstadoPeriferico.objects.get(nombre="Sin Asignar"))
     perifericos = serializers.PrimaryKeyRelatedField(
-        queryset=Perifericos.objects.all(), many=True)
-
-    perifericos_sin_asignar = Perifericos.objects.filter(id_estado_periferico=CatEstadoPeriferico.objects.get(nombre="Sin Asignar")
-                                                         )
-
-    perifericos = serializers.PrimaryKeyRelatedField(
-        queryset=perifericos_sin_asignar)
+        queryset=perifericos_sin_asignar, many=True)
 
     class Meta:
         model = KitPerifericos
@@ -317,10 +329,51 @@ class KitPerifericosSerializer(serializers.ModelSerializer):
         perifericos_data = validated_data.pop('perifericos')
         kit_perifericos = KitPerifericos.objects.create(**validated_data)
         kit_perifericos.perifericos.set(perifericos_data)
+        # Actualizar el estado de los periféricos a "Asignado"
+        estado_asignado = CatEstadoPeriferico.objects.get(nombre="Asignado")
+        for periferico in perifericos_data:
+            periferico.id_estado_periferico = estado_asignado
+            periferico.save()
         return kit_perifericos
+    
+class KitPerifericosUpdateSerializer(serializers.ModelSerializer):
+    nombre_periferico = serializers.CharField(
+        source='id_periferico.nombre', read_only=True)
+    perifericos = serializers.PrimaryKeyRelatedField(
+        queryset=Perifericos.objects.all(), many=True)
 
+    class Meta:
+        model = KitPerifericos
+        fields = ['id_kit_perifericos', 'perifericos', 'nombre_periferico']
+
+    def validate(self, data):
+        # En la actualización, verificar si id_perifericos ha cambiado y si el nuevo valor ya está asignado
+        for periferico in data['perifericos']:
+            if KitPerifericos.objects.filter(perifericos=periferico).exists() and periferico not in self.instance.perifericos.all():
+                equipo = KitPerifericos.objects.filter(
+                    perifericos=periferico).first()
+                raise serializers.ValidationError(
+                    {"id_periferico": f"El periférico ya está asignado al kit # {equipo.id_kit_perifericos}."})
+        return data
+    
     def update(self, instance, validated_data):
         perifericos_data = validated_data.pop('perifericos')
-        instance.perifericos.set(perifericos_data)
+        perifericos_actuales = set(instance.perifericos.all())
+        nuevos_perifericos = set(perifericos_data)
+
+        # Perifericos quitados
+        perifericos_quitados = perifericos_actuales - nuevos_perifericos
+        estado_sin_asignar = CatEstadoPeriferico.objects.get(nombre="Sin Asignar")
+        for periferico in perifericos_quitados:
+            periferico.id_estado_periferico = estado_sin_asignar
+            periferico.save()
+
+        # Perifericos agregados
+        estado_asignado = CatEstadoPeriferico.objects.get(nombre="Asignado")
+        for periferico in nuevos_perifericos:
+            periferico.id_estado_periferico = estado_asignado
+            periferico.save()
+
+        instance.perifericos.set(nuevos_perifericos)
         instance.save()
         return instance

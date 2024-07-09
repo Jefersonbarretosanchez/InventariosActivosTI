@@ -200,12 +200,12 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
     # trabajadores_con_asignaciones = AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True)
     # trabajadores_sin_asignaciones = Persona.objects.exclude(id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True))
     
-    id_licencia = serializers.PrimaryKeyRelatedField(
-        queryset=LicenciaPersona.objects.filter(id_estado_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
-    )
+    # id_licencia = serializers.PrimaryKeyRelatedField(
+    #     queryset=LicenciaPersona.objects.filter(id_estado_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
+    # )
     
-    id_trabajador = serializers.PrimaryKeyRelatedField(
-        queryset=Persona.objects.exclude(id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True)))
+    # id_trabajador = serializers.PrimaryKeyRelatedField(
+    #     queryset=Persona.objects.exclude(id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True)))
     
     class Meta:
         model= AsignacionLicenciaPersona
@@ -284,12 +284,12 @@ class AsignacionLicenciasEquiposSerializer(serializers.ModelSerializer):
     # trabajadores_con_asignaciones = AsignacionLicenciasEquipo.objects.values_list('id_trabajador', flat=True)
     # trabajadores_sin_asignaciones = Persona.objects.exclude(id_trabajador__in=AsignacionLicenciasEquipo.objects.values_list('id_trabajador', flat=True))
     
-    id_licencia = serializers.PrimaryKeyRelatedField(
-        queryset=LicenciasEquipo.objects.filter(id_estado_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
-    )
+    # id_licencia = serializers.PrimaryKeyRelatedField(
+    #     queryset=LicenciasEquipo.objects.filter(id_estado_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
+    # )
     
-    id_equipo = serializers.PrimaryKeyRelatedField(
-        queryset=Equipo.objects.exclude(id_equipo__in=AsignacionLicenciasEquipo.objects.values_list('id_equipo', flat=True)))
+    # id_equipo = serializers.PrimaryKeyRelatedField(
+    #     queryset=Equipo.objects.exclude(id_equipo__in=AsignacionLicenciasEquipo.objects.values_list('id_equipo', flat=True)))
     
     class Meta:
         model= AsignacionLicenciasEquipo

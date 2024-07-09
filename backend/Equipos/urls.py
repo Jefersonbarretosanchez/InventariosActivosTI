@@ -14,6 +14,7 @@ urlpatterns = [
     path('estado_equipo/',views.CatEstadoEquipoViewSet.as_view(),name="estado_equipo"),
     path('coordinadores/',views.CatCoordinadoresViewSet.as_view(),name="coordinadores"),
     path('ubicaciones/',views.CatUbicacionViewSet.as_view(),name="ubicaciones"),
+    path('personas/asig_equipo/',views.PersonasAsigEquiposView.as_view(),name="personas_asig_equipo"),
     path('asignar_equipo/', views.AsignarEquipoView.as_view(), name='asignar-equipo'),
     path('actualizar_asignacion_equipo/<int:pk>/', views.ActualizarAsignacionView.as_view(), name='actualizar_asignacion_equipo'),
     path('desasignar_equipo/<int:pk>/', views.DesasignarEquipoView.as_view(), name='desasignar-equipo'),
@@ -22,5 +23,5 @@ urlpatterns = [
     path('perifericos/<int:pk>/', views.PerifericosUpdate.as_view(), name='perifericos_actualizar'),
     path('estado_perifericos/', views.EstadoPerifericosView.as_view(), name='estado_perifericos_create'),
     path('kit_perifericos/', views.KitPerifericosListCreateView.as_view(), name='kit_perifericos_create'),
-    path('kit_perifericos/<int:pk>/', views.KitPerifericosDetailView.as_view(), name='kit_perifericos_detail'),
+    path('kit_perifericos/<int:pk>/', views.KitPerifericosUpdateView.as_view(), name='kit_perifericos_detail'),
 ]

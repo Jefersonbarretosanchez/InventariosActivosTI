@@ -198,6 +198,11 @@ class CatUbicacionViewSet(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
 # Vistas Modulo Asignaciones
+class PersonasAsigEquiposView(generics.ListAPIView):
+    queryset= Persona.objects.all()
+    serializer_class=PersonasAsigEquiposSerializer
+    permission_classes=[AllowAny]
+
 class EquiposAsignacionViewSet(generics.ListAPIView):
     queryset = Equipo.objects.all()
     serializer_class = EquiposAsignacionSerializer
@@ -359,9 +364,9 @@ class KitPerifericosListCreateView(generics.ListCreateAPIView):
     serializer_class = KitPerifericosSerializer
     permission_classes = [AllowAny]
 
-class KitPerifericosDetailView(generics.RetrieveUpdateDestroyAPIView):
+class KitPerifericosUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = KitPerifericos.objects.all()
-    serializer_class = KitPerifericosSerializer
+    serializer_class = KitPerifericosUpdateSerializer
     permission_classes = [AllowAny]
 
 class PerifericosUpdate(generics.RetrieveUpdateAPIView):

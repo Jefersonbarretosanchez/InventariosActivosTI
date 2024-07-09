@@ -181,7 +181,7 @@ class Perifericos(models.Model):
         db_table = 'perifericos'
         
     def __str__(self):
-        return str(self.nombre_periferico)
+        return str(self.nombre_periferico) + " " + str(self.sereal)
 
 
 class KitPerifericos(models.Model):
