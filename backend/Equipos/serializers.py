@@ -162,10 +162,25 @@ class AsignacionEquiposSerializer(serializers.ModelSerializer):
     nombre_equipo = serializers.CharField(
         source='id_equipo.nombre_equipo', read_only=True)
 
+    # ||Filtrar los equipos que esten en Bodega para mostrarlos en la lista.||
+    equipos_en_bodega = Equipo.objects.filter(
+        id_estadoequipo=CatEstadoequipo.objects.get(nombre="En Bodega"))
+
+    # ||Obtener la lista de trabajadores con asignaciones y excluirlos del listado que se muestra para asignar un equipo.||
+    trabajadores_con_asignaciones = AsignacionEquipos.objects.values_list(
+        'id_trabajador', flat=True)
+    trabajadores_sin_asignaciones = Persona.objects.exclude(
+        id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
+
+    id_equipo = serializers.PrimaryKeyRelatedField(queryset=equipos_en_bodega)
+
+    id_trabajador = serializers.PrimaryKeyRelatedField(
+        queryset=trabajadores_sin_asignaciones)
+
     class Meta:
         model = AsignacionEquipos
-        fields = ['id_asignacion', 'id_trabajador', 'nombre_trabajador', 'apellido_trabajador',
-                  'id_equipo', 'nombre_equipo', 'fecha_entrega_equipo', 'fecha_devolucion_equipo', 'id_kit_perifericos']
+        fields = ['id_asignacion', 'id_trabajador', 'id_equipo',
+                  'fecha_entrega_equipo', 'id_kit_perifericos']
 
     def validate(self, data):
         if self.instance is None:
@@ -174,14 +189,14 @@ class AsignacionEquiposSerializer(serializers.ModelSerializer):
                 id_equipo=data['id_equipo']).first()
             if asignacion_existente:
                 usuario = asignacion_existente.id_trabajador
-                raise serializers.ValidationError({"errors": f"El equipo ya está asignado a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."}
+                raise serializers.ValidationError({"id_equipo": f"El equipo ya está asignado a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."}
                                                   )
             # Comprobar si el trabajador ya tiene un equipo asignado
             trabajador_asignacion = AsignacionEquipos.objects.filter(
                 id_trabajador=data['id_trabajador']).first()
             if trabajador_asignacion:
                 equipo = trabajador_asignacion.id_equipo
-                raise serializers.ValidationError({"errors": f"El trabajador ya tiene un equipo asignado: {equipo.nombre_equipo} (ID: {equipo.id_equipo})."}
+                raise serializers.ValidationError({"id_trabajador": f"El trabajador ya tiene un equipo asignado: {equipo.nombre_equipo} (ID: {equipo.id_equipo})."}
                                                   )
         else:
             # En la actualización, verificar si id_equipo ha cambiado y si el nuevo valor ya está asignado
@@ -191,9 +206,7 @@ class AsignacionEquiposSerializer(serializers.ModelSerializer):
                 if asignacion_existente:
                     usuario = asignacion_existente.id_trabajador
                     raise serializers.ValidationError(
-                        f"El equipo ya está asignado a {usuario.nombres} {usuario.apellidos} (ID: {
-                            usuario.id_trabajador}, Email: {usuario.correo_institucional}).")
-
+                        f"El equipo ya está asignado a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional}).")
             # Comprobar si el trabajador ya tiene un equipo asignado solo si el trabajador ha cambiado
             if 'id_trabajador' in data and self.instance.id_trabajador != data['id_trabajador']:
                 trabajador_asignacion = AsignacionEquipos.objects.filter(
@@ -259,13 +272,10 @@ class EstadoPerifericosSerializer(serializers.ModelSerializer):
 
 
 class PerifericosSerializer(serializers.ModelSerializer):
-    nombre_estado_periferico = serializers.CharField(
-        source='id_estado_periferico.nombre', read_only=True)
-
     class Meta:
         model = Perifericos
         fields = ['id_perifericos', 'nombre_periferico',
-                  'id_estado_periferico', 'modelo', 'sereal', 'costo', 'nombre_estado_periferico']
+                  'id_estado_periferico', 'modelo', 'sereal', 'costo']
 
 
 class KitPerifericosSerializer(serializers.ModelSerializer):
@@ -274,9 +284,34 @@ class KitPerifericosSerializer(serializers.ModelSerializer):
     perifericos = serializers.PrimaryKeyRelatedField(
         queryset=Perifericos.objects.all(), many=True)
 
+    perifericos_sin_asignar = Perifericos.objects.filter(id_estado_periferico=CatEstadoPeriferico.objects.get(nombre="Sin Asignar")
+                                                         )
+
+    perifericos = serializers.PrimaryKeyRelatedField(
+        queryset=perifericos_sin_asignar)
+
     class Meta:
         model = KitPerifericos
         fields = ['id_kit_perifericos', 'perifericos', 'nombre_periferico']
+
+    def validate(self, data):
+        if self.instance is None:
+            # Comprobar si el periférico ya está en un kit
+            for periferico in data['perifericos']:
+                if KitPerifericos.objects.filter(perifericos=periferico).exists():
+                    equipo = KitPerifericos.objects.filter(
+                        perifericos=periferico).first()
+                    raise serializers.ValidationError(
+                        {"id_periferico": f"El periférico ya está asignado en el kit # {equipo.id_kit_perifericos}."})
+        else:
+            # En la actualización, verificar si id_perifericos ha cambiado y si el nuevo valor ya está asignado
+            for periferico in data['perifericos']:
+                if KitPerifericos.objects.filter(perifericos=periferico).exists() and periferico not in self.instance.perifericos.all():
+                    equipo = KitPerifericos.objects.filter(
+                        perifericos=periferico).first()
+                    raise serializers.ValidationError(
+                        {"id_periferico": f"El periférico ya está asignado al kit # {equipo.id_kit_perifericos}."})
+        return data
 
     def create(self, validated_data):
         perifericos_data = validated_data.pop('perifericos')

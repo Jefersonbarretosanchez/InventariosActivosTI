@@ -186,7 +186,7 @@ class Perifericos(models.Model):
 
 class KitPerifericos(models.Model):
     id_kit_perifericos = models.AutoField(primary_key=True)
-    perifericos = models.ManyToManyField(Perifericos, db_table='kit_perifericos_perifericos',)
+    perifericos = models.ManyToManyField(Perifericos, db_table='kit_perifericos_perifericos')
 
     class Meta:
         db_table = 'kit_perifericos'

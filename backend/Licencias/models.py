@@ -63,7 +63,7 @@ class LicenciaPersona(models.Model):
     sereal = models.CharField(max_length=30, blank=True, null=True)
     fecha_vencimiento = models.DateField(blank=True, null=True)
     id_estado_licencia = models.ForeignKey(
-        CatEstadoLicencias, models.DO_NOTHING, db_column='id_estado_licencia')
+        CatEstadoLicencias, models.DO_NOTHING, db_column='id_estado_licencia',verbose_name='Estado Licencia')
     id_contrato = models.ForeignKey(
         Contratos, models.DO_NOTHING, db_column='id_contrato')
     no_ticket = models.CharField(max_length=20)
@@ -73,6 +73,8 @@ class LicenciaPersona(models.Model):
     class Meta:
         db_table = 'licencia_persona'
 
+    def __str__(self):
+        return str(self.nombre_licencia)
 
 class LicenciasEquipo(models.Model):
     id_licencia = models.AutoField(primary_key=True)

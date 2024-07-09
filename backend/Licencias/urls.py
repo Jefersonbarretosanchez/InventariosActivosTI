@@ -22,4 +22,8 @@ urlpatterns = [
          name='actualizacion_contratos_licencias'),
     path('licencias/responsables/', views.PersonasLicenciasList.as_view(),
          name='lista_responsables'),
+     path('licencias/asignar_licencia_persona/', views.AsignarLicenciaPersonaView.as_view(),
+         name='lista_asignacion_licencias'),
+     path('licencias/desasignar_licencia_persona/<int:pk>/', views.DesasignarLicPerView.as_view(),
+         name='lista_asignacion_licencias'),
 ]
