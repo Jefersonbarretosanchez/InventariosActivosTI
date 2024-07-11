@@ -91,6 +91,9 @@ class LicenciasEquipo(models.Model):
 
     class Meta:
         db_table = 'licencias_equipo'
+        
+    def __str__(self):
+        return str(self.nombre_licencia)
 
 
 class UpgradeLicenciasArea(models.Model):

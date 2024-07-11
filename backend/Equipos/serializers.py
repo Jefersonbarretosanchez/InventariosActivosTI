@@ -175,21 +175,6 @@ class AsignacionEquiposSerializer(serializers.ModelSerializer):
     nombre_equipo = serializers.CharField(
         source='id_equipo.nombre_equipo', read_only=True)
 
-    # # ||Filtrar los equipos que esten en Bodega para mostrarlos en la lista.||
-    # equipos_en_bodega = Equipo.objects.filter(
-    #     id_estadoequipo=CatEstadoequipo.objects.get(nombre="En Bodega"))
-
-    # # ||Obtener la lista de trabajadores con asignaciones y excluirlos del listado que se muestra para asignar un equipo.||
-    # trabajadores_con_asignaciones = AsignacionEquipos.objects.values_list(
-    #     'id_trabajador', flat=True)
-    # trabajadores_sin_asignaciones = Persona.objects.exclude(
-    #     id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
-
-    # id_equipo = serializers.PrimaryKeyRelatedField(queryset=equipos_en_bodega)
-
-    # id_trabajador = serializers.PrimaryKeyRelatedField(
-    #     queryset=trabajadores_sin_asignaciones)
-
     class Meta:
         model = AsignacionEquipos
         fields = ['id_asignacion', 'id_trabajador','nombre_trabajador','apellido_trabajador','nombre_equipo', 'id_equipo',

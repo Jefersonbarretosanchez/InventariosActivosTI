@@ -87,6 +87,29 @@ class PersonaSinAsignacionSerializer(serializers.ModelSerializer):
         fields = ['id_trabajador', 'nombres', 'apellidos']
 
 
+class LicenciaPerSinAsignarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LicenciaPersona
+        fields = [
+            'id_licencia',
+            'nombre_licencia',
+        ]
+
+class LicenciaEquSinAsignarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LicenciasEquipo
+        fields = [
+            'id_licencia',
+            'nombre_licencia',
+        ]
+
+class EquipoSinAsignacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Equipo
+        # Incluye los campos necesarios
+        fields = ['id_equipo', 'nombre_equipo']
+
+
 class LicenciaEquiposSerializer(serializers.ModelSerializer):
     id_estado_licencia = serializers.PrimaryKeyRelatedField(
         queryset=CatEstadoLicencias.objects.all())
@@ -203,19 +226,6 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
         source='id_licencia.nombre_licencia', read_only=True)
     nombre_trabajador = serializers.CharField(
         source='id_trabajador.nombres', read_only=True)
-    # ||Filtrar la licencias que esten sin asignarlas para mostrarlos en la lista.||
-    # licenicas_en_stock=LicenciaPersona.objects.filter(id_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
-
-    # ||Obtener la lista de trabajadores con asignaciones y excluirlos del listado que se muestra para asignar una licencia.||
-    # trabajadores_con_asignaciones = AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True)
-    # trabajadores_sin_asignaciones = Persona.objects.exclude(id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True))
-
-    # id_licencia = serializers.PrimaryKeyRelatedField(
-    #     queryset=LicenciaPersona.objects.filter(id_estado_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
-    # )
-
-    # id_trabajador = serializers.PrimaryKeyRelatedField(
-    #     queryset=Persona.objects.exclude(id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True)))
 
     class Meta:
         model = AsignacionLicenciaPersona
@@ -247,8 +257,7 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
                     usuario = asignacion_existente.id_trabajador
                     raise serializers.ValidationError(
                         f"La licencia ya está asignada a {usuario.nombres} {usuario.apellidos} (ID: {
-                            usuario.id_trabajador}, Email: {usuario.correo_institucional})."
-                    )
+                            usuario.id_trabajador}, Email: {usuario.correo_institucional}).")
                 trabajador_asignacion = AsignacionLicenciaPersona.objects.filter(
                     id_trabajador=data['id_trabajador']).first()
                 if trabajador_asignacion:
@@ -284,9 +293,8 @@ class DesAsignacionLicenciasPersonaSerializer(serializers.ModelSerializer):
             lic_persona.save()
         return super().update(instance, validated_data)
 
+
 # Serializadores asignación licencias Equipos
-
-
 class LicenciasEquiposAsigSerializer(serializers.ModelSerializer):
     class Meta:
         model = LicenciasEquipo
@@ -298,23 +306,11 @@ class AsignacionLicenciasEquiposSerializer(serializers.ModelSerializer):
         source='id_licencia.nombre_licencia', read_only=True)
     nombre_equipo = serializers.CharField(
         source='id_equipo.nombre_equipo', read_only=True)
-    # ||Filtrar la licencias que esten sin asignarlas para mostrarlos en la lista.||
-    # licencias_en_stock=LicenciasEquipo.objects.filter(id_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
-
-    # ||Obtener la lista de trabajadores con asignaciones y excluirlos del listado que se muestra para asignar una licencia.||
-    # trabajadores_con_asignaciones = AsignacionLicenciasEquipo.objects.values_list('id_trabajador', flat=True)
-    # trabajadores_sin_asignaciones = Persona.objects.exclude(id_trabajador__in=AsignacionLicenciasEquipo.objects.values_list('id_trabajador', flat=True))
-
-    # id_licencia = serializers.PrimaryKeyRelatedField(
-    #     queryset=LicenciasEquipo.objects.filter(id_estado_licencia = CatEstadoLicencias.objects.get(nombre="Sin Asignar"))
-    # )
-
-    # id_equipo = serializers.PrimaryKeyRelatedField(
-    #     queryset=Equipo.objects.exclude(id_equipo__in=AsignacionLicenciasEquipo.objects.values_list('id_equipo', flat=True)))
 
     class Meta:
         model = AsignacionLicenciasEquipo
-        fields = ['id_asignacion', 'id_equipo', 'id_licencia']
+        fields = ['id', 'id_equipo', 'nombre_equipo',
+                  'id_licencia', 'nombre_licencia']
 
     def validate(self, data):
         if self.instance is None:
@@ -352,7 +348,7 @@ class AsignacionLicenciasEquiposSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        equipo = validated_data['id_equipo']
+        equipo = validated_data['id_licencia']
         equipo.id_estado_licencia = CatEstadoLicencias.objects.get(
             nombre="Asignada")
         equipo.save()

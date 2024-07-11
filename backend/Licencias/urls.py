@@ -26,10 +26,18 @@ urlpatterns = [
          name='lista_asignacion_licencias'),
     path('licencias/desasignar_licencia_persona/<int:pk>/', views.DesasignarLicPerView.as_view(),  # asignar licencias Persona
          name='lista_asignacion_licencias'),
+    path('licencias/asignar_licencia_equipo/', views.AsignarLicenciaEquiposView.as_view(),  # asignar licencias Persona
+         name='lista_asignacion_licencias'),
+    path('licencias/desasignar_licencia_equipo/<int:pk>/', views.DesasignarLicEquipoView.as_view(),  # asignar licencias Persona
+         name='lista_asignacion_licencias'),
 
-    path('licencias_sin_asignar/', views.LicenciasSinAsignarViewSet.as_view(),
+    path('licencias_sin_asignar/', views.LicenciasPersonasSinAsignarViewSet.as_view(),
          name="licencias_sin_asignar"),
     path('personas_sin_asignacion_licencia/', views.PersonasSinAsignacionLicenciaViewSet.as_view(),
          name="personas_sin_asignacion_licencia"),
+    path('licencias_sin_asignar_equipos/', views.LicenciasEquiposSinAsignarViewSet.as_view(),
+         name="licencias_sin_asignar"),
+    path('equipos_sin_asignacion_licencia/', views.EquiposSinAsignacionLicenciaViewSet.as_view(),
+         name="equipos_sin_asignacion_licencia"),
 
 ]

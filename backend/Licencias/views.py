@@ -696,16 +696,102 @@ class DesasignarLicPerView(generics.RetrieveUpdateAPIView):
                 instance.id_trabajador.nombres} {instance.id_trabajador.apellidos}'
         )
 
+        # Eliminar el registro de la tabla AsignacionLicenciasPersonas después de desasignar el equipo
+        instance.delete()
+
+        return Response({"detail": "La licencia ha sido desasignado y el registro ha sido eliminado."}, status=status.HTTP_204_NO_CONTENT)
+# vistas APIs asignación licencias Equipos
+class AsignarLicenciaEquiposView(generics.ListCreateAPIView):
+    queryset = AsignacionLicenciasEquipo.objects.all()
+    serializer_class = AsignacionLicenciasEquiposSerializer
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        # Guardar la nueva asignación
+        AsignacionLicencias = serializer.save()
+        print("guarda Asignación")
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            print("Ingresa a Historico")
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Asignación",
+                tipo_activo="Licencia Equipo",
+                activo_modificado=AsignacionLicencias.id_licencia.nombre_licencia,
+                descripcion=f'Se asigno la licencia "{AsignacionLicencias.id_licencia.nombre_licencia} al equipo {
+                    AsignacionLicencias.id_equipo.nombre_equipo}"')
+            print("Registro histórico creado exitosamente.")
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+            
+class DesasignarLicEquipoView(generics.RetrieveUpdateAPIView):
+    queryset = AsignacionLicenciasEquipo.objects.all()
+    serializer_class = DesAsignacionLicEquSerializer
+    permission_classes = [AllowAny]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        LicEquipo = instance.id_licencia
+
+        # Guardar valores originales antes de la actualización
+        original_values = {
+            'id_estado_licencia': LicEquipo.id_estado_licencia,
+        }
+
+        # Actualizar el equipo
+        LicEquipo.id_estado_licencia = CatEstadoLicencias.objects.get(
+            nombre="Sin Asignar")
+        LicEquipo.save()
+
+        # Guardar valores actualizados después de la actualización
+        updated_values = {
+            'id_estado_licencia': LicEquipo.id_estado_licencia,
+        }
+
+        # Registrar los cambios en el historial
+        for field, original_value in original_values.items():
+            current_value = updated_values[field]
+            if original_value != current_value:
+                verbose_name = LicenciasEquipo._meta.get_field(
+                    field).verbose_name
+                Historicos.objects.create(
+                    usuario=self.request.user if self.request.user.is_authenticated else None,
+                    correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                    tipo_cambio="Actualización",
+                    tipo_activo="Licencia Equipo",
+                    activo_modificado=verbose_name,
+                    descripcion=f'Cambio en {verbose_name}: de {original_value} a {
+                        current_value} (Por Desasignacion Licencias)'
+                )
+
+        # Guardar el histórico de la desasignación
+        Historicos.objects.create(
+            usuario=self.request.user if self.request.user.is_authenticated else None,
+            correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+            tipo_cambio="Desasignación",
+            tipo_activo="Licencia Equipo",
+            activo_modificado=LicEquipo.nombre_licencia,
+            descripcion=f'Se elimino la asignación de la licencia "{LicEquipo.nombre_licencia}" a {
+                instance.id_equipo.nombre_equipo}'
+        )
+
         # Eliminar el registro de la tabla AsignacionEquipos después de desasignar el equipo
         instance.delete()
 
         return Response({"detail": "La licencia ha sido desasignado y el registro ha sido eliminado."}, status=status.HTTP_204_NO_CONTENT)
 
-
-class LicenciasSinAsignarViewSet(generics.ListAPIView):
+class LicenciasPersonasSinAsignarViewSet(generics.ListAPIView):
     queryset = LicenciaPersona.objects.filter(
         id_estado_licencia__nombre="Sin Asignar")
-    serializer_class = LicenciaPersonasSerializer
+    serializer_class = LicenciaPerSinAsignarSerializer
     permission_classes = [AllowAny]
 
 
@@ -713,4 +799,17 @@ class PersonasSinAsignacionLicenciaViewSet(generics.ListAPIView):
     queryset = Persona.objects.exclude(
         id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True))
     serializer_class = PersonaSinAsignacionSerializer  # Usa el nuevo serializer
+    permission_classes = [AllowAny]
+
+class LicenciasEquiposSinAsignarViewSet(generics.ListAPIView):
+    queryset = LicenciasEquipo.objects.filter(
+        id_estado_licencia__nombre="Sin Asignar")
+    serializer_class = LicenciaEquSinAsignarSerializer
+    permission_classes = [AllowAny]
+
+
+class EquiposSinAsignacionLicenciaViewSet(generics.ListAPIView):
+    queryset = Equipo.objects.exclude(
+        id_equipo__in=AsignacionLicenciasEquipo.objects.values_list('id_equipo', flat=True))
+    serializer_class = EquipoSinAsignacionSerializer  # Usa el nuevo serializer
     permission_classes = [AllowAny]
