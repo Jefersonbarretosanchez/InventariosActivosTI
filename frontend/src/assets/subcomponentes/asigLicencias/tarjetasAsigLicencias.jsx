@@ -5,7 +5,7 @@ import activos from "../../imagenes/computadora.png";
 import equipos from "../../imagenes/monitoor.png";
 import licencias from "../../imagenes/license-icon.webp";
 
-function TarjetasAsigLicencias() {
+function TarjetasAsigLicencias({ totalLicPersonasAsignadas, totalLicPersonasDisponibles, totalLicEquiposAsignados, totalLicEquiposDisponibles }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-equipos">
@@ -14,7 +14,7 @@ function TarjetasAsigLicencias() {
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos spanAsigLic">
-            <span className="estadisticas-numero-activos">250</span>
+            <span className="estadisticas-numero-activos">{totalLicPersonasAsignadas}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos spanAsigLic">
               Total Licencias Personas Asignadas
@@ -28,7 +28,7 @@ function TarjetasAsigLicencias() {
             <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos spanAsigLic">
-            <span className="estadisticas-numero-activos">75</span>
+            <span className="estadisticas-numero-activos">{totalLicPersonasDisponibles}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos spanAsigLic">
               Total Licencias Personas Disponibles
@@ -42,7 +42,7 @@ function TarjetasAsigLicencias() {
             <img src={activos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos spanAsigLic">
-            <span className="estadisticas-numero-activos spanAsigLic">92</span>
+            <span className="estadisticas-numero-activos spanAsigLic">{totalLicEquiposAsignados}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos spanAsigLic">
               Total Licencias Equipos Asignadas
@@ -56,7 +56,7 @@ function TarjetasAsigLicencias() {
             <img src={equipos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-asigequipos spanAsigLic">
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalLicEquiposDisponibles}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos spanAsigLic">
               Total Licencias Equipos Disponibles

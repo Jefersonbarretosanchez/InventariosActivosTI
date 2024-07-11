@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "../Estilos/activos.css";
 import Header from "../subcomponentes/generales/header";
 import Sidebar from "../subcomponentes/generales/sidebar";
@@ -17,7 +17,6 @@ import TablaKitPerifericosBack from '../subcomponentes/asigEquipos/TablaKitPerif
 import TablaPerifericosBack from '../subcomponentes/asigEquipos/TablaPerifericosBack';
 
 export default function AsigEquipos() {
-
     const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
     const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
     const [totalperifericosAsignados, setTotalPerifericosAsignados] = useState(0);
@@ -25,29 +24,33 @@ export default function AsigEquipos() {
 
     const [equipos, setEquipos] = useState([]);
     const [perifericos, setPerifericos] = useState([]);
-    useEffect(() => {
-        const fetchEquipos = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/equipos/");
-                setEquipos(response.data);
 
-            } catch (error) {
-                console.error("Error fetching equipos data:", error);
-            }
-        };
-        const fetchPerifericos = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/perifericos/");
-                setPerifericos(response.data);
+    const fetchEquipos = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/equipos/");
+            setEquipos(response.data);
+        } catch (error) {
+            console.error("Error fetching equipos data:", error);
+        }
+    };
 
-            } catch (error) {
-                console.error("Error fetching perifericos data:", error);
-            }
-        };
+    const fetchPerifericos = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/perifericos/");
+            setPerifericos(response.data);
+        } catch (error) {
+            console.error("Error fetching perifericos data:", error);
+        }
+    };
 
+    const fetchData = useCallback(() => {
         fetchEquipos();
         fetchPerifericos();
     }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     useEffect(() => {
         const equiposAsignados = equipos.filter(
@@ -66,8 +69,7 @@ export default function AsigEquipos() {
         setTotalEquiposDisponibles(equiposDisponibles);
         setTotalPerifericosAsignados(perifericosAsignados);
         setTotalPerifericosDisponibles(PerifericosDisponibles);
-    }, [equipos]);
-
+    }, [equipos, perifericos]);
 
     const [tablaActiva, setTablaActiva] = useState('asignacionEquipos'); // Estado para la tabla activa
 
@@ -86,15 +88,21 @@ export default function AsigEquipos() {
                 totalequiposAsignados={totalequiposAsignados}
                 totalEquiposDisponibles={totalEquiposDisponibles}
                 totalperifericosAsignados={totalperifericosAsignados}
-                totalperifericosDisponibles={totalperifericosDisponibles} />
+                totalperifericosDisponibles={totalperifericosDisponibles}
+                fetchData={fetchData} // Propagar la función de actualización
+            />
                 : tablaActiva === 'asignacionPerifericos' ? <TablaKitPerifericosBack totalequiposAsignados={totalequiposAsignados}
                     totalEquiposDisponibles={totalEquiposDisponibles}
                     totalperifericosAsignados={totalperifericosAsignados}
-                    totalperifericosDisponibles={totalperifericosDisponibles} />
+                    totalperifericosDisponibles={totalperifericosDisponibles}
+                    fetchData={fetchData} // Propagar la función de actualización
+                />
                     : <TablaPerifericosBack totalequiposAsignados={totalequiposAsignados}
                         totalEquiposDisponibles={totalEquiposDisponibles}
                         totalperifericosAsignados={totalperifericosAsignados}
-                        totalperifericosDisponibles={totalperifericosDisponibles} />}
+                        totalperifericosDisponibles={totalperifericosDisponibles}
+                        fetchData={fetchData} // Propagar la función de actualización
+                    />}
             <ToastContainer />
             <Paginate />
             <Footer />

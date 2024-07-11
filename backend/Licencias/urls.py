@@ -22,8 +22,14 @@ urlpatterns = [
          name='actualizacion_contratos_licencias'),
     path('licencias/responsables/', views.PersonasLicenciasList.as_view(),
          name='lista_responsables'),
-     path('licencias/asignar_licencia_persona/', views.AsignarLicenciaPersonaView.as_view(),#asignar licencias Persona
+    path('licencias/asignar_licencia_persona/', views.AsignarLicenciaPersonaView.as_view(),  # asignar licencias Persona
          name='lista_asignacion_licencias'),
-     path('licencias/desasignar_licencia_persona/<int:pk>/', views.DesasignarLicPerView.as_view(),#asignar licencias Persona
+    path('licencias/desasignar_licencia_persona/<int:pk>/', views.DesasignarLicPerView.as_view(),  # asignar licencias Persona
          name='lista_asignacion_licencias'),
+
+    path('licencias_sin_asignar/', views.LicenciasSinAsignarViewSet.as_view(),
+         name="licencias_sin_asignar"),
+    path('personas_sin_asignacion_licencia/', views.PersonasSinAsignacionLicenciaViewSet.as_view(),
+         name="personas_sin_asignacion_licencia"),
+
 ]

@@ -121,10 +121,10 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
 
   useEffect(() => {
     const LicActivas = licequipos.filter(
-      (licequipo) => licequipo.nombre_estado_licencia === "Activa"
+      (licequipo) => licequipo.nombre_estado_licencia === "Asignada"
     ).length;
     const LicInactivas = licequipos.filter(
-      (licequipo) => licequipo.nombre_estado_licencia === "Inactiva"
+      (licequipo) => licequipo.nombre_estado_licencia === "Sin Asignar"
     ).length;
     const TotalLicenciasEquipos = licequipos.length;
 
@@ -495,7 +495,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                       <td
                         style={{
                           color:
-                            licequipo.nombre_estado_licencia === "Activa"
+                            licequipo.nombre_estado_licencia === "Asignada"
                               ? "#10A142"
                               : "#ff0000",
                           paddingLeft: "0vw"

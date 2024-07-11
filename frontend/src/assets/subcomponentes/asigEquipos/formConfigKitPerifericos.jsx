@@ -4,7 +4,7 @@ export const ALL_INPUT_IDS = [
   "modelo",
   "sereal",
   "costo",
-  "id_estado_periferico"
+  // "id_estado_periferico"
 ];
 export const formFields = [
   {
@@ -42,13 +42,13 @@ export const formFields2 = [
     type: "number",
     required: true,
   },
-  {
-    id: "id_estado_periferico",
-    label: "Estado Periferico",
-    type: "select",
-    required: true,
-    options: [],
-  },
+  // {
+  //   id: "id_estado_periferico",
+  //   label: "Estado Periferico",
+  //   type: "select",
+  //   required: true,
+  //   options: [],
+  // },
 ];
 
 

@@ -11,6 +11,20 @@ export const ALL_INPUT_IDS = [
 
 export const formFields = [
   {
+    id: "id_trabajador",
+    label: "Empleado",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_equipo",
+    label: "Equipo",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
     id: "fecha_entrega_equipo",
     label: "Fecha Entrega Equipo",
     type: "date",
@@ -22,20 +36,8 @@ export const formFields = [
     type: "date",
     required: true,
   },
-  {
-    id: "id_equipo",
-    label: "Equipo",
-    type: "select",
-    required: true,
-    options: [],
-  },
-  {
-    id: "id_trabajador",
-    label: "Empleado",
-    type: "select",
-    required: true,
-    options: [],
-  },
+
+
   {
     id: "id_kit_perifericos",
     label: "Kit de perifericos",

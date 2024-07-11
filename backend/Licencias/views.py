@@ -700,3 +700,17 @@ class DesasignarLicPerView(generics.RetrieveUpdateAPIView):
         instance.delete()
 
         return Response({"detail": "La licencia ha sido desasignado y el registro ha sido eliminado."}, status=status.HTTP_204_NO_CONTENT)
+
+
+class LicenciasSinAsignarViewSet(generics.ListAPIView):
+    queryset = LicenciaPersona.objects.filter(
+        id_estado_licencia__nombre="Sin Asignar")
+    serializer_class = LicenciaPersonasSerializer
+    permission_classes = [AllowAny]
+
+
+class PersonasSinAsignacionLicenciaViewSet(generics.ListAPIView):
+    queryset = Persona.objects.exclude(
+        id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True))
+    serializer_class = PersonaSinAsignacionSerializer  # Usa el nuevo serializer
+    permission_classes = [AllowAny]

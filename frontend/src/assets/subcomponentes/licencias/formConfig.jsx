@@ -4,7 +4,6 @@ export const ALL_INPUT_IDS = [
   "fecha_vencimiento",
   "no_ticket",
   "id_contrato",
-  "id_estado_licencia",
   "id_solicitante",
 ];
 
@@ -44,13 +43,6 @@ export const formFields = [
   {
     id: "id_solicitante",
     label: "Persona Solicitante",
-    type: "select",
-    required: true,
-    options: [],
-  },
-  {
-    id: "id_estado_licencia",
-    label: "Estado Licencia",
     type: "select",
     required: true,
     options: [],

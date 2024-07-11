@@ -69,4 +69,5 @@ function TarjetasAsigEquipos({ totalequiposAsignados, totalEquiposDisponibles, t
     </div>
   );
 }
+
 export default TarjetasAsigEquipos;

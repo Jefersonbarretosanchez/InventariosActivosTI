@@ -4,7 +4,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
 
-const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors, showAddPerifericoButton }) => {
+const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors, showAddPerifericoButton, actionType }) => {
   const [perifericosFields, setPerifericosFields] = useState(initialValues.perifericos || [{ value: null, label: '' }]);
 
   useEffect(() => {
@@ -14,6 +14,15 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
     });
     setErrors(initialErrors);
   }, [fields, setErrors]);
+
+  useEffect(() => {
+    console.log("actionType:", actionType); // Agregar esta línea para depuración
+  }, [actionType]);
+
+
+  useEffect(() => {
+    setPerifericosFields(initialValues.perifericos || [{ value: null, label: '' }]);
+  }, [initialValues.perifericos]);
 
   const validateField = (name, value) => {
     if (!value && (name !== "costo" && name !== "observacion" && name !== "id_ubicacion" && name !== "id_coordinadores" && name !== "fecha_devolucion_equipo" && name !== "id_kit_perifericos")) {
@@ -54,6 +63,7 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
     onInputChange({ target: { name, value: value ? value.value : null } });
     validateField(name, value ? value.value : null);
   };
+
   const handlePerifericoChange = (index, value) => {
     const newFields = [...perifericosFields];
     if (value) {
@@ -64,7 +74,6 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
     setPerifericosFields(newFields);
     onInputChange({ target: { name: 'perifericos', value: newFields.map(field => field.value) } });
   };
-
 
   const addPerifericoField = () => {
     setPerifericosFields([...perifericosFields, { value: null, label: '' }]);
@@ -118,11 +127,11 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
                       )}
                       disabled={disabledFields.includes(field.id)}
                     />
-                    <FontAwesomeIcon
+                    {actionType !== "detail" && (<FontAwesomeIcon
                       icon={faMinusCircle}
                       style={{ marginLeft: '10px', cursor: 'pointer', height: '4vh' }}
                       onClick={() => removePerifericoField(index)}
-                    />
+                    />)}
                   </div>
                 ))
               ) : (
@@ -172,7 +181,6 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
           onClick={addPerifericoField}
         />
       )}
-
     </Formulario>
   );
 };

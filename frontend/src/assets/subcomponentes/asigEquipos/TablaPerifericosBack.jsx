@@ -17,7 +17,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
-function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles }) {
+function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -149,6 +149,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
       setNewPerifericoData({});
       cambiarEstadoModal(false);
       toast.success("Periferico creado exitosamente!");
+      fetchData();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -213,6 +214,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
       setNewPerifericoData({});
       cambiarEstadoModal(false);
       toast.success("Periferico actualizado exitosamente!");
+      fetchData();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message

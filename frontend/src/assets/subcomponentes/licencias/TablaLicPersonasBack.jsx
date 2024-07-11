@@ -120,10 +120,10 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
   }, []);
   useEffect(() => {
     const LicActivas = licpersonas.filter(
-      (licpersona) => licpersona.nombre_estado_licencia === "Activa"
+      (licpersona) => licpersona.nombre_estado_licencia === "Asignada"
     ).length;
     const LicInactivas = licpersonas.filter(
-      (licpersona) => licpersona.nombre_estado_licencia === "Inactiva"
+      (licpersona) => licpersona.nombre_estado_licencia === "Sin Asignar"
     ).length;
 
     setTotalActivos(LicActivas);

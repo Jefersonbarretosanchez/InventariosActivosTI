@@ -13,7 +13,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
-function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles }) {
+function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -179,6 +179,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       setnewKitPerifericoData({});
       cambiarEstadoModal(false);
       toast.success("El Kit Fue Creado Exitosamente!");
+      fetchData();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -252,6 +253,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       setnewKitPerifericoData({});
       cambiarEstadoModal(false);
       toast.success("El Kit Periferico fue actualizado exitosamente!");
+      fetchData();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -320,6 +322,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
           initialValues={initialValues}
           onInputChange={handleInputChange}
           showAddPerifericoButton={action === "create" || action === "update"}
+          actionType={action}
         />
       ),
     });
@@ -502,9 +505,9 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "8.2vw" }}>ID</th>
-                  <th style={{ paddingLeft: "3vw" }}>Perifericos</th>
-                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  <th style={{ paddingLeft: "15.2vw" }}>ID</th>
+                  <th style={{ paddingLeft: "8vw" }}>Perifericos</th>
+                  <th style={{ paddingLeft: "6vw" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody >
@@ -525,9 +528,9 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
                 ) : (
                   currentRecords.map((kitperiferico) => (
                     <tr key={kitperiferico.id_kit_perifericos}>
-                      <td style={{ paddingLeft: "8.5vw" }}>{kitperiferico.id_kit_perifericos}</td>
-                      <td>{kitperiferico.perifericosNames.join(', ')}</td>
-                      <td>
+                      <td style={{ paddingLeft: "15.5vw" }}>{kitperiferico.id_kit_perifericos}</td>
+                      <td style={{ paddingLeft: "8vw" }}>{kitperiferico.perifericosNames.join(', ')}</td>
+                      <td style={{ paddingLeft: "5vw" }}>
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(kitperiferico)}
@@ -541,6 +544,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
                           <FontAwesomeIcon icon={faFileLines} />
                         </button>
                       </td>
+                      <td style={{ paddingLeft: "17vw" }}></td>
                     </tr>
                   ))
                 )}

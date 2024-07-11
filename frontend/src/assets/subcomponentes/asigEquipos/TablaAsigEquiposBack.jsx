@@ -4,7 +4,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
-import ModalDesasignacion from "../generales/modalDesasignacion"
+import ModalDesasignacion from "../generales/modalDesasignacion";
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
 import { formFields, formFields2, filterFields, ALL_INPUT_IDS } from "./formConfig";
@@ -13,7 +13,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
-function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles }) {
+function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -25,7 +25,9 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
   const [asigEquiposSeleccionado, setasigEquiposSeleccionado] = useState(null);
   const [desasigEquiposSeleccionado, setDesasigEquiposSeleccionado] = useState(null);
   const [equipo, setEquipo] = useState([]);
+  const [equipoFiltrado, setEquipoFiltrado] = useState([]);
   const [trabajador, setTrabajador] = useState([]);
+  const [trabajadorFiltrado, setTrabajadorFiltrado] = useState([]);
   const [perifericos, setPerifericos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
@@ -81,70 +83,88 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     fetchasigEquipos();
   }, []);
 
+  const fetchCatalogos = async () => {
+    setIsLoading(true);
+    setIsCatalogsLoading(true);
+    try {
+      const responseEquipos = await axios.get(
+        "http://localhost:8000/api/equipos/"
+      );
+      const equiposData = responseEquipos.data.map((item) => ({
+        value: item.id_equipo,
+        label: item.nombre_equipo,
+      }));
+      setEquipo(equiposData);
+
+      const responseTrabajador = await axios.get(
+        "http://localhost:8000/api/licencias/responsables/"
+      );
+      const trabajadoresData = responseTrabajador.data.map((item) => ({
+        value: item.id_trabajador,
+        label: item.nombres,
+      }));
+      setTrabajador(trabajadoresData);
+
+      const responsePerifericos = await axios.get(
+        "http://localhost:8000/api/kit_perifericos/"
+      );
+      setPerifericos(
+        responsePerifericos.data.map((item) => ({
+          value: item.id_kit_perifericos,
+          label: item.id_kit_perifericos,
+        }))
+      );
+
+      const responseCoordinadores = await axios.get(
+        "http://localhost:8000/api/coordinadores/"
+      );
+      setCoordinadores(
+        responseCoordinadores.data.map((item) => ({
+          value: item.id_coordinadores,
+          label: item.nombre,
+        }))
+      );
+
+      const responseUbicaciones = await axios.get(
+        "http://localhost:8000/api/ubicaciones/"
+      );
+      setUbicaciones(
+        responseUbicaciones.data.map((item) => ({
+          value: item.id_ubicacion,
+          label: item.nombre,
+        }))
+      );
+
+      // Fetch only unassigned equipos and trabajadores
+      const responseEquiposFiltrados = await axios.get(
+        "http://localhost:8000/api/equipos_en_bodega/"
+      );
+      setEquipoFiltrado(
+        responseEquiposFiltrados.data.map((item) => ({
+          value: item.id_equipo,
+          label: item.nombre_equipo,
+        }))
+      );
+
+      const responseTrabajadorFiltrados = await axios.get(
+        "http://localhost:8000/api/personas_sin_asignacion/"
+      );
+      setTrabajadorFiltrado(
+        responseTrabajadorFiltrados.data.map((item) => ({
+          value: item.id_trabajador,
+          label: item.nombres,
+        }))
+      );
+
+    } catch (error) {
+      toast.error("Hubo un error en la carga de datos de los catalogos.");
+    } finally {
+      setIsLoading(false);
+      setIsCatalogsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCatalogos = async () => {
-      setIsLoading(true);
-      setIsCatalogsLoading(true);
-      try {
-        const responseEquipos = await axios.get(
-          "http://localhost:8000/api/equipos/"
-        );
-        setEquipo(
-          responseEquipos.data.map((item) => ({
-            value: item.id_equipo,
-            label: item.nombre_equipo, // Mantener el nombre original en el valor
-          }))
-        );
-
-        const responseTrabajador = await axios.get(
-          "http://localhost:8000/api/licencias/responsables/"
-        );
-        setTrabajador(
-          responseTrabajador.data.map((item) => ({
-            value: item.id_trabajador,
-            label: item.nombres, // Mantener el nombre original en el valor
-          }))
-        );
-
-        const responsePerifericos = await axios.get(
-          "http://localhost:8000/api/kit_perifericos/"
-        );
-        setPerifericos(
-          responsePerifericos.data.map((item) => ({
-            value: item.id_kit_perifericos,
-            label: item.id_kit_perifericos,
-          }))
-        );
-
-        const responseCoordinadores = await axios.get(
-          "http://localhost:8000/api/coordinadores/"
-        );
-        setCoordinadores(
-          responseCoordinadores.data.map((item) => ({
-            value: item.id_coordinadores,
-            label: item.nombre,
-          }))
-        );
-
-        const responseUbicaciones = await axios.get(
-          "http://localhost:8000/api/ubicaciones/"
-        );
-        setUbicaciones(
-          responseUbicaciones.data.map((item) => ({
-            value: item.id_ubicacion,
-            label: item.nombre,
-          }))
-        );
-
-      } catch (error) {
-        toast.error("Hubo un error en la carga de datos de los catalogos.");
-      } finally {
-        setIsLoading(false);
-        setIsCatalogsLoading(false);
-      }
-    };
-
     fetchCatalogos();
   }, []);
 
@@ -185,6 +205,9 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       setnewAsigEquipoData({});
       cambiarEstadoModal(false);
       toast.success("La Asignacion de equipo creada exitosamente!");
+      fetchData(); // Actualizar los datos
+      fetchasigEquipos();
+      fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -253,6 +276,9 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       setnewDesasigEquipoData({});
       cambiarEstadoModalDesasignacion(false);
       toast.success("La Desasignacion del equipo fue exitosa!");
+      fetchData(); // Actualizar los datos
+      fetchasigEquipos();
+      fetchCatalogos(); // Actualizar los catálogos
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -277,7 +303,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
               <br />
             </strong>
           </div>,
-          { position: "bottom-center" }
+          { position: "bottom-center", }
         );
       } else {
         toast.error(`${errorMessage} (Código de error: ${statusCode})`);
@@ -318,6 +344,8 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       setnewAsigEquipoData({});
       cambiarEstadoModal(false);
       toast.success("La Asignacion del equipo fue actualizada exitosamente!");
+      fetchData(); // Actualizar los datos
+      fetchasigEquipos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -365,11 +393,12 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       toast.info("Espere a que los datos se carguen completamente.");
       return;
     }
+
     let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_equipo") {
-        return { ...field, options: equipo };
+        return { ...field, options: action === "create" ? equipoFiltrado : equipo };
       } else if (field.id === "id_trabajador") {
-        return { ...field, options: trabajador };
+        return { ...field, options: action === "create" ? trabajadorFiltrado : trabajador };
       } else if (field.id === "id_kit_perifericos") {
         return { ...field, options: perifericos };
       }
@@ -394,13 +423,14 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         />
       ),
     });
+
     if (action === "degree") {
       cambiarEstadoModalDesasignacion(true);
     } else {
       cambiarEstadoModal(true);
     }
-
   };
+
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
@@ -464,10 +494,21 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     abrirModal("Crear Asignacion Equipo", formFields, [], {}, "create");
   };
 
-  const handleDesgree = (desasigequipos) => {
-    setDesasigEquiposSeleccionado(desasigequipos);
+  const handleEdit = (asigequipo) => {
+    setasigEquiposSeleccionado(asigequipo);
     abrirModal(
-      `Desasignar Equipo`,
+      `Actualizar ${asigequipo.id_asignacion}`,
+      formFields,
+      ["id_equipo", "id_trabajador"],
+      asigequipo,
+      "update"
+    );
+  };
+
+  const handleDesgree = (desasigequipo) => {
+    setDesasigEquiposSeleccionado(desasigequipo);
+    abrirModal(
+      "Desasignar Equipo",
       formFields2.map((field) => {
         if (field.id === "id_trabajador") {
           return { ...field, options: trabajador };
@@ -479,22 +520,8 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         return field;
       }),
       ["id_trabajador", "id_equipo"],
-      desasigequipos,
+      desasigequipo,
       "degree"
-    );
-  };
-
-
-
-
-  const handleEdit = (asigequipo) => {
-    setasigEquiposSeleccionado(asigequipo);
-    abrirModal(
-      `Actualizar ${asigequipo.id_asignacion}`,
-      formFields,
-      [""],
-      asigequipo,
-      "update"
     );
   };
 
@@ -509,12 +536,13 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     );
   };
 
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   const filteredasigEquipos = asigequipos.filter((asigequipo) => {
-    const searchString = `${asigequipo.id_asignacion} ${asigequipo.id_equipo} ${asigequipo.id_trabajador} ${asigequipo.id_kit_perifericos}`.toLowerCase();
+    const searchString = `${asigequipo.id_asignacion} ${asigequipo.nombre_equipo} ${asigequipo.nombre_trabajador} ${asigequipo.id_kit_perifericos}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {

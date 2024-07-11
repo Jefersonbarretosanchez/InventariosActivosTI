@@ -10,7 +10,6 @@ export const ALL_INPUT_IDS = [
   "anydesk",
   "id_tipopropiedad",
   "id_tipoequipo",
-  "id_estadoequipo",
   "id_coordinadores",
   "id_ubicacion",
   "costo",
@@ -86,13 +85,6 @@ export const formFields = [
   {
     id: "id_tipoequipo",
     label: "Tipo De Equipo",
-    type: "select",
-    required: true,
-    options: [],
-  },
-  {
-    id: "id_estadoequipo",
-    label: "Estado Equipo",
     type: "select",
     required: true,
     options: [],

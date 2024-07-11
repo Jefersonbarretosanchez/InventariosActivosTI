@@ -19,7 +19,7 @@ function TarjetasLicencias({ totalActivos, totalInactivos, totalLicenciasPersona
             <span className="estadisticas-numero-activos">{totalActivos}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos">
-              Total Licencias Activas
+              Total Licencias Asignadas
             </span>
           </div>
         </Link>
@@ -33,7 +33,7 @@ function TarjetasLicencias({ totalActivos, totalInactivos, totalLicenciasPersona
             <span className="estadisticas-numero-activos">{totalInactivos}</span>
             <br />
             <span className="estadisticas-descripcion-asigequipos">
-              Total Licencias Inactivas
+              Total Licencias Disponibles
             </span>
           </div>
         </Link>
