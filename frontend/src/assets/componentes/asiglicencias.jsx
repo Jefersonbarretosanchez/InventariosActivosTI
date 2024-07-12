@@ -15,6 +15,7 @@ import TablaAsigLicPersonaBack from '../subcomponentes/asigLicencias/TablaAsigLi
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import TablaAsigLicEquiposBack from '../subcomponentes/asigLicencias/TablaAsigLicEquiposBack';
 
 export default function Asiglicencias() {
 
@@ -91,7 +92,13 @@ export default function Asiglicencias() {
                     totalLicPersonasDisponibles={totalLicPersonasDisponibles}
                     totalLicEquiposAsignados={totalLicEquiposAsignados}
                     totalLicEquiposDisponibles={totalLicEquiposDisponibles}
-                    fetchData={fetchData} />) : (<TablaAsigLicEquipos />)}
+                    fetchData={fetchData} />) :
+                (<TablaAsigLicEquiposBack
+                    totalLicPersonasAsignadas={totalLicPersonasAsignadas}
+                    totalLicPersonasDisponibles={totalLicPersonasDisponibles}
+                    totalLicEquiposAsignados={totalLicEquiposAsignados}
+                    totalLicEquiposDisponibles={totalLicEquiposDisponibles}
+                    fetchData={fetchData} />)}
             <ToastContainer />
             <Paginate />
             <Footer />

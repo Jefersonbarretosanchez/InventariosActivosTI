@@ -491,7 +491,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "25vw" }}></td>
                     <td style={{ paddingLeft: "13vw" }}>
                       <Loading>
                         <Spinner />

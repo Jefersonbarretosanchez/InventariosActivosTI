@@ -5,6 +5,7 @@ export const ALL_INPUT_IDS = [
   "no_ticket",
   "id_contrato",
   "id_solicitante",
+  // "id_estado_licencia"
 ];
 
 export const formFields = [
@@ -47,6 +48,13 @@ export const formFields = [
     required: true,
     options: [],
   },
+  // {
+  //   id: "id_estado_licencia",
+  //   label: "Estado Licencia",
+  //   type: "select",
+  //   required: true,
+  //   options: [],
+  // },
 ];
 
 export const filterFields = [

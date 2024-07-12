@@ -4,41 +4,36 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
-import ModalDesasignacion from "../generales/modalDesasignacion";
+import ModalDesasignacion from "../generales/modalDesasignacion"
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, formFields2, filterFields, ALL_INPUT_IDS } from "./formConfig";
+import { formFields1, formFields2, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
-import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
+import TarjetasAsigLicencias from "./tarjetasAsigLicencias";
 
-function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
+
+function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDisponibles, totalLicEquiposAsignados, totalLicEquiposDisponibles, fetchData }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
 
-  const [asigequipos, setAsigEquipos] = useState([]);
-  const [desasigequipos, setDesasigEquipos] = useState([]);
-  const [asigEquiposSeleccionado, setasigEquiposSeleccionado] = useState(null);
-  const [desasigEquiposSeleccionado, setDesasigEquiposSeleccionado] = useState(null);
+  const [asiglicequipos, setAsigLicEquipos] = useState([]);
+  const [desasiglicequipos, setDesasigLicEquipos] = useState([]);
+  const [asiglicEquipoSeleccionado, setasigLicEquipoSeleccionado] = useState(null);
+  const [desasiglicEquipoSeleccionado, setDesasigLicEquipoSeleccionado] = useState(null);
+  const [licencia, setLicencia] = useState([]);
+  const [lienciaFiltrada, setLicnciaFiltrada] = useState([]);
   const [equipo, setEquipo] = useState([]);
   const [equipoFiltrado, setEquipoFiltrado] = useState([]);
-  const [trabajador, setTrabajador] = useState([]);
-  const [trabajadorFiltrado, setTrabajadorFiltrado] = useState([]);
-  const [perifericos, setPerifericos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
-  const [newAsigEquipoData, setnewAsigEquipoData] = useState({});
-  const [newDesasigEquipoData, setnewDesasigEquipoData] = useState({});
+  const [newAsigLicEquipoData, setnewAsigLicEquipoData] = useState({});
+  const [newDesAsigLicEquipoData, setnewDesAsigLicEquipoData] = useState({});
   const [actionType, setActionType] = useState("");
-
-
-  const [coordinadores, setCoordinadores] = useState([]);
-  const [ubicaciones, setUbicaciones] = useState([]);
-
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -65,94 +60,65 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchasigEquipos = async () => {
+  const fetchasigLicEquipo = async () => {
     setIsLoading(true);
     try {
-      const responseasigEquipos = await axios.get(
-        "http://localhost:8000/api/asignar_equipo/"
+      const responseasigLicEquipo = await axios.get(
+        "http://localhost:8000/api/licencias/asignar_licencia_equipo/"
       );
-      setAsigEquipos(responseasigEquipos.data);
+      setAsigLicEquipos(responseasigLicEquipo.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de Asignacion Equipos");
+      toast.error("Hubo un error en la carga de datos de Asignacion de Licencias Equipos");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchasigEquipos();
+    fetchasigLicEquipo();
   }, []);
 
   const fetchCatalogos = async () => {
     setIsLoading(true);
     setIsCatalogsLoading(true);
     try {
-      const responseEquipos = await axios.get(
+      const responseLicEquipo = await axios.get(
+        "http://localhost:8000/api/licencias/equipo/"
+      );
+      setLicencia(
+        responseLicEquipo.data.map((item) => ({
+          value: item.id_licencia,
+          label: item.nombre_licencia,
+        }))
+      );
+
+      const responseEquipo = await axios.get(
         "http://localhost:8000/api/equipos/"
       );
-      const equiposData = responseEquipos.data.map((item) => ({
-        value: item.id_equipo,
-        label: item.nombre_equipo,
-      }));
-      setEquipo(equiposData);
-
-      const responseTrabajador = await axios.get(
-        "http://localhost:8000/api/licencias/responsables/"
-      );
-      const trabajadoresData = responseTrabajador.data.map((item) => ({
-        value: item.id_trabajador,
-        label: item.nombres,
-      }));
-      setTrabajador(trabajadoresData);
-
-      const responsePerifericos = await axios.get(
-        "http://localhost:8000/api/kit_perifericos/"
-      );
-      setPerifericos(
-        responsePerifericos.data.map((item) => ({
-          value: item.id_kit_perifericos,
-          label: item.id_kit_perifericos,
+      setEquipo(
+        responseEquipo.data.map((item) => ({
+          value: item.id_equipo,
+          label: item.nombre_equipo, // Mantener el nombre original en el valor
         }))
       );
 
-      const responseCoordinadores = await axios.get(
-        "http://localhost:8000/api/coordinadores/"
+      const responseLicEquiposFiltradas = await axios.get(
+        "http://localhost:8000/api/licencias_sin_asignar_equipos/"
       );
-      setCoordinadores(
-        responseCoordinadores.data.map((item) => ({
-          value: item.id_coordinadores,
-          label: item.nombre,
+      setLicnciaFiltrada(
+        responseLicEquiposFiltradas.data.map((item) => ({
+          value: item.id_licencia,
+          label: item.nombre_licencia,
         }))
       );
 
-      const responseUbicaciones = await axios.get(
-        "http://localhost:8000/api/ubicaciones/"
-      );
-      setUbicaciones(
-        responseUbicaciones.data.map((item) => ({
-          value: item.id_ubicacion,
-          label: item.nombre,
-        }))
-      );
-
-      // Fetch only unassigned equipos and trabajadores
       const responseEquiposFiltrados = await axios.get(
-        "http://localhost:8000/api/equipos_en_bodega/"
+        "http://localhost:8000/api/equipos_sin_asignacion_licencia/"
       );
       setEquipoFiltrado(
         responseEquiposFiltrados.data.map((item) => ({
           value: item.id_equipo,
           label: item.nombre_equipo,
-        }))
-      );
-
-      const responseTrabajadorFiltrados = await axios.get(
-        "http://localhost:8000/api/personas_sin_asignacion/"
-      );
-      setTrabajadorFiltrado(
-        responseTrabajadorFiltrados.data.map((item) => ({
-          value: item.id_trabajador,
-          label: item.nombres,
         }))
       );
 
@@ -170,7 +136,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setnewAsigEquipoData((prevData) => ({ ...prevData, [name]: value }));
+    setnewAsigLicEquipoData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -186,27 +152,26 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     setCurrentPage(1);
   };
 
-  const createasigEquipo = async () => {
+  const createasigLicEquipo = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newAsigEquipoData,
-        id_equipo: parseInt(newAsigEquipoData.id_equipo, 10),
-        id_trabajador: parseInt(newAsigEquipoData.id_trabajador, 10),
-        id_kit_perifericos: parseInt(newAsigEquipoData.id_kit_perifericos, 10),
+        ...newAsigLicEquipoData,
+        id_licencia: parseInt(newAsigLicEquipoData.id_licencia, 10),
+        id_equipo: parseInt(newAsigLicEquipoData.id_equipo, 10),
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/asignar_equipo/",
+        "http://localhost:8000/api/licencias/asignar_licencia_equipo/",
         formattedData
       );
-      const nuevaasigEquipo = response.data;
-      setAsigEquipos([...asigequipos, nuevaasigEquipo]);
-      setnewAsigEquipoData({});
+      const nuevaasigLicEquipo = response.data;
+      setAsigLicEquipos([...asiglicequipos, nuevaasigLicEquipo]);
+      setnewAsigLicEquipoData({});
       cambiarEstadoModal(false);
-      toast.success("La Asignacion de equipo creada exitosamente!");
-      fetchData(); // Actualizar los datos
-      fetchasigEquipos();
+      toast.success("La Asignacion de la Licencia fue creada exitosamente!");
+      fetchData();
+      fetchasigLicEquipo();
       fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
@@ -243,42 +208,40 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     }
   };
 
-  const createDesasigEquipo = async () => {
+  const createDesasigLicEquipo = async () => {
     setIsLoading(true);
     try {
 
       const updatedData = {
-        ...desasigEquiposSeleccionado,
-        ...newAsigEquipoData,
+        ...desasiglicEquipoSeleccionado,
+        ...newAsigLicEquipoData,
       };
 
       const formattedData = {
         ...updatedData,
-        id_equipo: parseInt(newAsigEquipoData.id_equipo, 10),
-        id_trabajador: parseInt(newAsigEquipoData.id_trabajador, 10),
-        id_coordinadores: parseInt(newAsigEquipoData.id_coordinadores, 10),
-        id_ubicacion: parseInt(newAsigEquipoData.id_ubicacion, 10),
+        id_licencia: parseInt(newAsigLicEquipoData.id_licencia, 10),
+        id_equipo: parseInt(newAsigLicEquipoData.id_equipo, 10),
       };
-      console.log("id equipo:" + formattedData.id_equipo);
+      console.log("id licencia:" + formattedData.id_licencia);
 
       const response = await axios.put(
-        `http://localhost:8000/api/desasignar_equipo/${desasigEquiposSeleccionado.id_asignacion}/`,
+        `http://localhost:8000/api/licencias/desasignar_licencia_equipo/${desasiglicEquipoSeleccionado.id}/`,
         formattedData
       );
 
-      const nuevaDesasigEquipo = response.data;
-      setDesasigEquipos(
-        desasigequipos.map((desasigequipo) =>
-          desasigequipo.id_asignacion === nuevaDesasigEquipo.id_asignacion
-            ? nuevaDesasigEquipo
-            : desasigequipo
+      const nuevaDesasigLicEquipo = response.data;
+      setDesasigLicEquipos(
+        desasiglicequipos.map((desasiglicequipo) =>
+          desasiglicequipo.id === nuevaDesasigLicEquipo.id
+            ? nuevaDesasigLicEquipo
+            : desasiglicequipo
         ));
-      setnewDesasigEquipoData({});
+      setnewDesAsigLicEquipoData({});
       cambiarEstadoModalDesasignacion(false);
-      toast.success("La Desasignacion del equipo fue exitosa!");
-      fetchData(); // Actualizar los datos
-      fetchasigEquipos();
-      fetchCatalogos(); // Actualizar los catálogos
+      toast.success("La Desasignacion de la licencia fue exitosa!");
+      fetchData();
+      fetchasigLicEquipo();
+      fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -303,79 +266,12 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
               <br />
             </strong>
           </div>,
-          { position: "bottom-center", }
+          { position: "bottom-center" }
         );
       } else {
         toast.error(`${errorMessage} (Código de error: ${statusCode})`);
       }
       cambiarEstadoModalDesasignacion(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateAsigEquipo = async () => {
-    setIsLoading(true);
-    try {
-      const updatedData = {
-        ...asigEquiposSeleccionado,
-        ...newAsigEquipoData,
-      };
-
-      const formattedData = {
-        ...updatedData,
-        id_equipo: parseInt(newAsigEquipoData.id_equipo, 10),
-        id_trabajador: parseInt(newAsigEquipoData.id_trabajador, 10),
-        id_kit_perifericos: parseInt(newAsigEquipoData.id_kit_perifericos, 10),
-      };
-
-      const response = await axios.put(
-        `http://localhost:8000/api/actualizar_asignacion_equipo/${asigEquiposSeleccionado.id_asignacion}/`,
-        formattedData
-      );
-      const updatedasigEquipo = response.data;
-      setAsigEquipos(
-        asigequipos.map((asigequipo) =>
-          asigequipo.id_asignacion === updatedasigEquipo.id_asignacion
-            ? updatedasigEquipo
-            : asigequipo
-        )
-      );
-      setnewAsigEquipoData({});
-      cambiarEstadoModal(false);
-      toast.success("La Asignacion del equipo fue actualizada exitosamente!");
-      fetchData(); // Actualizar los datos
-      fetchasigEquipos();
-    } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : error.message;
-      const statusCode = error.response ? error.response.status : 500;
-
-      if (error.response && error.response.data.errors) {
-        const specificErrors = error.response.data.errors;
-
-        const formattedErrors = Object.keys(specificErrors)
-          .map((key) => `${key}: ${specificErrors[key]}`)
-          .join("<br />");
-
-        toast.error(
-          <div>
-            {errorMessage} <br />
-            <br />
-            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
-            <br />
-            <strong>
-              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
-              <br />
-            </strong>
-          </div>,
-          { position: "bottom-center", }
-        );
-      } else {
-        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
-      }
-      cambiarEstadoModal(false);
     } finally {
       setIsLoading(false);
     }
@@ -393,22 +289,19 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       toast.info("Espere a que los datos se carguen completamente.");
       return;
     }
-
     let fieldsWithOptions = fields.map((field) => {
-      if (field.id === "id_equipo") {
+      if (field.id === "id_licencia") {
+        return { ...field, options: action === "create" ? lienciaFiltrada : licencia };
+      } else if (field.id === "id_equipo") {
         return { ...field, options: action === "create" ? equipoFiltrado : equipo };
-      } else if (field.id === "id_trabajador") {
-        return { ...field, options: action === "create" ? trabajadorFiltrado : trabajador };
-      } else if (field.id === "id_kit_perifericos") {
-        return { ...field, options: perifericos };
       }
       return field;
     });
 
     if (action === "degree") {
-      setnewDesasigEquipoData(initialValues);
+      setnewDesAsigLicEquipoData(initialValues);
     } else {
-      setnewAsigEquipoData(initialValues);
+      setnewAsigLicEquipoData(initialValues);
     }
 
     setActionType(action);
@@ -423,14 +316,13 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         />
       ),
     });
-
     if (action === "degree") {
       cambiarEstadoModalDesasignacion(true);
     } else {
       cambiarEstadoModal(true);
     }
-  };
 
+  };
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
@@ -491,63 +383,50 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
   };
 
   const handleCreate = () => {
-    abrirModal("Crear Asignacion Equipo", formFields, [], {}, "create");
+    abrirModal("Crear Asignacion Licencia", formFields2, [], {}, "create");
   };
 
-  const handleEdit = (asigequipo) => {
-    setasigEquiposSeleccionado(asigequipo);
+  const handleDesgree = (desasiglicequipo) => {
+    setDesasigLicEquipoSeleccionado(desasiglicequipo);
     abrirModal(
-      `Actualizar ${asigequipo.id_asignacion}`,
-      formFields,
-      ["id_equipo", "id_trabajador"],
-      asigequipo,
-      "update"
-    );
-  };
-
-  const handleDesgree = (desasigequipo) => {
-    setDesasigEquiposSeleccionado(desasigequipo);
-    abrirModal(
-      "Desasignar Equipo",
+      `Desasignar Licencia`,
       formFields2.map((field) => {
-        if (field.id === "id_trabajador") {
-          return { ...field, options: trabajador };
-        } else if (field.id === "id_coordinadores") {
-          return { ...field, options: coordinadores };
-        } else if (field.id === "id_ubicacion") {
-          return { ...field, options: ubicaciones };
+        if (field.id === "id_licencia") {
+          return { ...field, options: licencia };
+        } else if (field.id === "id_equipo") {
+          return { ...field, options: equipo };
         }
         return field;
       }),
-      ["id_trabajador", "id_equipo"],
-      desasigequipo,
+      ["id_equipo", "id_licencia"],
+      desasiglicequipo,
       "degree"
     );
   };
 
-  const handleInfo = (asigequipo) => {
-    setasigEquiposSeleccionado(asigequipo);
+
+  const handleInfo = (asiglicequipo) => {
+    setasigLicEquipoSeleccionado(asiglicequipo);
     abrirModal(
-      `Información de ${asigequipo.id_asignacion}`,
-      formFields,
-      ALL_INPUT_IDS,
-      asigequipo,
+      `Información de ${asiglicequipo.id}`,
+      formFields2,
+      ["id_equipo", "id_licencia"],
+      asiglicequipo,
       "detail"
     );
   };
-
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const filteredasigEquipos = asigequipos.filter((asigequipo) => {
-    const searchString = `${asigequipo.id_asignacion} ${asigequipo.nombre_equipo} ${asigequipo.nombre_trabajador} ${asigequipo.id_kit_perifericos}`.toLowerCase();
+  const filteredasigLicEquipos = asiglicequipos.filter((asiglicequipo) => {
+    const searchString = `${asiglicequipo.id} ${asiglicequipo.nombre_equipo} ${asiglicequipo.nombre_licencia}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(asigequipo[key]) === String(filtroValues[key]);
+      return String(asiglicequipo[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -555,27 +434,27 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredasigEquipos.slice(
+  const currentRecords = filteredasigLicEquipos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredasigEquipos.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredasigLicEquipos.length / recordsPerPage);
 
   return (
     <>
       <div style={{ marginTop: '-2vh' }}>
-        < TarjetasAsigEquipos
-          totalequiposAsignados={totalequiposAsignados}
-          totalEquiposDisponibles={totalEquiposDisponibles}
-          totalperifericosAsignados={totalperifericosAsignados}
-          totalperifericosDisponibles={totalperifericosDisponibles} />
+        < TarjetasAsigLicencias
+          totalLicPersonasAsignadas={totalLicPersonasAsignadas}
+          totalLicPersonasDisponibles={totalLicPersonasDisponibles}
+          totalLicEquiposAsignados={totalLicEquiposAsignados}
+          totalLicEquiposDisponibles={totalLicEquiposDisponibles} />
       </div>
       <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">
         <div className="row-activos">
           <div className="asigEquipos">
-            <h1>Asignacion Equipos</h1>
+            <h1>Asignacion Licencias Persona</h1>
           </div>
-          <div style={{ marginLeft: '0.5vw' }} className="contbuscador-asigEquipos">
+          <div style={{ marginLeft: '1.5vw' }} className="contbuscador-asigEquipos">
             <input
               className="contbuscador-licenciasPer"
               type="text"
@@ -590,6 +469,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
           </div>
           <div>
             <FontAwesomeIcon
+              style={{ marginLeft: '37vw' }}
               className="agregar-licPersonas"
               onClick={() => handleCreate()}
               icon={faPlus}
@@ -601,10 +481,9 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
                   <th style={{ paddingLeft: "5vw" }}>ID Asignacion</th>
-                  <th style={{ paddingLeft: "6vw" }}>Empleado</th>
-                  <th style={{ paddingLeft: "3vw" }}>Equipo</th>
-                  <th style={{ paddingLeft: "1vw" }}>Fecha Entrega</th>
-                  <th style={{ paddingLeft: "5.8vw" }}>Acciones</th>
+                  <th style={{ paddingLeft: "0vw" }}>Licencia</th>
+                  <th style={{ paddingLeft: "3vw" }}>Equipos</th>
+                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody >
@@ -612,43 +491,31 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
                   <tr>
                     <td></td>
                     <td style={{ paddingLeft: "13vw" }}></td>
-                    <td style={{ paddingLeft: "1vw" }}>
+                    <td style={{ paddingLeft: "13vw" }}>
                       <Loading>
                         <Spinner />
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "30vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((asigequipo) => (
-                    <tr key={asigequipo.id_asignacion}>
-                      <td style={{ paddingLeft: "8.5vw" }}>{asigequipo.id_asignacion}</td>
-                      <td>{asigequipo.nombre_trabajador} {asigequipo.apellido_trabajador}</td>
-                      <td style={{ paddingLeft: "1vw" }}>{asigequipo.nombre_equipo}</td>
-                      <td style={{ paddingLeft: "2vw" }}>{asigequipo.fecha_entrega_equipo}</td>
+                  currentRecords.map((asiglicequipo) => (
+                    <tr key={asiglicequipo.id}>
+                      <td style={{ paddingLeft: "9vw" }}>{asiglicequipo.id}</td>
+                      <td style={{ paddingLeft: "0vw" }}>{asiglicequipo.nombre_licencia}</td>
+                      <td>{asiglicequipo.nombre_equipo}</td>
+
                       <td>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(asigequipo)}
-                        >
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(asigequipo)}
-                        >
-                          <FontAwesomeIcon icon={faFileLines} />
-                        </button>
-
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleDesgree(asigequipo)}
+                          onClick={() => handleDesgree(asiglicequipo)}
 
                         >
-                          <FontAwesomeIcon icon={faMinus} />
+                          <FontAwesomeIcon icon={faMinus}
+                            style={{ marginLeft: '1.4vw' }} />
                         </button>
                       </td>
                     </tr>
@@ -671,9 +538,8 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createasigEquipo}
-        onUpdate={updateAsigEquipo}
-        onDegree={createDesasigEquipo}
+        onCreate={createasigLicEquipo}
+        onDegree={createDesasigLicEquipo}
       >
         {modalConfig.contenido}
       </Modal>
@@ -683,9 +549,8 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         cambiarEstado={cambiarEstadoModalDesasignacion}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createasigEquipo}
-        onUpdate={updateAsigEquipo}
-        onDegree={createDesasigEquipo}
+        onCreate={createasigLicEquipo}
+        onDegree={createDesasigLicEquipo}
       >
         {modalConfig.contenido}
       </ModalDesasignacion>
@@ -743,7 +608,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
   );
 }
 
-export default TablaAsigEquiposBack;
+export default TablaAsigLicEquiposBack;
 
 const Boton = styled.button`
   display: block;

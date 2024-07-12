@@ -514,14 +514,14 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
-                    <td style={{ paddingLeft: "13vw" }}>
+                    <td style={{ paddingLeft: "0vw" }}></td>
+                    <td style={{ paddingLeft: "0vw" }}>
                       <Loading>
                         <Spinner />
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "30vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
