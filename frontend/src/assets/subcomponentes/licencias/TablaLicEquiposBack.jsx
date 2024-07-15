@@ -293,7 +293,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
     });
 
     if (action === "create") {
-      initialValues.id_estado_licencia = estadoLicencia.find(e => e.label === "Activa")?.value || "";
+      initialValues.id_estado_licencia = estadoLicencia.find(e => e.label === "Sin Asignar")?.value || "";
       fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_licencia");
     }
 
@@ -473,7 +473,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "25vw" }}></td>
                     <td style={{ paddingLeft: "13vw" }}>
                       <Loading>
                         <Spinner />

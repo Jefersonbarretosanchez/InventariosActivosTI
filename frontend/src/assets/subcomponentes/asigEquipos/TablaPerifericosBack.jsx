@@ -452,7 +452,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "25vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>

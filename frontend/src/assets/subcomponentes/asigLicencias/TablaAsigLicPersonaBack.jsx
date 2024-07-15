@@ -497,7 +497,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "30vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -509,19 +509,14 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                       <td>{asiglicpersona.nombre_trabajador} {asiglicpersona.apellido_trabajador}</td>
 
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(asiglicpersona)}
-                        >
-                          <FontAwesomeIcon icon={faFileLines} />
-                        </button>
 
                         <button
                           className="btn-accion"
                           onClick={() => handleDesgree(asiglicpersona)}
 
                         >
-                          <FontAwesomeIcon icon={faMinus} />
+                          <FontAwesomeIcon icon={faMinus}
+                            style={{ marginLeft: '1.4vw' }} />
                         </button>
                       </td>
                     </tr>

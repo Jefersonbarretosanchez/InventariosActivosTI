@@ -21,6 +21,23 @@ export const formFields1 = [
 
 ];
 
+export const formFields2 = [
+  {
+    id: "id_licencia",
+    label: "ID Licencia",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_equipo",
+    label: "Equipo",
+    type: "select",
+    required: true,
+    options: [],
+  },
+
+];
 
 export const filterFields = [
 ];

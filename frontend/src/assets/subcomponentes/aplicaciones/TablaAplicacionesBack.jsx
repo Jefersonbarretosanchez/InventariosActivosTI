@@ -383,9 +383,8 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas })
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "4vw" }}>ID</th>
-                  <th style={{ paddingLeft: "3.5vw" }}>Nombre Aplicativo</th>
-                  <th>Fecha de Instalacion</th>
+                  <th style={{ paddingLeft: "11.8vw" }}>ID</th>
+                  <th style={{ paddingLeft: "3vw" }}>Nombre Aplicativo</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
@@ -407,9 +406,8 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas })
                 ) : (
                   currentRecords.map((aplicacion) => (
                     <tr key={aplicacion.id_aplicacion}>
-                      <td style={{ paddingLeft: "4.1vw" }}>{aplicacion.id_aplicacion}</td>
+                      <td style={{ paddingLeft: "12vw" }}>{aplicacion.id_aplicacion}</td>
                       <td style={{ paddingLeft: "3.3vw" }}>{aplicacion.nombre_aplicativo}</td>
-                      <td style={{ paddingLeft: "5.5vw" }}>{aplicacion.fecha_instalacion}</td>
                       <td style={{ paddingLeft: "4.5vw" }}>
                         <button
                           className="btn-accion"
