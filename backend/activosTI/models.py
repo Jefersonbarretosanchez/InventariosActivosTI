@@ -112,10 +112,9 @@ class CatCargo(models.Model):
 class CatCentroCosto(models.Model):
     id_centro_costo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateTimeField()
+    fecha_registro = models.DateField()
 
     class Meta:
-        managed = False
         db_table = 'cat_centro_costo'
     
     def __str__(self):
