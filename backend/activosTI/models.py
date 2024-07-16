@@ -85,10 +85,9 @@ class AuthtokenToken(models.Model):
 class CatArea(models.Model):
     id_area = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateTimeField()
+    fecha_registro = models.DateField()
 
     class Meta:
-        managed = False
         db_table = 'cat_area'
 
     def __str__(self):
