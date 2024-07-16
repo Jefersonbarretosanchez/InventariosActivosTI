@@ -38,13 +38,13 @@ class AreaSerializer(serializers.ModelSerializer):
         fields = ['id_area', 'nombre', 'fecha_registro']
 
 
-class RegionSerializer(BaseModel):
+class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatRegion
         fields = ['id_region', 'nombre', 'fecha_registro']
 
 
-class CargoSerializer(BaseModel):
+class CargoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatCargo
         fields = ['id_cargo', 'nombre', 'fecha_registro']
