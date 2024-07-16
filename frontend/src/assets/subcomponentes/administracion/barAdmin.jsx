@@ -31,7 +31,7 @@ export default function BarAdmin({ onClickTabla }) {
                 color: '#384295'
             }} icon={faChevronLeft} /></div>
             <div style={{ marginLeft: '-0.6vw' }} className="bar" ref={barRef}>
-                <div id="licenciaPersonas" className={tablaSeleccionada === 'licenciaPersonas' ? 'active' : ''} onClick={handleTablaClick}>Alianzas</div>
+                <div id="licenciaPersonas" className={tablaSeleccionada === 'licenciaPersonas' ? 'active' : ''} onClick={handleTablaClick}>Centro Costo</div>
                 <div id="licenciaEquipos" className={tablaSeleccionada === 'licenciaEquipos' ? 'active' : ''} onClick={handleTablaClick}>Areas</div>
                 <div id="licenciaAreas" className={tablaSeleccionada === 'licenciaAreas' ? 'active' : ''} onClick={handleTablaClick}>Cargos</div>
                 <div id="ubicacion" className={tablaSeleccionada === 'ubicacion' ? 'active' : ''} onClick={handleTablaClick}>Ubicacion</div>

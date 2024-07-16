@@ -293,7 +293,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       if (field.id === "id_licencia") {
         return { ...field, options: action === "create" ? lienciaFiltrada : licencia };
       } else if (field.id === "id_trabajador") {
-        return { ...field, options: action === "create" ? trabajadorFiltrado : trabajador };
+        return { ...field, options: action === "create" ? trabajador : trabajador };
       }
       return field;
     });
