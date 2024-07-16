@@ -21,6 +21,10 @@ import TablaCatMarcaEquipo from '../subcomponentes/administracion/catalogos/Tabl
 import TablaCatSO from '../subcomponentes/administracion/catalogos/TablaCatSO';
 import TablaCatDiscoDuro from '../subcomponentes/administracion/catalogos/TablaCatDiscoDuro';
 import TablaCatRam from '../subcomponentes/administracion/catalogos/TablaCatRam';
+import TablaCatAlianzaBack from '../subcomponentes/administracion/catalogos/TablaCatAlianzaBack';
+import TablaCatAreaBack from '../subcomponentes/administracion/catalogos/TablaCatAreaBack';
+import { ToastContainer } from 'react-toastify';
+import TablaCatPuestoBack from '../subcomponentes/administracion/catalogos/TablaCatPuestoBack';
 
 export default function Administracion() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -34,9 +38,10 @@ export default function Administracion() {
             <Header />
             <Sidebar />
             <BarAdmin onClickTabla={handleTablaClick} />
-            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianza />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatArea />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuesto />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) :
+            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianzaBack />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatAreaBack />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuestoBack />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) :
                 tablaActiva === 'region' ? (<TablaCatRegion />) : tablaActiva === 'licenciapersona' ? (<TablaCatLicPersonas />) : tablaActiva === 'licenciaequipo' ? (<TablaCatLicEquipo />) : tablaActiva === 'coordinador' ? (<TablaCatCoordinadores />) :
                     tablaActiva === 'marcaequipo' ? (<TablaCatMarcaEquipo />) : tablaActiva === 'so' ? (<TablaCatSO />) : tablaActiva === 'discoduro' ? (<TablaCatDiscoDuro />) : (<TablaCatRam />)}
+            <ToastContainer />
             <Paginate />
             <Footer />
         </div>

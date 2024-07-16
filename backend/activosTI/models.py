@@ -3,8 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -92,9 +90,10 @@ class CatArea(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_area'
-        
+
     def __str__(self):
         return str(self.nombre)
+
 
 class CatCargo(models.Model):
     id_cargo = models.AutoField(primary_key=True)
@@ -104,7 +103,7 @@ class CatCargo(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_cargo'
-        
+
     def __str__(self):
         return str(self.nombre)
 
@@ -116,9 +115,10 @@ class CatCentroCosto(models.Model):
 
     class Meta:
         db_table = 'cat_centro_costo'
-    
+
     def __str__(self):
         return str(self.nombre)
+
 
 class CatEstadoPersona(models.Model):
     id_estado_persona = models.AutoField(primary_key=True)
@@ -128,10 +128,9 @@ class CatEstadoPersona(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_estado_persona'
-        
+
     def __str__(self):
         return str(self.nombre)
-
 
 
 class CatRegion(models.Model):
@@ -142,9 +141,10 @@ class CatRegion(models.Model):
     class Meta:
         managed = False
         db_table = 'cat_region'
-        
+
     def __str__(self):
         return str(self.nombre)
+
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -152,7 +152,8 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.SmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey(
+        'DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
 
     class Meta:
@@ -193,27 +194,36 @@ class DjangoSession(models.Model):
 
 class Persona(models.Model):
     id_trabajador = models.AutoField(primary_key=True)
-    identificacion = models.IntegerField(unique=True,verbose_name='Numero Identificación')
-    nombres = models.CharField(max_length=30,verbose_name='Nombres')
-    apellidos = models.CharField(max_length=30,verbose_name='Apellidos')
-    correo_personal = models.CharField(max_length=50,unique=True,verbose_name='Correo Personal')
-    correo_institucional = models.CharField(max_length=50,unique=True,verbose_name='Correo Institucional')
-    id_centro_costo = models.ForeignKey(CatCentroCosto, models.DO_NOTHING, db_column='id_centro_costo',verbose_name='Centro De Costo')
-    id_area = models.ForeignKey(CatArea, models.DO_NOTHING, db_column='id_area',verbose_name='Area')
-    id_region = models.ForeignKey(CatRegion, models.DO_NOTHING, db_column='id_region',verbose_name='Región')
-    id_cargo = models.ForeignKey(CatCargo, models.DO_NOTHING, db_column='id_cargo', verbose_name="Cargo")
+    identificacion = models.IntegerField(
+        unique=True, verbose_name='Numero Identificación')
+    nombres = models.CharField(max_length=30, verbose_name='Nombres')
+    apellidos = models.CharField(max_length=30, verbose_name='Apellidos')
+    correo_personal = models.CharField(
+        max_length=50, unique=True, verbose_name='Correo Personal')
+    correo_institucional = models.CharField(
+        max_length=50, unique=True, verbose_name='Correo Institucional')
+    id_centro_costo = models.ForeignKey(
+        CatCentroCosto, models.DO_NOTHING, db_column='id_centro_costo', verbose_name='Centro De Costo')
+    id_area = models.ForeignKey(
+        CatArea, models.DO_NOTHING, db_column='id_area', verbose_name='Area')
+    id_region = models.ForeignKey(
+        CatRegion, models.DO_NOTHING, db_column='id_region', verbose_name='Región')
+    id_cargo = models.ForeignKey(
+        CatCargo, models.DO_NOTHING, db_column='id_cargo', verbose_name="Cargo")
     fecha_ingreso_empresa = models.DateField(verbose_name='Fecha Ingreso')
-    id_estado_persona = models.ForeignKey(CatEstadoPersona, models.DO_NOTHING, db_column='id_estado_persona',verbose_name='Estado')
-    direccion = models.CharField(max_length=100, blank=True, null=True,verbose_name='Dirección Residencia')
+    id_estado_persona = models.ForeignKey(
+        CatEstadoPersona, models.DO_NOTHING, db_column='id_estado_persona', verbose_name='Estado')
+    direccion = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name='Dirección Residencia')
 
     class Meta:
         managed = False
         db_table = 'persona'
-        
-    def __str__(self):
-        return str(self.nombres) + ' ' +(self.apellidos)
 
-        
+    def __str__(self):
+        return str(self.nombres) + ' ' + (self.apellidos)
+
+
 class Historicos(models.Model):
     """Modulo de registros de Logs de cambios"""
     id_historico = models.AutoField(primary_key=True)
