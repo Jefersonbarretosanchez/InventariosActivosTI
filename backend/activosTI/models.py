@@ -85,7 +85,7 @@ class AuthtokenToken(models.Model):
 class CatArea(models.Model):
     id_area = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'cat_area'
@@ -97,10 +97,9 @@ class CatArea(models.Model):
 class CatCargo(models.Model):
     id_cargo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_cargo'
 
     def __str__(self):
@@ -110,7 +109,7 @@ class CatCargo(models.Model):
 class CatCentroCosto(models.Model):
     id_centro_costo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'cat_centro_costo'
@@ -122,10 +121,9 @@ class CatCentroCosto(models.Model):
 class CatEstadoPersona(models.Model):
     id_estado_persona = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_estado_persona'
 
     def __str__(self):
@@ -135,10 +133,9 @@ class CatEstadoPersona(models.Model):
 class CatRegion(models.Model):
     id_region = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_region'
 
     def __str__(self):

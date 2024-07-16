@@ -6,10 +6,9 @@ from activosTI.models import Persona
 class CatMarcaequipo(models.Model):
     id_marcaequipo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_marcaequipo'
 
     def __str__(self):
@@ -19,7 +18,7 @@ class CatMarcaequipo(models.Model):
 class CatSo(models.Model):
     id_so = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'cat_so'
@@ -31,10 +30,9 @@ class CatSo(models.Model):
 class CatMemoriaram(models.Model):
     id_ram = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_memoriaram'
 
     def __str__(self):
@@ -44,10 +42,9 @@ class CatMemoriaram(models.Model):
 class CatDiscoduro(models.Model):
     id_discoduro = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_discoduro'
 
     def __str__(self):
@@ -57,10 +54,9 @@ class CatDiscoduro(models.Model):
 class CatTipopropiedad(models.Model):
     id_tipopropiedad = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_tipopropiedad'
 
     def __str__(self):
@@ -70,10 +66,9 @@ class CatTipopropiedad(models.Model):
 class CatTipoequipo(models.Model):
     id_tipoequipo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_tipoequipo'
 
     def __str__(self):
@@ -83,10 +78,9 @@ class CatTipoequipo(models.Model):
 class CatEstadoequipo(models.Model):
     id_estadoequipo = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_estadoequipo'
 
     def __str__(self):
@@ -96,10 +90,9 @@ class CatEstadoequipo(models.Model):
 class CatCoordinadores(models.Model):
     id_coordinadores = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'cat_coordinadores'
 
     def __str__(self):
@@ -109,7 +102,7 @@ class CatCoordinadores(models.Model):
 class CatUbicacion(models.Model):
     id_ubicacion = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-    fecha_registro = models.DateField()
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'cat_ubicacion'
@@ -159,7 +152,7 @@ class Equipo(models.Model):
 class CatEstadoPeriferico(models.Model):
     id_estado_periferico = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=30)
-    fecha_registro = models.DateField(auto_created=True)
+    fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'cat_estado_periferico'

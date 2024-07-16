@@ -247,27 +247,328 @@ class CatCentroCostoViewSet(generics.ListCreateAPIView):
     queryset = CatCentroCosto.objects.all()
     serializer_class = CentroCostoSerializer
     permission_classes = [AllowAny]
+    
+class CatCentroCostoUpdate(generics.RetrieveUpdateAPIView):
+    """Actualización Centros de costo"""
+    serializer_class = CentroCostoSerializer
+    permission_classes = [AllowAny]
+    queryset = CatCentroCosto.objects.all()
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        
+        errors = {}
+
+        if errors:
+            return Response({'message': 'Error Al Actualizar El Cntro De Costo', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
+            self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Centro Costo",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
+            return Response(serializer.data)
+        except ValidationError as e:
+            # Captura otros errores de validación
+            errors = {field: [str(error) for error in messages]
+                      for field, messages in e.detail.items()}
+            customized_response = {
+                'message': 'Error Al Actualizar El Centro De Costo',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Manejar cualquier otra excepción aquí si es necesario
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al actualizar el centro de costo'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 
 class CatAreaViewSet(generics.ListCreateAPIView):
     queryset = CatArea.objects.all()
     serializer_class = AreaSerializer
     permission_classes = [AllowAny]
 
+class CatAreaUpdate(generics.RetrieveUpdateAPIView):
+    """Actualización Centros de costo"""
+    serializer_class = AreaSerializer
+    permission_classes = [AllowAny]
+    queryset = CatArea.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        
+        errors = {}
+
+        if errors:
+            return Response({'message': 'Error Al Actualizar El Area', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
+            self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Area",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
+            return Response(serializer.data)
+        except ValidationError as e:
+            # Captura otros errores de validación
+            errors = {field: [str(error) for error in messages]
+                      for field, messages in e.detail.items()}
+            customized_response = {
+                'message': 'Error Al Actualizar El Area',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Manejar cualquier otra excepción aquí si es necesario
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al actualizar el area'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+ 
 
 class CatRegionViewSet(generics.ListCreateAPIView):
     queryset = CatRegion.objects.all()
     serializer_class = RegionSerializer
     permission_classes = [AllowAny]
 
+class CatRegionUpdate(generics.RetrieveUpdateAPIView):
+    """Actualización Centros de costo"""
+    serializer_class = RegionSerializer
+    permission_classes = [AllowAny]
+    queryset = CatRegion.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        
+        errors = {}
+
+        if errors:
+            return Response({'message': 'Error Al Actualizar La Region', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
+            self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Region",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
+            return Response(serializer.data)
+        except ValidationError as e:
+            # Captura otros errores de validación
+            errors = {field: [str(error) for error in messages]
+                      for field, messages in e.detail.items()}
+            customized_response = {
+                'message': 'Error Al Actualizar La Region',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Manejar cualquier otra excepción aquí si es necesario
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al actualizar la region'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+ 
 
 class CatCargoViewSet(generics.ListCreateAPIView):
     queryset = CatCargo.objects.all()
     serializer_class = CargoSerializer
     permission_classes = [AllowAny]
 
+class CatCargoUpdate(generics.RetrieveUpdateAPIView):
+    """Actualización Centros de costo"""
+    serializer_class = CargoSerializer
+    permission_classes = [AllowAny]
+    queryset = CatCargo.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        
+        errors = {}
+
+        if errors:
+            return Response({'message': 'Error Al Actualizar El Cargo', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
+            self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Cargo",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
+            return Response(serializer.data)
+        except ValidationError as e:
+            # Captura otros errores de validación
+            errors = {field: [str(error) for error in messages]
+                      for field, messages in e.detail.items()}
+            customized_response = {
+                'message': 'Error Al Actualizar El Cargo',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Manejar cualquier otra excepción aquí si es necesario
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al actualizar el cargo'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+ 
 
 class CatEstadoPersonaViewSet(generics.ListCreateAPIView):
     queryset = CatEstadoPersona.objects.all()
     serializer_class = EstadoPersonaSerializer
     permission_classes = [AllowAny]
+
+class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
+    """Actualización Centros de costo"""
+    serializer_class = EstadoPersonaSerializer
+    permission_classes = [AllowAny]
+    queryset = CatEstadoPersona.objects.all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        
+        errors = {}
+
+        if errors:
+            return Response({'message': 'Error Al Actualizar El Estado', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+            # Guardar los valores originales antes de la actualización
+            original_values = {field: getattr(instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios actualizados
+            self.perform_update(serializer)
+
+            # Obtener los valores actualizados después de la actualización
+            updated_instance = self.get_object()
+            updated_values = {field: getattr(updated_instance, field) for field in serializer.validated_data}
+
+            # Guardar los cambios en el historial
+            for field, original_value in original_values.items():
+                current_value = updated_values[field]
+                if original_value != current_value:
+                    verbose_name = updated_instance._meta.get_field(field).verbose_name
+                    Historicos.objects.create(
+                        usuario=self.request.user if self.request.user.is_authenticated else None,
+                        correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
+                        tipo_cambio="Actualización",
+                        tipo_activo="Estado",
+                        activo_modificado=verbose_name,
+                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                    )
+
+            return Response(serializer.data)
+        except ValidationError as e:
+            # Captura otros errores de validación
+            errors = {field: [str(error) for error in messages]
+                      for field, messages in e.detail.items()}
+            customized_response = {
+                'message': 'Error Al Actualizar El Estado',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Manejar cualquier otra excepción aquí si es necesario
+            print(f'Error inesperado: {e}')
+            return Response({'message': 'Error inesperado al actualizar el estado'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+ 
