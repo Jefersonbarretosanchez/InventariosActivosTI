@@ -5,7 +5,7 @@ import activos from "../../imagenes/perfil-del-usuario.png";
 import equipos from "../../imagenes/ocupado.png";
 import licencias from "../../imagenes/cuentacuentos.png";
 
-function TarjetasAplicaciones({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones }) {
+function TarjetasAplicaciones({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones, totalAplicacionesAsig }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
@@ -56,7 +56,7 @@ function TarjetasAplicaciones({ totalPersonasActivas, totalPersonasInactivas, to
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos" style={{ padding: '10px 0px 0px 0px' }}>
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalAplicacionesAsig}</span>
             <br />
             <span className="estadisticas-descripcion-activos" >
               Total Aplicaciones Asignadas

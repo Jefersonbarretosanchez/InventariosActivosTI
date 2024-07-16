@@ -133,10 +133,10 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
 
   useEffect(() => {
     const LicActivas = licareas.filter(
-      (licarea) => licarea.nombre_estado_licencia === "Activa"
+      (licarea) => licarea.nombre_estado_licencia === "Asignada"
     ).length;
     const LicInactivas = licareas.filter(
-      (licarea) => licarea.nombre_estado_licencia === "Inactiva"
+      (licarea) => licarea.nombre_estado_licencia === "Sin Asignar"
     ).length;
 
     setTotalActivos(LicActivas);

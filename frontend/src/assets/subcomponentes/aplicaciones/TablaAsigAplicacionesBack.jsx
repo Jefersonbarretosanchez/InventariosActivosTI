@@ -2,49 +2,51 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFileLines,
-  faPlus,
-  faPenToSquare,
-  faMagnifyingGlass,
-  faPlusCircle,
-  faBarsProgress
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
+import ModalDesasignacion from "../generales/modalDesasignacion"
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "./formConfig";
+import { formFields1, filterFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "../generales/formDinamico";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAplicaciones from "./tarjetasAplicaciones";
 
-function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones, totalAplicacionesAsig, fetchData }) {
+
+
+function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones, totalAplicacionesAsig, fetchData }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [aplicaciones, setAplicaciones] = useState([]);
-  const [aplicacionSeleccionada, setAplicacionSeleccionada] = useState(null);
 
+  const [asigaplicaciones, setAsigAplicaciones] = useState([]);
+  const [desasigaplicaciones, setDesasigAplicaciones] = useState([]);
+  const [asigAplicacionSeleccionada, setasigAplicacionSeleccionada] = useState(null);
+  const [desasigAplicacionSeleccionada, setDesasigAplicacioneleccionado] = useState(null);
+  const [aplicacion, setAplicacion] = useState([]);
+  const [AplicacionFiltrada, setAplicacionFiltrada] = useState([]);
+  const [trabajador, setTrabajador] = useState([]);
+  const [trabajadorFiltrado, setTrabajadorFiltrado] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newAplicacionData, setNewAplicacionData] = useState({});
+  const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
+  const [newAsigAplicacionData, setnewAsigAplicacionData] = useState({});
+  const [newDesAsigAplicacionData, setnewDesAsigAplicacionData] = useState({});
   const [actionType, setActionType] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
-
-
 
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15); // Cambiado a 15
 
   const [estadoModalFiltros, cambiarEstadoModalFiltros] = useState(false);
+  const [estadoModalDesasignacion, cambiarEstadoModalDesasignacion] = useState(false);
   const [filtroValues, setFiltroValues] = useState({});
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
-
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -59,30 +61,83 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchAplicaciones = async () => {
+  const fetchasigAplicacion = async () => {
     setIsLoading(true);
     try {
-      const responseAplicaciones = await axios.get(
-        "http://localhost:8000/api/aplicaciones/"
+      const responseasigAplicacion = await axios.get(
+        "http://localhost:8000/api/aplicaciones/asignar/"
       );
-      setAplicaciones(responseAplicaciones.data);
+      setAsigAplicaciones(responseasigAplicacion.data);
     } catch (error) {
-      toast.error("Hubo un error en la carga de datos de las Aplicaciones");
+      toast.error("Hubo un error en la carga de datos de Asignacion de Aplicaciones");
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchAplicaciones();
+    fetchasigAplicacion();
   }, []);
 
+  const fetchCatalogos = async () => {
+    setIsLoading(true);
+    setIsCatalogsLoading(true);
+    try {
+      const responseAplicaciones = await axios.get(
+        "http://localhost:8000/api/aplicaciones/"
+      );
+      setAplicacion(
+        responseAplicaciones.data.map((item) => ({
+          value: item.id_aplicacion,
+          label: item.nombre_aplicativo,
+        }))
+      );
 
+      const responseTrabajador = await axios.get(
+        "http://localhost:8000/api/licencias/responsables/"
+      );
+      setTrabajador(
+        responseTrabajador.data.map((item) => ({
+          value: item.id_trabajador,
+          label: item.nombres, // Mantener el nombre original en el valor
+        }))
+      );
 
+      const responseAplicacionesFiltradas = await axios.get(
+        "http://localhost:8000/api/licencias_sin_asignar/"
+      );
+      setAplicacionFiltrada(
+        responseAplicacionesFiltradas.data.map((item) => ({
+          value: item.id_aplicacion,
+          label: item.nombre_aplicacion,
+        }))
+      );
+
+      const responseTrabajadorFiltrados = await axios.get(
+        "http://localhost:8000/api/personas_sin_asignacion_licencia/"
+      );
+      setTrabajadorFiltrado(
+        responseTrabajadorFiltrados.data.map((item) => ({
+          value: item.id_trabajador,
+          label: item.nombres, // Mantener el nombre original en el valor
+        }))
+      );
+
+    } catch (error) {
+      toast.error("Hubo un error en la carga de datos de los catalogos.");
+    } finally {
+      setIsLoading(false);
+      setIsCatalogsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCatalogos();
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewAplicacionData((prevData) => ({ ...prevData, [name]: value }));
+    setnewAsigAplicacionData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -98,22 +153,28 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
     setCurrentPage(1);
   };
 
-  const createAplicacion = async () => {
+  const createasigAplicacion = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newAplicacionData,
-      }
+        ...newAsigAplicacionData,
+        id_aplicacion: parseInt(newAsigAplicacionData.id_aplicacion, 10),
+        id_trabajador: parseInt(newAsigAplicacionData.id_trabajador, 10),
+      };
+      console.log("id licencia:" + formattedData.id_aplicacion);
+
       const response = await axios.post(
-        "http://localhost:8000/api/aplicaciones/",
+        "http://localhost:8000/api/aplicaciones/asignar/",
         formattedData
       );
-      const nuevaAplicacion = response.data;
-      setAplicaciones([...aplicaciones, nuevaAplicacion]);
-      setNewAplicacionData({});
+      const nuevaasigAplacion = response.data;
+      setAsigAplicaciones([...asigaplicaciones, nuevaasigAplacion]);
+      setnewAsigAplicacionData({});
       cambiarEstadoModal(false);
-      toast.success("Aplicacion creada exitosamente!");
-      fetchData();
+      toast.success("La Asignacion de la Aplicacion fue creada exitosamente!");
+      await fetchData();
+      fetchasigAplicacion();
+      fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -137,7 +198,6 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            {/* (Código de error: {statusCode}) */}
           </div>,
           { position: "bottom-center" }
         );
@@ -150,33 +210,40 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
     }
   };
 
-  const updateAplicacion = async () => {
+  const createDesasigAplicaciones = async () => {
     setIsLoading(true);
     try {
+
       const updatedData = {
-        ...aplicacionSeleccionada,
-        ...newAplicacionData,
+        ...desasigAplicacionSeleccionada,
+        ...newAsigAplicacionData,
       };
 
       const formattedData = {
-        ...updatedData
+        ...updatedData,
+        id_aplicacion: parseInt(newAsigAplicacionData.id_aplicacion, 10),
+        id_trabajador: parseInt(newAsigAplicacionData.id_trabajador, 10),
       };
+      console.log("id licencia:" + formattedData.id_aplicacion);
 
       const response = await axios.put(
-        `http://localhost:8000/api/aplicaciones/${aplicacionSeleccionada.id_aplicacion}/`,
+        `http://localhost:8000/api/aplicaciones/desasignar/${desasigAplicacionSeleccionada.id}/`,
         formattedData
       );
-      const updatedAplicacion = response.data;
-      setAplicaciones(
-        aplicaciones.map((aplicacion) =>
-          aplicacion.id_aplicacion === updatedAplicacion.id_aplicacion
-            ? updatedAplicacion
-            : aplicacion
-        )
-      );
-      setNewAplicacionData({});
-      cambiarEstadoModal(false);
-      toast.success("Aplicacion actualizada exitosamente!");
+
+      const nuevaDesasigAplicacion = response.data;
+      setDesasigAplicaciones(
+        desasigaplicaciones.map((desasigaplicaciones) =>
+          desasigaplicaciones.id === nuevaDesasigAplicacion.id
+            ? nuevaDesasigAplicacion
+            : desasigaplicaciones
+        ));
+      setnewDesAsigAplicacionData({});
+      cambiarEstadoModalDesasignacion(false);
+      toast.success("La Desasignacion de la Aplicacion fue exitosa!");
+      fetchData();
+      fetchasigAplicacion();
+      fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -200,18 +267,18 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
               <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
               <br />
             </strong>
-            {/* (Código de error: {statusCode}) */}
           </div>,
-          { position: "bottom-center", }
+          { position: "bottom-center" }
         );
       } else {
         toast.error(`${errorMessage} (Código de error: ${statusCode})`);
       }
-      cambiarEstadoModal(false);
+      cambiarEstadoModalDesasignacion(false);
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const abrirModal = (
     titulo,
@@ -220,11 +287,25 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
     initialValues = {},
     action = ""
   ) => {
+    if (isCatalogsLoading) {
+      toast.info("Espere a que los datos se carguen completamente.");
+      return;
+    }
     let fieldsWithOptions = fields.map((field) => {
+      if (field.id === "id_aplicacion") {
+        return { ...field, options: action === "create" ? aplicacion : aplicacion };
+      } else if (field.id === "id_trabajador") {
+        return { ...field, options: action === "create" ? trabajador : trabajador };
+      }
       return field;
     });
 
-    setNewAplicacionData(initialValues);
+    if (action === "degree") {
+      setnewDesAsigAplicacionData(initialValues);
+    } else {
+      setnewAsigAplicacionData(initialValues);
+    }
+
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
@@ -237,11 +318,23 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
         />
       ),
     });
-    cambiarEstadoModal(true);
+    if (action === "degree") {
+      cambiarEstadoModalDesasignacion(true);
+    } else {
+      cambiarEstadoModal(true);
+    }
+
   };
 
   const abrirModalFiltros = () => {
     const fieldsWithOptions = filterFields.map((field) => {
+      if (field.id === "id_equipo") {
+        return { ...field, options: equipo };
+      } else if (field.id === "id_trabajador") {
+        return { ...field, options: trabajador };
+      } else if (field.id === "id_kit_perifericos") {
+        return { ...field, options: perifericos };
+      }
       return field;
     });
 
@@ -292,27 +385,35 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
+    abrirModal("Crear Asignacion Licencia", formFields1, [], {}, "create");
   };
 
-  const handleEdit = (aplicacion) => {
-    setAplicacionSeleccionada(aplicacion);
+  const handleDesgree = (desasigaplicaciones) => {
+    setDesasigAplicacioneleccionado(desasigaplicaciones);
     abrirModal(
-      `Actualizar ${aplicacion.nombre_aplicativo}`,
-      formFields,
-      ["sereal"],
-      aplicacion,
-      "update"
+      `Desasignar Aplicacion`,
+      formFields1.map((field) => {
+        if (field.id === "id_aplicacion") {
+          return { ...field, options: aplicacion };
+        } else if (field.id === "id_trabajador") {
+          return { ...field, options: trabajador };
+        }
+        return field;
+      }),
+      ["id_trabajador", "id_aplicacion", "fecha_instalacion"],
+      desasigaplicaciones,
+      "degree"
     );
   };
 
-  const handleInfo = (aplicacion) => {
-    setAplicacionSeleccionada(aplicacion);
+
+  const handleInfo = (asigaplicaciones) => {
+    setasigAplicacionSeleccionada(asigaplicaciones);
     abrirModal(
-      `Información de ${aplicacion.nombre_aplicativo}`,
-      formFields,
+      `Información de ${asigaplicaciones.id}`,
+      formFields1,
       ALL_INPUT_IDS,
-      aplicacion,
+      asigaplicaciones,
       "detail"
     );
   };
@@ -321,13 +422,13 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
     setCurrentPage(pageNumber);
   };
 
-  const filteredAplicaciones = aplicaciones.filter((aplicacion) => {
-    const searchString = `${aplicacion.id_aplicacion} ${aplicacion.nombre_aplicativo}`.toLowerCase();
+  const filteredasigAplicaciones = asigaplicaciones.filter((asigaplicaciones) => {
+    const searchString = `${asigaplicaciones.id} ${asigaplicaciones.nombre_trabajador} ${asigaplicaciones.nombre_aplicacion}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(aplicacion[key]) === String(filtroValues[key]);
+      return String(asigaplicaciones[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -335,16 +436,16 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredAplicaciones.slice(
+  const currentRecords = filteredasigAplicaciones.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredAplicaciones.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredasigAplicaciones.length / recordsPerPage);
 
   return (
     <>
       <div style={{ marginTop: '-2vh' }}>
-        <TarjetasAplicaciones
+        < TarjetasAplicaciones
           totalPersonasActivas={totalPersonasActivas}
           totalPersonasInactivas={totalPersonasInactivas}
           totalAplicaciones={totalAplicaciones}
@@ -352,12 +453,12 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
       </div>
       <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">
         <div className="row-activos">
-          <div className="Personas">
-            <h1>Aplicaciones</h1>
+          <div className="asigEquipos">
+            <h1>Asignacion Aplicaciones</h1>
           </div>
-          <div style={{ marginLeft: '3vw' }} className="contbuscador-personas">
+          <div style={{ marginLeft: '4.5vw' }} className="contbuscador-asigEquipos">
             <input
-              className="buscador-personas"
+              className="contbuscador-licenciasPer"
               type="text"
               placeholder="Buscar"
               value={searchTerm}
@@ -370,19 +471,20 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
           </div>
           <div>
             <FontAwesomeIcon
-              style={{ marginLeft: '29vw' }}
-              className="agregar-personas"
+              style={{ marginLeft: '39vw' }}
+              className="agregar-licPersonas"
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
           </div>
-          <Divtabla style={{ maxHeight: "36.7vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+
+          <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "11.8vw" }}>ID</th>
-                  <th style={{ paddingLeft: "3vw" }}>Nombre Aplicativo</th>
+                  <th style={{ paddingLeft: "5vw" }}>ID Asignacion</th>
+                  <th style={{ paddingLeft: "0vw" }}>Nombre Trabajador</th>
+                  <th style={{ paddingLeft: "3vw" }}>Aplicaciones</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
@@ -397,21 +499,23 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "30vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((aplicacion) => (
-                    <tr key={aplicacion.id_aplicacion}>
-                      <td style={{ paddingLeft: "12vw" }}>{aplicacion.id_aplicacion}</td>
-                      <td style={{ paddingLeft: "3.3vw" }}>{aplicacion.nombre_aplicativo}</td>
-                      <td style={{ paddingLeft: "4.5vw" }}>
+                  currentRecords.map((asigaplicaciones) => (
+                    <tr key={asigaplicaciones.id}>
+                      <td style={{ paddingLeft: "9vw" }}>{asigaplicaciones.id}</td>
+                      <td>{asigaplicaciones.nombre_trabajador} {asigaplicaciones.apellido_trabajador}</td>
+                      <td style={{ paddingLeft: "0vw" }}>{asigaplicaciones.nombre_aplicacion}</td>
+                      <td>
                         <button
                           className="btn-accion"
-                          onClick={() => handleEdit(aplicacion)}
+                          onClick={() => handleDesgree(asigaplicaciones)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon icon={faMinus}
+                            style={{ marginLeft: '1.4vw' }} />
                         </button>
                       </td>
                     </tr>
@@ -422,6 +526,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
           </Divtabla>
         </div>
       </div>
+
       <Paginate
         currentPage={currentPage}
         totalPages={totalPages}
@@ -433,11 +538,22 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createAplicacion}
-        onUpdate={updateAplicacion}
+        onCreate={createasigAplicacion}
+        onDegree={createDesasigAplicaciones}
       >
         {modalConfig.contenido}
       </Modal>
+
+      <ModalDesasignacion
+        estado={estadoModalDesasignacion}
+        cambiarEstado={cambiarEstadoModalDesasignacion}
+        titulo={modalConfig.titulo}
+        actionType={actionType}
+        onCreate={createasigAplicacion}
+        onDegree={createDesasigAplicaciones}
+      >
+        {modalConfig.contenido}
+      </ModalDesasignacion>
 
       <ModalFiltros
         estado={estadoModalFiltros}
@@ -454,6 +570,13 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
           onFiltroChange={handleFiltroChange}
           filtroValues={filtroValues}
           fieldsWithOptions={filterFields.map((field) => {
+            if (field.id === "id_equipo") {
+              return { ...field, options: equipo };
+            } else if (field.id === "id_trabajador") {
+              return { ...field, options: trabajador };
+            } else if (field.id === "id_kit_perifericos") {
+              return { ...field, options: perifericos };
+            }
             return field;
           })}
         />
@@ -485,7 +608,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
   );
 }
 
-export default TablaAplicacionesBack;
+export default TablaAsigAplicacionesBack;
 
 const Boton = styled.button`
   display: block;
@@ -498,6 +621,19 @@ const Boton = styled.button`
   font-weight: 500;
   transition: 0.3s ease all;
 `;
+
+const Contenido = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+`;
+
 const LoadingRow = styled.tr`
   height: 200px; /* Ajusta esta altura según sea necesario */
 `;
@@ -539,17 +675,6 @@ const Spinner = styled.div`
   }
 `;
 
-const Contenido = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-`;
 
 const FilterOptions = styled.div`
   display: flex;

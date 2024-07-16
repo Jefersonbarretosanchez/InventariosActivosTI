@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import "../Estilos/activos.css";
 import Header from "../subcomponentes/generales/header";
 import Sidebar from "../subcomponentes/generales/sidebar";
@@ -19,13 +19,42 @@ import TablaAplicacionesBack from '../subcomponentes/aplicaciones/TablaAplicacio
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import TablaAsigAplicacionesBack from '../subcomponentes/aplicaciones/TablaAsigAplicacionesBack';
 
 export default function Aplicaciones() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
     const [totalPersonasActivas, setTotalPersonasActivas] = useState(0);
     const [totalPersonasInactivas, setTotalPersonasInactivas] = useState(0);
     const [totalAplicaciones, setTotalAplicaciones] = useState(0);
+    const [totalAplicacionesAsig, setTotalAplicacionesAsig] = useState(0);
     const [personas, setPersonas] = useState([]);
+    const [aplicaciones, setAplicaciones] = useState([]);
+    const [aplicacionesasig, setAplicacionesAsig] = useState([]);
+
+
+    const fetchAplicaciones = async () => {
+        try {
+            const responseAplicaciones = await axios.get(
+                "http://localhost:8000/api/aplicaciones/"
+            );
+            setAplicaciones(responseAplicaciones.data);
+        } catch (error) {
+            toast.error("Hubo un error en la carga de datos de las Aplicaciones");
+        } finally {
+        }
+    };
+
+    useEffect(() => {
+        fetchAplicaciones();
+    }, []);
+
+
+    useEffect(() => {
+        const naplicaciones = aplicaciones.length;
+        setTotalAplicaciones(naplicaciones);
+    }, [aplicaciones]);
+
+
 
     useEffect(() => {
         const fetchPersonas = async () => {
@@ -54,9 +83,41 @@ export default function Aplicaciones() {
         setTotalPersonasInactivas(totalInactivas);
     }, [personas]); // Dependencia en el estado 'personas'
 
+
+    const fetchAplicacionesAsig = async () => {
+        try {
+            const responseAplicaciones = await axios.get(
+                "http://localhost:8000/api/aplicaciones/asignar/"
+            );
+            setAplicacionesAsig(responseAplicaciones.data);
+        } catch (error) {
+            toast.error("Hubo un error en la carga de datos de las Aplicaciones Asignadas");
+        } finally {
+        }
+    };
+
+    useEffect(() => {
+        fetchAplicacionesAsig();
+    }, []);
+
+    useEffect(() => {
+        const naplicacionesAsig = aplicacionesasig.length;
+        setTotalAplicacionesAsig(naplicacionesAsig);
+    }, [aplicacionesasig]);
+
+
     const handleTablaClick = (tabla) => {
         setTablaActiva(tabla);
     };
+
+    const fetchData = useCallback(() => {
+        fetchAplicaciones();
+        fetchAplicacionesAsig();
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     return (
         <div className="LicenciasBody">
@@ -67,8 +128,16 @@ export default function Aplicaciones() {
             </div>
             {tablaActiva === 'licenciaPersonas' ?
                 (<TablaAplicacionesBack totalPersonasActivas={totalPersonasActivas}
-                    totalPersonasInactivas={totalPersonasInactivas} />)
-                : (<TablaAsigAplicaciones />)}
+                    totalPersonasInactivas={totalPersonasInactivas}
+                    totalAplicaciones={totalAplicaciones}
+                    totalAplicacionesAsig={totalAplicacionesAsig}
+                    fetchData={fetchData} />)
+                : (<TablaAsigAplicacionesBack
+                    totalPersonasActivas={totalPersonasActivas}
+                    totalPersonasInactivas={totalPersonasInactivas}
+                    totalAplicaciones={totalAplicaciones}
+                    totalAplicacionesAsig={totalAplicacionesAsig}
+                    fetchData={fetchData} />)}
             <ToastContainer />
             <Paginate />
             <Footer />
