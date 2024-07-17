@@ -1,4 +1,5 @@
 """Importaciones de datos requeridos"""
+import locale
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona, Historicos
@@ -23,9 +24,15 @@ class historicoSerializer(serializers.ModelSerializer):
     """Modulo Historicos"""
     nombre_usuario = serializers.CharField(
         source='usuario.username', read_only=True)
+    fecha = serializers.SerializerMethodField()
+
     class Meta:
-        model=Historicos
-        fields='__all__'
+        model = Historicos
+        fields = ['id_historico','fecha', 'nombre_usuario','correo_usuario','tipo_cambio','tipo_activo','activo_modificado','descripcion']
+
+    def get_fecha(self, obj):
+        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        return obj.fecha_registro.strftime('%d de %B de %Y a las %H:%M')
 
 # serializadores catalogos
 class CentroCostoSerializer(serializers.ModelSerializer):
