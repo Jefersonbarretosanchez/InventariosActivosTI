@@ -25,6 +25,13 @@ import TablaCatAlianzaBack from '../subcomponentes/administracion/catalogos/Tabl
 import TablaCatAreaBack from '../subcomponentes/administracion/catalogos/TablaCatAreaBack';
 import { ToastContainer } from 'react-toastify';
 import TablaCatPuestoBack from '../subcomponentes/administracion/catalogos/TablaCatPuestoBack';
+import TablaCatUbicacionBackend from '../subcomponentes/administracion/catalogos/TablaCatUbicacionBackend';
+import TablaCatRegionBack from '../subcomponentes/administracion/catalogos/TablaCatRegionBack';
+import TablaCatCoordinadoresBack from '../subcomponentes/administracion/catalogos/TablaCatCoordinadoresBack';
+import TablaCatMarcaEquipoBack from '../subcomponentes/administracion/catalogos/TablaCatMarcaEquipoBack';
+import TablaCatSOBack from '../subcomponentes/administracion/catalogos/TablaCatSOBack';
+import TablaCatDiscoDuroBack from '../subcomponentes/administracion/catalogos/TablaCatDiscoDuroBack';
+import TablaCatRamBack from '../subcomponentes/administracion/catalogos/TablaCatRamBack';
 
 export default function Administracion() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -38,9 +45,9 @@ export default function Administracion() {
             <Header />
             <Sidebar />
             <BarAdmin onClickTabla={handleTablaClick} />
-            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianzaBack />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatAreaBack />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuestoBack />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacion />) :
-                tablaActiva === 'region' ? (<TablaCatRegion />) : tablaActiva === 'licenciapersona' ? (<TablaCatLicPersonas />) : tablaActiva === 'licenciaequipo' ? (<TablaCatLicEquipo />) : tablaActiva === 'coordinador' ? (<TablaCatCoordinadores />) :
-                    tablaActiva === 'marcaequipo' ? (<TablaCatMarcaEquipo />) : tablaActiva === 'so' ? (<TablaCatSO />) : tablaActiva === 'discoduro' ? (<TablaCatDiscoDuro />) : (<TablaCatRam />)}
+            {tablaActiva === 'licenciaPersonas' ? (<TablaCatAlianzaBack />) : tablaActiva === 'licenciaEquipos' ? (<TablaCatAreaBack />) : tablaActiva === 'licenciaAreas' ? (<TablaCatPuestoBack />) : tablaActiva === 'ubicacion' ? (<TablaCatUbicacionBackend />) :
+                tablaActiva === 'region' ? (<TablaCatRegionBack />) : tablaActiva === 'coordinador' ? (<TablaCatCoordinadoresBack />) :
+                    tablaActiva === 'marcaequipo' ? (<TablaCatMarcaEquipoBack />) : tablaActiva === 'so' ? (<TablaCatSOBack />) : tablaActiva === 'discoduro' ? (<TablaCatDiscoDuroBack />) : (<TablaCatRamBack />)}
             <ToastContainer />
             <Paginate />
             <Footer />

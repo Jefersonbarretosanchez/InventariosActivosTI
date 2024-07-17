@@ -19,7 +19,7 @@ import TarjetasPersonas from "./tarjetasPersonas";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
-function TablaPersonasBack() {
+function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetchData }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -199,6 +199,7 @@ function TablaPersonasBack() {
       setNewPersonData({});
       cambiarEstadoModal(false);
       toast.success("Persona creada exitosamente!");
+      fetchData();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -267,6 +268,7 @@ function TablaPersonasBack() {
       setNewPersonData({});
       cambiarEstadoModal(false);
       toast.success("Persona actualizada exitosamente!");
+      fetchData();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -466,8 +468,10 @@ function TablaPersonasBack() {
   return (
     <>
       <TarjetasPersonas
-        totalActivos={totalActivos} // Pasar el total de activos como props
-        totalInactivos={totalInactivos} // Pasar el total de inactivos como props
+        totalActivos={totalActivos}
+        totalInactivos={totalInactivos}
+        totalequiposAsignados={totalequiposAsignados}
+        totalLicenciasPersonas={totalLicenciasPersonas}
       />
       <div className="contenedor-activos">
         <div className="row-activos">

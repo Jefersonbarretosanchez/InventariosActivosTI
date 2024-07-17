@@ -4,7 +4,7 @@ import { faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle } from "@fortawe
 import Modal from "../../generales/modal";
 import ModalFiltros from "../../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "../../equipos/formConfig";
+import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
@@ -340,14 +340,14 @@ function TablaCatPuestoBack() {
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
-                    <td style={{ paddingLeft: "13vw" }}>
+                    <td style={{ paddingLeft: "5vw" }}></td>
+                    <td style={{ paddingLeft: "5vw" }}>
                       <Loading>
                         <Spinner />
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "20vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
