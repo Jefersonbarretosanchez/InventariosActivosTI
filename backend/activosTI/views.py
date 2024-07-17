@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from .forms import PersonaCreacion, PersonaActualizar
 from .models import Historicos,Persona,CatCentroCosto,CatArea,CatRegion,CatCargo,CatEstadoPersona
-from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer
+from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer
 # Create your views here.
 
 
@@ -572,3 +572,9 @@ class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el estado'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
  
+ 
+# modulo historicos
+class HistoricosList(generics.ListAPIView):
+    queryset=Historicos.objects.all()
+    serializer_class= historicoSerializer
+    permission_classes=[AllowAny]

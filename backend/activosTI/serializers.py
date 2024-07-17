@@ -1,7 +1,7 @@
 """Importaciones de datos requeridos"""
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
+from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona, Historicos
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,14 +18,16 @@ class UserSerializer(serializers.ModelSerializer):
         # Token.objects.create(user=user)
         return user
 
-
-class BaseModel(serializers.ModelSerializer):
-    fecha_registro = serializers.DateField()
-
+# Serializador Historicos
+class historicoSerializer(serializers.ModelSerializer):
+    """Modulo Historicos"""
+    nombre_usuario = serializers.CharField(
+        source='usuario.username', read_only=True)
     class Meta:
-        abstract = True
+        model=Historicos
+        fields='__all__'
 
-
+# serializadores catalogos
 class CentroCostoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatCentroCosto
