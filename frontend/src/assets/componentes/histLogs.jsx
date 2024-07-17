@@ -10,7 +10,6 @@ import "../Estilos/asiglicencias.css";
 import TarjetasHistLogs from '../subcomponentes/historicoLogs/tarjetasHistLogs';
 import TablaHistPersonas from '../subcomponentes/historicoLogs/TablaHistoricos';
 import TablaHistoricosBack from '../subcomponentes/historicoLogs/TablaHistoricosBack';
-import TablaHistoricos from '../subcomponentes/historicoLogs/TablaHistoricos';
 
 export default function HistLogs() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -23,7 +22,7 @@ export default function HistLogs() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <TablaHistoricos />
+            <TablaHistoricosBack />
             <Paginate />
             <Footer />
         </div>
