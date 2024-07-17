@@ -7,17 +7,33 @@ urlpatterns = [
     path("equipos/delete/<int:pk>/",
          views.EquiposDelete.as_view(), name="delete-equipos"),
     path('marca_equipo/', views.CatMarcaEquipoViewSet.as_view(), name="marca_equipos"),
+    path('marca_equipo/<int:pk>/', views.CatMarcaequipoUpdate.as_view(), name="marca_equipo_update"),
+    
     path('so/', views.CatSoViewSet.as_view(), name="so"),
+    path('so/<int:pk>/', views.CatSoUpdate.as_view(), name="so_update"),
+    
     path('memoria_ram/', views.CatMRamViewSet.as_view(), name="memoria_ram"),
+    path('memoria_ram/<int:pk>/', views.CatMemoriaramUpdate.as_view(), name="memoria_ram_update"),
+    
     path('disco_duro/', views.CatDiscoDuroViewSet.as_view(), name="disco_duro"),
+    path('disco_duro/<int:pk>/', views.CatDiscoduroUpdate.as_view(), name="disco_duro_update"),
+    
     path('tipo_propiedad/', views.CatTipoPropiedadViewSet.as_view(),
          name="tipo_propiedad"),
+    path('tipo_propiedad/<int:pk>/', views.CatTipopropiedadUpdate.as_view(), name="tipo_propiedad_update"),
+    
     path('tipo_equipo/', views.CatTipoEquipoViewSet.as_view(), name="tipo_equipo"),
-    path('estado_equipo/', views.CatEstadoEquipoViewSet.as_view(),
-         name="estado_equipo"),
-    path('coordinadores/', views.CatCoordinadoresViewSet.as_view(),
-         name="coordinadores"),
+    path('tipo_equipo/<int:pk>/', views.CatTipoequipoUpdate.as_view(), name="tipo_equipo_update"),
+    
+    path('estado_equipo/', views.CatEstadoEquipoViewSet.as_view(),name="estado_equipo"),
+    path('estado_equipo/<int:pk>/', views.CatEstadoequipoUpdate.as_view(), name="estado_equipo_update"),
+    
+    path('coordinadores/', views.CatCoordinadoresViewSet.as_view(),name="coordinadores"),
+    path('coordinadores/<int:pk>/', views.CatCoordinadoresUpdate.as_view(), name="coordinadores_update"),
+    
     path('ubicaciones/', views.CatUbicacionViewSet.as_view(), name="ubicaciones"),
+    path('ubicaciones/<int:pk>/', views.CatUbicacionUpdate.as_view(), name="ubicaciones_update"),
+    
     path('personas/asig_equipo/', views.PersonasAsigEquiposView.as_view(),
          name="personas_asig_equipo"),
     path('asignar_equipo/', views.AsignarEquipoView.as_view(), name='asignar-equipo'),

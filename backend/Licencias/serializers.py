@@ -239,15 +239,8 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
                 id_licencia=data['id_licencia']).first()
             if asignacion_existente:
                 usuario = asignacion_existente.id_trabajador
-                raise serializers.ValidationError({"id_licencia": f"la licencia ya está asignada a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."}
-                                                  )
-            # Comprobar si el trabajador ya tiene una licencia asignada
-            trabajador_asignacion = AsignacionLicenciaPersona.objects.filter(
-                id_trabajador=data['id_trabajador']).first()
-            if trabajador_asignacion:
-                licencia = trabajador_asignacion.id_licencia
-                raise serializers.ValidationError({"id_trabajador": f"El trabajador ya tiene una licencia asignada: {licencia.nombre_licencia} (ID: {licencia.id_licencia})."}
-                                                  )
+                raise serializers.ValidationError({"id_licencia": f"la licencia ya está asignada a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."})
+
         else:
             # En la actualización, verificar si id_licencia ha cambiado y si el nuevo valor ya está asignado
             if 'id_trabajador' in data and self.instance.id_licencia != data['id_licencia']:
@@ -258,12 +251,6 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         f"La licencia ya está asignada a {usuario.nombres} {usuario.apellidos} (ID: {
                             usuario.id_trabajador}, Email: {usuario.correo_institucional}).")
-                trabajador_asignacion = AsignacionLicenciaPersona.objects.filter(
-                    id_trabajador=data['id_trabajador']).first()
-                if trabajador_asignacion:
-                    licencia = trabajador_asignacion.id_licencia
-                    raise serializers.ValidationError({"id_trabajador": f"El trabajador ya tiene una licencia asignada: {licencia.nombre_licencia} (ID: {licencia.id_licencia})."}
-                                                      )
         return data
 
     def create(self, validated_data):
@@ -321,13 +308,6 @@ class AsignacionLicenciasEquiposSerializer(serializers.ModelSerializer):
                 equipo = asignacion_existente.id_equipo
                 raise serializers.ValidationError({"id_licencia": f"la licencia ya está asignada a {equipo.nombre_equipo} (ID: {equipo.id_equipo})."}
                                                   )
-            # Comprobar si el equipo ya tiene una licencia asignada
-            equipo_asignacion = AsignacionLicenciasEquipo.objects.filter(
-                id_equipo=data['id_equipo']).first()
-            if equipo_asignacion:
-                licencia = equipo_asignacion.id_licencia
-                raise serializers.ValidationError({"id_equipo": f"El equipo ya tiene una licencia asignada: {licencia.nombre_licencia} (ID: {licencia.id_licencia})."}
-                                                  )
         else:
             # En la actualización, verificar si id_licencia ha cambiado y si el nuevo valor ya está asignado
             if 'id_equipo' in data and self.instance.id_licencia != data['id_licencia']:
@@ -339,12 +319,6 @@ class AsignacionLicenciasEquiposSerializer(serializers.ModelSerializer):
                         f"La licencia ya está asignada a {
                             equipo.nombre_equipo} (ID: {equipo.id_equipo})."
                     )
-                equipo_asignacion = AsignacionLicenciasEquipo.objects.filter(
-                    id_equipo=data['id_equipo']).first()
-                if equipo_asignacion:
-                    licencia = equipo_asignacion.id_licencia
-                    raise serializers.ValidationError({"id_equipo": f"El equipo ya tiene una licencia asignada: {licencia.nombre_licencia} (ID: {licencia.id_licencia})."}
-                                                      )
         return data
 
     def create(self, validated_data):

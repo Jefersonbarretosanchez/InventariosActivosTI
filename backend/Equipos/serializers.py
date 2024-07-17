@@ -4,14 +4,6 @@ from django.contrib.auth.models import User
 from .models import *
 from activosTI.models import Persona
 
-
-class BaseModel(serializers.ModelSerializer):
-    fecha_registro = serializers.DateField()
-
-    class Meta:
-        abstract = True
-
-
 class MarcaEquipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatMarcaequipo
@@ -24,13 +16,13 @@ class SoSerializer(serializers.ModelSerializer):
         fields = ['id_so', 'nombre', 'fecha_registro']
 
 
-class MRamSerializer(BaseModel):
+class MRamSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatMemoriaram
         fields = ['id_ram', 'nombre', 'fecha_registro']
 
 
-class DiscoDuroSerializer(BaseModel):
+class DiscoDuroSerializer(serializers.ModelSerializer):
     class Meta:
         model = CatDiscoduro
         fields = ['id_discoduro', 'nombre', 'fecha_registro']
