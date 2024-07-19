@@ -25,4 +25,5 @@ urlpatterns = [
     path('estado_persona/', views.CatEstadoPersonaViewSet.as_view(), name="estados"),
     path('estado_persona/<int:pk>/',
          views.CatEstadoPersonaUpdate.as_view(), name="estado_persona-update"),
+    path('activos/', views.ActivosViewSet.as_view(), name="activos"),
 ]

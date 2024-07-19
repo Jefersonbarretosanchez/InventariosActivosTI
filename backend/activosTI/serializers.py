@@ -2,6 +2,9 @@
 import locale
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from Equipos.models import Equipo,AsignacionEquipos
+from ComplementosActivos.models import Aplicaciones,AsignacionAplicaciones 
+from Licencias.models import LicenciaPersona, AsignacionLicenciaPersona
 from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona, Historicos
 
 
@@ -123,3 +126,45 @@ class PersonaSerializer(serializers.ModelSerializer):
             'id_estado_persona', instance.id_estado_persona)
         instance.save()
         return instance
+    
+# Modulos de activos general
+class EquipoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Equipo
+        fields = ['nombre_equipo','anydesk']
+
+class LicenciaPersonaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LicenciaPersona
+        fields = ['nombre_licencia','fecha_vencimiento']
+        
+class AplicacionesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Aplicaciones
+        fields = ['nombre_aplicativo']
+
+class ActivosSerializer(serializers.ModelSerializer):
+    equipos = serializers.SerializerMethodField()
+    licencias = serializers.SerializerMethodField()
+    aplicaciones = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Persona
+        fields = ['identificacion', 'nombres', 'apellidos', 'correo_institucional',
+                  'id_centro_costo', 'id_area', 'id_region', 'id_cargo', 'fecha_ingreso_empresa', 'id_estado_persona', 
+                   'equipos', 'licencias','aplicaciones']
+
+    def get_equipos(self, obj):
+        asignaciones = AsignacionEquipos.objects.filter(id_trabajador=obj.id_trabajador)
+        equipos = [asignacion.id_equipo for asignacion in asignaciones]
+        return EquipoSerializer(equipos, many=True).data
+
+    def get_licencias(self, obj):
+        asignaciones = AsignacionLicenciaPersona.objects.filter(id_trabajador=obj.id_trabajador)
+        licencias = [asignacion.id_licencia for asignacion in asignaciones]
+        return LicenciaPersonaSerializer(licencias, many=True).data
+    
+    def get_aplicaciones(self, obj):
+        asignaciones = AsignacionAplicaciones.objects.filter(id_trabajador=obj.id_trabajador)
+        aplicaciones = [asignacion.id_aplicacion for asignacion in asignaciones]
+        return AplicacionesSerializer(aplicaciones, many=True).data

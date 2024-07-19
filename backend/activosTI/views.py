@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from .forms import PersonaCreacion, PersonaActualizar
 from .models import Historicos,Persona,CatCentroCosto,CatArea,CatRegion,CatCargo,CatEstadoPersona
-from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer
+from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer
 # Create your views here.
 
 
@@ -577,4 +577,11 @@ class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
 class HistoricosList(generics.ListAPIView):
     queryset=Historicos.objects.all()
     serializer_class= historicoSerializer
+    permission_classes=[AllowAny]
+
+
+# activos general
+class ActivosViewSet(generics.ListAPIView):
+    queryset = Persona.objects.all()
+    serializer_class = ActivosSerializer
     permission_classes=[AllowAny]
