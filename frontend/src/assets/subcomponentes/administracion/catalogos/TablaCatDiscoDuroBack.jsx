@@ -11,16 +11,16 @@ import Paginate from "../../generales/paginate";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-function TablaCatAlianzaBack() {
+function TablaCatDiscoDuroBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [alianzas, setAlianzas] = useState([]);
-  const [alianzaSeleccionada, setAlianzaSeleccionada] = useState(null);
+  const [discosDuros, setDiscosDuros] = useState([]);
+  const [discoDuroSeleccionado, setDiscoDuroSeleccionado] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [newAlianzaData, setNewAlianzaData] = useState({});
+  const [newDiscoDuroData, setNewDiscoDuroData] = useState({});
   const [actionType, setActionType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,16 +46,16 @@ function TablaCatAlianzaBack() {
   }, []);
 
   useEffect(() => {
-    fetchAlianzas();
+    fetchDiscosDuros();
   }, []);
 
-  const fetchAlianzas = async () => {
+  const fetchDiscosDuros = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/centro_costos/");
-      setAlianzas(response.data);
+      const response = await axios.get("http://localhost:8000/api/disco_duro/");
+      setDiscosDuros(response.data);
     } catch (error) {
-      toast.error("Error cargando las alianzas");
+      toast.error("Error cargando los discos duros");
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +63,7 @@ function TablaCatAlianzaBack() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewAlianzaData((prevData) => ({ ...prevData, [name]: value }));
+    setNewDiscoDuroData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -74,18 +74,18 @@ function TablaCatAlianzaBack() {
     }));
   };
 
-  const createAlianza = async () => {
+  const createDiscoDuro = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newAlianzaData,
+        ...newDiscoDuroData,
       };
-      const response = await axios.post("http://localhost:8000/api/centro_costos/", formattedData);
-      const nuevaAlianza = response.data;
-      setAlianzas([...alianzas, nuevaAlianza]);
-      setNewAlianzaData({});
+      const response = await axios.post("http://localhost:8000/api/disco_duro/", formattedData);
+      const nuevoDiscoDuro = response.data;
+      setDiscosDuros([...discosDuros, nuevoDiscoDuro]);
+      setNewDiscoDuroData({});
       cambiarEstadoModal(false);
-      toast.success("Alianza creada exitosamente!");
+      toast.success("Disco duro creado exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -122,12 +122,12 @@ function TablaCatAlianzaBack() {
     }
   };
 
-  const updateAlianza = async () => {
+  const updateDiscoDuro = async () => {
     setIsLoading(true);
     try {
       const updatedData = {
-        ...alianzaSeleccionada,
-        ...newAlianzaData,
+        ...discoDuroSeleccionado,
+        ...newDiscoDuroData,
       };
 
       const formattedData = {
@@ -135,20 +135,20 @@ function TablaCatAlianzaBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/centro_costos/${alianzaSeleccionada.id_centro_costo}/`,
+        `http://localhost:8000/api/disco_duro/${discoDuroSeleccionado.id_discoduro}/`,
         formattedData
       );
-      const updatedAlianza = response.data;
-      setAlianzas(
-        alianzas.map((alianza) =>
-          alianza.id_centro_costo === updatedAlianza.id_centro_costo
-            ? updatedAlianza
-            : alianza
+      const updatedDiscoDuro = response.data;
+      setDiscosDuros(
+        discosDuros.map((discoDuro) =>
+          discoDuro.id_discoduro === updatedDiscoDuro.id_discoduro
+            ? updatedDiscoDuro
+            : discoDuro
         )
       );
-      setNewAlianzaData({});
+      setNewDiscoDuroData({});
       cambiarEstadoModal(false);
-      toast.success("Alianza actualizada exitosamente!");
+      toast.success("Disco duro actualizado exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -192,23 +192,16 @@ function TablaCatAlianzaBack() {
     initialValues = {},
     action = ""
   ) => {
-    let fieldsWithOptions = fields.map((field) => {
-      return field;
-    });
-    setNewAlianzaData(initialValues);
+    setNewDiscoDuroData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
         <FormDinamico
-          fields={fieldsWithOptions}
-          disabledFields={disabledFields || []}
+          fields={fields}
+          disabledFields={Array.isArray(disabledFields) ? disabledFields : []}
           initialValues={initialValues}
           onInputChange={handleInputChange}
-          errors={{}}
-          setErrors={() => { }}
-          showAddPerifericoButton={false}
-          actionType={action}
         />
       ),
     });
@@ -262,16 +255,16 @@ function TablaCatAlianzaBack() {
   };
 
   const handleCreate = () => {
-    abrirModal("Agregar Alianza", formFields, [], {}, "create");
+    abrirModal("Agregar Disco Duro", formFields, [], {}, "create");
   };
 
-  const handleEdit = (alianza) => {
-    setAlianzaSeleccionada(alianza);
+  const handleEdit = (discoDuro) => {
+    setDiscoDuroSeleccionado(discoDuro);
     abrirModal(
-      `Editar ${alianza.nombre}`,
+      `Editar ${discoDuro.nombre}`,
       formFields,
-      [],
-      alianza,
+      ["id"],
+      discoDuro,
       "update"
     );
   };
@@ -285,13 +278,13 @@ function TablaCatAlianzaBack() {
     setCurrentPage(1);
   };
 
-  const filteredAlianzas = alianzas.filter((alianza) => {
-    const searchString = `${alianza.id_centro_costo} ${alianza.fecha_registro} ${alianza.nombre}`.toLowerCase();
+  const filteredDiscosDuros = discosDuros.filter((discoDuro) => {
+    const searchString = `${discoDuro.id_discoduro} ${discoDuro.nombre} ${discoDuro.fecha_registro}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(alianza[key]) === String(filtroValues[key]);
+      return String(discoDuro[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -299,20 +292,20 @@ function TablaCatAlianzaBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredAlianzas.slice(
+  const currentRecords = filteredDiscosDuros.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredAlianzas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredDiscosDuros.length / recordsPerPage);
 
   return (
     <>
-      <div style={{ marginTop: '-1vh' }} className="contenedor-activos">
+      <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Catalogo Centro de Costos</h1>
+            <h1>Catalogo Discos Duros</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-3.5vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-7.2vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -327,7 +320,7 @@ function TablaCatAlianzaBack() {
           </div>
           <div>
             <FontAwesomeIcon
-              style={{ marginLeft: '41.8vw' }}
+              style={{ marginLeft: '38vw' }}
               className="agregar-asigLicenciasEquip "
               onClick={handleCreate}
               icon={faPlus}
@@ -335,10 +328,10 @@ function TablaCatAlianzaBack() {
           </div>
           <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
-              <thead>
+              <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Centro Costo</th>
-                  <th>Nombre</th>
+                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Disco Duro</th>
+                  <th>Tipo Disco</th>
                   <th>Fecha Registro</th>
                   <th>Acciones</th>
                 </tr>
@@ -359,16 +352,16 @@ function TablaCatAlianzaBack() {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((alianza) => (
-                    <tr key={alianza.id_centro_costo}>
-                      <td style={{ paddingLeft: "10vw" }}>{alianza.id_centro_costo}</td>
-                      <td style={{ paddingLeft: "3.1vw" }}>{alianza.nombre}</td>
-                      <td style={{ paddingLeft: "4vw" }}>{alianza.fecha_registro}</td>
+                  currentRecords.map((discoDuro) => (
+                    <tr key={discoDuro.id_discoduro}>
+                      <td style={{ paddingLeft: '9vw' }}>{discoDuro.id_discoduro}</td>
+                      <td style={{ paddingLeft: '3.5vw' }}>{discoDuro.nombre}</td>
+                      <td style={{ paddingLeft: '4vw' }}>{discoDuro.fecha_registro}</td>
                       <td>
                         <button
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
-                          onClick={() => handleEdit(alianza)}
+                          onClick={() => handleEdit(discoDuro)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
@@ -393,8 +386,8 @@ function TablaCatAlianzaBack() {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createAlianza}
-        onUpdate={updateAlianza}
+        onCreate={createDiscoDuro}
+        onUpdate={updateDiscoDuro}
       >
         {modalConfig.contenido}
       </Modal>
@@ -443,7 +436,7 @@ function TablaCatAlianzaBack() {
   );
 }
 
-export default TablaCatAlianzaBack;
+export default TablaCatDiscoDuroBack;
 
 const Boton = styled.button`
   display: block;
@@ -456,6 +449,19 @@ const Boton = styled.button`
   font-weight: 500;
   transition: 0.3s ease all;
 `;
+
+const Contenido = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+`;
+
 const Loading = styled.div`
   display: flex;
   flex-direction: column;
@@ -482,18 +488,6 @@ const Spinner = styled.div`
     100% {
       transform: rotate(360deg);
     }
-  }
-`;
-
-const Contenido = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
   }
 `;
 

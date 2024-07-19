@@ -11,12 +11,6 @@ export const formFields = [
     type: "text",
     required: true,
   },
-  {
-    id: "fecha_registro",
-    label: "Fecha de Registro",
-    type: "date",
-    required: true,
-  },
 ];
 
 

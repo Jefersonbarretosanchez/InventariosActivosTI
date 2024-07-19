@@ -1,27 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../../generales/modal";
-import ModalFiltros from "../../generales/modalFiltros";
+import { faFileLines, faMagnifyingGlass, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import Modal from "../generales/modal";
+import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
-import FormDinamico from "../../generales/formDinamico";
-import FiltroDinamico from "../../generales/filtroDinamico";
-import Paginate from "../../generales/paginate";
+import { formFields, filterFields, ALL_INPUT_IDS } from "../historicoLogs/formConfig";
+import FormDinamico from "../generales/formDinamico";
+import FiltroDinamico from "../generales/filtroDinamico";
+import Paginate from "../generales/paginate";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-function TablaCatAlianzaBack() {
+function TablaHistoricosBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [alianzas, setAlianzas] = useState([]);
-  const [alianzaSeleccionada, setAlianzaSeleccionada] = useState(null);
+  const [historicos, setHistoricos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newAlianzaData, setNewAlianzaData] = useState({});
-  const [actionType, setActionType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15);
@@ -35,7 +32,7 @@ function TablaCatAlianzaBack() {
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(20);
+      setRecordsPerPage(150);
     }
   };
 
@@ -46,24 +43,19 @@ function TablaCatAlianzaBack() {
   }, []);
 
   useEffect(() => {
-    fetchAlianzas();
+    fetchHistoricos();
   }, []);
 
-  const fetchAlianzas = async () => {
+  const fetchHistoricos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/centro_costos/");
-      setAlianzas(response.data);
+      const response = await axios.get("http://localhost:8000/api/log/"); // URL de la API
+      setHistoricos(response.data);
     } catch (error) {
-      toast.error("Error cargando las alianzas");
+      toast.error("Error cargando los historicos");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setNewAlianzaData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -74,146 +66,22 @@ function TablaCatAlianzaBack() {
     }));
   };
 
-  const createAlianza = async () => {
-    setIsLoading(true);
-    try {
-      const formattedData = {
-        ...newAlianzaData,
-      };
-      const response = await axios.post("http://localhost:8000/api/centro_costos/", formattedData);
-      const nuevaAlianza = response.data;
-      setAlianzas([...alianzas, nuevaAlianza]);
-      setNewAlianzaData({});
-      cambiarEstadoModal(false);
-      toast.success("Alianza creada exitosamente!");
-    } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : error.message;
-      const statusCode = error.response ? error.response.status : 500;
-
-      if (error.response && error.response.data.errors) {
-        const specificErrors = error.response.data.errors;
-
-        const formattedErrors = Object.keys(specificErrors)
-          .map((key) => `${key}: ${specificErrors[key]}`)
-          .join("<br />");
-
-        toast.error(
-          <div>
-            {errorMessage} <br />
-            <br />
-            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
-            <br />
-            <strong>
-              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
-              <br />
-            </strong>
-            {/* (Código de error: {statusCode}) */}
-          </div>,
-          { position: "bottom-center" }
-        );
-      } else {
-        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
-      }
-      cambiarEstadoModal(false);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleInfo = (historico) => {
+    abrirModal(`Descripcion del Historico`, historico.descripcion);
   };
 
-  const updateAlianza = async () => {
-    setIsLoading(true);
-    try {
-      const updatedData = {
-        ...alianzaSeleccionada,
-        ...newAlianzaData,
-      };
-
-      const formattedData = {
-        ...updatedData,
-      };
-
-      const response = await axios.put(
-        `http://localhost:8000/api/centro_costos/${alianzaSeleccionada.id_centro_costo}/`,
-        formattedData
-      );
-      const updatedAlianza = response.data;
-      setAlianzas(
-        alianzas.map((alianza) =>
-          alianza.id_centro_costo === updatedAlianza.id_centro_costo
-            ? updatedAlianza
-            : alianza
-        )
-      );
-      setNewAlianzaData({});
-      cambiarEstadoModal(false);
-      toast.success("Alianza actualizada exitosamente!");
-    } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : error.message;
-      const statusCode = error.response ? error.response.status : 500;
-
-      if (error.response && error.response.data.errors) {
-        const specificErrors = error.response.data.errors;
-
-        const formattedErrors = Object.keys(specificErrors)
-          .map((key) => `${key}: ${specificErrors[key]}`)
-          .join("<br />");
-
-        toast.error(
-          <div>
-            {errorMessage} <br />
-            <br />
-            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
-            <br />
-            <strong>
-              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
-              <br />
-            </strong>
-            {/* (Código de error: {statusCode}) */}
-          </div>,
-          { position: "bottom-center", }
-        );
-      } else {
-        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
-      }
-      cambiarEstadoModal(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const abrirModal = (
-    titulo,
-    fields,
-    disabledFields = [],
-    initialValues = {},
-    action = ""
-  ) => {
-    let fieldsWithOptions = fields.map((field) => {
-      return field;
-    });
-    setNewAlianzaData(initialValues);
-    setActionType(action);
+  const abrirModal = (titulo, contenido) => {
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
-        <FormDinamico
-          fields={fieldsWithOptions}
-          disabledFields={disabledFields || []}
-          initialValues={initialValues}
-          onInputChange={handleInputChange}
-          errors={{}}
-          setErrors={() => { }}
-          showAddPerifericoButton={false}
-          actionType={action}
-        />
+        <div>
+          <p style={{ width: '90%' }}>{contenido}</p>
+        </div>
       ),
     });
     cambiarEstadoModal(true);
   };
+
 
   const abrirModalFiltros = () => {
     cambiarModalConfig({
@@ -261,21 +129,6 @@ function TablaCatAlianzaBack() {
     setTriggerUpdate((prev) => !prev);
   };
 
-  const handleCreate = () => {
-    abrirModal("Agregar Alianza", formFields, [], {}, "create");
-  };
-
-  const handleEdit = (alianza) => {
-    setAlianzaSeleccionada(alianza);
-    abrirModal(
-      `Editar ${alianza.nombre}`,
-      formFields,
-      [],
-      alianza,
-      "update"
-    );
-  };
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -285,13 +138,13 @@ function TablaCatAlianzaBack() {
     setCurrentPage(1);
   };
 
-  const filteredAlianzas = alianzas.filter((alianza) => {
-    const searchString = `${alianza.id_centro_costo} ${alianza.fecha_registro} ${alianza.nombre}`.toLowerCase();
+  const filteredHistoricos = historicos.filter((historico) => {
+    const searchString = `${historico.fecha} ${historico.nombre_usuario} ${historico.correo_usuario} ${historico.tipo_cambio} ${historico.tipo_activo} ${historico.activo_modificado}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(alianza[key]) === String(filtroValues[key]);
+      return String(historico[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -299,20 +152,20 @@ function TablaCatAlianzaBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredAlianzas.slice(
+  const currentRecords = filteredHistoricos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredAlianzas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredHistoricos.length / recordsPerPage);
 
   return (
     <>
-      <div style={{ marginTop: '-1vh' }} className="contenedor-activos">
+      <div className="contenedor-activos" style={{ marginTop: '1vh' }}>
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Catalogo Centro de Costos</h1>
+            <h1>Historicos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-3.5vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-19vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -325,54 +178,50 @@ function TablaCatAlianzaBack() {
               className="buscador-icon-activos"
             />
           </div>
-          <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '41.8vw' }}
-              className="agregar-asigLicenciasEquip "
-              onClick={handleCreate}
-              icon={faPlus}
-            />
-          </div>
-          <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+          <Divtabla style={{ maxHeight: "62.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
-              <thead>
+              <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Centro Costo</th>
-                  <th>Nombre</th>
-                  <th>Fecha Registro</th>
-                  <th>Acciones</th>
+                  <th style={{ paddingLeft: '4vw' }}>Fecha</th>
+                  <th>Usuario</th>
+                  <th>Correo</th>
+                  <th >Tipo Cambio</th>
+                  <th>Tipo Activo</th>
+                  <th>Activo Modificado</th>
+                  <th style={{ paddingLeft: '1vw' }}>Descripción</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "5vw" }}></td>
-                    <td style={{ paddingLeft: "5vw" }}>
-                      <Loading>
-                        <Spinner />
-                        <span>Loading..</span>
-                      </Loading>
-                    </td>
-                    <td style={{ paddingLeft: "20vw" }}></td>
-                    <td></td>
-                    <td></td>
+                    <td style={{ paddingLeft: "0vw" }}></td>
+                    <td style={{ paddingLeft: "0vw" }}></td>
+                    <td style={{ paddingLeft: "10vw" }}><Loading>
+                      <Spinner />
+                      <span>Loading..</span>
+                    </Loading></td>
+                    <td style={{ paddingLeft: "8vw" }}></td>
                   </tr>
                 ) : (
-                  currentRecords.map((alianza) => (
-                    <tr key={alianza.id_centro_costo}>
-                      <td style={{ paddingLeft: "10vw" }}>{alianza.id_centro_costo}</td>
-                      <td style={{ paddingLeft: "3.1vw" }}>{alianza.nombre}</td>
-                      <td style={{ paddingLeft: "4vw" }}>{alianza.fecha_registro}</td>
+                  currentRecords.map((historico) => (
+                    <tr key={historico.id}>
+                      <td style={{ paddingLeft: '1vw' }}>{historico.fecha}</td>
+                      <td>{historico.nombre_usuario}</td>
+                      <td >{historico.correo_usuario}</td>
+                      <td >{historico.tipo_cambio}</td>
+                      <td>{historico.tipo_activo}</td>
+                      <td >{historico.activo_modificado}</td>
                       <td>
                         <button
-                          style={{ marginLeft: '.8vw' }}
+
                           className="btn-accion"
-                          onClick={() => handleEdit(alianza)}
+                          onClick={() => handleInfo(historico)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon icon={faFileLines} />
                         </button>
                       </td>
+                      <td style={{ paddingLeft: '1vw' }}></td>
                     </tr>
                   ))
                 )}
@@ -392,9 +241,6 @@ function TablaCatAlianzaBack() {
         estado={estadoModal}
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
-        actionType={actionType}
-        onCreate={createAlianza}
-        onUpdate={updateAlianza}
       >
         {modalConfig.contenido}
       </Modal>
@@ -443,7 +289,7 @@ function TablaCatAlianzaBack() {
   );
 }
 
-export default TablaCatAlianzaBack;
+export default TablaHistoricosBack;
 
 const Boton = styled.button`
   display: block;
@@ -456,6 +302,19 @@ const Boton = styled.button`
   font-weight: 500;
   transition: 0.3s ease all;
 `;
+
+const Contenido = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+`;
+
 const Loading = styled.div`
   display: flex;
   flex-direction: column;
@@ -482,18 +341,6 @@ const Spinner = styled.div`
     100% {
       transform: rotate(360deg);
     }
-  }
-`;
-
-const Contenido = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
   }
 `;
 

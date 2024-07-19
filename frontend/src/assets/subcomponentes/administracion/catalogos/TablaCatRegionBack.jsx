@@ -11,16 +11,16 @@ import Paginate from "../../generales/paginate";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-function TablaCatAlianzaBack() {
+function TablaCatRegionBack() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [alianzas, setAlianzas] = useState([]);
-  const [alianzaSeleccionada, setAlianzaSeleccionada] = useState(null);
+  const [regiones, setRegiones] = useState([]);
+  const [regionSeleccionada, setRegionSeleccionada] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [newAlianzaData, setNewAlianzaData] = useState({});
+  const [newRegionData, setNewRegionData] = useState({});
   const [actionType, setActionType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,16 +46,16 @@ function TablaCatAlianzaBack() {
   }, []);
 
   useEffect(() => {
-    fetchAlianzas();
+    fetchRegiones();
   }, []);
 
-  const fetchAlianzas = async () => {
+  const fetchRegiones = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/centro_costos/");
-      setAlianzas(response.data);
+      const response = await axios.get("http://localhost:8000/api/region/");
+      setRegiones(response.data);
     } catch (error) {
-      toast.error("Error cargando las alianzas");
+      toast.error("Error cargando las regiones");
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +63,7 @@ function TablaCatAlianzaBack() {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setNewAlianzaData((prevData) => ({ ...prevData, [name]: value }));
+    setNewRegionData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -74,18 +74,18 @@ function TablaCatAlianzaBack() {
     }));
   };
 
-  const createAlianza = async () => {
+  const createRegion = async () => {
     setIsLoading(true);
     try {
       const formattedData = {
-        ...newAlianzaData,
+        ...newRegionData,
       };
-      const response = await axios.post("http://localhost:8000/api/centro_costos/", formattedData);
-      const nuevaAlianza = response.data;
-      setAlianzas([...alianzas, nuevaAlianza]);
-      setNewAlianzaData({});
+      const response = await axios.post("http://localhost:8000/api/region/", formattedData);
+      const nuevaRegion = response.data;
+      setRegiones([...regiones, nuevaRegion]);
+      setNewRegionData({});
       cambiarEstadoModal(false);
-      toast.success("Alianza creada exitosamente!");
+      toast.success("Región creada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -122,12 +122,12 @@ function TablaCatAlianzaBack() {
     }
   };
 
-  const updateAlianza = async () => {
+  const updateRegion = async () => {
     setIsLoading(true);
     try {
       const updatedData = {
-        ...alianzaSeleccionada,
-        ...newAlianzaData,
+        ...regionSeleccionada,
+        ...newRegionData,
       };
 
       const formattedData = {
@@ -135,20 +135,20 @@ function TablaCatAlianzaBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/centro_costos/${alianzaSeleccionada.id_centro_costo}/`,
+        `http://localhost:8000/api/region/${regionSeleccionada.id_region}/`,
         formattedData
       );
-      const updatedAlianza = response.data;
-      setAlianzas(
-        alianzas.map((alianza) =>
-          alianza.id_centro_costo === updatedAlianza.id_centro_costo
-            ? updatedAlianza
-            : alianza
+      const updatedRegion = response.data;
+      setRegiones(
+        regiones.map((region) =>
+          region.id_region === updatedRegion.id_region
+            ? updatedRegion
+            : region
         )
       );
-      setNewAlianzaData({});
+      setNewRegionData({});
       cambiarEstadoModal(false);
-      toast.success("Alianza actualizada exitosamente!");
+      toast.success("Región actualizada exitosamente!");
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -192,23 +192,16 @@ function TablaCatAlianzaBack() {
     initialValues = {},
     action = ""
   ) => {
-    let fieldsWithOptions = fields.map((field) => {
-      return field;
-    });
-    setNewAlianzaData(initialValues);
+    setNewRegionData(initialValues);
     setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
         <FormDinamico
-          fields={fieldsWithOptions}
-          disabledFields={disabledFields || []}
+          fields={fields}
+          disabledFields={Array.isArray(disabledFields) ? disabledFields : []}
           initialValues={initialValues}
           onInputChange={handleInputChange}
-          errors={{}}
-          setErrors={() => { }}
-          showAddPerifericoButton={false}
-          actionType={action}
         />
       ),
     });
@@ -262,16 +255,16 @@ function TablaCatAlianzaBack() {
   };
 
   const handleCreate = () => {
-    abrirModal("Agregar Alianza", formFields, [], {}, "create");
+    abrirModal("Agregar Región", formFields, [], {}, "create");
   };
 
-  const handleEdit = (alianza) => {
-    setAlianzaSeleccionada(alianza);
+  const handleEdit = (region) => {
+    setRegionSeleccionada(region);
     abrirModal(
-      `Editar ${alianza.nombre}`,
+      `Editar ${region.nombre}`,
       formFields,
-      [],
-      alianza,
+      ["id"],
+      region,
       "update"
     );
   };
@@ -285,13 +278,13 @@ function TablaCatAlianzaBack() {
     setCurrentPage(1);
   };
 
-  const filteredAlianzas = alianzas.filter((alianza) => {
-    const searchString = `${alianza.id_centro_costo} ${alianza.fecha_registro} ${alianza.nombre}`.toLowerCase();
+  const filteredRegiones = regiones.filter((region) => {
+    const searchString = `${region.id_region} ${region.nombre} ${region.fecha_registro}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(alianza[key]) === String(filtroValues[key]);
+      return String(region[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -299,20 +292,20 @@ function TablaCatAlianzaBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredAlianzas.slice(
+  const currentRecords = filteredRegiones.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredAlianzas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredRegiones.length / recordsPerPage);
 
   return (
     <>
-      <div style={{ marginTop: '-1vh' }} className="contenedor-activos">
+      <div className="contenedor-activos">
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Catalogo Centro de Costos</h1>
+            <h1>Catalogo Regiones</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-3.5vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-10.4vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -327,7 +320,7 @@ function TablaCatAlianzaBack() {
           </div>
           <div>
             <FontAwesomeIcon
-              style={{ marginLeft: '41.8vw' }}
+              style={{ marginLeft: '34.7vw' }}
               className="agregar-asigLicenciasEquip "
               onClick={handleCreate}
               icon={faPlus}
@@ -335,11 +328,11 @@ function TablaCatAlianzaBack() {
           </div>
           <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
-              <thead>
+              <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Centro Costo</th>
+                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Región</th>
                   <th>Nombre</th>
-                  <th>Fecha Registro</th>
+                  <th>Fecha Creación</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -359,16 +352,16 @@ function TablaCatAlianzaBack() {
                     <td></td>
                   </tr>
                 ) : (
-                  currentRecords.map((alianza) => (
-                    <tr key={alianza.id_centro_costo}>
-                      <td style={{ paddingLeft: "10vw" }}>{alianza.id_centro_costo}</td>
-                      <td style={{ paddingLeft: "3.1vw" }}>{alianza.nombre}</td>
-                      <td style={{ paddingLeft: "4vw" }}>{alianza.fecha_registro}</td>
+                  currentRecords.map((region) => (
+                    <tr key={region.id_region}>
+                      <td style={{ paddingLeft: '8vw' }}>{region.id_region}</td>
+                      <td style={{ paddingLeft: '3vw' }}>{region.nombre}</td>
+                      <td style={{ paddingLeft: '4vw' }}>{region.fecha_registro}</td>
                       <td>
                         <button
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
-                          onClick={() => handleEdit(alianza)}
+                          onClick={() => handleEdit(region)}
                         >
                           <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
@@ -393,8 +386,8 @@ function TablaCatAlianzaBack() {
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
         actionType={actionType}
-        onCreate={createAlianza}
-        onUpdate={updateAlianza}
+        onCreate={createRegion}
+        onUpdate={updateRegion}
       >
         {modalConfig.contenido}
       </Modal>
@@ -443,7 +436,7 @@ function TablaCatAlianzaBack() {
   );
 }
 
-export default TablaCatAlianzaBack;
+export default TablaCatRegionBack;
 
 const Boton = styled.button`
   display: block;
@@ -456,6 +449,19 @@ const Boton = styled.button`
   font-weight: 500;
   transition: 0.3s ease all;
 `;
+
+const Contenido = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+`;
+
 const Loading = styled.div`
   display: flex;
   flex-direction: column;
@@ -482,18 +488,6 @@ const Spinner = styled.div`
     100% {
       transform: rotate(360deg);
     }
-  }
-`;
-
-const Contenido = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
   }
 `;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from 'react';
 import "../Estilos/activos.css";
 import TarjetasPersonas from "../subcomponentes/personas/tarjetasPersonas";
 import TablaPersonas from "../subcomponentes/personas/tablaPersonas";
@@ -10,13 +10,59 @@ import "../Estilos/personas.css"
 import TablaPersonasBack from "../subcomponentes/personas/tablaPersonasBack";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function Personas() {
+    const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
+    const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
+    const [equipos, setEquipos] = useState([]);
+
+    const fetchEquipos = async () => {
+        try {
+            const response = await axios.get("http://localhost:8000/api/equipos/");
+            setEquipos(response.data);
+        } catch (error) {
+            console.error("Error fetching equipos data:", error);
+        }
+    };
+
+    const fetchData = useCallback(() => {
+        fetchEquipos();
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    useEffect(() => {
+        const equiposAsignados = equipos.filter(
+            (equipo) => equipo.nombre_estado_equipo === "Asignado"
+        ).length;
+        setTotalequiposAsignados(equiposAsignados);
+    }, [equipos]);
+
+    useEffect(() => {
+        // Fetch total licenses data when the component mounts
+        const fetchTotalLicencias = async () => {
+            try {
+                const responsePersonas = await axios.get("http://localhost:8000/api/licencias/persona/");
+                setTotalLicenciasPersonas(responsePersonas.data.length);
+            } catch (error) {
+                console.error("Error fetching total licenses data:", error);
+            }
+        };
+
+        fetchTotalLicencias();
+    }, []);
+
     return (
         <div className="PersonasBody">
             <Header />
             <Sidebar />
-            <TablaPersonasBack />
+            <TablaPersonasBack
+                totalequiposAsignados={totalequiposAsignados}
+                totalLicenciasPersonas={totalLicenciasPersonas}
+                fetchData={fetchData} />
             <ToastContainer />
             <Paginate />
             <Footer />

@@ -340,14 +340,14 @@ function TablaCatAreaBack() {
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
-                    <td style={{ paddingLeft: "13vw" }}>
+                    <td style={{ paddingLeft: "5vw" }}></td>
+                    <td style={{ paddingLeft: "5vw" }}>
                       <Loading>
                         <Spinner />
                         <span>Loading..</span>
                       </Loading>
                     </td>
-                    <td style={{ paddingLeft: "13vw" }}></td>
+                    <td style={{ paddingLeft: "20vw" }}></td>
                     <td></td>
                     <td></td>
                   </tr>
@@ -356,7 +356,7 @@ function TablaCatAreaBack() {
                     <tr key={area.id_area}>
                       <td style={{ paddingLeft: "8vw" }}>{area.id_area}</td>
                       <td style={{ paddingLeft: "4.5vw" }}>{area.nombre}</td>
-                      <td>{area.fecha_registro}</td>
+                      <td style={{ paddingLeft: "4.6vw" }}>{area.fecha_registro}</td>
                       <td>
                         <button
                           style={{ marginLeft: '.8vw' }}

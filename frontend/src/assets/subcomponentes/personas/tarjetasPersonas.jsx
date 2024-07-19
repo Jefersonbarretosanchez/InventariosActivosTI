@@ -5,7 +5,7 @@ import equiposImg from "../../imagenes/computadora.png";
 import licenciasImg from "../../imagenes/license-icon.webp";
 import { Link } from "react-router-dom";
 
-function TarjetasPersonas({ totalActivos, totalInactivos }) {
+function TarjetasPersonas({ totalActivos, totalInactivos, totalequiposAsignados, totalLicenciasPersonas }) {
   return (
     <>
       <div className="estadisticas-activos">
@@ -50,7 +50,7 @@ function TarjetasPersonas({ totalActivos, totalInactivos }) {
               <img src={equiposImg} alt="Logo Scala" className="logo-activos" />
             </div>
             <div className="estadisticas-info-activos">
-              <span className="estadisticas-numero-activos">92</span>
+              <span className="estadisticas-numero-activos">{totalequiposAsignados}</span>
               <br />
               <span className="estadisticas-descripcion-activos">
                 Total Equipos Asignados
@@ -64,10 +64,10 @@ function TarjetasPersonas({ totalActivos, totalInactivos }) {
               <img src={licenciasImg} alt="Logo Scala" className="logo-activos" />
             </div>
             <div className="estadisticas-info-activos">
-              <span className="estadisticas-numero-activos">88</span>
+              <span className="estadisticas-numero-activos">{totalLicenciasPersonas}</span>
               <br />
               <span className="estadisticas-descripcion-activos">
-                Total Licencias Asignadas
+                Total Licencias Persona
               </span>
             </div>
           </Link>
