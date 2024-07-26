@@ -33,7 +33,7 @@ export const getRefreshToken = () => {
 // Función para refrescar el token de acceso
 export const refreshToken = async () => {
   try {
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    const refreshToken = getRefreshToken();
     if (!refreshToken) throw new Error("No refresh token available");
     const response = await api.post("/token/refresh/", { refresh: refreshToken });
     const { access } = response.data;
@@ -47,7 +47,12 @@ export const refreshToken = async () => {
 // Interceptor para añadir el token de acceso a las solicitudes
 api.interceptors.request.use(
   async (config) => {
-    const token = getAccessToken();
+    let token = getAccessToken();
+    
+    if (!token) {
+      token = await refreshToken();
+    }
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -57,5 +62,32 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Interceptor para manejar respuestas con error
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const newToken = await refreshToken();
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      return api(originalRequest);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Función para obtener la lista de personas
+export const fetchPersonas = async () => {
+  try {
+    const response = await api.get("/api/personas/");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export default api;

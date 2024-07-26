@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { fetchPersonas } from "../../../api";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -64,22 +65,21 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const fetchPersonas = async () => {
-    setIsLoading(true);
-    try {
-      const responsePersonas = await axios.get(
-        "http://localhost:8000/api/personas/"
-      );
-      setPersonas(responsePersonas.data);
-    } catch (error) {
-      toast.error("Hubo un error en la carga de datos de las personas");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchPersonas();
+    const loadPersonas = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchPersonas();
+        setPersonas(data);
+      } catch (error) {
+        console.error("Error loading persons:", error);
+        toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadPersonas();
   }, []);
 
   useEffect(() => {
