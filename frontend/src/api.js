@@ -1,10 +1,10 @@
 import axios from "axios";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
 
-const baseURL = "https://sigsdj-dev.scalahed.com/choreo-apis/awbo/backend/rest-api-be2/v1.0";
+const apiUrl = "/choreo-apis/awbo/backend/rest-api-be2/v1.0";
 
 const api = axios.create({
-  baseURL,
+  baseURL: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : apiUrl,
 });
 
 // Función para iniciar sesión
@@ -33,14 +33,13 @@ export const getRefreshToken = () => {
 // Función para refrescar el token de acceso
 export const refreshToken = async () => {
   try {
-    const refreshToken = getRefreshToken();
+    const refreshToken = localStorage.getItem(REFRESH_TOKEN);
     if (!refreshToken) throw new Error("No refresh token available");
     const response = await api.post("/token/refresh/", { refresh: refreshToken });
     const { access } = response.data;
     localStorage.setItem(ACCESS_TOKEN, access);
     return access;
   } catch (error) {
-    console.error('Error al refrescar el token:', error);
     throw error;
   }
 };
@@ -48,12 +47,7 @@ export const refreshToken = async () => {
 // Interceptor para añadir el token de acceso a las solicitudes
 api.interceptors.request.use(
   async (config) => {
-    let token = getAccessToken();
-    
-    if (!token) {
-      token = await refreshToken();
-    }
-
+    const token = getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -71,15 +65,11 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response) {
-      if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        const newToken = await refreshToken();
-        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-        return api(originalRequest);
-      }
-    } else {
-      console.error('La respuesta del servidor es undefined');
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const newToken = await refreshToken();
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      return api(originalRequest);
     }
     return Promise.reject(error);
   }

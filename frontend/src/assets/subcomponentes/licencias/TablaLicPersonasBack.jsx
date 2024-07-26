@@ -43,6 +43,8 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -60,7 +62,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
     setIsLoading(true);
     try {
       const responselicPersonas = await axios.get(
-        "http://localhost:8000/api/licencias/persona/"
+        `${API_URL}/api/licencias/persona/`
       );
       setLicPersonas(responselicPersonas.data);
     } catch (error) {

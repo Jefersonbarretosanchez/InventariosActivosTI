@@ -50,7 +50,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
-
+  const API_URL = import.meta.env.VITE_API_URL
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -88,7 +88,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       setIsCatalogsLoading(true);
       try {
         const responseEstado = await axios.get(
-          "http://localhost:8000/api/estado_persona/"
+          `${API_URL}/api/estado_persona/`
         );
         setEstado(
           responseEstado.data.map((item) => ({
@@ -98,7 +98,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         );
 
         const responseCentroCostos = await axios.get(
-          "http://localhost:8000/api/centro_costos/"
+          `${API_URL}/api/centro_costos/`
         );
         setCentroCostos(
           responseCentroCostos.data.map((item) => ({
@@ -108,7 +108,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         );
 
         const responseAreas = await axios.get(
-          "http://localhost:8000/api/area/"
+          `${API_URL}/api/area/`
         );
         setArea(
           responseAreas.data.map((item) => ({
@@ -118,7 +118,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         );
 
         const responseRegion = await axios.get(
-          "http://localhost:8000/api/region/"
+          `${API_URL}/api/region/`
         );
         setRegion(
           responseRegion.data.map((item) => ({
@@ -128,7 +128,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         );
 
         const responseCargo = await axios.get(
-          "http://localhost:8000/api/cargo/"
+          `${API_URL}/api/cargo/`
         );
         setCargo(
           responseCargo.data.map((item) => ({
@@ -191,7 +191,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/personas/",
+        `${API_URL}/api/personas/`,
         formattedData
       );
       const nuevaPersona = response.data;
@@ -254,7 +254,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/personas/${personaSeleccionada.id_trabajador}/`,
+        `${API_URL}/api/personas/${personaSeleccionada.id_trabajador}/`,
         formattedData
       );
       const updatedPersona = response.data;

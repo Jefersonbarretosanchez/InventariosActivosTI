@@ -54,6 +54,8 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
 
 
   const handleResize = () => {
@@ -73,7 +75,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     setIsLoading(true);
     try {
       const responseEquipos = await axios.get(
-        "http://localhost:8000/api/equipos/"
+        `${API_URL}/api/equipos/`
       );
       setEquipos(responseEquipos.data);
     } catch (error) {
@@ -239,7 +241,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
 
 
       const response = await axios.post(
-        "http://localhost:8000/api/equipos/",
+        `${API_URL}/api/equipos/`,
         formattedData
       );
       const nuevoEquipo = response.data;
@@ -306,7 +308,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
       console.log("id equipo:" + formattedData.id_coordinadores);
 
       const response = await axios.put(
-        `http://localhost:8000/api/equipos/${equipoSeleccionado.id_equipo}/`,
+        `${API_URL}/api/equipos/${equipoSeleccionado.id_equipo}/`,
         formattedData
       );
       const updatedEquipo = response.data;

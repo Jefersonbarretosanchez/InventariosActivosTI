@@ -19,7 +19,7 @@ export default function Personas() {
 
     const fetchEquipos = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/equipos/");
+            const response = await axios.get(`${API_URL}/api/equipos/`);
             setEquipos(response.data);
         } catch (error) {
             console.error("Error fetching equipos data:", error);
@@ -45,7 +45,7 @@ export default function Personas() {
         // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
-                const responsePersonas = await axios.get("http://localhost:8000/api/licencias/persona/");
+                const responsePersonas = await axios.get(`${API_URL}/api/licencias/persona/`);
                 setTotalLicenciasPersonas(responsePersonas.data.length);
             } catch (error) {
                 console.error("Error fetching total licenses data:", error);
