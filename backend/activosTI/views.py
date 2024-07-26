@@ -510,7 +510,7 @@ class CatCargoUpdate(generics.RetrieveUpdateAPIView):
 class CatEstadoPersonaViewSet(generics.ListCreateAPIView):
     queryset = CatEstadoPersona.objects.all()
     serializer_class = EstadoPersonaSerializer
-    # permission_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
 class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
