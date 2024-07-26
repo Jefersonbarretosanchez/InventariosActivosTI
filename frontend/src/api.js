@@ -1,10 +1,10 @@
 import axios from "axios";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants";
 
-const apiUrl = "/choreo-apis/awbo/backend/rest-api-be2/v1.0";
+const baseURL = "https://sigsdj-dev.scalahed.com/choreo-apis/awbo/backend/rest-api-be2/v1.0";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : apiUrl,
+  baseURL,
 });
 
 // Función para iniciar sesión
@@ -40,6 +40,7 @@ export const refreshToken = async () => {
     localStorage.setItem(ACCESS_TOKEN, access);
     return access;
   } catch (error) {
+    console.error('Error al refrescar el token:', error);
     throw error;
   }
 };
@@ -70,11 +71,15 @@ api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      const newToken = await refreshToken();
-      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-      return api(originalRequest);
+    if (error.response) {
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        const newToken = await refreshToken();
+        api.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+        return api(originalRequest);
+      }
+    } else {
+      console.error('La respuesta del servidor es undefined');
     }
     return Promise.reject(error);
   }
