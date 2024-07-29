@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-const modalDesasignacion = ({
+const ModalActivos = ({
   children,
   estado,
   cambiarEstado,
@@ -12,7 +12,9 @@ const modalDesasignacion = ({
   onCreate,
   onUpdate,
   onClear,
-  onDegree
+  steps,
+  currentStep,
+  setCurrentStep,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -21,22 +23,24 @@ const modalDesasignacion = ({
     const formElements = document.querySelectorAll('.form-control, .form-select');
     const newErrors = {};
     formElements.forEach(element => {
-      if (!element.value && !element.disabled) {
+      if (!element.value && !element.disabled && (element.name !== "costo" && element.name !== "observacion" && element.name !== "fecha_devolucion_equipo")) {
         newErrors[element.name] = 'Campo obligatorio';
+      }
+      if ((element.name === 'nombres' || element.name === 'apellidos') && element.value && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(element.value)) {
+        newErrors[element.name] = 'Solo se permiten nombres en formato texto';
+      }
+      if ((element.name === 'correo_personal' || element.name === 'correo_institucional') && element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
+        newErrors[element.name] = 'Formato de correo inválido';
       }
     });
 
     // Validación adicional para Autocomplete
     const autocompleteElements = document.querySelectorAll('.autocomplete-control');
     autocompleteElements.forEach(element => {
-      console.log(`Validating autocomplete: ${element.getAttribute('data-name')}`);
-      console.log(`Data value: ${element.getAttribute('data-value')}`);
-
-      if (!element.getAttribute('data-value')) {
+      if (!element.getAttribute('data-value') && (element.getAttribute('data-name') !== "id_ubicacion" && element.getAttribute('data-name') !== "id_coordinadores" && element.getAttribute('data-name') !== "id_kit_perifericos")) {
         newErrors[element.getAttribute('data-name')] = 'Campo obligatorio';
       }
     });
-
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -46,12 +50,6 @@ const modalDesasignacion = ({
     if (!validateForm()) return;
     setIsLoading(true);
     await onCreate();
-    setIsLoading(false);
-  };
-  const handleDegree = async () => {
-    if (!validateForm()) return;
-    setIsLoading(true);
-    await onDegree();
     setIsLoading(false);
   };
 
@@ -68,6 +66,23 @@ const modalDesasignacion = ({
     setIsLoading(false);
   };
 
+  const handleNextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePreviousStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+
+  const handleStepClick = (stepIndex) => {
+    setCurrentStep(stepIndex);
+  };
+
   return (
     <>
       {estado && (
@@ -79,30 +94,43 @@ const modalDesasignacion = ({
                 <FontAwesomeIcon icon={faX} />
               </BotonCerrar>
             </ModalHeader>
-            <ModalBody style={{ marginLeft: '1vw' }}>
-              {React.cloneElement(children, { errors, setErrors })}
+            <StepsIndicator>
+              {steps.map((step, index) => (
+                <Step key={index} active={index === currentStep} onClick={() => handleStepClick(index)}>
+                  {step}
+                </Step>
+              ))}
+            </StepsIndicator>
+            <ModalBody>
+              {React.cloneElement(children, { errors, setErrors, currentStep })}
             </ModalBody>
             <ModalFooter>
-              {(actionType === "create" || actionType === "update" || actionType === "degree") && (
-                <BtnCancelar onClick={() => cambiarEstado(false)} disabled={isLoading}>
-                  <span>Cancelar</span>
-                </BtnCancelar>
+              {currentStep > 0 && (
+                <Button onClick={handlePreviousStep}>Anterior</Button>
               )}
-              {actionType === "create" && (
-                <Boton onClick={handleCreate} disabled={isLoading}>Registrar</Boton>
-              )}
-              {actionType === "update" && (
-                <Boton onClick={handleUpdate} disabled={isLoading}>Actualizar</Boton>
-              )}
-              {actionType === "degree" && (
-                <Boton onClick={handleDegree} disabled={isLoading}>DesAsignar</Boton>
-              )}
-              {actionType === "Clear" && (
+              {(currentStep < steps.length - 1) ? (
+                <Button onClick={handleNextStep}>Siguiente</Button>
+              ) : (
                 <>
-                  <BtnCancelar style={{ marginTop: '1vh' }} onClick={() => cambiarEstado(false)} disabled={isLoading}>
-                    <span>Salir</span>
-                  </BtnCancelar>
-                  <BtnLimpiar style={{ marginTop: '1vh' }} onClick={handleClear} disabled={isLoading}>Limpiar Filtros</BtnLimpiar>
+                  {(actionType === "create" || actionType === "update") && (
+                    <BtnCancelar onClick={() => cambiarEstado(false)} disabled={isLoading}>
+                      <span>Cancelar</span>
+                    </BtnCancelar>
+                  )}
+                  {actionType === "create" && (
+                    <Button onClick={handleCreate} disabled={isLoading}>Registrar</Button>
+                  )}
+                  {actionType === "update" && (
+                    <Button onClick={handleUpdate} disabled={isLoading}>Actualizar</Button>
+                  )}
+                  {actionType === "Clear" && (
+                    <>
+                      <BtnCancelar style={{ marginTop: '1vh' }} onClick={() => cambiarEstado(false)} disabled={isLoading}>
+                        <span>Salir</span>
+                      </BtnCancelar>
+                      <BtnLimpiar style={{ marginTop: '1vh' }} onClick={handleClear} disabled={isLoading}>Limpiar Filtros</BtnLimpiar>
+                    </>
+                  )}
                 </>
               )}
             </ModalFooter>
@@ -113,7 +141,7 @@ const modalDesasignacion = ({
   );
 };
 
-export default modalDesasignacion;
+export default ModalActivos;
 
 const Overlay = styled.div`
   width: 100vw;
@@ -125,10 +153,11 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 `;
 
 const ContenedorModal = styled.div`
-  width: 25vw;
+  width: 30vw;
   height: auto;
   max-height: 90vh;
   background: #fff;
@@ -136,7 +165,8 @@ const ContenedorModal = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
-  overflow: hidden;
+  overflow: visible;
+  z-index: 1200;
 `;
 
 const ModalHeader = styled.div`
@@ -149,7 +179,7 @@ const ModalHeader = styled.div`
   h3 {
     font-weight: 500;
     font-size: 18px;
-    color: #545c8c;
+    color: #1766dc;
     margin: 0;
   }
 `;
@@ -169,6 +199,29 @@ const BotonCerrar = styled.button`
   &:hover {
     transform: scale(1.2);
   }
+`;
+
+const StepsIndicator = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  margin-left:-.9vw;
+`;
+
+const Step = styled.div`
+  flex: 1;
+  text-align: center;
+  padding: 1vh;
+  margin-left: 0.3vw;
+  background-color: ${(props) => (props.active ? "#1766dc" : "#e8e8e8")};
+  color: ${(props) => (props.active ? "#fff" : "#000")};
+  border-radius: 5px;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.05);
+  }
+
 `;
 
 const ModalBody = styled.div`
@@ -205,17 +258,19 @@ const ModalFooter = styled.div`
   padding: 10px 0;
 `;
 
-const Boton = styled.button`
+const Button = styled.button`
   padding: 14px 20px;
   margin: 8px 0;
+  margin-top:0vh;
   border: none;
   cursor: pointer;
   width: 45%;
   color: white;
-  background: #545c8c;
+  background: linear-gradient(to right, #14add6, #384295);
   transition: background 0.3s ease;
 
   &:hover {
+    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 

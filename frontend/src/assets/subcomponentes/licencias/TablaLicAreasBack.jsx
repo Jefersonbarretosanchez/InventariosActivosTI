@@ -441,7 +441,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
 
   return (
     <>
-      <div style={{ marginTop: '-2vh' }}>
+      <div style={{ marginTop: '-2.5vh' }}>
         <TarjetasLicencias
           totalActivos={totalActivos}
           totalInactivos={totalInactivos}
@@ -473,6 +473,8 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
               onClick={() => handleCreate()}
               icon={faPlus}
             />
+            <FontAwesomeIcon style={{ marginLeft: '38vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+
           </div>
           <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
@@ -664,7 +666,7 @@ const Spinner = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #545c8c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -689,7 +691,7 @@ const FilterOptions = styled.div`
 `;
 
 const FilterOptionButton = styled.button`
-  background: linear-gradient(to right, #14add6, #384295);
+  background: #545c8c;
   width: 20vw;
   color: white;
   border: none;
@@ -699,7 +701,6 @@ const FilterOptionButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 `;
@@ -707,7 +708,7 @@ const FilterOptionButton = styled.button`
 const AgregarFiltroContainer = styled.div`
   display: flex;
   justify-content: center;
-  color: #384295;
+  color: #545c8c;
   cursor: pointer;
   transition: transform 0.3s ease;
   &:hover {
@@ -728,7 +729,7 @@ const Divtabla = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 

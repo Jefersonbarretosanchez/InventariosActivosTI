@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import inactivos from "../../imagenes/computadora.png";
+import inactivos from "../../imagenes/screen.png";
 import activos from "../../imagenes/contrato.png";
 import equipos from "../../imagenes/license-icon.webp";
 import licencias from "../../imagenes/usuario.png";

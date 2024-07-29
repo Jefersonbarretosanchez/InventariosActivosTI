@@ -1,7 +1,7 @@
 import React from "react";
 import activosImg from "../../imagenes/perfil-del-usuario.png";
 import inactivosImg from "../../imagenes/ocupado.png";
-import equiposImg from "../../imagenes/computadora.png";
+import equiposImg from "../../imagenes/screen.png";
 import licenciasImg from "../../imagenes/license-icon.webp";
 import { Link } from "react-router-dom";
 

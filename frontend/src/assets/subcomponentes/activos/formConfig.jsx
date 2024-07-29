@@ -1,41 +1,44 @@
 export const ALL_INPUT_IDS = [
-    "identificacion",
-    "nombres",
-    "apellidos",
-    "correo_personal",
-    "correo_institucional",
-    "fecha_ingreso_empresa",
-    "id_alianza",
-    "id_area",
-    "id_region",
-    "id_cargo"
-  ];
+  "identificacion",
+  "nombres",
+  "apellidos",
+  "correo_institucional",
+  "nombre_centro_costo",
+  "nombre_region",
+  "nombre_cargo",
+  "nombre_area",
+  "fecha_ingreso_empresa",
+  "nombre_estado_persona",
+  "nombre_equipo",
+  "anydesk",
+  "nombre_licencia",
+  "fecha_vencimiento",
+  "nombre_aplicativo"
+];
 
 export const formFields = [
   {
-    id: "identificacion",
-    label: "N° Documento",
-    type: "text",
-    required: true,
-  },
-  {
+    name: "nombres",
     id: "nombres",
     label: "Nombres",
     type: "text",
     required: true,
   },
   {
+    name: "apellidos",
     id: "apellidos",
     label: "Apellidos",
     type: "text",
     required: true,
   },
   {
-    id: "correo_personal",
-    label: "Correo Personal",
-    type: "email",
-    required: false,
+    name: "identificacion",
+    id: "identificacion",
+    label: "N° Documento",
+    type: "number",
+    required: true,
   },
+
   {
     id: "correo_institucional",
     label: "Correo Institucional",
@@ -43,60 +46,87 @@ export const formFields = [
     required: true,
   },
   {
+    id: "nombre_centro_costo",
+    label: "Centro de Costo",
+    type: "text",
+    required: true,
+  },
+  {
+    id: "nombre_region",
+    label: "Región",
+    type: "text",
+    required: true,
+  },
+  {
+    id: "nombre_cargo",
+    label: "Cargo",
+    type: "text",
+    required: true,
+  },
+  {
+    id: "nombre_area",
+    label: "Área",
+    type: "text",
+    required: true,
+  },
+
+  {
     id: "fecha_ingreso_empresa",
-    label: "Fecha De Ingreso",
+    label: "Fecha de Ingreso a la Empresa",
     type: "date",
     required: true,
   },
   {
-    id: "id_alianza",
-    label: "Alianza",
-    type: "select",
+    id: "nombre_estado_persona",
+    label: "Estado de la Persona",
+    type: "text",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
   },
   {
-    id: "id_area",
-    label: "Area",
-    type: "select",
+    id: "nombre_equipo",
+    label: "Nombre del Equipo",
+    type: "text",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
   },
   {
-    id: "id_region",
-    label: "Region",
-    type: "select",
+    id: "anydesk",
+    label: "Anydesk",
+    type: "text",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
   },
   {
-    id: "id_cargo",
-    label: "Cargo",
-    type: "select",
+    id: "nombre_licencia",
+    label: "Nombre de la Licencia",
+    type: "text",
     required: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
   },
   {
-    id: "id_estado_persona",
-    label: "Estado Persona",
-    type: "select",
+    id: "fecha_vencimiento",
+    label: "Fecha de Vencimiento",
+    type: "date",
     required: true,
-    hidden: true,
-    options: [
-      { value: "", label: "" },
-      { value: "Prueba", label: "Prueba 1" },
-    ],
   },
+  {
+    id: "nombre_aplicativo",
+    label: "Nombre del Aplicativo",
+    type: "text",
+    required: true,
+  }
 ];
+
+// const [filterFields, setFilterFields] = useState([
+//   {
+//     id: "nombre_centro_costo",
+//     label: "Centro de Costo",
+//     type: "select",
+//     required: true,
+//     options: [], // Opciones iniciales vacías
+//   },
+//   {
+//     id: "nombre_equipo",
+//     label: "Nombre del Equipo",
+//     type: "text",
+//     required: true,
+//   },
+// ]);
+

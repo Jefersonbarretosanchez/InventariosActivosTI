@@ -14,6 +14,7 @@ export const ALL_INPUT_IDS = [
   "id_ubicacion",
   "costo",
   "observacion",
+  "id_estadoequipo"
 ];
 
 export const formFields = [
@@ -119,6 +120,68 @@ export const formFields = [
 
 
 export const filterFields = [
-
+  {
+    id: "id_marcaequipo",
+    label: "Marca Equipo",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_so",
+    label: "Sistema Operativo",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_ram",
+    label: "Memoria RAM",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_discoduro",
+    label: "Disco Duro",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_tipopropiedad",
+    label: "Tipo De Propiedad",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_tipoequipo",
+    label: "Tipo De Equipo",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_coordinadores",
+    label: "Coordinador Bodega",
+    type: "select",
+    required: false,
+    options: [],
+  },
+  {
+    id: "id_ubicacion",
+    label: "Ubicación Bodega",
+    type: "select",
+    required: false,
+    options: [],
+  },
+  {
+    id: "id_estadoequipo",
+    label: "Estado Equipo",
+    type: "select",
+    required: false,
+    options: [],
+  },
 ];
 

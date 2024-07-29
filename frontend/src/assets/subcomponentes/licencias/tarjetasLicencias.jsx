@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import inactivos from "../../imagenes/analisis.png";
-import activos from "../../imagenes/pagina-web.png";
+import activos from "../../imagenes/usuario.png";
 import equipos from "../../imagenes/laptop.png";
-import licencias from "../../imagenes/licenciass.png";
+import licencias from "../../imagenes/license-icon.webp";
 
 function TarjetasLicencias({ totalActivos, totalInactivos, totalLicenciasPersonas, totalLicenciasEquipos }) {
   return (

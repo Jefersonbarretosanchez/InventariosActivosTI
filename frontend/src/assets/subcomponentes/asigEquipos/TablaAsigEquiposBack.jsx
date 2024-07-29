@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import ModalDesasignacion from "../generales/modalDesasignacion";
 import ModalFiltros from "../generales/modalFiltros";
@@ -404,7 +404,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       }
       return field;
     });
-
+    console.log("Fields with options:", fieldsWithOptions);
     if (action === "degree") {
       setnewDesasigEquipoData(initialValues);
     } else {
@@ -433,16 +433,19 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
 
 
   const abrirModalFiltros = () => {
-    const fieldsWithOptions = filterFields.map((field) => {
+    const fieldsWithOptions = formFields.map((field) => {
       if (field.id === "id_equipo") {
         return { ...field, options: equipo };
       } else if (field.id === "id_trabajador") {
         return { ...field, options: trabajador };
-      } else if (field.id === "id_kit_perifericos") {
-        return { ...field, options: perifericos };
+      } else if (field.id === "id_coordinadores") {
+        return { ...field, options: coordinadores };
+      } else if (field.id === "id_ubicacion") {
+        return { ...field, options: ubicaciones };
       }
       return field;
     });
+    console.log("Fields with options:", fieldsWithOptions);
 
     cambiarModalConfig({
       titulo: "Agregar Filtros",
@@ -563,7 +566,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
 
   return (
     <>
-      <div style={{ marginTop: '-2vh' }}>
+      <div style={{ marginTop: '-2.4vh' }}>
         < TarjetasAsigEquipos
           totalequiposAsignados={totalequiposAsignados}
           totalEquiposDisponibles={totalEquiposDisponibles}
@@ -709,8 +712,10 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
               return { ...field, options: equipo };
             } else if (field.id === "id_trabajador") {
               return { ...field, options: trabajador };
-            } else if (field.id === "id_kit_perifericos") {
-              return { ...field, options: perifericos };
+            } else if (field.id === "id_coordinadores") {
+              return { ...field, options: coordinadores };
+            } else if (field.id === "id_ubicacion") {
+              return { ...field, options: ubicaciones };
             }
             return field;
           })}
@@ -793,7 +798,7 @@ const Spinner = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #545c8c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -818,7 +823,7 @@ const FilterOptions = styled.div`
 `;
 
 const FilterOptionButton = styled.button`
-  background: linear-gradient(to right, #14add6, #384295);
+  background: #545c8c;
   width: 20vw;
   color: white;
   border: none;
@@ -828,7 +833,6 @@ const FilterOptionButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 `;
@@ -836,7 +840,7 @@ const FilterOptionButton = styled.button`
 const AgregarFiltroContainer = styled.div`
   display: flex;
   justify-content: center;
-  color: #384295;
+  color: #545c8c;
   cursor: pointer;
   transition: transform 0.3s ease;
   &:hover {
@@ -857,7 +861,7 @@ const Divtabla = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 

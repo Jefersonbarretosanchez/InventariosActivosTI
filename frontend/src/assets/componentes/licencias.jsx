@@ -44,7 +44,7 @@ export default function Licencias() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <div style={{ marginTop: '20.5vh', position: 'fixed' }}>
+            <div style={{ marginTop: '20vh', position: 'fixed' }}>
                 <BarLicencias onClickTabla={handleTablaClick} />
             </div>
             {tablaActiva === 'licenciaPersonas' ?

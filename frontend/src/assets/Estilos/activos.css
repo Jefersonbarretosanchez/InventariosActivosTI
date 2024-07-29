@@ -327,12 +327,12 @@ section {
 }
 
 .pagina-link.active {
-    background: linear-gradient(to right, #14ADD6, #384295);
+    background: linear-gradient(to right, #384295, #4f60c4);
     color: white;
 }
 
 .pagina-link:hover {
-    background: linear-gradient(to right, #14ADD6, #384295);
+    background: linear-gradient(to right, #4f60c4, #384295);
     color: white;
     border-color: #384295;
 }

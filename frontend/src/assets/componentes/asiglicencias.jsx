@@ -83,7 +83,7 @@ export default function Asiglicencias() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <div style={{ marginTop: '20.5vh', position: 'fixed' }}>
+            <div style={{ marginTop: '20vh', position: 'fixed' }}>
                 <BarAsigLicencias onClickTabla={handleTablaClick} />
             </div>
             {tablaActiva === 'licenciaPersonas' ?

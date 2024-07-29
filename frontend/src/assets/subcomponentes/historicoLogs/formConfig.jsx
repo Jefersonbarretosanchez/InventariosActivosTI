@@ -58,4 +58,38 @@ export const formFields2 = [
 ];
 
 export const filterFields = [
+  {
+    id: "nombre_usuario",
+    label: "Nombre de Usuario",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "correo_usuario",
+    label: "Correo de Usuario",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "tipo_cambio",
+    label: "Tipo de Cambio",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "tipo_activo",
+    label: "Tipo de Activo",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "fecha_registro",
+    label: "Fecha de Registro",
+    type: "date",
+    required: true,
+  },
 ];

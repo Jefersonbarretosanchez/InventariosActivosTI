@@ -20,9 +20,7 @@ import TarjetasPersonas from "./tarjetasPersonas";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
-
 function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetchData }) {
-  const API_URL = import.meta.env.VITE_API_URL;
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -52,6 +50,8 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
+
+  const API_URL = import.meta.env.VITE_API_URL
 
 
   const handleResize = () => {
@@ -371,6 +371,8 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       return field;
     });
 
+
+
     cambiarModalConfig({
       titulo: "Agregar Filtros",
       contenido: (
@@ -402,6 +404,8 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       setActiveFilters((prevFilters) => [...prevFilters, filterId]);
       setTriggerUpdate((prev) => !prev);
       setShowFilterOptions(false); // Ocultar opciones después de seleccionar una
+      console.log("Filter added:", filterId);
+      console.log("Active filters:", activeFilters);
     }
   };
 
@@ -475,7 +479,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         totalequiposAsignados={totalequiposAsignados}
         totalLicenciasPersonas={totalLicenciasPersonas}
       />
-      <div className="contenedor-activos">
+      <div style={{ marginTop: '-1.5vh' }} className="contenedor-activos">
         <div className="row-activos">
           <div className="Personas">
             <h1>Personas</h1>
@@ -499,7 +503,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
               onClick={() => handleCreate()}
               icon={faPlus}
             />
-            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
+            <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
           </div>
           <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
@@ -678,7 +682,7 @@ const Spinner = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #545c8c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -714,7 +718,7 @@ const FilterOptions = styled.div`
 `;
 
 const FilterOptionButton = styled.button`
-  background: linear-gradient(to right, #14add6, #384295);
+  background: #545c8c;
   width: 20vw;
   color: white;
   border: none;
@@ -724,7 +728,6 @@ const FilterOptionButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 `;
@@ -732,7 +735,7 @@ const FilterOptionButton = styled.button`
 const AgregarFiltroContainer = styled.div`
   display: flex;
   justify-content: center;
-  color: #384295;
+  color: #545c8c;
   cursor: pointer;
   transition: transform 0.3s ease;
   &:hover {
@@ -753,7 +756,7 @@ const Divtabla = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 

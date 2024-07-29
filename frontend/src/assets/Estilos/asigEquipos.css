@@ -161,11 +161,12 @@
 #asignacionPerifericos.active,
 #ubicacion.active,
 #Perifericos.active {
-    background: -webkit-linear-gradient(#384295, #14ADD6);
+    background: -webkit-linear-gradient(#384295, #4f60c4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     /*border-bottom: 2px solid #384295;*/
 }
+
 
 .contenedor-tabla-perifericos {
     display: flex;

@@ -1,38 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
 const ModalFiltros = ({ children, estado, cambiarEstado, titulo, onClear }) => {
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleClear = async () => {
-        setIsLoading(true);
-        await onClear();
-        setIsLoading(false);
-    };
-    return (
-        <>
-            {estado && (
-                <Overlay>
-                    <ContenedorModal>
-                        <ModalHeader>
-                            <h3>{titulo}</h3>
-                            <BotonCerrar onClick={() => cambiarEstado(false)}>
-                                <FontAwesomeIcon icon={faX} />
-                            </BotonCerrar>
-                        </ModalHeader>
-                        <ModalBody style={{ marginLeft: '1vw' }}>
-                            {children}
-                        </ModalBody>
-                        <BtnCancelar style={{ marginTop: '1vh', marginLeft: '4.2vw' }} onClick={() => cambiarEstado(false)}>
-                            <span>Salir</span>
-                        </BtnCancelar>
-                        <BtnLimpiar style={{ marginTop: '1vh', marginLeft: '1vw' }} onClick={handleClear} >Limpiar Filtros</BtnLimpiar>
-                    </ContenedorModal>
-                </Overlay>
-            )}
-        </>
-    );
+  const handleClear = async () => {
+    setIsLoading(true);
+    await onClear();
+    setIsLoading(false);
+  };
+
+  return (
+    <>
+      {estado && (
+        <Overlay>
+          <ContenedorModal>
+            <ModalHeader>
+              <h3>{titulo}</h3>
+              <BotonCerrar onClick={() => cambiarEstado(false)}>
+                <FontAwesomeIcon icon={faX} />
+              </BotonCerrar>
+            </ModalHeader>
+            <ModalBody style={{ marginLeft: '1vw' }}>
+              {children}
+            </ModalBody>
+            <BtnCancelar style={{ marginTop: '1vh', marginLeft: '4.2vw' }} onClick={() => cambiarEstado(false)}>
+              <span>Salir</span>
+            </BtnCancelar>
+            <BtnLimpiar
+              style={{ marginTop: '1vh', marginLeft: '1vw' }}
+              onClick={handleClear}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Limpiando...' : 'Limpiar Filtros'}
+            </BtnLimpiar>
+          </ContenedorModal>
+        </Overlay>
+      )}
+    </>
+  );
 };
 
 export default ModalFiltros;
@@ -47,6 +55,7 @@ const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible; /* Permitir el desbordamiento visible */
 `;
 
 const ContenedorModal = styled.div`
@@ -59,6 +68,8 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
   overflow: hidden;
+  overflow: visible; /* Permitir el desbordamiento visible */
+  z-index: 1200; /* Asegura que el modal tenga un z-index menor que el popper */
 `;
 
 const ModalHeader = styled.div`

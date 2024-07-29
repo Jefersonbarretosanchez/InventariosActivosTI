@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import inactivos from "../../imagenes/screen.png";
 import activos from "../../imagenes/perfil-del-usuario.png";
 import equipos from "../../imagenes/computadora.png";
 import licencias from "../../imagenes/license-icon.webp";
 
-function TarjetasActivos() {
+function TarjetasActivos({ totalPersonasActivas, totalequiposAsignados, totalEquiposDisponibles, totalLicenciasPersonas }) {
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-activos">
@@ -14,7 +14,7 @@ function TarjetasActivos() {
             <img src={activos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">250</span>
+            <span className="estadisticas-numero-activos">{totalPersonasActivas}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Personas Activas
@@ -30,7 +30,7 @@ function TarjetasActivos() {
             <img src={equipos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">75</span>
+            <span className="estadisticas-numero-activos">{totalequiposAsignados}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Equipos Asignados
@@ -44,7 +44,7 @@ function TarjetasActivos() {
             <img src={inactivos} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">92</span>
+            <span className="estadisticas-numero-activos">{totalEquiposDisponibles}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
               Total Equipos Disponibles
@@ -58,10 +58,10 @@ function TarjetasActivos() {
             <img src={licencias} alt="Logo Scala" className="logo-activos" />
           </div>
           <div className="estadisticas-info-activos">
-            <span className="estadisticas-numero-activos">88</span>
+            <span className="estadisticas-numero-activos">{totalLicenciasPersonas}</span>
             <br />
             <span className="estadisticas-descripcion-activos">
-              Total Licencias Asignadas
+              Total Licencias Persona
             </span>
           </div>
         </Link>

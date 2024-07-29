@@ -442,7 +442,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
 
   return (
     <>
-      <div style={{ marginTop: '-2vh' }}>
+      <div style={{ marginTop: '-2.5vh' }}>
         < TarjetasAsigLicencias
           totalLicPersonasAsignadas={totalLicPersonasAsignadas}
           totalLicPersonasDisponibles={totalLicPersonasDisponibles}
@@ -659,7 +659,7 @@ const Spinner = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #545c8c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -723,7 +723,7 @@ const Divtabla = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 

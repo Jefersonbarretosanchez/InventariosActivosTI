@@ -146,7 +146,7 @@ const ModalHeader = styled.div`
   h3 {
     font-weight: 500;
     font-size: 18px;
-    color: #1766dc;
+    color: #545c8c;
     margin: 0;
   }
 `;
@@ -186,7 +186,7 @@ const ModalBody = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 
@@ -209,11 +209,10 @@ const Boton = styled.button`
   cursor: pointer;
   width: 45%;
   color: white;
-  background: linear-gradient(to right, #14add6, #384295);
+  background: #545c8c;
   transition: background 0.3s ease;
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 

@@ -5,7 +5,7 @@ const apiUrl = "/choreo-apis/awbo/backend/rest-api-be2/v1.0";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : apiUrl,
-  withCredentials: True, // Incluye credenciales en las solicitudes
+  withCredentials: false, // Incluye credenciales en las solicitudes
 });
 
 // Función para iniciar sesión
@@ -14,7 +14,7 @@ export const login = async (username, password) => {
     const response = await api.post("/api/token/", { username, password });
     const { access, refresh, user } = response.data;
     localStorage.setItem(ACCESS_TOKEN, access);
-    localStorage.setItem(REFRESH_TOKEN, refresh);   
+    localStorage.setItem(REFRESH_TOKEN, refresh);
     localStorage.setItem('user', JSON.stringify(user));
     return { access, refresh, user }; // Asegúrate de devolver la información del usuario
   } catch (error) {

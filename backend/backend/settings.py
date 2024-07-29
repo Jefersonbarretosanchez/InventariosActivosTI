@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zrtd8=f_n637vx)_c=owvjbhu1mbon0wholu4d2-+kg5k&!$m='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'corsheaders',    
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -156,13 +156,13 @@ USE_TZ = False
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOWED_ORIGINS = [
- 'http://localhost:5173',
- 'https://sigs-dev.scalahed.com',
- 'http://127.0.0.1:8000'
+    'http://localhost:5173',
+    'https://sigs-dev.scalahed.com',
+    'http://127.0.0.1:8000'
 ]
 
 LOGIN_URL = '/admin/'
-    
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/x
@@ -175,7 +175,7 @@ if not DEBUG:
     # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
     # and renames the files with unique names for each version to support long-term caching
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
+
     # Ensure HTTPS is used
     SECURE_SSL_REDIRECT = True
     CSRF_COOKIE_SECURE = True
@@ -183,8 +183,6 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-
-
 
 
 # Default primary key field type

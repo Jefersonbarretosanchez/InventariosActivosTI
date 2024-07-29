@@ -50,14 +50,12 @@ export const formFields = [
     required: true,
   },
   {
-    name: "fecha_ingreso_empresa",
     id: "fecha_ingreso_empresa",
     label: "Fecha De Ingreso",
     type: "date",
     required: true,
   },
   {
-    name: "id_centro_costo",
     id: "id_centro_costo",
     label: "Centro de Costo",
     type: "select",
@@ -114,34 +112,34 @@ export const filterFields = [
     label: "Centro de Costo",
     type: "select",
     filter: true,
-    options: [], // Opciones dinámicas
+    options: [],
   },
   {
     id: "id_area",
     label: "Area",
     type: "select",
     filter: true,
-    options: [], // Opciones dinámicas
+    options: [],
   },
   {
     id: "id_region",
     label: "Region",
     type: "select",
     filter: true,
-    options: [], // Opciones dinámicas
+    options: [],
   },
   {
     id: "id_cargo",
     label: "Cargo",
     type: "select",
     filter: true,
-    options: [], // Opciones dinámicas
+    options: [],
   },
   {
     id: "id_estado_persona",
     label: "Estado Persona",
     type: "select",
     filter: true,
-    options: [], // Opciones dinámicas
+    options: [],
   },
 ];

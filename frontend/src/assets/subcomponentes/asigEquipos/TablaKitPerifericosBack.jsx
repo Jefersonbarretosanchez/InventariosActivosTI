@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import ModalDesasignacion from "../generales/modalDesasignacion"
 import ModalFiltros from "../generales/modalFiltros";
@@ -467,7 +467,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
   const totalPages = Math.ceil(filteredKitPerifericos.length / recordsPerPage);
   return (
     <>
-      <div style={{ marginTop: '-2vh' }}>
+      <div style={{ marginTop: '-2.5vh' }}>
         < TarjetasAsigEquipos
           totalequiposAsignados={totalequiposAsignados}
           totalEquiposDisponibles={totalEquiposDisponibles}
@@ -681,7 +681,7 @@ const Spinner = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #545c8c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -745,7 +745,7 @@ const Divtabla = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 

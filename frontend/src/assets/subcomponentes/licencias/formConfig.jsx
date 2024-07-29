@@ -58,4 +58,38 @@ export const formFields = [
 ];
 
 export const filterFields = [
+  {
+    name: "fecha_vencimiento",
+    id: "fecha_vencimiento",
+    label: "Fecha De Vencimiento",
+    type: "date",
+    required: true,
+  },
+  {
+    id: "no_ticket",
+    label: "N° Ticket",
+    type: "number",
+    required: true,
+  },
+  {
+    id: "id_contrato",
+    label: "Contrato",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_solicitante",
+    label: "Persona Solicitante",
+    type: "select",
+    required: true,
+    options: [],
+  },
+  {
+    id: "id_estado_licencia",
+    label: "Estado Licencia",
+    type: "select",
+    required: true,
+    options: [],
+  },
 ];

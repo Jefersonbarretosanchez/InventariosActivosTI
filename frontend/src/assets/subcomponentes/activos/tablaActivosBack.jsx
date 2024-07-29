@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBarsProgress, faFileLines, faMagnifyingGlass, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../generales/modal";
+import Modal from "./modalActivos";
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "../historicoLogs/formConfig";
-import FormDinamico from "../generales/formDinamico";
+import { formFields, ALL_INPUT_IDS } from "./formConfig";
+import FormDinamico from "./formDinamicoActivos";
 import FiltroDinamico from "../generales/filtroDinamico";
 import Paginate from "../generales/paginate";
 import axios from "axios";
 import { toast } from "react-toastify";
+import TarjetasActivos from "./tarjetasActivos";
 
-function TablaHistoricosBack() {
+function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEquiposDisponibles, totalLicenciasPersonas }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [historicos, setHistoricos] = useState([]);
+  const [activos, setActivos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [NomEquipo, setNomEquipo] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15);
 
@@ -28,43 +30,29 @@ function TablaHistoricosBack() {
   const [activeFilters, setActiveFilters] = useState([]);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const [filterFields, setFilterFields] = useState([
     {
-      id: "nombre_usuario",
-      label: "Nombre de Usuario",
+      id: "nombre_centro_costo",
+      label: "Centro de Costo",
       type: "select",
       required: true,
-      options: [], // Opciones iniciales vacías
+      options: [],
     },
     {
-      id: "correo_usuario",
-      label: "Correo de Usuario",
+      id: "nombre_equipo",
+      label: "Nombre del Equipo",
       type: "select",
       required: true,
-      options: [], // Opciones iniciales vacías
-    },
-    {
-      id: "tipo_cambio",
-      label: "Tipo de Cambio",
-      type: "select",
-      required: true,
-      options: [], // Opciones iniciales vacías
-    },
-    {
-      id: "tipo_activo",
-      label: "Tipo de Activo",
-      type: "select",
-      required: true,
-      options: [], // Opciones iniciales vacías
+      options: [],
     },
   ]);
-
 
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(150);
+      setRecordsPerPage(20);
     }
   };
 
@@ -75,50 +63,34 @@ function TablaHistoricosBack() {
   }, []);
 
   useEffect(() => {
-    fetchHistoricos();
+    fetchActivos();
   }, []);
 
-  const fetchHistoricos = async () => {
+  const fetchActivos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/log/"); // URL de la API
-      setHistoricos(response.data);
+      const response = await axios.get("http://localhost:8000/api/activos/"); // URL de la API
+      setActivos(response.data);
 
-      // Extraer las opciones de los campos de filtro
-      const nombresUsuarios = response.data.map(historico => historico.nombre_usuario).filter(n => n);
-      const correosUsuarios = response.data.map(historico => historico.correo_usuario).filter(n => n);
-      const tiposCambio = response.data.map(historico => historico.tipo_cambio);
-      const tiposActivo = response.data.map(historico => historico.tipo_activo);
 
-      const uniqueNombresUsuarios = [...new Set(nombresUsuarios)];
-      const uniqueCorreosUsuarios = [...new Set(correosUsuarios)];
-      const uniqueTiposCambio = [...new Set(tiposCambio)];
-      const uniqueTiposActivo = [...new Set(tiposActivo)];
+      const centrosDeCosto = response.data.map(activo => activo.nombre_centro_costo);
+      const uniqueCentrosDeCosto = [...new Set(centrosDeCosto)];
 
-      // Asignar las opciones a los campos de filtro
+
+      const equipos = response.data.flatMap(activo => activo.equipos.map(equipo => equipo.nombre_equipo));
+      const uniqueEquipos = [...new Set(equipos)];
+
       const updatedFilterFields = filterFields.map(field => {
-        if (field.id === "nombre_usuario") {
+        if (field.id === "nombre_centro_costo") {
           return {
             ...field,
-            options: uniqueNombresUsuarios.map(option => ({ value: option, label: option }))
+            options: uniqueCentrosDeCosto.map(option => ({ value: option, label: option }))
           };
         }
-        if (field.id === "correo_usuario") {
+        if (field.id === "nombre_equipo") {
           return {
             ...field,
-            options: uniqueCorreosUsuarios.map(option => ({ value: option, label: option }))
-          };
-        }
-        if (field.id === "tipo_cambio") {
-          return {
-            ...field,
-            options: uniqueTiposCambio.map(option => ({ value: option, label: option }))
-          };
-        }
-        if (field.id === "tipo_activo") {
-          return {
-            ...field,
-            options: uniqueTiposActivo.map(option => ({ value: option, label: option }))
+            options: uniqueEquipos.map(option => ({ value: option, label: option }))
           };
         }
         return field;
@@ -126,11 +98,12 @@ function TablaHistoricosBack() {
       setFilterFields(updatedFilterFields);
 
     } catch (error) {
-      toast.error("Error cargando los historicos");
+      toast.error("Error cargando los activos");
     } finally {
       setIsLoading(false);
     }
   };
+
 
   const handleFiltroChange = (event) => {
     const { name, value } = event.target;
@@ -140,22 +113,33 @@ function TablaHistoricosBack() {
     }));
   };
 
-  const handleInfo = (historico) => {
-    abrirModal(`Descripcion del Historico`, historico.descripcion);
-  };
+  const abrirModal = (
+    titulo,
+    fields,
+    disabledFields = [],
+    initialValues = {}
+  ) => {
+    const completeInitialValues = {
+      ...initialValues,
+      nombre_equipo: initialValues.equipos[0]?.nombre_equipo || "",
+      anydesk: initialValues.equipos[0]?.anydesk || "",
+      licencias: initialValues.licencias || [],
+      aplicaciones: initialValues.aplicaciones || [],
+    };
 
-  const abrirModal = (titulo, contenido) => {
+    setCurrentStep(0);
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
-        <div>
-          <p style={{ width: '90%' }}>{contenido}</p>
-        </div>
+        <FormDinamico
+          fields={fields}
+          disabledFields={Array.isArray(disabledFields) ? disabledFields : []}
+          initialValues={completeInitialValues}
+        />
       ),
     });
     cambiarEstadoModal(true);
   };
-
 
   const abrirModalFiltros = () => {
     cambiarModalConfig({
@@ -212,13 +196,16 @@ function TablaHistoricosBack() {
     setCurrentPage(1);
   };
 
-  const filteredHistoricos = historicos.filter((historico) => {
-    const searchString = `${historico.fecha} ${historico.nombre_usuario} ${historico.correo_usuario} ${historico.tipo_cambio} ${historico.tipo_activo} ${historico.activo_modificado}`.toLowerCase();
+  const filteredActivos = activos.filter((activo) => {
+    const searchString = `${activo.nombres} ${activo.apellidos} ${activo.identificacion} ${activo.correo_institucional} ${activo.nombre_centro_costo} 
+    ${activo.equipos.map((equipo) => (
+      equipo.nombre_equipo
+    ))}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(historico[key]) === String(filtroValues[key]);
+      return String(activo[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -226,22 +213,27 @@ function TablaHistoricosBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredHistoricos.slice(
+  const currentRecords = filteredActivos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredHistoricos.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredActivos.length / recordsPerPage);
 
   return (
     <>
-      <div className="contenedor-activos" style={{ marginTop: '0.8vh' }}>
+      <TarjetasActivos
+        totalPersonasActivas={totalPersonasActivas}
+        totalequiposAsignados={totalequiposAsignados}
+        totalEquiposDisponibles={totalEquiposDisponibles}
+        totalLicenciasPersonas={totalLicenciasPersonas} />
+      <div style={{ marginTop: '-1.5vh' }} className="contenedor-activos">
         <div className="row-activos">
-          <div className="asigPerifericos">
-            <h1>Historicos</h1>
+          <div className="activos">
+            <h1>Activos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-19vw' }}>
+          <div className="contbuscador-activos">
             <input
-              className="contbuscador-asigLicenciasEquip"
+              className="buscador-activos"
               type="text"
               placeholder="Buscar"
               value={searchTerm}
@@ -251,58 +243,71 @@ function TablaHistoricosBack() {
               icon={faMagnifyingGlass}
               className="buscador-icon-activos"
             />
-            <FontAwesomeIcon style={{ marginLeft: '2vw', marginTop: '2.8vh' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
-          </div>
-          <Divtabla style={{ maxHeight: "62.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
-            <table style={{ width: "100%" }} className="table-personas">
-              <thead style={{ position: 'sticky', top: '0' }}>
-                <tr>
-                  <th style={{ paddingLeft: '4vw' }}>Fecha</th>
-                  <th>Usuario</th>
-                  <th>Correo</th>
-                  <th >Tipo Cambio</th>
-                  <th>Tipo Activo</th>
-                  <th>Activo Modificado</th>
-                  <th style={{ paddingLeft: '1vw' }}>Descripción</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr>
-                    <td></td>
-                    <td style={{ paddingLeft: "0vw" }}></td>
-                    <td style={{ paddingLeft: "0vw" }}></td>
-                    <td style={{ paddingLeft: "10vw" }}><Loading>
-                      <Spinner />
-                      <span>Loading..</span>
-                    </Loading></td>
-                    <td style={{ paddingLeft: "8vw" }}></td>
-                  </tr>
-                ) : (
-                  currentRecords.map((historico) => (
-                    <tr key={historico.id}>
-                      <td style={{ paddingLeft: '1vw' }}>{historico.fecha}</td>
-                      <td>{historico.nombre_usuario}</td>
-                      <td >{historico.correo_usuario}</td>
-                      <td >{historico.tipo_cambio}</td>
-                      <td>{historico.tipo_activo}</td>
-                      <td >{historico.activo_modificado}</td>
-                      <td>
-                        <button
+            <FontAwesomeIcon style={{ marginLeft: '1.5vw', marginTop: '2.5vh' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
-                          className="btn-accion"
-                          onClick={() => handleInfo(historico)}
-                        >
-                          <FontAwesomeIcon icon={faFileLines} />
-                        </button>
+          </div>
+          <div className="contenedor-tabla-activos">
+            <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+              <table style={{ width: "100%" }} className="table-personas">
+                <thead style={{ position: 'sticky', top: '0' }}>
+                  <tr>
+                    <th>Nombres</th>
+                    <th>Identificación</th>
+                    <th>Correo Institucional</th>
+                    <th>Alianza</th>
+                    <th>Equipo</th>
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading ? (
+                    <tr>
+                      <td></td>
+                      <td style={{ paddingLeft: "13vw" }}></td>
+                      <td style={{ paddingLeft: "13vw" }}>
+                        <Loading>
+                          <Spinner />
+                          <span>Loading..</span>
+                        </Loading>
                       </td>
-                      <td style={{ paddingLeft: '1vw' }}></td>
+                      <td style={{ paddingLeft: "13vw" }}></td>
+                      <td></td>
+                      <td></td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </Divtabla>
+                  ) : (
+                    currentRecords.map((activo) => (
+                      <tr key={activo.id}>
+                        <td>{activo.nombres} {activo.apellidos}</td>
+                        <td>{activo.identificacion}</td>
+                        <td>{activo.correo_institucional}</td>
+                        <td>{activo.nombre_centro_costo}</td>
+                        <td style={{ color: activo.equipos.length === 0 ? 'red' : 'inherit' }}>
+                          {activo.equipos.length === 0 ? (
+                            "Sin equipo asignado"
+                          ) : (
+                            activo.equipos.map((equipo, index) => (
+                              <div key={index}>{equipo.nombre_equipo}</div>
+                            ))
+                          )}
+                        </td>
+                        <td>
+                          <button
+                            className="btn-accion"
+                            onClick={() =>
+                              abrirModal(`Detalle Activo`, formFields, ALL_INPUT_IDS, activo)
+                            }
+                          >
+                            <FontAwesomeIcon icon={faFileLines} />
+                          </button>
+                        </td>
+                        <td style={{ marginLeft: '20vw' }}></td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </Divtabla>
+          </div>
         </div>
       </div>
 
@@ -316,6 +321,9 @@ function TablaHistoricosBack() {
         estado={estadoModal}
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
+        steps={["Persona", "Equipo", "Licencias", "Aplicaciones"]}
+        currentStep={currentStep}
+        setCurrentStep={setCurrentStep}
       >
         {modalConfig.contenido}
       </Modal>
@@ -364,7 +372,7 @@ function TablaHistoricosBack() {
   );
 }
 
-export default TablaHistoricosBack;
+export default TablaActivosBack;
 
 const Boton = styled.button`
   display: block;

@@ -85,4 +85,17 @@ export const formFields2 = [
 ];
 
 export const filterFields = [
+
+  {
+    id: "fecha_entrega_equipo",
+    label: "Fecha Entrega Equipo",
+    type: "date",
+    required: true,
+  },
+  {
+    id: "fecha_devolucion_equipo",
+    label: "Fecha Devolucion Equipo",
+    type: "date",
+    required: true,
+  },
 ];

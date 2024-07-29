@@ -81,7 +81,7 @@ export default function AsigEquipos() {
         <div className="asigEquiposBody">
             <Header />
             <Sidebar />
-            <div style={{ marginTop: '20.5vh', position: 'fixed' }}>
+            <div style={{ marginTop: '20vh', position: 'fixed' }}>
                 <Bar onClickTabla={handleTablaClick} />
             </div>
             {tablaActiva === 'asignacionEquipos' ? <TablaAsigEquiposBack

@@ -123,7 +123,7 @@ export default function Aplicaciones() {
         <div className="LicenciasBody">
             <Header />
             <Sidebar />
-            <div style={{ marginTop: '20.3vh', position: 'fixed' }}>
+            <div style={{ marginTop: '19.9vh', position: 'fixed' }}>
                 <BarAplicaciones onClickTabla={handleTablaClick} />
             </div>
             {tablaActiva === 'licenciaPersonas' ?
