@@ -19,20 +19,29 @@ from django.urls import include, path
 from activosTI.views import *
 from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
 
+def home_redirect(request):
+    return redirect('admin/')  # Redirige a una vista específica
+
 urlpatterns = [
+    path('', home_redirect, name='home'),
+    
     path('admin/', admin.site.urls),
+    path('admin/catalogos/', catalogos, name='catalogos'),
+    path('admin/catalogos/carga_masiva/<str:catalogo>', upload_excel_view, name='carga_masiva'),
     # path('',include('activosTI.urls')),
     # path('auth/',obtain_auth_token),
-    path('',PersonaCreate.as_view(), name='create'),
+    # path('',PersonaCreate.as_view(), name='create'),
     path('list/',PersonaLista.as_view(),name='list'),
     path('editar/<int:pk>/',PersonaUpdate.as_view(), name='editar'),
     path('eliminar/<int:pk>/',PersonaDelete.as_view(),name='eliminar'),
     #    path('api/login/', LoginView.as_view(), name='login'),
     
     path("api/user/register/", CreateUserView.as_view(), name="register"),
-    path("api/token/", TokenObtainPairView.as_view(), name="get_token"),
+    path('api/user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path("api/token/", CustomTokenObtainPairView.as_view(), name="get_token"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),
+    path('api/login/', LoginView.as_view(), name='login'),
     path("api/", include("activosTI.urls")),
     path("api/", include("Equipos.urls")),
     path("api/", include("Licencias.urls")),

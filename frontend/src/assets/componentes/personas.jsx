@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 export default function Personas() {
+    const API_URL = import.meta.env.VITE_API_URL;
     const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
     const [equipos, setEquipos] = useState([]);

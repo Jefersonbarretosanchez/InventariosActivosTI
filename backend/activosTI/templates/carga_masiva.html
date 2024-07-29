@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+
+    .catalog-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      background: #fff;
+    }
+
+    .catalog-container h1 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .catalog-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .catalog-item {
+      margin-bottom: 15px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .catalog-item h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .catalog-item a {
+      background: linear-gradient(90deg, #264b5d 0%, #417690 100%);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .catalog-item a:hover {
+      background: linear-gradient(90deg, #417690 0%, #264b5d 100%);
+      transform: translateY(-2px);
+    }
+
+    .catalog-item a:active {
+      background: linear-gradient(90deg, #417690 0%, #264b5d 100%);
+      transform: translateY(1px);
+    }
+  </style>
+
+  <div class="catalog-container">
+    <h1>Opciones de Carga Masiva</h1>
+    <ul class="catalog-list">
+      {% for catalog in catalogs %}
+        <li class="catalog-item">
+          <h2>{{ catalog.name }}</h2>
+          <a href="{% url 'carga_masiva' catalog.slug %}">Cargar</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

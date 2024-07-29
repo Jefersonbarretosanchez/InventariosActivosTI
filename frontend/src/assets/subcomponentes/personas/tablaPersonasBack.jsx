@@ -20,7 +20,9 @@ import TarjetasPersonas from "./tarjetasPersonas";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
+
 function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetchData }) {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -50,7 +52,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL
+
 
   const handleResize = () => {
     const width = window.innerWidth;

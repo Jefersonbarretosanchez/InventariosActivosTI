@@ -1,7 +1,7 @@
-import { faArrowRightToBracket, faGears, faUser } from "@fortawesome/free-solid-svg-icons";
-import { faUserTie } from "@fortawesome/free-solid-svg-icons/faUserTie";
+import { faArrowRightToBracket, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
 
 function Header() {
     const today = new Date(); // Get the current date
@@ -17,25 +17,34 @@ function Header() {
 
     // Format the date string
     const formattedDate = `${day}, ${date} de ${month} ${year}`;
+
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
     return (
         <header className="header">
             <div>
                 <h1>Bienvenido al Sistema Integrado de Gestión Scala</h1>
                 <p>{formattedDate}</p>
             </div>
-            <div class="menu-login">
-                <button class="boton-usuario-gen">
+            <div className="menu-login">
+                <button className="boton-usuario-gen">
                     <FontAwesomeIcon icon={faUserTie} size='2xl' style={{}} />
-                    <div class="usuario-info-princ">
-                        <div class="nombre-usuario-princ">Fabrizzio Garzon</div>
-                        <div class="cargo-usuario-princ">Gerente de Tecnologia</div>
+                    <div className="usuario-info-princ">
+                        <div className="nombre-usuario-princ">{user ? `${user.nombre} ${user.apellidos}` : 'Usuario'}</div>
+                        <div className="cargo-usuario-princ" style={{textAlign:"center"}}>Scala Learning TI</div>
                     </div>
-                    <i class="icono-desplegable-princ">▼</i>
+                    <i className="icono-desplegable-princ">▼</i>
                 </button>
-                <div class="contenido-desplegable-princ">
-                    {/* <a href="#"><FontAwesomeIcon icon={faGears} style={{ width: '30px' }} />Settings</a> */}
-                    <Link to="/logout" >
-                        <a href="#" style={{ color: 'red' }}><FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout</a>
+                <div className="contenido-desplegable-princ">
+                    <Link to="/logout" style={{ color: 'red' }} >
+                         <FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout
                     </Link>
                 </div>
             </div>

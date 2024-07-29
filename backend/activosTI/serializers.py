@@ -1,18 +1,40 @@
 """Importaciones de datos requeridos"""
 import locale
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from Equipos.models import Equipo,AsignacionEquipos
 from ComplementosActivos.models import Aplicaciones,AsignacionAplicaciones 
 from Licencias.models import LicenciaPersona, AsignacionLicenciaPersona
 from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona, Historicos
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data.update({'user': {
+            'userId': self.user.id,
+            'username': self.user.username,
+            'email': self.user.email,
+            'nombre': self.user.first_name,
+            'apellidos': self.user.last_name,
+        }})
+
+        return data
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializador para el Usuario"""
     class Meta:
         model = User
-        fields = ['id', 'username', 'password']
+        fields = ['id', 'username', 'password','email', 'first_name', 'last_name']
 
         extra_kwargs = {'password': {'write_only': True}}
 

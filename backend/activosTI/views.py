@@ -1,6 +1,12 @@
 """Importaciones"""
+import logging
+import pandas as pd
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.db import connection
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -8,14 +14,136 @@ from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .forms import PersonaCreacion, PersonaActualizar
+from .forms import PersonaCreacion, PersonaActualizar,UploadExcelForm
 from .models import Historicos,Persona,CatCentroCosto,CatArea,CatRegion,CatCargo,CatEstadoPersona
-from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer
+from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
 # Create your views here.
 
+# Configuración del logger
+logger = logging.getLogger(__name__)
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
-class PersonaCreate(CreateView):
+
+class LoginView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        
+        if not username or not password:
+            return Response({'detail': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                refresh = RefreshToken.for_user(user)
+                access_token = str(refresh.access_token)
+
+                # Registro para depuración
+                logger.info(f"Generated Access Token: {access_token}")
+                logger.info(f"Generated Refresh Token: {str(refresh)}")
+
+                user_info = {
+                    'userId': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'nombre': user.first_name,
+                    'apellidos': user.last_name,
+                }
+
+                return Response({
+                    'access': access_token,
+                    'refresh': str(refresh),
+                    'user': user_info
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        except Exception as e:
+            logger.error(f"Error during authentication: {str(e)}")
+            return Response({'detail': 'An error occurred during authentication'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+CATALOGOS = {
+    'area': {
+        'model': CatArea,
+        'sequence': 'cat_area_id_area_seq',
+        'id_field': 'id_area'
+    },
+    'region': {
+        'model': CatRegion,
+        'sequence': 'cat_region_id_region_seq',
+        'id_field': 'id_region'
+    },
+    # Añadir más catálogos según sea necesario...
+}
+
+def catalogos(request):
+    catalogs = [
+        {'name': 'Cargue Masivo Areas', 'slug': 'area'},
+        {'name': 'Cargue Masivo Regiones', 'slug': 'region'},
+        # Agrega más catálogos según sea necesario
+    ]
+    return render(request, 'carga_masiva.html', {'catalogs': catalogs})
+
+def update_sequence(table_name, sequence_name, id_field):
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT setval(pg_get_serial_sequence('{table_name}', '{id_field}'), (SELECT MAX({id_field}) FROM {table_name}))")
+
+def upload_excel_view(request, catalogo):
+    if catalogo not in CATALOGOS:
+        messages.error(request, "Catálogo no válido.")
+        return redirect("admin:index")
+    
+    model_info = CATALOGOS[catalogo]
+    model = model_info['model']
+    sequence = model_info['sequence']
+    id_field = model_info['id_field']
+    
+    if request.method == "POST":
+        form = UploadExcelForm(request.POST, request.FILES)
+        if form.is_valid():
+            archivo_excel = request.FILES["archivo_excel"]
+            try:
+                df = pd.read_excel(archivo_excel, engine='openpyxl')
+                # Eliminar filas que tengan NaN en la columna del id
+                df = df.dropna(subset=[id_field])
+            except Exception as e:
+                messages.error(request, f"Error al leer el archivo: {str(e)}")
+                return redirect("admin:carga_masiva", catalogo=catalogo)
+
+            for index, row in df.iterrows():
+                try:
+                    id_value = row[id_field]
+                    nombre = row["nombre"]
+
+                    if pd.isna(id_value):
+                        raise ValueError(f"Field '{id_field}' cannot be NaN")
+
+                    id_value = int(id_value)  # Convertir a entero
+
+                    model.objects.update_or_create(
+                        **{id_field: id_value},
+                        defaults={"nombre": nombre}
+                    )
+                except Exception as e:
+                    messages.error(request, f"Error en la fila {index + 1}: {str(e)}")
+                    continue
+
+            # Actualizar la secuencia después de la carga
+            update_sequence(model._meta.db_table, sequence, id_field)
+
+            messages.success(request, "Datos cargados exitosamente.")
+            return redirect("admin:index")
+    else:
+        form = UploadExcelForm()
+
+    return render(request, "admin/upload_excel.html", {"form": form})
+
+
+class PersonaCreate(LoginRequiredMixin,CreateView):
     """"Vista Persona"""
     model = Persona
     form_class = PersonaCreacion
@@ -40,7 +168,7 @@ class PersonaCreate(CreateView):
     # print(fecha_actual)
 
 
-class PersonaLista(ListView):
+class PersonaLista(LoginRequiredMixin,ListView):
     """Lista personas"""
     model = Historicos
     template_name = 'persona.html'
@@ -48,7 +176,7 @@ class PersonaLista(ListView):
     queryset= Historicos.objects.all().order_by('-fecha_registro')
 
 
-class PersonaUpdate(UpdateView):
+class PersonaUpdate(LoginRequiredMixin,UpdateView):
     """Actualiza Requerimientos"""
     model = Persona
     form_class = PersonaActualizar
@@ -73,8 +201,7 @@ class PersonaUpdate(UpdateView):
                 )
         return super().form_valid(form)
 
-
-class PersonaDelete(DeleteView):
+class PersonaDelete(LoginRequiredMixin,DeleteView):
     """"Vista para eliminar Personas"""
     model = Persona
     template_name = 'persona_confirm_delete.html'
@@ -83,7 +210,7 @@ class PersonaDelete(DeleteView):
 
 class PersonaListCreate(generics.ListCreateAPIView):
     serializer_class = PersonaSerializer
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
 
     def get_queryset(self):
         return Persona.objects.all().order_by('-id_trabajador')
@@ -236,11 +363,16 @@ class PersonasDelete(generics.DestroyAPIView):
         return Persona.objects.filter(nombres=user)
 
 
-class CreateUserView(generics.CreateAPIView):
+class CreateUserView(generics.ListCreateAPIView):
     """CU"""
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class CatCentroCostoViewSet(generics.ListCreateAPIView):

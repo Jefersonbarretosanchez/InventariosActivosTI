@@ -1,35 +1,33 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
-import api from "../../api";
-import logo from "../imagenes/login.png";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants';
+import { login } from '../../api';
+import logo from '../imagenes/login.png';
 
-import "../Estilos/Login.css";
+import '../Estilos/Login.css';
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const method = "login";
-  // const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // const name = method === "login" ? "Login" : "Register";
-
   const handleSubmit = async (e) => {
-    // setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const res = await api.post("/api/token/", { username, password });
-      if (method === "login") {
-        localStorage.setItem(ACCESS_TOKEN, res.data.access);
-        localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+      const res = await login(username, password); // Usa la función `login` aquí
+      if (res.access) {
+        localStorage.setItem(ACCESS_TOKEN, res.access);
+        localStorage.setItem(REFRESH_TOKEN, res.refresh);
+
+        // Redirige al usuario a la página principal después del inicio de sesión exitoso
         navigate("/activos");
-      } else {
-        navigate("/");
       }
     } catch (error) {
-      alert(error);
+      console.error("Login error:", error.response ? error.response.data : error.message);
+      alert("Error de inicio de sesión. Verifique sus credenciales.");
     } finally {
       setLoading(false);
     }
@@ -69,21 +67,18 @@ export default function Login() {
             required
           />
         </div>
-        <div className='"checkboxs-login'>
+        <div className="checkboxs-login">
           <input type="checkbox" id="remember" name="remember" />
-          <label for="remember">Remember me</label>
+          <label htmlFor="remember">Remember me</label>
           <a href="#" className="forgot-password-login">
-            {" "}
             I forgot my password
           </a>
         </div>
         <div className="buttons-login">
-          {/* <Link to="/activos"> */}
-          <button className="button1-login" type="submit">
-            Iniciar Sesión
+          <button className="button1-login" type="submit" disabled={loading}>
+            {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
-          {/* </Link> */}
-          <button type="submit" className="botonreg-login">
+          <button type="button" className="botonreg-login">
             Registrar
           </button>
         </div>
