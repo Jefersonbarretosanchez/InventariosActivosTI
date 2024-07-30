@@ -32,6 +32,8 @@ function TablaCatDiscoDuroBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatDiscoDuroBack() {
   const fetchDiscosDuros = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/disco_duro/");
+      const response = await axios.get(`${API_URL}/api/disco_duro/`);
       setDiscosDuros(response.data);
     } catch (error) {
       toast.error("Error cargando los discos duros");
@@ -80,7 +82,7 @@ function TablaCatDiscoDuroBack() {
       const formattedData = {
         ...newDiscoDuroData,
       };
-      const response = await axios.post("http://localhost:8000/api/disco_duro/", formattedData);
+      const response = await axios.post(`${API_URL}/api/disco_duro/`, formattedData);
       const nuevoDiscoDuro = response.data;
       setDiscosDuros([...discosDuros, nuevoDiscoDuro]);
       setNewDiscoDuroData({});
@@ -135,7 +137,7 @@ function TablaCatDiscoDuroBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/disco_duro/${discoDuroSeleccionado.id_discoduro}/`,
+        `${API_URL}/api/disco_duro/${discoDuroSeleccionado.id_discoduro}/`,
         formattedData
       );
       const updatedDiscoDuro = response.data;

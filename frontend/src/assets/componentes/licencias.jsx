@@ -19,14 +19,16 @@ export default function Licencias() {
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
     const [totalLicenciasEquipos, setTotalLicenciasEquipos] = useState(0);
 
+    const API_URL = import.meta.env.VITE_API_URL
+
     useEffect(() => {
         // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
-                const responseEquipos = await axios.get("http://localhost:8000/api/licencias/equipo/");
+                const responseEquipos = await axios.get(`${API_URL}/api/licencias/equipo/`);
                 setTotalLicenciasEquipos(responseEquipos.data.length);
 
-                const responsePersonas = await axios.get("http://localhost:8000/api/licencias/persona/");
+                const responsePersonas = await axios.get(`${API_URL}/api/licencias/persona/`);
                 setTotalLicenciasPersonas(responsePersonas.data.length);
             } catch (error) {
                 console.error("Error fetching total licenses data:", error);

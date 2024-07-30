@@ -32,6 +32,8 @@ function TablaCatAreaBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatAreaBack() {
   const fetchAreas = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/area/");
+      const response = await axios.get(`${API_URL}/api/area/`);
       setAreas(response.data);
     } catch (error) {
       toast.error("Error cargando las áreas");
@@ -80,7 +82,7 @@ function TablaCatAreaBack() {
       const formattedData = {
         ...newAreaData,
       };
-      const response = await axios.post("http://localhost:8000/api/area/", formattedData);
+      const response = await axios.post(`${API_URL}/api/area/`, formattedData);
       const nuevaArea = response.data;
       setAreas([...areas, nuevaArea]);
       setNewAreaData({});
@@ -135,7 +137,7 @@ function TablaCatAreaBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/area/${areaSeleccionada.id_area}/`,
+        `${API_URL}/api/area/${areaSeleccionada.id_area}/`,
         formattedData
       );
       const updatedArea = response.data;

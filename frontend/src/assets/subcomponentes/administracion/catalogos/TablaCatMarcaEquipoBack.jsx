@@ -32,6 +32,8 @@ function TablaCatMarcaEquipoBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatMarcaEquipoBack() {
   const fetchMarcas = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/marca_equipo/");
+      const response = await axios.get(`${API_URL}/api/marca_equipo/`);
       setMarcas(response.data);
     } catch (error) {
       toast.error("Error cargando las marcas");
@@ -80,7 +82,7 @@ function TablaCatMarcaEquipoBack() {
       const formattedData = {
         ...newMarcaData,
       };
-      const response = await axios.post("http://localhost:8000/api/marca_equipo/", formattedData);
+      const response = await axios.post(`${API_URL}/api/marca_equipo/`, formattedData);
       const nuevaMarca = response.data;
       setMarcas([...marcas, nuevaMarca]);
       setNewMarcaData({});
@@ -135,7 +137,7 @@ function TablaCatMarcaEquipoBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/marca_equipo/${marcaSeleccionada.id_marcaequipo}/`,
+        `${API_URL}/api/marca_equipo/${marcaSeleccionada.id_marcaequipo}/`,
         formattedData
       );
       const updatedMarca = response.data;

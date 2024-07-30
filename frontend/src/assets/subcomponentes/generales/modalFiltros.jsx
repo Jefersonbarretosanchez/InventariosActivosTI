@@ -82,7 +82,7 @@ const ModalHeader = styled.div`
   h3 {
     font-weight: 500;
     font-size: 18px;
-    color: #1766dc;
+    color: #545c8c;
     margin: 0;
   }
 `;
@@ -164,7 +164,7 @@ const BtnLimpiar = styled.button`
   cursor: pointer;
   width: 45%;
   color: white;
-  background: -webkit-linear-gradient(#384295, #14ADD6);
+  background: -webkit-linear-gradient(#384295, #4f60c4);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 

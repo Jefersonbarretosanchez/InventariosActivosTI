@@ -45,6 +45,8 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [perifericosMap, setPerifericosMap] = useState({});
 
+  const API_URL = import.meta.env.VITE_API_URL
+
 
 
 
@@ -67,7 +69,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       setIsLoading(true);
       try {
         const responseKitPerifericos = await axios.get(
-          "http://localhost:8000/api/kit_perifericos/"
+          `${API_URL}/api/kit_perifericos/`
         );
         const kitsData = responseKitPerifericos.data;
 
@@ -103,7 +105,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       setIsCatalogsLoading(true);
       try {
         const responsePerifericos = await axios.get(
-          "http://localhost:8000/api/perifericos/"
+          `${API_URL}/api/perifericos/`
         );
 
         const perifData = responsePerifericos.data;
@@ -162,7 +164,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/kit_perifericos/",
+        `${API_URL}/api/kit_perifericos/`,
         formattedData
       );
       const nuevoKitPeriferico = response.data;
@@ -231,7 +233,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/kit_perifericos/${kitperifericosSeleccionado.id_kit_perifericos}/`,
+        `${API_URL}/api/kit_perifericos/${kitperifericosSeleccionado.id_kit_perifericos}/`,
         formattedData
       );
       const updatedKitPerifericos = response.data;

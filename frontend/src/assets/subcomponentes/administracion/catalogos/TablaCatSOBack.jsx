@@ -32,6 +32,8 @@ function TablaCatSOBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatSOBack() {
   const fetchSistemasOperativos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/so/");
+      const response = await axios.get(`${API_URL}/api/so/`);
       setSistemasOperativos(response.data);
     } catch (error) {
       toast.error("Error cargando los sistemas operativos");
@@ -80,7 +82,7 @@ function TablaCatSOBack() {
       const formattedData = {
         ...newSOData,
       };
-      const response = await axios.post("http://localhost:8000/api/so/", formattedData);
+      const response = await axios.post(`${API_URL}/api/so/`, formattedData);
       const nuevoSO = response.data;
       setSistemasOperativos([...sistemasOperativos, nuevoSO]);
       setNewSOData({});
@@ -135,7 +137,7 @@ function TablaCatSOBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/so/${sistemaOperativoSeleccionado.id_so}/`,
+        `${API_URL}/api/so/${sistemaOperativoSeleccionado.id_so}/`,
         formattedData
       );
       const updatedSO = response.data;

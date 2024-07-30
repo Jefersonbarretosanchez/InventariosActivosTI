@@ -32,6 +32,8 @@ function TablaCatCoordinadoresBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatCoordinadoresBack() {
   const fetchCoordinadores = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/coordinadores/");
+      const response = await axios.get(`${API_URL}/api/coordinadores/`);
       setCoordinadores(response.data);
     } catch (error) {
       toast.error("Error cargando los coordinadores");
@@ -80,7 +82,7 @@ function TablaCatCoordinadoresBack() {
       const formattedData = {
         ...newCoordinadorData,
       };
-      const response = await axios.post("http://localhost:8000/api/coordinadores/", formattedData);
+      const response = await axios.post(`${API_URL}/api/coordinadores/`, formattedData);
       const nuevoCoordinador = response.data;
       setCoordinadores([...coordinadores, nuevoCoordinador]);
       setNewCoordinadorData({});
@@ -135,7 +137,7 @@ function TablaCatCoordinadoresBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/coordinadores/${coordinadorSeleccionado.id_coordinadores}/`,
+        `${API_URL}/api/coordinadores/${coordinadorSeleccionado.id_coordinadores}/`,
         formattedData
       );
       const updatedCoordinador = response.data;

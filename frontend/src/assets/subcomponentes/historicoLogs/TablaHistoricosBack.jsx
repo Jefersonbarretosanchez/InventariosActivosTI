@@ -29,6 +29,8 @@ function TablaHistoricosBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const [filterFields, setFilterFields] = useState([
     {
       id: "nombre_usuario",
@@ -81,7 +83,7 @@ function TablaHistoricosBack() {
   const fetchHistoricos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/log/"); // URL de la API
+      const response = await axios.get(`${API_URL}/api/log/`); // URL de la API
       setHistoricos(response.data);
 
       // Extraer las opciones de los campos de filtro

@@ -6,6 +6,7 @@ import Header from "../subcomponentes/generales/header";
 import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
+import { fetchPersonas } from "../../api";
 import "../Estilos/asiglicencias.css";
 import TarjetasAsigLicencias from '../subcomponentes/asigLicencias/tarjetasAsigLicencias';
 import BarAsigLicencias from '../subcomponentes/asigLicencias/barAsigLicencias';
@@ -30,6 +31,7 @@ export default function Aplicaciones() {
     const [personas, setPersonas] = useState([]);
     const [aplicaciones, setAplicaciones] = useState([]);
     const [aplicacionesasig, setAplicacionesAsig] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL
 
 
@@ -58,17 +60,20 @@ export default function Aplicaciones() {
 
 
     useEffect(() => {
-        const fetchPersonas = async () => {
+        const loadPersonas = async () => {
+            setIsLoading(true);
             try {
-                const response = await axios.get(`${API_URL}/api/personas/`);
-                setPersonas(response.data); // Almacena todas las personas en el estado
-
+                const data = await fetchPersonas();
+                setPersonas(data);
             } catch (error) {
-                console.error("Error fetching personas data:", error);
+                console.error("Error loading persons:", error);
+                toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
+            } finally {
+                setIsLoading(false);
             }
         };
 
-        fetchPersonas();
+        loadPersonas();
     }, []);
 
     useEffect(() => {

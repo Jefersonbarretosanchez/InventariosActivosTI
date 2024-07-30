@@ -24,10 +24,11 @@ export default function AsigEquipos() {
 
     const [equipos, setEquipos] = useState([]);
     const [perifericos, setPerifericos] = useState([]);
+    const API_URL = import.meta.env.VITE_API_URL
 
     const fetchEquipos = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/equipos/");
+            const response = await axios.get(`${API_URL}/api/equipos/`);
             setEquipos(response.data);
         } catch (error) {
             console.error("Error fetching equipos data:", error);
@@ -36,7 +37,7 @@ export default function AsigEquipos() {
 
     const fetchPerifericos = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/perifericos/");
+            const response = await axios.get(`${API_URL}/api/perifericos/`);
             setPerifericos(response.data);
         } catch (error) {
             console.error("Error fetching perifericos data:", error);

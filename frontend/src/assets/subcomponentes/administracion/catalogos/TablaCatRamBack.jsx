@@ -32,6 +32,8 @@ function TablaCatRamBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatRamBack() {
   const fetchMemoriasRam = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/memoria_ram/");
+      const response = await axios.get(`${API_URL}/api/memoria_ram/`);
       setMemoriasRam(response.data);
     } catch (error) {
       toast.error("Error cargando las memorias RAM");
@@ -80,7 +82,7 @@ function TablaCatRamBack() {
       const formattedData = {
         ...newRamData,
       };
-      const response = await axios.post("http://localhost:8000/api/memoria_ram/", formattedData);
+      const response = await axios.post(`${API_URL}/api/memoria_ram/`, formattedData);
       const nuevaRam = response.data;
       setMemoriasRam([...memoriasRam, nuevaRam]);
       setNewRamData({});
@@ -135,7 +137,7 @@ function TablaCatRamBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/memoria_ram/${memoriaRamSeleccionada.id_ram}/`,
+        `${API_URL}/api/memoria_ram/${memoriaRamSeleccionada.id_ram}/`,
         formattedData
       );
       const updatedRam = response.data;

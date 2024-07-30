@@ -42,6 +42,8 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -60,7 +62,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
     setIsLoading(true);
     try {
       const responselicEquipos = await axios.get(
-        "http://localhost:8000/api/licencias/equipo/"
+        `${API_URL}/api/licencias/equipo/`
       );
       setLicEquipos(responselicEquipos.data);
     } catch (error) {
@@ -80,7 +82,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
       setIsCatalogsLoading(true);
       try {
         const responseContratos = await axios.get(
-          "http://localhost:8000/api/licencias/contratos/"
+          `${API_URL}/api/licencias/contratos/`
         );
         setContrato(
           responseContratos.data.map((item) => ({
@@ -90,7 +92,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
         );
 
         const responseEstado = await axios.get(
-          "http://localhost:8000/api/licencias/estado/"
+          `${API_URL}/api/licencias/estado/`
         );
         setEstadoLicencia(
           responseEstado.data.map((item) => ({
@@ -100,7 +102,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
         );
 
         const responseSolicitante = await axios.get(
-          "http://localhost:8000/api/licencias/responsables/"
+          `${API_URL}/api/licencias/responsables/`
         );
         setSolicitante(
           responseSolicitante.data.map((item) => ({
@@ -162,7 +164,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/licencias/equipo/",
+        `${API_URL}/api/licencias/equipo/`,
         formattedData
       );
       const nuevalicEquipo = response.data;
@@ -221,7 +223,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/licencias/equipo/${licequipoSeleccionada.id_licencia}/`,
+        `${API_URL}/api/licencias/equipo/${licequipoSeleccionada.id_licencia}/`,
         formattedData
       );
       const updatedlicEquipo = response.data;

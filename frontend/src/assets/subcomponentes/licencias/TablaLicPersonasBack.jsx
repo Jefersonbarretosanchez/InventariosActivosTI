@@ -82,7 +82,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
       setIsCatalogsLoading(true);  // Añadido
       try {
         const responseContratos = await axios.get(
-          "http://localhost:8000/api/licencias/contratos/"
+          `${API_URL}/api/licencias/contratos/`
         );
         setContrato(
           responseContratos.data.map((item) => ({
@@ -92,7 +92,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
         );
 
         const responseEstado = await axios.get(
-          "http://localhost:8000/api/licencias/estado/"
+          `${API_URL}/api/licencias/estado/`
         );
         setEstadoLicencia(
           responseEstado.data.map((item) => ({
@@ -102,7 +102,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
         );
 
         const responseSolicitante = await axios.get(
-          "http://localhost:8000/api/licencias/responsables/"
+          `${API_URL}/api/licencias/responsables/`
         );
         setSolicitante(
           responseSolicitante.data.map((item) => ({

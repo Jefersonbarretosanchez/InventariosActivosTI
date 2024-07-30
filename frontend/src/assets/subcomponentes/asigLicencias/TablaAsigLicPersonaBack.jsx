@@ -47,6 +47,8 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -64,7 +66,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
     setIsLoading(true);
     try {
       const responseasigLicPersona = await axios.get(
-        "http://localhost:8000/api/licencias/asignar_licencia_persona/"
+        `${API_URL}/api/licencias/asignar_licencia_persona/`
       );
       setAsigLicPersonas(responseasigLicPersona.data);
     } catch (error) {
@@ -83,7 +85,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
     setIsCatalogsLoading(true);
     try {
       const responseLicPersona = await axios.get(
-        "http://localhost:8000/api/licencias/persona/"
+        `${API_URL}/api/licencias/persona/`
       );
       setLicencia(
         responseLicPersona.data.map((item) => ({
@@ -93,7 +95,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseTrabajador = await axios.get(
-        "http://localhost:8000/api/licencias/responsables/"
+        `${API_URL}/api/licencias/responsables/`
       );
       setTrabajador(
         responseTrabajador.data.map((item) => ({
@@ -103,7 +105,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseLicPersonaFiltradas = await axios.get(
-        "http://localhost:8000/api/licencias_sin_asignar/"
+        `${API_URL}/api/licencias_sin_asignar/`
       );
       setLicnciaFiltrada(
         responseLicPersonaFiltradas.data.map((item) => ({
@@ -113,7 +115,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseTrabajadorFiltrados = await axios.get(
-        "http://localhost:8000/api/personas_sin_asignacion_licencia/"
+        `${API_URL}/api/personas_sin_asignacion_licencia/`
       );
       setTrabajadorFiltrado(
         responseTrabajadorFiltrados.data.map((item) => ({
@@ -162,7 +164,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/licencias/asignar_licencia_persona/",
+        `${API_URL}/api/licencias/asignar_licencia_persona/`,
         formattedData
       );
       const nuevaasigLicPersona = response.data;
@@ -225,7 +227,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       console.log("id licencia:" + formattedData.id_licencia);
 
       const response = await axios.put(
-        `http://localhost:8000/api/licencias/desasignar_licencia_persona/${desasiglicPersonaSeleccionada.id}/`,
+        `${API_URL}/api/licencias/desasignar_licencia_persona/${desasiglicPersonaSeleccionada.id}/`,
         formattedData
       );
 

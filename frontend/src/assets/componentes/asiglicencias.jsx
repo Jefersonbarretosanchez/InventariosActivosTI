@@ -27,9 +27,11 @@ export default function Asiglicencias() {
     const [licpersonas, setLicPersonas] = useState([]);
     const [licequipos, setLicEquipos] = useState([]);
 
+    const API_URL = import.meta.env.VITE_API_URL
+
     const fetchLicPersona = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/licencias/persona/");
+            const response = await axios.get(`${API_URL}/api/licencias/persona/`);
             setLicPersonas(response.data);
 
         } catch (error) {
@@ -38,7 +40,7 @@ export default function Asiglicencias() {
     };
     const fetchLicEquipos = async () => {
         try {
-            const response = await axios.get("http://localhost:8000/api/licencias/equipo/");
+            const response = await axios.get(`${API_URL}/api/licencias/equipo/`);
             setLicEquipos(response.data);
 
         } catch (error) {

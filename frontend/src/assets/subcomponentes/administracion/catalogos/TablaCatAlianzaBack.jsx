@@ -32,6 +32,8 @@ function TablaCatAlianzaBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatAlianzaBack() {
   const fetchAlianzas = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/centro_costos/");
+      const response = await axios.get(`${API_URL}/api/centro_costos/`);
       setAlianzas(response.data);
     } catch (error) {
       toast.error("Error cargando las alianzas");
@@ -80,7 +82,7 @@ function TablaCatAlianzaBack() {
       const formattedData = {
         ...newAlianzaData,
       };
-      const response = await axios.post("http://localhost:8000/api/centro_costos/", formattedData);
+      const response = await axios.post(`${API_URL}/api/centro_costos/`, formattedData);
       const nuevaAlianza = response.data;
       setAlianzas([...alianzas, nuevaAlianza]);
       setNewAlianzaData({});
@@ -135,7 +137,7 @@ function TablaCatAlianzaBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/centro_costos/${alianzaSeleccionada.id_centro_costo}/`,
+        `${API_URL}/api/centro_costos/${alianzaSeleccionada.id_centro_costo}/`,
         formattedData
       );
       const updatedAlianza = response.data;

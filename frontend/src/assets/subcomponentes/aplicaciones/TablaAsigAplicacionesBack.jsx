@@ -48,6 +48,8 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -65,7 +67,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
     setIsLoading(true);
     try {
       const responseasigAplicacion = await axios.get(
-        "http://localhost:8000/api/aplicaciones/asignar/"
+        `${API_URL}/api/aplicaciones/asignar/`
       );
       setAsigAplicaciones(responseasigAplicacion.data);
     } catch (error) {
@@ -84,7 +86,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
     setIsCatalogsLoading(true);
     try {
       const responseAplicaciones = await axios.get(
-        "http://localhost:8000/api/aplicaciones/"
+        `${API_URL}/api/aplicaciones/`
       );
       setAplicacion(
         responseAplicaciones.data.map((item) => ({
@@ -94,7 +96,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       );
 
       const responseTrabajador = await axios.get(
-        "http://localhost:8000/api/licencias/responsables/"
+        `${API_URL}/api/licencias/responsables/`
       );
       setTrabajador(
         responseTrabajador.data.map((item) => ({
@@ -104,7 +106,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       );
 
       const responseAplicacionesFiltradas = await axios.get(
-        "http://localhost:8000/api/licencias_sin_asignar/"
+        `${API_URL}/api/licencias_sin_asignar/`
       );
       setAplicacionFiltrada(
         responseAplicacionesFiltradas.data.map((item) => ({
@@ -114,7 +116,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       );
 
       const responseTrabajadorFiltrados = await axios.get(
-        "http://localhost:8000/api/personas_sin_asignacion_licencia/"
+        `${API_URL}/api/personas_sin_asignacion_licencia/`
       );
       setTrabajadorFiltrado(
         responseTrabajadorFiltrados.data.map((item) => ({
@@ -164,7 +166,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       console.log("id licencia:" + formattedData.id_aplicacion);
 
       const response = await axios.post(
-        "http://localhost:8000/api/aplicaciones/asignar/",
+        `${API_URL}/api/aplicaciones/asignar/`,
         formattedData
       );
       const nuevaasigAplacion = response.data;
@@ -227,7 +229,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       console.log("id licencia:" + formattedData.id_aplicacion);
 
       const response = await axios.put(
-        `http://localhost:8000/api/aplicaciones/desasignar/${desasigAplicacionSeleccionada.id}/`,
+        `${API_URL}/api/aplicaciones/desasignar/${desasigAplicacionSeleccionada.id}/`,
         formattedData
       );
 
@@ -385,7 +387,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
   };
 
   const handleCreate = () => {
-    abrirModal("Crear Asignacion Licencia", formFields1, [], {}, "create");
+    abrirModal("Crear Asignacion de Aplicacion", formFields1, [], {}, "create");
   };
 
   const handleDesgree = (desasigaplicaciones) => {

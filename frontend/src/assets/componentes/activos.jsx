@@ -15,7 +15,7 @@ import axios from "axios";
 export default function Activos() {
     const [totalPersonasActivas, setTotalPersonasActivas] = useState(0);
     const [personas, setPersonas] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(false);
     const [equipos, setEquipos] = useState([]);
     const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
     const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
@@ -25,20 +25,20 @@ export default function Activos() {
 
     useEffect(() => {
         const loadPersonas = async () => {
-          setIsLoading(true);
-          try {
-            const data = await fetchPersonas();
-            setPersonas(data);
-          } catch (error) {
-            console.error("Error loading persons:", error);
-            toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
-          } finally {
-            setIsLoading(false);
-          }
+            setIsLoading(true);
+            try {
+                const data = await fetchPersonas();
+                setPersonas(data);
+            } catch (error) {
+                console.error("Error loading persons:", error);
+                toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
+            } finally {
+                setIsLoading(false);
+            }
         };
-    
+
         loadPersonas();
-      }, []);
+    }, []);
 
 
     useEffect(() => {

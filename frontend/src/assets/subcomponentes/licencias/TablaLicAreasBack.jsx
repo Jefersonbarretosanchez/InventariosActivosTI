@@ -44,6 +44,8 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -62,7 +64,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     setIsLoading(true);
     try {
       const responselicAreas = await axios.get(
-        "http://localhost:8000/api/licencias/area/"
+        `${API_URL}/api/licencias/area/`
       );
       setLicAreas(responselicAreas.data);
     } catch (error) {
@@ -82,7 +84,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
       setIsCatalogsLoading(true);
       try {
         const responseCentroCostos = await axios.get(
-          "http://localhost:8000/api/centro_costos/"
+          `${API_URL}/api/centro_costos/`
         );
         setCentroCostos(
           responseCentroCostos.data.map((item) => ({
@@ -92,7 +94,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         );
 
         const responseContratos = await axios.get(
-          "http://localhost:8000/api/licencias/contratos/"
+          `${API_URL}/api/licencias/contratos/`
         );
         setContrato(
           responseContratos.data.map((item) => ({
@@ -102,7 +104,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         );
 
         const responseEstado = await axios.get(
-          "http://localhost:8000/api/licencias/estado/"
+          `${API_URL}/api/licencias/estado/`
         );
         setEstadoLicencia(
           responseEstado.data.map((item) => ({
@@ -112,7 +114,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         );
 
         const responseSolicitante = await axios.get(
-          "http://localhost:8000/api/licencias/responsables/"
+          `${API_URL}/api/licencias/responsables/`
         );
         setResponsable(
           responseSolicitante.data.map((item) => ({
@@ -173,7 +175,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/licencias/area/",
+        `${API_URL}/api/licencias/area/`,
         formattedData
       );
       const nuevalicArea = response.data;
@@ -234,7 +236,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/licencias/area/${licareaSeleccionada.id_licencia}/`,
+        `${API_URL}/api/licencias/area/${licareaSeleccionada.id_licencia}/`,
         formattedData
       );
       const updatedlicArea = response.data;

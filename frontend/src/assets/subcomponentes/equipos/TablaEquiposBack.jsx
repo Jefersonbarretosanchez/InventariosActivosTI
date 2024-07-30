@@ -96,7 +96,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
       setIsCatalogsLoading(true);
       try {
         const responseEstadoEquipo = await axios.get(
-          "http://localhost:8000/api/estado_equipo/"
+          `${API_URL}/api/estado_equipo/`
         );
         setEstadoEquipo(
           responseEstadoEquipo.data.map((item) => ({
@@ -106,7 +106,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseSO = await axios.get(
-          "http://localhost:8000/api/so/"
+          `${API_URL}/api/so/`
         );
         setSO(
           responseSO.data.map((item) => ({
@@ -116,7 +116,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseMarcaEquipo = await axios.get(
-          "http://localhost:8000/api/marca_equipo/"
+          `${API_URL}/api/marca_equipo/`
         );
         setMarcaEquipo(
           responseMarcaEquipo.data.map((item) => ({
@@ -126,7 +126,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseMemoriaRam = await axios.get(
-          "http://localhost:8000/api/memoria_ram/"
+          `${API_URL}/api/memoria_ram/`
         );
         setMemoriaRam(
           responseMemoriaRam.data.map((item) => ({
@@ -136,7 +136,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseDiscoDuro = await axios.get(
-          "http://localhost:8000/api/disco_duro/"
+          `${API_URL}/api/disco_duro/`
         );
         setDiscoDuro(
           responseDiscoDuro.data.map((item) => ({
@@ -146,7 +146,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseTipoPropiedad = await axios.get(
-          "http://localhost:8000/api/tipo_propiedad/"
+          `${API_URL}/api/tipo_propiedad/`
         );
         setTipoPropiedad(
           responseTipoPropiedad.data.map((item) => ({
@@ -156,7 +156,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseTipoEquipo = await axios.get(
-          "http://localhost:8000/api/tipo_equipo/"
+          `${API_URL}/api/tipo_equipo/`
         );
         setTipoEquipo(
           responseTipoEquipo.data.map((item) => ({
@@ -166,7 +166,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseCoordinadores = await axios.get(
-          "http://localhost:8000/api/coordinadores/"
+          `${API_URL}/api/coordinadores/`
         );
         setCoordinadores(
           responseCoordinadores.data.map((item) => ({
@@ -176,7 +176,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
         );
 
         const responseUbicaciones = await axios.get(
-          "http://localhost:8000/api/ubicaciones/"
+          `${API_URL}/api/ubicaciones/`
         );
         setUbicaciones(
           responseUbicaciones.data.map((item) => ({

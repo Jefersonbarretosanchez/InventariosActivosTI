@@ -45,6 +45,8 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -63,7 +65,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
     setIsLoading(true);
     try {
       const responseAplicaciones = await axios.get(
-        "http://localhost:8000/api/aplicaciones/"
+        `${API_URL}/api/aplicaciones/`
       );
       setAplicaciones(responseAplicaciones.data);
     } catch (error) {
@@ -105,7 +107,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
         ...newAplicacionData,
       }
       const response = await axios.post(
-        "http://localhost:8000/api/aplicaciones/",
+        `${API_URL}/api/aplicaciones/`,
         formattedData
       );
       const nuevaAplicacion = response.data;
@@ -163,7 +165,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/aplicaciones/${aplicacionSeleccionada.id_aplicacion}/`,
+        `${API_URL}/api/aplicaciones/${aplicacionSeleccionada.id_aplicacion}/`,
         formattedData
       );
       const updatedAplicacion = response.data;
@@ -292,7 +294,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
+    abrirModal("Registrar Aplicacion", formFields, [], {}, "create");
   };
 
   const handleEdit = (aplicacion) => {

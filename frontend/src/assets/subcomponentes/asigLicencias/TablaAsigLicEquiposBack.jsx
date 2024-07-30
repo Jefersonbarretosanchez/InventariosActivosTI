@@ -47,6 +47,8 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -64,7 +66,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
     setIsLoading(true);
     try {
       const responseasigLicEquipo = await axios.get(
-        "http://localhost:8000/api/licencias/asignar_licencia_equipo/"
+        `${API_URL}/api/licencias/asignar_licencia_equipo/`
       );
       setAsigLicEquipos(responseasigLicEquipo.data);
     } catch (error) {
@@ -83,7 +85,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
     setIsCatalogsLoading(true);
     try {
       const responseLicEquipo = await axios.get(
-        "http://localhost:8000/api/licencias/equipo/"
+        `${API_URL}/api/licencias/equipo/`
       );
       setLicencia(
         responseLicEquipo.data.map((item) => ({
@@ -93,7 +95,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseEquipo = await axios.get(
-        "http://localhost:8000/api/equipos/"
+        `${API_URL}/api/equipos/`
       );
       setEquipo(
         responseEquipo.data.map((item) => ({
@@ -103,7 +105,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseLicEquiposFiltradas = await axios.get(
-        "http://localhost:8000/api/licencias_sin_asignar_equipos/"
+        `${API_URL}/api/licencias_sin_asignar_equipos/`
       );
       setLicnciaFiltrada(
         responseLicEquiposFiltradas.data.map((item) => ({
@@ -113,7 +115,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseEquiposFiltrados = await axios.get(
-        "http://localhost:8000/api/equipos_sin_asignacion_licencia/"
+        `${API_URL}/api/equipos_sin_asignacion_licencia/`
       );
       setEquipoFiltrado(
         responseEquiposFiltrados.data.map((item) => ({
@@ -162,7 +164,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       };
 
       const response = await axios.post(
-        "http://localhost:8000/api/licencias/asignar_licencia_equipo/",
+        `${API_URL}/api/licencias/asignar_licencia_equipo/`,
         formattedData
       );
       const nuevaasigLicEquipo = response.data;
@@ -225,7 +227,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       console.log("id licencia:" + formattedData.id_licencia);
 
       const response = await axios.put(
-        `http://localhost:8000/api/licencias/desasignar_licencia_equipo/${desasiglicEquipoSeleccionado.id}/`,
+        `${API_URL}/api/licencias/desasignar_licencia_equipo/${desasiglicEquipoSeleccionado.id}/`,
         formattedData
       );
 

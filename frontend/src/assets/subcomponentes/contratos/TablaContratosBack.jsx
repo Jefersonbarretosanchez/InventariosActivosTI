@@ -45,6 +45,8 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -62,7 +64,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
     setIsLoading(true);
     try {
       const responseContratos = await axios.get(
-        "http://localhost:8000/api/licencias/contratos/"
+        `${API_URL}/api/licencias/contratos/`
       );
       setContratos(responseContratos.data);
     } catch (error) {
@@ -108,7 +110,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
         ...newContratoData,
       }
       const response = await axios.post(
-        "http://localhost:8000/api/licencias/contratos/",
+        `${API_URL}/api/licencias/contratos/`,
         formattedData
       );
       const nuevoContrato = response.data;
@@ -165,7 +167,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/licencias/contratos/${contratoSeleccionado.id_contrato}/`,
+        `${API_URL}/api/licencias/contratos/${contratoSeleccionado.id_contrato}/`,
         formattedData
       );
       const updatedContrato = response.data;
@@ -294,7 +296,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
   };
 
   const handleCreate = () => {
-    abrirModal("Registrar Trabajador", formFields, [], {}, "create");
+    abrirModal("Registrar Contrato", formFields, [], {}, "create");
   };
 
   const handleEdit = (contrato) => {

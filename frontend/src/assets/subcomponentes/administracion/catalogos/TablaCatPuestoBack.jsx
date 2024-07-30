@@ -32,6 +32,8 @@ function TablaCatPuestoBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatPuestoBack() {
   const fetchPuestos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/cargo/");
+      const response = await axios.get(`${API_URL}/api/cargo/`);
       setPuestos(response.data);
     } catch (error) {
       toast.error("Error cargando los cargos");
@@ -80,7 +82,7 @@ function TablaCatPuestoBack() {
       const formattedData = {
         ...newPuestoData,
       };
-      const response = await axios.post("http://localhost:8000/api/cargo/", formattedData);
+      const response = await axios.post(`${API_URL}/api/cargo/`, formattedData);
       const nuevoPuesto = response.data;
       setPuestos([...puestos, nuevoPuesto]);
       setNewPuestoData({});
@@ -135,7 +137,7 @@ function TablaCatPuestoBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/cargo/${puestoSeleccionado.id_cargo}/`,
+        `${API_URL}/api/cargo/${puestoSeleccionado.id_cargo}/`,
         formattedData
       );
       const updatedPuesto = response.data;

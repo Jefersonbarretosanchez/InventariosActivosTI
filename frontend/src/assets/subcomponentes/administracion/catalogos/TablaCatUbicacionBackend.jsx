@@ -32,6 +32,8 @@ function TablaCatUbicacionBackend() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatUbicacionBackend() {
   const fetchUbicaciones = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/ubicaciones/");
+      const response = await axios.get(`${API_URL}/api/ubicaciones/`);
       setUbicaciones(response.data);
     } catch (error) {
       toast.error("Error cargando las ubicaciones");
@@ -80,7 +82,7 @@ function TablaCatUbicacionBackend() {
       const formattedData = {
         ...newUbicacionData,
       };
-      const response = await axios.post("http://localhost:8000/api/ubicaciones/", formattedData);
+      const response = await axios.post(`${API_URL}/api/ubicaciones/`, formattedData);
       const nuevaUbicacion = response.data;
       setUbicaciones([...ubicaciones, nuevaUbicacion]);
       setNewUbicacionData({});
@@ -135,7 +137,7 @@ function TablaCatUbicacionBackend() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/ubicaciones/${ubicacionSeleccionada.id_ubicacion}/`,
+        `${API_URL}/api/ubicaciones/${ubicacionSeleccionada.id_ubicacion}/`,
         formattedData
       );
       const updatedUbicacion = response.data;

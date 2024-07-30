@@ -11,7 +11,7 @@ import TablaEquiposBack from "../subcomponentes/equipos/TablaEquiposBack";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function Equipos() {
     const [totalLicenciasEquipos, setTotalLicenciasEquipos] = useState(0);
@@ -20,7 +20,7 @@ export default function Equipos() {
         // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
-                const responseEquipos = await axios.get("http://localhost:8000/api/licencias/equipo/");
+                const responseEquipos = await axios.get(`${API_URL}/api/licencias/equipo/`);
                 setTotalLicenciasEquipos(responseEquipos.data.length);
             } catch (error) {
                 console.error("Error fetching total licenses data:", error);

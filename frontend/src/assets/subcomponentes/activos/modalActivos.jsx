@@ -179,7 +179,7 @@ const ModalHeader = styled.div`
   h3 {
     font-weight: 500;
     font-size: 18px;
-    color: #1766dc;
+    color: #545c8c;
     margin: 0;
   }
 `;
@@ -213,7 +213,7 @@ const Step = styled.div`
   text-align: center;
   padding: 1vh;
   margin-left: 0.3vw;
-  background-color: ${(props) => (props.active ? "#1766dc" : "#e8e8e8")};
+  background-color: ${(props) => (props.active ? "#545c8c" : "#e8e8e8")};
   color: ${(props) => (props.active ? "#fff" : "#000")};
   border-radius: 5px;
   transition: 0.3s;
@@ -242,7 +242,7 @@ const ModalBody = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #72b1d8;
+    background: #545c8c;
     border-radius: 10px;
   }
 
@@ -266,11 +266,10 @@ const Button = styled.button`
   cursor: pointer;
   width: 45%;
   color: white;
-  background: linear-gradient(to right, #14add6, #384295);
+  background: #545c8c;
   transition: background 0.3s ease;
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 

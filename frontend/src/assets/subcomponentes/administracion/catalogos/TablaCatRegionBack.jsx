@@ -32,6 +32,8 @@ function TablaCatRegionBack() {
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
@@ -52,7 +54,7 @@ function TablaCatRegionBack() {
   const fetchRegiones = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/region/");
+      const response = await axios.get(`${API_URL}/api/region/`);
       setRegiones(response.data);
     } catch (error) {
       toast.error("Error cargando las regiones");
@@ -80,7 +82,7 @@ function TablaCatRegionBack() {
       const formattedData = {
         ...newRegionData,
       };
-      const response = await axios.post("http://localhost:8000/api/region/", formattedData);
+      const response = await axios.post(`${API_URL}/api/region/`, formattedData);
       const nuevaRegion = response.data;
       setRegiones([...regiones, nuevaRegion]);
       setNewRegionData({});
@@ -135,7 +137,7 @@ function TablaCatRegionBack() {
       };
 
       const response = await axios.put(
-        `http://localhost:8000/api/region/${regionSeleccionada.id_region}/`,
+        `${API_URL}/api/region/${regionSeleccionada.id_region}/`,
         formattedData
       );
       const updatedRegion = response.data;
