@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { fetchPersonas } from "../../api";
 import '../Estilos/activos.css'
 import '../Estilos/estilosGlobal.css'
 import TarjetasActivos from '../subcomponentes/activos/tarjetasActivos';
@@ -20,26 +21,30 @@ export default function Activos() {
     const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
 
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
+    const API_URL = import.meta.env.VITE_API_URL
 
     useEffect(() => {
-        const fetchPersonas = async () => {
-            try {
-                const response = await axios.get("http://localhost:8000/api/personas/");
-                setPersonas(response.data);
-
-            } catch (error) {
-                console.error("Error fetching personas data:", error);
-            }
+        const loadPersonas = async () => {
+          setIsLoading(true);
+          try {
+            const data = await fetchPersonas();
+            setPersonas(data);
+          } catch (error) {
+            console.error("Error loading persons:", error);
+            toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
+          } finally {
+            setIsLoading(false);
+          }
         };
-
-        fetchPersonas();
-    }, []);
+    
+        loadPersonas();
+      }, []);
 
 
     useEffect(() => {
         const fetchEquipos = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/equipos/");
+                const response = await axios.get(`${API_URL}/api/equipos/`);
                 setEquipos(response.data);
             } catch (error) {
                 console.error("Error fetching equipos data:", error);
@@ -52,7 +57,7 @@ export default function Activos() {
         // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
-                const responsePersonas = await axios.get("http://localhost:8000/api/licencias/persona/");
+                const responsePersonas = await axios.get(`${API_URL}/api/licencias/persona/`);
                 setTotalLicenciasPersonas(responsePersonas.data.length);
             } catch (error) {
                 console.error("Error fetching total licenses data:", error);

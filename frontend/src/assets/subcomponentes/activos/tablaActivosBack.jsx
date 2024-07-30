@@ -31,6 +31,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const API_URL = import.meta.env.VITE_API_URL
 
   const [filterFields, setFilterFields] = useState([
     {
@@ -69,7 +70,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
   const fetchActivos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/activos/"); // URL de la API
+      const response = await axios.get(`${API_URL}/api/activos/`); // URL de la API
       setActivos(response.data);
 
 

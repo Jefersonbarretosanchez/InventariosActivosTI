@@ -57,7 +57,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(20);
+      setRecordsPerPage(50);
     }
   };
 

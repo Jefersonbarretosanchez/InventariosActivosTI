@@ -30,12 +30,13 @@ export default function Aplicaciones() {
     const [personas, setPersonas] = useState([]);
     const [aplicaciones, setAplicaciones] = useState([]);
     const [aplicacionesasig, setAplicacionesAsig] = useState([]);
+    const API_URL = import.meta.env.VITE_API_URL
 
 
     const fetchAplicaciones = async () => {
         try {
             const responseAplicaciones = await axios.get(
-                "http://localhost:8000/api/aplicaciones/"
+                `${API_URL}/api/aplicaciones/`
             );
             setAplicaciones(responseAplicaciones.data);
         } catch (error) {
@@ -59,7 +60,7 @@ export default function Aplicaciones() {
     useEffect(() => {
         const fetchPersonas = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/personas/");
+                const response = await axios.get(`${API_URL}/api/personas/`);
                 setPersonas(response.data); // Almacena todas las personas en el estado
 
             } catch (error) {
@@ -87,7 +88,7 @@ export default function Aplicaciones() {
     const fetchAplicacionesAsig = async () => {
         try {
             const responseAplicaciones = await axios.get(
-                "http://localhost:8000/api/aplicaciones/asignar/"
+                `${API_URL}/api/aplicaciones/asignar/`
             );
             setAplicacionesAsig(responseAplicaciones.data);
         } catch (error) {
