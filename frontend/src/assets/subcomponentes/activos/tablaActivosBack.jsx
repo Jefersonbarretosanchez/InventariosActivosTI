@@ -32,6 +32,8 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   const [filterFields, setFilterFields] = useState([
     {
       id: "nombre_centro_costo",
