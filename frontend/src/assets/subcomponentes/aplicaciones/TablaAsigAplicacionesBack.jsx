@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -66,7 +66,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
   const fetchasigAplicacion = async () => {
     setIsLoading(true);
     try {
-      const responseasigAplicacion = await axios.get(
+      const responseasigAplicacion = await api.get(
         `${API_URL}/api/aplicaciones/asignar/`
       );
       setAsigAplicaciones(responseasigAplicacion.data);
@@ -85,7 +85,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
     setIsLoading(true);
     setIsCatalogsLoading(true);
     try {
-      const responseAplicaciones = await axios.get(
+      const responseAplicaciones = await api.get(
         `${API_URL}/api/aplicaciones/`
       );
       setAplicacion(
@@ -95,7 +95,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
         }))
       );
 
-      const responseTrabajador = await axios.get(
+      const responseTrabajador = await api.get(
         `${API_URL}/api/licencias/responsables/`
       );
       setTrabajador(
@@ -105,7 +105,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
         }))
       );
 
-      const responseAplicacionesFiltradas = await axios.get(
+      const responseAplicacionesFiltradas = await api.get(
         `${API_URL}/api/licencias_sin_asignar/`
       );
       setAplicacionFiltrada(
@@ -115,7 +115,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
         }))
       );
 
-      const responseTrabajadorFiltrados = await axios.get(
+      const responseTrabajadorFiltrados = await api.get(
         `${API_URL}/api/personas_sin_asignacion_licencia/`
       );
       setTrabajadorFiltrado(
@@ -165,7 +165,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       };
       console.log("id licencia:" + formattedData.id_aplicacion);
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/aplicaciones/asignar/`,
         formattedData
       );
@@ -228,7 +228,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       };
       console.log("id licencia:" + formattedData.id_aplicacion);
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/aplicaciones/desasignar/${desasigAplicacionSeleccionada.id}/`,
         formattedData
       );

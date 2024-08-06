@@ -5,9 +5,6 @@ from .models import Persona
 
 # Formularios
 
-class UploadExcelForm(forms.Form):
-    archivo_excel = forms.FileField()
-
 class PersonaCreacion(ModelForm):
     """"Formulario Para registro de persona"""
 

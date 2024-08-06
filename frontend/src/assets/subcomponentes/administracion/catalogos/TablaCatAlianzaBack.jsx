@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatAlianzaBack() {
@@ -54,7 +54,7 @@ function TablaCatAlianzaBack() {
   const fetchAlianzas = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/centro_costos/`);
+      const response = await api.get(`${API_URL}/api/centro_costos/`);
       setAlianzas(response.data);
     } catch (error) {
       toast.error("Error cargando las alianzas");
@@ -82,7 +82,7 @@ function TablaCatAlianzaBack() {
       const formattedData = {
         ...newAlianzaData,
       };
-      const response = await axios.post(`${API_URL}/api/centro_costos/`, formattedData);
+      const response = await api.post(`${API_URL}/api/centro_costos/`, formattedData);
       const nuevaAlianza = response.data;
       setAlianzas([...alianzas, nuevaAlianza]);
       setNewAlianzaData({});
@@ -136,7 +136,7 @@ function TablaCatAlianzaBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/centro_costos/${alianzaSeleccionada.id_centro_costo}/`,
         formattedData
       );

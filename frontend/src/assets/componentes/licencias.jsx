@@ -12,7 +12,7 @@ import TablaLicAreasBack from '../subcomponentes/licencias/TablaLicAreasBack';
 import BarLicencias from '../subcomponentes/licencias/barLicencias';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from "../../api";
 
 export default function Licencias() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -25,10 +25,10 @@ export default function Licencias() {
         // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
-                const responseEquipos = await axios.get(`${API_URL}/api/licencias/equipo/`);
+                const responseEquipos = await api.get(`${API_URL}/api/licencias/equipo/`);
                 setTotalLicenciasEquipos(responseEquipos.data.length);
 
-                const responsePersonas = await axios.get(`${API_URL}/api/licencias/persona/`);
+                const responsePersonas = await api.get(`${API_URL}/api/licencias/persona/`);
                 setTotalLicenciasPersonas(responsePersonas.data.length);
             } catch (error) {
                 console.error("Error fetching total licenses data:", error);

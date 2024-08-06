@@ -1,15 +1,19 @@
 asgiref==3.8.1
 astroid==3.1.0
+cffi==1.16.0
 colorama==0.4.6
+cryptography==43.0.0
 dill==0.3.8
 dj-database-url==2.1.0
 Django==5.0.5
 django-cors-headers==4.3.1
+django-extensions==3.2.3
 djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
 et-xmlfile==1.1.0
 gunicorn==22.0.0
 isort==5.13.2
+MarkupSafe==2.1.5
 mccabe==0.7.0
 numpy==2.0.1
 openpyxl==3.1.5
@@ -17,8 +21,10 @@ packaging==24.1
 pandas==2.2.2
 platformdirs==4.2.1
 psycopg2-binary==2.9.9
+pycparser==2.22
 PyJWT==2.8.0
 pylint==3.1.0
+pyOpenSSL==24.2.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
@@ -27,4 +33,5 @@ sqlparse==0.5.0
 tomlkit==0.12.4
 typing_extensions==4.11.0
 tzdata==2024.1
+Werkzeug==3.0.3
 whitenoise==6.7.0

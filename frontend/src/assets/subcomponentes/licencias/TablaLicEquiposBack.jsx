@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -11,6 +11,7 @@ import FormDinamico from "../generales/formDinamico";
 import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasLicencias from './tarjetasLicencias';
+
 
 function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, setTotalLicenciasEquipos }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
@@ -61,7 +62,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
   const fetchlicEquipos = async () => {
     setIsLoading(true);
     try {
-      const responselicEquipos = await axios.get(
+      const responselicEquipos = await api.get(
         `${API_URL}/api/licencias/equipo/`
       );
       setLicEquipos(responselicEquipos.data);
@@ -81,7 +82,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
       setIsLoading(true);
       setIsCatalogsLoading(true);
       try {
-        const responseContratos = await axios.get(
+        const responseContratos = await api.get(
           `${API_URL}/api/licencias/contratos/`
         );
         setContrato(
@@ -91,7 +92,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
           }))
         );
 
-        const responseEstado = await axios.get(
+        const responseEstado = await api.get(
           `${API_URL}/api/licencias/estado/`
         );
         setEstadoLicencia(
@@ -101,7 +102,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
           }))
         );
 
-        const responseSolicitante = await axios.get(
+        const responseSolicitante = await api.get(
           `${API_URL}/api/licencias/responsables/`
         );
         setSolicitante(
@@ -163,7 +164,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
         id_solicitante: parseInt(newLicEquipoData.id_solicitante, 10),
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/licencias/equipo/`,
         formattedData
       );
@@ -222,7 +223,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
         id_solicitante: parseInt(newLicEquipoData.id_solicitante, 10),
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/licencias/equipo/${licequipoSeleccionada.id_licencia}/`,
         formattedData
       );

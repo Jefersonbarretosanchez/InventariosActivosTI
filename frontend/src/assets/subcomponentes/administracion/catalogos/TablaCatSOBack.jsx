@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatSOBack() {
@@ -54,7 +54,7 @@ function TablaCatSOBack() {
   const fetchSistemasOperativos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/so/`);
+      const response = await api.get(`${API_URL}/api/so/`);
       setSistemasOperativos(response.data);
     } catch (error) {
       toast.error("Error cargando los sistemas operativos");
@@ -82,7 +82,7 @@ function TablaCatSOBack() {
       const formattedData = {
         ...newSOData,
       };
-      const response = await axios.post(`${API_URL}/api/so/`, formattedData);
+      const response = await api.post(`${API_URL}/api/so/`, formattedData);
       const nuevoSO = response.data;
       setSistemasOperativos([...sistemasOperativos, nuevoSO]);
       setNewSOData({});
@@ -136,7 +136,7 @@ function TablaCatSOBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/so/${sistemaOperativoSeleccionado.id_so}/`,
         formattedData
       );

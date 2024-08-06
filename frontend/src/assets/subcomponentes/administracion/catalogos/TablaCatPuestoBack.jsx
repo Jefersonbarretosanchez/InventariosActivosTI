@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatPuestoBack() {
@@ -54,7 +54,7 @@ function TablaCatPuestoBack() {
   const fetchPuestos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/cargo/`);
+      const response = await api.get(`${API_URL}/api/cargo/`);
       setPuestos(response.data);
     } catch (error) {
       toast.error("Error cargando los cargos");
@@ -82,7 +82,7 @@ function TablaCatPuestoBack() {
       const formattedData = {
         ...newPuestoData,
       };
-      const response = await axios.post(`${API_URL}/api/cargo/`, formattedData);
+      const response = await api.post(`${API_URL}/api/cargo/`, formattedData);
       const nuevoPuesto = response.data;
       setPuestos([...puestos, nuevoPuesto]);
       setNewPuestoData({});
@@ -136,7 +136,7 @@ function TablaCatPuestoBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/cargo/${puestoSeleccionado.id_cargo}/`,
         formattedData
       );

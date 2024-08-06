@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -65,7 +65,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
   const fetchasigLicPersona = async () => {
     setIsLoading(true);
     try {
-      const responseasigLicPersona = await axios.get(
+      const responseasigLicPersona = await api.get(
         `${API_URL}/api/licencias/asignar_licencia_persona/`
       );
       setAsigLicPersonas(responseasigLicPersona.data);
@@ -84,7 +84,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
     setIsLoading(true);
     setIsCatalogsLoading(true);
     try {
-      const responseLicPersona = await axios.get(
+      const responseLicPersona = await api.get(
         `${API_URL}/api/licencias/persona/`
       );
       setLicencia(
@@ -94,7 +94,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         }))
       );
 
-      const responseTrabajador = await axios.get(
+      const responseTrabajador = await api.get(
         `${API_URL}/api/licencias/responsables/`
       );
       setTrabajador(
@@ -104,7 +104,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         }))
       );
 
-      const responseLicPersonaFiltradas = await axios.get(
+      const responseLicPersonaFiltradas = await api.get(
         `${API_URL}/api/licencias_sin_asignar/`
       );
       setLicnciaFiltrada(
@@ -114,7 +114,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         }))
       );
 
-      const responseTrabajadorFiltrados = await axios.get(
+      const responseTrabajadorFiltrados = await api.get(
         `${API_URL}/api/personas_sin_asignacion_licencia/`
       );
       setTrabajadorFiltrado(
@@ -163,7 +163,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         id_trabajador: parseInt(newAsigLicPersonaData.id_trabajador, 10),
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/licencias/asignar_licencia_persona/`,
         formattedData
       );
@@ -226,7 +226,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       };
       console.log("id licencia:" + formattedData.id_licencia);
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/licencias/desasignar_licencia_persona/${desasiglicPersonaSeleccionada.id}/`,
         formattedData
       );

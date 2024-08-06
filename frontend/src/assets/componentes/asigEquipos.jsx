@@ -12,7 +12,7 @@ import TablaAsigPerifericos from "../subcomponentes/asigEquipos/TablaAsigPerifer
 import TablaAsigEquiposBack from '../subcomponentes/asigEquipos/TablaAsigEquiposBack';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from "../../api";
 import TablaKitPerifericosBack from '../subcomponentes/asigEquipos/TablaKitPerifericosBack';
 import TablaPerifericosBack from '../subcomponentes/asigEquipos/TablaPerifericosBack';
 
@@ -28,7 +28,7 @@ export default function AsigEquipos() {
 
     const fetchEquipos = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/equipos/`);
+            const response = await api.get(`${API_URL}/api/equipos/`);
             setEquipos(response.data);
         } catch (error) {
             console.error("Error fetching equipos data:", error);
@@ -37,7 +37,7 @@ export default function AsigEquipos() {
 
     const fetchPerifericos = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/perifericos/`);
+            const response = await api.get(`${API_URL}/api/perifericos/`);
             setPerifericos(response.data);
         } catch (error) {
             console.error("Error fetching perifericos data:", error);

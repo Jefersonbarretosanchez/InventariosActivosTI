@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -68,7 +68,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
     const fetchKitPerifericos = async () => {
       setIsLoading(true);
       try {
-        const responseKitPerifericos = await axios.get(
+        const responseKitPerifericos = await api.get(
           `${API_URL}/api/kit_perifericos/`
         );
         const kitsData = responseKitPerifericos.data;
@@ -104,7 +104,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       setIsLoading(true);
       setIsCatalogsLoading(true);
       try {
-        const responsePerifericos = await axios.get(
+        const responsePerifericos = await api.get(
           `${API_URL}/api/perifericos/`
         );
 
@@ -163,7 +163,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
         perifericos: perifericosIds,
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/kit_perifericos/`,
         formattedData
       );
@@ -232,7 +232,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
         perifericos: perifericosIds,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/kit_perifericos/${kitperifericosSeleccionado.id_kit_perifericos}/`,
         formattedData
       );

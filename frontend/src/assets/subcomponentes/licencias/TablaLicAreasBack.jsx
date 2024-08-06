@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -63,7 +63,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   const fetchlicAreas = async () => {
     setIsLoading(true);
     try {
-      const responselicAreas = await axios.get(
+      const responselicAreas = await api.get(
         `${API_URL}/api/licencias/area/`
       );
       setLicAreas(responselicAreas.data);
@@ -83,7 +83,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
       setIsLoading(true);
       setIsCatalogsLoading(true);
       try {
-        const responseCentroCostos = await axios.get(
+        const responseCentroCostos = await api.get(
           `${API_URL}/api/centro_costos/`
         );
         setCentroCostos(
@@ -93,7 +93,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
           }))
         );
 
-        const responseContratos = await axios.get(
+        const responseContratos = await api.get(
           `${API_URL}/api/licencias/contratos/`
         );
         setContrato(
@@ -103,7 +103,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
           }))
         );
 
-        const responseEstado = await axios.get(
+        const responseEstado = await api.get(
           `${API_URL}/api/licencias/estado/`
         );
         setEstadoLicencia(
@@ -113,7 +113,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
           }))
         );
 
-        const responseSolicitante = await axios.get(
+        const responseSolicitante = await api.get(
           `${API_URL}/api/licencias/responsables/`
         );
         setResponsable(
@@ -174,7 +174,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         id_responsable: parseInt(newLicAreaData.id_responsable, 10),
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/licencias/area/`,
         formattedData
       );
@@ -235,7 +235,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
         id_responsable: parseInt(newLicAreaData.id_responsable, 10),
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/licencias/area/${licareaSeleccionada.id_licencia}/`,
         formattedData
       );

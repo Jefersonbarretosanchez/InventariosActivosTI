@@ -19,7 +19,7 @@ import TablaAsigAplicaciones from '../subcomponentes/aplicaciones/TablaAsigAplic
 import TablaAplicacionesBack from '../subcomponentes/aplicaciones/TablaAplicacionesBack';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from "../../api";
 import TablaAsigAplicacionesBack from '../subcomponentes/aplicaciones/TablaAsigAplicacionesBack';
 
 export default function Aplicaciones() {
@@ -37,7 +37,7 @@ export default function Aplicaciones() {
 
     const fetchAplicaciones = async () => {
         try {
-            const responseAplicaciones = await axios.get(
+            const responseAplicaciones = await api.get(
                 `${API_URL}/api/aplicaciones/`
             );
             setAplicaciones(responseAplicaciones.data);
@@ -92,7 +92,7 @@ export default function Aplicaciones() {
 
     const fetchAplicacionesAsig = async () => {
         try {
-            const responseAplicaciones = await axios.get(
+            const responseAplicaciones = await api.get(
                 `${API_URL}/api/aplicaciones/asignar/`
             );
             setAplicacionesAsig(responseAplicaciones.data);

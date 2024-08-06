@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants';
+import { AuthContext } from '../../AuthContext';
 import { login } from '../../api';
 import logo from '../imagenes/login.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,21 +12,21 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { setUser } = useContext(AuthContext); // Asegúrate de importar y usar setUser
   const navigate = useNavigate();
   const submitButtonRef = useRef(null);
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await login(username, password); // Usa la función `login` aquí
-      if (res.access) {
-        localStorage.setItem(ACCESS_TOKEN, res.access);
-        localStorage.setItem(REFRESH_TOKEN, res.refresh);
-
-        // Redirige al usuario a la página principal después del inicio de sesión exitoso
-        navigate("/activos");
+      const user = await login(username, password);
+      if (user) {
+        console.log("Inicio de sesión OK"); // Mensaje de éxito
+        setUser(user); // Establece el usuario en el contexto
+        navigate("/activos"); // Redirige al usuario a la página principal después del inicio de sesión exitoso
       }
     } catch (error) {
       console.error("Login error:", error.response ? error.response.data : error.message);

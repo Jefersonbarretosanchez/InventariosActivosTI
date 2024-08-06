@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
@@ -66,7 +66,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
   const fetchPerifericos = async () => {
     setIsLoading(true);
     try {
-      const responsePerifericos = await axios.get(
+      const responsePerifericos = await api.get(
         `${API_URL}/api/perifericos/`
       );
       setPerifericos(responsePerifericos.data);
@@ -85,7 +85,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
     const fetchCatalogos = async () => {
       setIsCatalogsLoading(true);
       try {
-        const responseEstadoPeriferico = await axios.get(
+        const responseEstadoPeriferico = await api.get(
           `${API_URL}/api/estado_perifericos/`
         );
         setEstadoPeriferico(
@@ -142,7 +142,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
       };
 
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/perifericos/`,
         formattedData
       );
@@ -201,7 +201,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
         id_estado_periferico: parseInt(newPerifericoData.id_estado_periferico, 10),
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/perifericos/${perifericoSeleccionado.id_perifericos}/`,
         formattedData
       );

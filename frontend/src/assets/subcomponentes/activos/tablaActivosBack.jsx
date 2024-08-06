@@ -8,7 +8,7 @@ import { formFields, ALL_INPUT_IDS } from "./formConfig";
 import FormDinamico from "./formDinamicoActivos";
 import FiltroDinamico from "../generales/filtroDinamico";
 import Paginate from "../generales/paginate";
-import axios from "axios";
+import api from "../../../api";
 import { toast } from "react-toastify";
 import TarjetasActivos from "./tarjetasActivos";
 
@@ -71,7 +71,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
   const fetchActivos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/activos/`); // URL de la API
+      const response = await api.get(`${API_URL}/api/activos/`); // URL de la API
       setActivos(response.data);
 
 

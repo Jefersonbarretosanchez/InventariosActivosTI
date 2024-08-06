@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -70,7 +70,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
   const fetchasigEquipos = async () => {
     setIsLoading(true);
     try {
-      const responseasigEquipos = await axios.get(
+      const responseasigEquipos = await api.get(
         `${API_URL}/api/asignar_equipo/`
       );
       setAsigEquipos(responseasigEquipos.data);
@@ -89,7 +89,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
     setIsLoading(true);
     setIsCatalogsLoading(true);
     try {
-      const responseEquipos = await axios.get(
+      const responseEquipos = await api.get(
         `${API_URL}/api/equipos/`
       );
       const equiposData = responseEquipos.data.map((item) => ({
@@ -98,7 +98,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       }));
       setEquipo(equiposData);
 
-      const responseTrabajador = await axios.get(
+      const responseTrabajador = await api.get(
         `${API_URL}/api/licencias/responsables/`
       );
       const trabajadoresData = responseTrabajador.data.map((item) => ({
@@ -107,7 +107,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       }));
       setTrabajador(trabajadoresData);
 
-      const responsePerifericos = await axios.get(
+      const responsePerifericos = await api.get(
         `${API_URL}/api/kit_perifericos/`
       );
       setPerifericos(
@@ -117,7 +117,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         }))
       );
 
-      const responseCoordinadores = await axios.get(
+      const responseCoordinadores = await api.get(
         `${API_URL}/api/coordinadores/`
       );
       setCoordinadores(
@@ -127,7 +127,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         }))
       );
 
-      const responseUbicaciones = await axios.get(
+      const responseUbicaciones = await api.get(
         `${API_URL}/api/ubicaciones/`
       );
       setUbicaciones(
@@ -138,7 +138,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       );
 
       // Fetch only unassigned equipos and trabajadores
-      const responseEquiposFiltrados = await axios.get(
+      const responseEquiposFiltrados = await api.get(
         `${API_URL}/api/equipos_en_bodega/`
       );
       setEquipoFiltrado(
@@ -148,7 +148,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         }))
       );
 
-      const responseTrabajadorFiltrados = await axios.get(
+      const responseTrabajadorFiltrados = await api.get(
         `${API_URL}/api/personas_sin_asignacion/`
       );
       setTrabajadorFiltrado(
@@ -198,7 +198,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         id_kit_perifericos: parseInt(newAsigEquipoData.id_kit_perifericos, 10),
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/asignar_equipo/`,
         formattedData
       );
@@ -263,7 +263,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       };
       console.log("id equipo:" + formattedData.id_equipo);
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/desasignar_equipo/${desasigEquiposSeleccionado.id_asignacion}/`,
         formattedData
       );
@@ -331,7 +331,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
         id_kit_perifericos: parseInt(newAsigEquipoData.id_kit_perifericos, 10),
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/actualizar_asignacion_equipo/${asigEquiposSeleccionado.id_asignacion}/`,
         formattedData
       );

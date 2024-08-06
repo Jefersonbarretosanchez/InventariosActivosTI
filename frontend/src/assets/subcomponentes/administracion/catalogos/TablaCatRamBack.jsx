@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatRamBack() {
@@ -54,7 +54,7 @@ function TablaCatRamBack() {
   const fetchMemoriasRam = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/memoria_ram/`);
+      const response = await api.get(`${API_URL}/api/memoria_ram/`);
       setMemoriasRam(response.data);
     } catch (error) {
       toast.error("Error cargando las memorias RAM");
@@ -82,7 +82,7 @@ function TablaCatRamBack() {
       const formattedData = {
         ...newRamData,
       };
-      const response = await axios.post(`${API_URL}/api/memoria_ram/`, formattedData);
+      const response = await api.post(`${API_URL}/api/memoria_ram/`, formattedData);
       const nuevaRam = response.data;
       setMemoriasRam([...memoriasRam, nuevaRam]);
       setNewRamData({});
@@ -136,7 +136,7 @@ function TablaCatRamBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/memoria_ram/${memoriaRamSeleccionada.id_ram}/`,
         formattedData
       );

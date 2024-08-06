@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import { fetchPersonas } from "../../../api";
-import axios from "axios";
+import { fetchPersonas, createPersonas, api} from "../../../api";
+import { AuthContext } from '../../../AuthContext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
@@ -21,6 +21,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
 function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetchData }) {
+  const { token } = useContext(AuthContext);
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -34,7 +35,13 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const [cargo, setCargo] = useState([]);
   const [estado, setEstado] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newPersonData, setNewPersonData] = useState({});
+  const [newPersonData, setNewPersonData] = useState({
+    id_centro_costo: '',
+    id_area: '',
+    id_region: '',
+    id_cargo: '',
+    id_estado_persona: ''
+  });
   const [actionType, setActionType] = useState("");
   const [totalActivos, setTotalActivos] = useState(0); // Estado para el total de personas activas
   const [totalInactivos, setTotalInactivos] = useState(0); // Estado para el total de personas inactivas
@@ -74,7 +81,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         const data = await fetchPersonas();
         setPersonas(data);
       } catch (error) {
-        console.error("Error loading persons:", error);
+        // console.error("Error loading persons:", error);
         toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
       } finally {
         setIsLoading(false);
@@ -89,7 +96,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       setIsLoading(true);
       setIsCatalogsLoading(true);
       try {
-        const responseEstado = await axios.get(
+        const responseEstado = await api.get(
           `${API_URL}/api/estado_persona/`
         );
         setEstado(
@@ -99,7 +106,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
           }))
         );
 
-        const responseCentroCostos = await axios.get(
+        const responseCentroCostos = await api.get(
           `${API_URL}/api/centro_costos/`
         );
         setCentroCostos(
@@ -109,7 +116,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
           }))
         );
 
-        const responseAreas = await axios.get(
+        const responseAreas = await api.get(
           `${API_URL}/api/area/`
         );
         setArea(
@@ -119,7 +126,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
           }))
         );
 
-        const responseRegion = await axios.get(
+        const responseRegion = await api.get(
           `${API_URL}/api/region/`
         );
         setRegion(
@@ -129,7 +136,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
           }))
         );
 
-        const responseCargo = await axios.get(
+        const responseCargo = await api.get(
           `${API_URL}/api/cargo/`
         );
         setCargo(
@@ -183,22 +190,16 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const createPersona = async () => {
     setIsLoading(true);
     try {
-      const formattedData = {
-        ...newPersonData,
-        id_centro_costo: parseInt(newPersonData.id_centro_costo, 10),
-        id_area: parseInt(newPersonData.id_area, 10),
-        id_region: parseInt(newPersonData.id_region, 10),
-        id_cargo: parseInt(newPersonData.id_cargo, 10),
-        id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
-      };
-
-      const response = await axios.post(
-        `${API_URL}/api/personas/`,
-        formattedData
-      );
-      const nuevaPersona = response.data;
+      const data = await createPersonas(newPersonData);
+      const nuevaPersona = data;
       setPersonas([...personas, nuevaPersona]);
-      setNewPersonData({});
+      setNewPersonData({
+        id_centro_costo: '',
+        id_area: '',
+        id_region: '',
+        id_cargo: '',
+        id_estado_persona: ''
+      });
       cambiarEstadoModal(false);
       toast.success("Persona creada exitosamente!");
       fetchData();
@@ -255,7 +256,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
         id_estado_persona: parseInt(newPersonData.id_estado_persona, 10),
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/personas/${personaSeleccionada.id_trabajador}/`,
         formattedData
       );
@@ -404,8 +405,8 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       setActiveFilters((prevFilters) => [...prevFilters, filterId]);
       setTriggerUpdate((prev) => !prev);
       setShowFilterOptions(false); // Ocultar opciones después de seleccionar una
-      console.log("Filter added:", filterId);
-      console.log("Active filters:", activeFilters);
+      // console.log("Filter added:", filterId);
+      // console.log("Active filters:", activeFilters);
     }
   };
 

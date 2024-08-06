@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from activosTI.views import *
+from cargamasiva.views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -29,8 +30,7 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('catalogos/', catalogos, name='catalogos'),
-    path('catalogos/carga_masiva/<str:catalogo>',
-         upload_excel_view, name='carga_masiva'),
+    path('catalogos/carga_masiva/<str:catalogo>',CargaMasivaView.as_view(), name='carga_masiva'),
     # path('',include('activosTI.urls')),
     # path('auth/',obtain_auth_token),
     # path('',PersonaCreate.as_view(), name='create'),
@@ -42,9 +42,9 @@ urlpatterns = [
     path("api/user/register/", CreateUserView.as_view(), name="register"),
     path('api/user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path("api/token/", CustomTokenObtainPairView.as_view(), name="get_token"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
+    path("api/token/refresh/", MyTokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),
-    path('api/login/', LoginView.as_view(), name='login'),
+    # path('api/login/', LoginView.as_view(), name='login'),
     path("api/", include("activosTI.urls")),
     path("api/", include("Equipos.urls")),
     path("api/", include("Licencias.urls")),

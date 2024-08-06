@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../historicoLogs/formCo
 import FormDinamico from "../generales/formDinamico";
 import FiltroDinamico from "../generales/filtroDinamico";
 import Paginate from "../generales/paginate";
-import axios from "axios";
+import api from "../../../api";
 import { toast } from "react-toastify";
 
 function TablaHistoricosBack() {
@@ -83,7 +83,7 @@ function TablaHistoricosBack() {
   const fetchHistoricos = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/log/`); // URL de la API
+      const response = await api.get(`${API_URL}/api/log/`); // URL de la API
       setHistoricos(response.data);
 
       // Extraer las opciones de los campos de filtro

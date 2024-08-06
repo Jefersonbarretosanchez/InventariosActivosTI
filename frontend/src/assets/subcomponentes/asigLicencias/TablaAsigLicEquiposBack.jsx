@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faCircleMinus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -65,7 +65,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
   const fetchasigLicEquipo = async () => {
     setIsLoading(true);
     try {
-      const responseasigLicEquipo = await axios.get(
+      const responseasigLicEquipo = await api.get(
         `${API_URL}/api/licencias/asignar_licencia_equipo/`
       );
       setAsigLicEquipos(responseasigLicEquipo.data);
@@ -84,7 +84,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
     setIsLoading(true);
     setIsCatalogsLoading(true);
     try {
-      const responseLicEquipo = await axios.get(
+      const responseLicEquipo = await api.get(
         `${API_URL}/api/licencias/equipo/`
       );
       setLicencia(
@@ -94,7 +94,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         }))
       );
 
-      const responseEquipo = await axios.get(
+      const responseEquipo = await api.get(
         `${API_URL}/api/equipos/`
       );
       setEquipo(
@@ -104,7 +104,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         }))
       );
 
-      const responseLicEquiposFiltradas = await axios.get(
+      const responseLicEquiposFiltradas = await api.get(
         `${API_URL}/api/licencias_sin_asignar_equipos/`
       );
       setLicnciaFiltrada(
@@ -114,7 +114,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         }))
       );
 
-      const responseEquiposFiltrados = await axios.get(
+      const responseEquiposFiltrados = await api.get(
         `${API_URL}/api/equipos_sin_asignacion_licencia/`
       );
       setEquipoFiltrado(
@@ -163,7 +163,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
         id_equipo: parseInt(newAsigLicEquipoData.id_equipo, 10),
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/licencias/asignar_licencia_equipo/`,
         formattedData
       );
@@ -226,7 +226,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       };
       console.log("id licencia:" + formattedData.id_licencia);
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/licencias/desasignar_licencia_equipo/${desasiglicEquipoSeleccionado.id}/`,
         formattedData
       );

@@ -10,7 +10,7 @@ import "../Estilos/personas.css"
 import TablaPersonasBack from "../subcomponentes/personas/tablaPersonasBack";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from "../../api";
 
 export default function Personas() {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -20,7 +20,7 @@ export default function Personas() {
 
     const fetchEquipos = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/equipos/`);
+            const response = await api.get(`${API_URL}/api/equipos/`);
             setEquipos(response.data);
         } catch (error) {
             console.error("Error fetching equipos data:", error);
@@ -46,7 +46,7 @@ export default function Personas() {
         // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
-                const responsePersonas = await axios.get(`${API_URL}/api/licencias/persona/`);
+                const responsePersonas = await api.get(`${API_URL}/api/licencias/persona/`);
                 setTotalLicenciasPersonas(responsePersonas.data.length);
             } catch (error) {
                 console.error("Error fetching total licenses data:", error);

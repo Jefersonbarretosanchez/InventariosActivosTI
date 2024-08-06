@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
@@ -64,7 +64,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
   const fetchAplicaciones = async () => {
     setIsLoading(true);
     try {
-      const responseAplicaciones = await axios.get(
+      const responseAplicaciones = await api.get(
         `${API_URL}/api/aplicaciones/`
       );
       setAplicaciones(responseAplicaciones.data);
@@ -106,7 +106,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
       const formattedData = {
         ...newAplicacionData,
       }
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/aplicaciones/`,
         formattedData
       );
@@ -164,7 +164,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
         ...updatedData
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/aplicaciones/${aplicacionSeleccionada.id_aplicacion}/`,
         formattedData
       );

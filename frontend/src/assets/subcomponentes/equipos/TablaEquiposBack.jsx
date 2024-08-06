@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
@@ -76,7 +76,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const fetchEquipos = async () => {
     setIsLoading(true);
     try {
-      const responseEquipos = await axios.get(
+      const responseEquipos = await api.get(
         `${API_URL}/api/equipos/`
       );
       setEquipos(responseEquipos.data);
@@ -95,7 +95,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
     const fetchCatalogos = async () => {
       setIsCatalogsLoading(true);
       try {
-        const responseEstadoEquipo = await axios.get(
+        const responseEstadoEquipo = await api.get(
           `${API_URL}/api/estado_equipo/`
         );
         setEstadoEquipo(
@@ -105,7 +105,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseSO = await axios.get(
+        const responseSO = await api.get(
           `${API_URL}/api/so/`
         );
         setSO(
@@ -115,7 +115,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseMarcaEquipo = await axios.get(
+        const responseMarcaEquipo = await api.get(
           `${API_URL}/api/marca_equipo/`
         );
         setMarcaEquipo(
@@ -125,7 +125,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseMemoriaRam = await axios.get(
+        const responseMemoriaRam = await api.get(
           `${API_URL}/api/memoria_ram/`
         );
         setMemoriaRam(
@@ -135,7 +135,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseDiscoDuro = await axios.get(
+        const responseDiscoDuro = await api.get(
           `${API_URL}/api/disco_duro/`
         );
         setDiscoDuro(
@@ -145,7 +145,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseTipoPropiedad = await axios.get(
+        const responseTipoPropiedad = await api.get(
           `${API_URL}/api/tipo_propiedad/`
         );
         setTipoPropiedad(
@@ -155,7 +155,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseTipoEquipo = await axios.get(
+        const responseTipoEquipo = await api.get(
           `${API_URL}/api/tipo_equipo/`
         );
         setTipoEquipo(
@@ -165,7 +165,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseCoordinadores = await axios.get(
+        const responseCoordinadores = await api.get(
           `${API_URL}/api/coordinadores/`
         );
         setCoordinadores(
@@ -175,7 +175,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
           }))
         );
 
-        const responseUbicaciones = await axios.get(
+        const responseUbicaciones = await api.get(
           `${API_URL}/api/ubicaciones/`
         );
         setUbicaciones(
@@ -242,7 +242,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
       };
 
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/equipos/`,
         formattedData
       );
@@ -309,7 +309,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
       };
       console.log("id equipo:" + formattedData.id_coordinadores);
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/equipos/${equipoSeleccionado.id_equipo}/`,
         formattedData
       );

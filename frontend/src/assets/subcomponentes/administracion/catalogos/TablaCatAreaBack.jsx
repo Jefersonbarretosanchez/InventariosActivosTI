@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatAreaBack() {
@@ -54,7 +54,7 @@ function TablaCatAreaBack() {
   const fetchAreas = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/area/`);
+      const response = await api.get(`${API_URL}/api/area/`);
       setAreas(response.data);
     } catch (error) {
       toast.error("Error cargando las áreas");
@@ -82,7 +82,7 @@ function TablaCatAreaBack() {
       const formattedData = {
         ...newAreaData,
       };
-      const response = await axios.post(`${API_URL}/api/area/`, formattedData);
+      const response = await api.post(`${API_URL}/api/area/`, formattedData);
       const nuevaArea = response.data;
       setAreas([...areas, nuevaArea]);
       setNewAreaData({});
@@ -136,7 +136,7 @@ function TablaCatAreaBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/area/${areaSeleccionada.id_area}/`,
         formattedData
       );

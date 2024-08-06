@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatUbicacionBackend() {
@@ -54,7 +54,7 @@ function TablaCatUbicacionBackend() {
   const fetchUbicaciones = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/ubicaciones/`);
+      const response = await api.get(`${API_URL}/api/ubicaciones/`);
       setUbicaciones(response.data);
     } catch (error) {
       toast.error("Error cargando las ubicaciones");
@@ -82,7 +82,7 @@ function TablaCatUbicacionBackend() {
       const formattedData = {
         ...newUbicacionData,
       };
-      const response = await axios.post(`${API_URL}/api/ubicaciones/`, formattedData);
+      const response = await api.post(`${API_URL}/api/ubicaciones/`, formattedData);
       const nuevaUbicacion = response.data;
       setUbicaciones([...ubicaciones, nuevaUbicacion]);
       setNewUbicacionData({});
@@ -136,7 +136,7 @@ function TablaCatUbicacionBackend() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/ubicaciones/${ubicacionSeleccionada.id_ubicacion}/`,
         formattedData
       );

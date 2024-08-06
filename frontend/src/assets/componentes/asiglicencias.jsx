@@ -14,7 +14,7 @@ import TablaAsigLicEquipos from '../subcomponentes/asigLicencias/TablaAsigLicEqu
 import TablaAsigLicPersonaBack from '../subcomponentes/asigLicencias/TablaAsigLicPersonaBack';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from "../../api";
 import TablaAsigLicEquiposBack from '../subcomponentes/asigLicencias/TablaAsigLicEquiposBack';
 
 export default function Asiglicencias() {
@@ -31,7 +31,7 @@ export default function Asiglicencias() {
 
     const fetchLicPersona = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/licencias/persona/`);
+            const response = await api.get(`${API_URL}/api/licencias/persona/`);
             setLicPersonas(response.data);
 
         } catch (error) {
@@ -40,7 +40,7 @@ export default function Asiglicencias() {
     };
     const fetchLicEquipos = async () => {
         try {
-            const response = await axios.get(`${API_URL}/api/licencias/equipo/`);
+            const response = await api.get(`${API_URL}/api/licencias/equipo/`);
             setLicEquipos(response.data);
 
         } catch (error) {

@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatDiscoDuroBack() {
@@ -54,7 +54,7 @@ function TablaCatDiscoDuroBack() {
   const fetchDiscosDuros = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/disco_duro/`);
+      const response = await api.get(`${API_URL}/api/disco_duro/`);
       setDiscosDuros(response.data);
     } catch (error) {
       toast.error("Error cargando los discos duros");
@@ -82,7 +82,7 @@ function TablaCatDiscoDuroBack() {
       const formattedData = {
         ...newDiscoDuroData,
       };
-      const response = await axios.post(`${API_URL}/api/disco_duro/`, formattedData);
+      const response = await api.post(`${API_URL}/api/disco_duro/`, formattedData);
       const nuevoDiscoDuro = response.data;
       setDiscosDuros([...discosDuros, nuevoDiscoDuro]);
       setNewDiscoDuroData({});
@@ -136,7 +136,7 @@ function TablaCatDiscoDuroBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/disco_duro/${discoDuroSeleccionado.id_discoduro}/`,
         formattedData
       );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileLines, faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle, faBarsProgress } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
@@ -61,7 +61,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
   const fetchlicPersonas = async () => {
     setIsLoading(true);
     try {
-      const responselicPersonas = await axios.get(
+      const responselicPersonas = await api.get(
         `${API_URL}/api/licencias/persona/`
       );
       setLicPersonas(responselicPersonas.data);
@@ -81,7 +81,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
       setIsLoading(true);
       setIsCatalogsLoading(true);  // Añadido
       try {
-        const responseContratos = await axios.get(
+        const responseContratos = await api.get(
           `${API_URL}/api/licencias/contratos/`
         );
         setContrato(
@@ -91,7 +91,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
           }))
         );
 
-        const responseEstado = await axios.get(
+        const responseEstado = await api.get(
           `${API_URL}/api/licencias/estado/`
         );
         setEstadoLicencia(
@@ -101,7 +101,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
           }))
         );
 
-        const responseSolicitante = await axios.get(
+        const responseSolicitante = await api.get(
           `${API_URL}/api/licencias/responsables/`
         );
         setSolicitante(
@@ -161,7 +161,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
         id_solicitante: parseInt(newLicPersonData.id_solicitante, 10),
       };
 
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/licencias/persona/`,
         formattedData
       );
@@ -220,7 +220,7 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
         id_solicitante: parseInt(newLicPersonData.id_solicitante, 10),
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/licencias/persona/${licpersonaSeleccionada.id_licencia}/`,
         formattedData
       );

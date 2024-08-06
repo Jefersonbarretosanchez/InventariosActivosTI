@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../../api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileLines,
@@ -63,7 +63,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
   const fetchContratos = async () => {
     setIsLoading(true);
     try {
-      const responseContratos = await axios.get(
+      const responseContratos = await api.get(
         `${API_URL}/api/licencias/contratos/`
       );
       setContratos(responseContratos.data);
@@ -109,7 +109,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
       const formattedData = {
         ...newContratoData,
       }
-      const response = await axios.post(
+      const response = await api.post(
         `${API_URL}/api/licencias/contratos/`,
         formattedData
       );
@@ -166,7 +166,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
         ...updatedData
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/licencias/contratos/${contratoSeleccionado.id_contrato}/`,
         formattedData
       );

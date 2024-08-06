@@ -8,7 +8,7 @@ import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
 import FormDinamico from "../../generales/formDinamico";
 import FiltroDinamico from "../../generales/filtroDinamico";
 import Paginate from "../../generales/paginate";
-import axios from "axios";
+import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatRegionBack() {
@@ -54,7 +54,7 @@ function TablaCatRegionBack() {
   const fetchRegiones = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_URL}/api/region/`);
+      const response = await api.get(`${API_URL}/api/region/`);
       setRegiones(response.data);
     } catch (error) {
       toast.error("Error cargando las regiones");
@@ -82,7 +82,7 @@ function TablaCatRegionBack() {
       const formattedData = {
         ...newRegionData,
       };
-      const response = await axios.post(`${API_URL}/api/region/`, formattedData);
+      const response = await api.post(`${API_URL}/api/region/`, formattedData);
       const nuevaRegion = response.data;
       setRegiones([...regiones, nuevaRegion]);
       setNewRegionData({});
@@ -136,7 +136,7 @@ function TablaCatRegionBack() {
         ...updatedData,
       };
 
-      const response = await axios.put(
+      const response = await api.put(
         `${API_URL}/api/region/${regionSeleccionada.id_region}/`,
         formattedData
       );

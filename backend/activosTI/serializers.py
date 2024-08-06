@@ -15,14 +15,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # Add custom claims
-        token['username'] = user.username
+        # token['username'] = user.username
         return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
 
         data.update({'user': {
-            'userId': self.user.id,
             'username': self.user.username,
             'email': self.user.email,
             'nombre': self.user.first_name,
