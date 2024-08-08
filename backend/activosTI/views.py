@@ -22,7 +22,7 @@ from Equipos.models import AsignacionEquipos
 from Licencias.models import AsignacionLicenciaPersona
 from ComplementosActivos.models import AsignacionAplicaciones
 from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
-from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer,PersonaListSerializer
+from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
 # Create your views here.
 
 # Configuración del logger
@@ -39,32 +39,33 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         if refresh and access:
             response.set_cookie(
-                'sigs_cookies', 
-                refresh, 
-                httponly=True, 
-                secure=True, 
+                'sigs_cookies',
+                refresh,
+                httponly=True,
+                secure=True,
                 samesite='None'
             )
             response.set_cookie(
-                'sigs_cookie', 
-                access, 
-                httponly=True, 
-                secure=True, 
+                'sigs_cookie',
+                access,
+                httponly=True,
+                secure=True,
                 samesite='None'
             )
             del response.data['refresh']
             del response.data['access']
-        
+
         return response
-    
+
+
 class MyTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Obtén el refresh token desde las cookies
         sigs_cookies = request.COOKIES.get('sigs_cookies')
-        
+
         if not sigs_cookies:
             return Response({'detail': 'Refresh token not found.'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+
         # Usa el refresh token para obtener un nuevo access token
         try:
             refresh = RefreshToken(sigs_cookies)
@@ -74,8 +75,9 @@ class MyTokenRefreshView(TokenRefreshView):
 
         # Configura la cookie para el nuevo access token
         response = Response({'SIGS': access})
-        response.set_cookie('sigs_cookie', access, httponly=True, secure=True, samesite='None')
-        
+        response.set_cookie('sigs_cookie', access,
+                            httponly=True, secure=True, samesite='None')
+
         return response
 
 # class LoginView(APIView):
@@ -116,6 +118,8 @@ class MyTokenRefreshView(TokenRefreshView):
 #             return Response({'detail': 'An error occurred during authentication'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Vistas
+
+
 class PersonaCreate(LoginRequiredMixin, CreateView):
     """"Vista Persona"""
     model = Persona
@@ -180,6 +184,7 @@ class PersonaDelete(LoginRequiredMixin, DeleteView):
     model = Persona
     template_name = 'persona_confirm_delete.html'
     success_url = reverse_lazy('list')
+
 
 class PersonaListCreate(generics.ListCreateAPIView):
     serializer_class = PersonaSerializer
@@ -714,9 +719,11 @@ class HistoricosList(generics.ListAPIView):
 # activos general
 class ActivosViewSet(generics.ListAPIView):
     queryset = Persona.objects.all().prefetch_related(
-        Prefetch('asignacionequipos_set', queryset=AsignacionEquipos.objects.select_related('id_equipo')),
-        Prefetch('asignacionlicenciapersona_set', queryset=AsignacionLicenciaPersona.objects.select_related('id_licencia')),
-        Prefetch('asignacionaplicaciones_set', queryset=AsignacionAplicaciones.objects.select_related('id_aplicacion')),
+        Prefetch('asignacionequipos_set',
+                 queryset=AsignacionEquipos.objects.select_related('id_equipo')),
+        Prefetch('asignacionlicenciapersona_set',
+                 queryset=AsignacionLicenciaPersona.objects.select_related('id_licencia')),
+        Prefetch('asignacionaplicaciones_set',
+                 queryset=AsignacionAplicaciones.objects.select_related('id_aplicacion')),
     ).select_related('id_centro_costo', 'id_area', 'id_region', 'id_cargo', 'id_estado_persona')
     serializer_class = ActivosSerializer
-   
