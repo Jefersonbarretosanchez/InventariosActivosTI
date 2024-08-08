@@ -365,7 +365,7 @@ function TablaCatRegionBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(region)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

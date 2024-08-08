@@ -365,7 +365,7 @@ function TablaCatPuestoBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(puesto)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

@@ -516,7 +516,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                           onClick={() => handleDesgree(asiglicequipo)}
 
                         >
-                          <FontAwesomeIcon icon={faMinus}
+                          <FontAwesomeIcon className="icon-accion" icon={faMinus}
                             style={{ marginLeft: '1.4vw' }} />
                         </button>
                       </td>

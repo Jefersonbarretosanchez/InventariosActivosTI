@@ -537,13 +537,13 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
                           className="btn-accion"
                           onClick={() => handleEdit(kitperiferico)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(kitperiferico)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                       <td style={{ paddingLeft: "17vw" }}></td>

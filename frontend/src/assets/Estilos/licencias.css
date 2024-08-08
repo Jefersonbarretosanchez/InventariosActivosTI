@@ -61,6 +61,7 @@
     position: relative;
     margin-left: 38.5vh;
     margin-top: 1.5vh;
+    background: #f3f4f6 !important;
 }
 
 .contbuscador-licenciasEquip {
@@ -73,6 +74,7 @@
     position: relative;
     margin-left: 38.5vh;
     margin-top: 1.5vh;
+    background: #f3f4f6 !important;
 }
 
 .agregar-licPersonas,

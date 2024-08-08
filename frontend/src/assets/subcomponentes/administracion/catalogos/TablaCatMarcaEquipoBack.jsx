@@ -365,7 +365,7 @@ function TablaCatMarcaEquipoBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(marca)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

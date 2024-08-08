@@ -365,7 +365,7 @@ function TablaCatAreaBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(area)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                       <td style={{ marginLeft: '10vw' }} ></td>

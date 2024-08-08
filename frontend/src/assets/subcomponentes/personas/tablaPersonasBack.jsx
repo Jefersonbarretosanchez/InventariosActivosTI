@@ -555,13 +555,13 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                           className="btn-accion"
                           onClick={() => handleEdit(persona)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(persona)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                     </tr>

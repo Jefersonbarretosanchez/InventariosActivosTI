@@ -516,7 +516,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
                           className="btn-accion"
                           onClick={() => handleDesgree(asigaplicaciones)}
                         >
-                          <FontAwesomeIcon icon={faMinus}
+                          <FontAwesomeIcon className="icon-accion" icon={faMinus}
                             style={{ marginLeft: '1.4vw' }} />
                         </button>
                       </td>

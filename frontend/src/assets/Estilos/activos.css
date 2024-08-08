@@ -243,6 +243,7 @@
     position: relative;
     margin-left: 18vh;
     margin-top: 1.5vh;
+    background: #f3f4f6 !important;
 }
 
 .buscador-icon-activos {
@@ -250,8 +251,6 @@
     margin-left: -2vw;
     margin-top: 2.5vh;
 }
-
-
 
 .agregar-activos:hover {
     position: absolute;
@@ -280,6 +279,10 @@
 
 .table-activos tr:hover {
     background-color: #f1f1f1;
+}
+
+.icon-accion{
+    color: black;
 }
 
 .btn-accion {

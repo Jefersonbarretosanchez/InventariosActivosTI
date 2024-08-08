@@ -372,7 +372,7 @@ function TablaCatAlianzaBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(alianza)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

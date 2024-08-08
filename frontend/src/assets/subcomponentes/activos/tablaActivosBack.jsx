@@ -299,7 +299,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                               abrirModal(`Detalle Activo`, formFields, ALL_INPUT_IDS, activo)
                             }
                           >
-                            <FontAwesomeIcon icon={faFileLines} />
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                           </button>
                         </td>
                         <td style={{ marginLeft: '20vw' }}></td>

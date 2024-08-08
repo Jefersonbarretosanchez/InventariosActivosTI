@@ -295,7 +295,7 @@ function TablaHistoricosBack() {
                           className="btn-accion"
                           onClick={() => handleInfo(historico)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                       <td style={{ paddingLeft: '1vw' }}></td>

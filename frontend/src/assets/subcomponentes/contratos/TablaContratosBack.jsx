@@ -419,13 +419,13 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
                           className="btn-accion"
                           onClick={() => handleEdit(contrato)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(contrato)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                     </tr>

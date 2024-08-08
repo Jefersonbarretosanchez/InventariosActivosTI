@@ -365,7 +365,7 @@ function TablaCatUbicacionBackend() {
                           className="btn-accion"
                           onClick={() => handleEdit(ubicacion)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

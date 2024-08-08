@@ -365,7 +365,7 @@ function TablaCatSOBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(so)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

@@ -481,13 +481,13 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
                           className="btn-accion"
                           onClick={() => handleEdit(periferico)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(periferico)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                     </tr>

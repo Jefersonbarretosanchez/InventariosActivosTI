@@ -413,7 +413,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
                           className="btn-accion"
                           onClick={() => handleEdit(aplicacion)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

@@ -626,13 +626,13 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
                           className="btn-accion"
                           onClick={() => handleEdit(equipo)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(equipo)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                     </tr>

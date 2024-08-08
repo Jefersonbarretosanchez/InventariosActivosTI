@@ -512,13 +512,13 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                           className="btn-accion"
                           onClick={() => handleEdit(licequipo)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(licequipo)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                     </tr>

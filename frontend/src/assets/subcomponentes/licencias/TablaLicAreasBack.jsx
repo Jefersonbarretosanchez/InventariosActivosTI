@@ -530,13 +530,13 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
                           className="btn-accion"
                           onClick={() => handleEdit(licarea)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(licarea)}
                         >
-                          <FontAwesomeIcon icon={faFileLines} />
+                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
                       </td>
                     </tr>

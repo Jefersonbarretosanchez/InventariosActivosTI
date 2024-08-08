@@ -365,7 +365,7 @@ function TablaCatDiscoDuroBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(discoDuro)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

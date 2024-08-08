@@ -365,7 +365,7 @@ function TablaCatRamBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(ram)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>

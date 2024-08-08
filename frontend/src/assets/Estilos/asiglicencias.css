@@ -8,6 +8,7 @@
     position: relative;
     margin-left: 62.5vh;
     margin-top: 1.5vh;
+    background: #f3f4f6 !important;
 }
 
 .contbuscador-asigLicenciasEquip {
@@ -20,6 +21,7 @@
     position: relative;
     margin-left: 59.5vh;
     margin-top: 1.5vh;
+    background: #f3f4f6 !important;
 }
 
 .agregar-asigLicenciasPer {

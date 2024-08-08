@@ -365,7 +365,7 @@ function TablaCatCoordinadoresBack() {
                           className="btn-accion"
                           onClick={() => handleEdit(coordinador)}
                         >
-                          <FontAwesomeIcon icon={faPenToSquare} />
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
                     </tr>
