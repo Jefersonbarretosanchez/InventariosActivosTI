@@ -199,20 +199,13 @@ class ActivosSerializer(serializers.ModelSerializer):
                   'equipos', 'licencias', 'aplicaciones']
 
     def get_equipos(self, obj):
-        asignaciones = AsignacionEquipos.objects.filter(
-            id_trabajador=obj.id_trabajador)
-        equipos = [asignacion.id_equipo for asignacion in asignaciones]
+        equipos = [asignacion.id_equipo for asignacion in obj.asignacionequipos_set.all()]
         return EquipoSerializer(equipos, many=True).data
 
     def get_licencias(self, obj):
-        asignaciones = AsignacionLicenciaPersona.objects.filter(
-            id_trabajador=obj.id_trabajador)
-        licencias = [asignacion.id_licencia for asignacion in asignaciones]
+        licencias = [asignacion.id_licencia for asignacion in obj.asignacionlicenciapersona_set.all()]
         return LicenciaPersonaSerializer(licencias, many=True).data
 
     def get_aplicaciones(self, obj):
-        asignaciones = AsignacionAplicaciones.objects.filter(
-            id_trabajador=obj.id_trabajador)
-        aplicaciones = [
-            asignacion.id_aplicacion for asignacion in asignaciones]
+        aplicaciones = [asignacion.id_aplicacion for asignacion in obj.asignacionaplicaciones_set.all()]
         return AplicacionesSerializer(aplicaciones, many=True).data

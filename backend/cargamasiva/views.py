@@ -203,7 +203,7 @@ class CargaMasivaView(LoginRequiredMixin, View):
                             'identificacion': row['identificacion'],
                             'nombres': row['nombres'].title(),
                             'apellidos': row['apellidos'].title(),
-                            'correo_personal': row['correo_personal'].lower(),
+                            'correo_personal': row.get('correo_personal','').lower() if not pd.isna(row.get('correo_personal', '')) else '',
                             'correo_institucional': row['correo_institucional'].lower(),
                             'id_centro_costo_id': row['id_centro_costo'],
                             'id_area_id': row['id_area'],
@@ -211,7 +211,7 @@ class CargaMasivaView(LoginRequiredMixin, View):
                             'id_cargo_id': row['id_cargo'],
                             'fecha_ingreso_empresa': row['fecha_ingreso_empresa'],
                             'id_estado_persona_id': row['id_estado_persona'],
-                            'direccion': row.get('direccion', None),
+                            'direccion': row.get('direccion',''). title() if not pd.isna(row.get('direccion', '')) else '',
                         }
                     elif catalogo == 'equipos':
                         data = {

@@ -112,7 +112,7 @@ class CatCargo(models.Model):
 
 class CatCentroCosto(models.Model):
     id_centro_costo = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=100)
     fecha_registro = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -200,8 +200,7 @@ class DjangoSession(models.Model):
 
 class Persona(models.Model):
     id_trabajador = models.AutoField(primary_key=True)
-    identificacion = models.IntegerField(
-        unique=True, verbose_name='Numero Identificación')
+    identificacion = models.CharField(max_length=30,verbose_name='Numero Identificación')
     nombres = models.CharField(max_length=30, verbose_name='Nombres')
     apellidos = models.CharField(max_length=30, verbose_name='Apellidos')
     correo_personal = models.CharField(
@@ -220,7 +219,7 @@ class Persona(models.Model):
     id_estado_persona = models.ForeignKey(
         CatEstadoPersona, models.DO_NOTHING, db_column='id_estado_persona', verbose_name='Estado')
     direccion = models.CharField(
-        max_length=100, blank=True, null=True, verbose_name='Dirección Residencia')
+        max_length=300, blank=True, null=True, verbose_name='Dirección Residencia')
 
     class Meta:
         managed = False

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Prefetch
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -17,8 +18,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .forms import PersonaCreacion, PersonaActualizar
+from Equipos.models import AsignacionEquipos
+from Licencias.models import AsignacionLicenciaPersona
+from ComplementosActivos.models import AsignacionAplicaciones
 from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
-from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer,PersonaListSerializer
 # Create your views here.
 
 # Configuración del logger
@@ -176,7 +180,6 @@ class PersonaDelete(LoginRequiredMixin, DeleteView):
     model = Persona
     template_name = 'persona_confirm_delete.html'
     success_url = reverse_lazy('list')
-
 
 class PersonaListCreate(generics.ListCreateAPIView):
     serializer_class = PersonaSerializer
@@ -710,5 +713,10 @@ class HistoricosList(generics.ListAPIView):
 
 # activos general
 class ActivosViewSet(generics.ListAPIView):
-    queryset = Persona.objects.all()
+    queryset = Persona.objects.all().prefetch_related(
+        Prefetch('asignacionequipos_set', queryset=AsignacionEquipos.objects.select_related('id_equipo')),
+        Prefetch('asignacionlicenciapersona_set', queryset=AsignacionLicenciaPersona.objects.select_related('id_licencia')),
+        Prefetch('asignacionaplicaciones_set', queryset=AsignacionAplicaciones.objects.select_related('id_aplicacion')),
+    ).select_related('id_centro_costo', 'id_area', 'id_region', 'id_cargo', 'id_estado_persona')
     serializer_class = ActivosSerializer
+   
