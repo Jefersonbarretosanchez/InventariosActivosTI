@@ -255,7 +255,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                   <tr>
                     <th>Nombres</th>
                     <th>Identificación</th>
-                    <th>Correo Institucional</th>
+                    <th style={{ paddingLeft: '1vw' }}>Correo Institucional</th>
                     <th>Alianza</th>
                     <th>Equipo</th>
                     <th>Accion</th>
@@ -279,11 +279,13 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                   ) : (
                     currentRecords.map((activo) => (
                       <tr key={activo.id}>
-                        <td>{activo.nombres} {activo.apellidos}</td>
+                        <td style={{ whiteSpace: "nowrap" }}>
+                          {activo.nombres.split(" ")[0]} {activo.apellidos.split(" ")[0]}
+                        </td>
                         <td>{activo.identificacion}</td>
-                        <td>{activo.correo_institucional}</td>
+                        <td style={{ paddingLeft: '1vw' }}>{activo.correo_institucional}</td>
                         <td>{activo.nombre_centro_costo}</td>
-                        <td style={{ color: activo.equipos.length === 0 ? 'red' : 'inherit' }}>
+                        <td style={{ color: activo.equipos.length === 0 ? 'red' : 'inherit', width: '100%' }}>
                           {activo.equipos.length === 0 ? (
                             "Sin equipo asignado"
                           ) : (
@@ -299,7 +301,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                               abrirModal(`Detalle Activo`, formFields, ALL_INPUT_IDS, activo)
                             }
                           >
-                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                            <FontAwesomeIcon icon={faFileLines} />
                           </button>
                         </td>
                         <td style={{ marginLeft: '20vw' }}></td>

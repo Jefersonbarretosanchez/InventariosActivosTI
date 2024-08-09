@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import { fetchPersonas, createPersonas, api} from "../../../api";
+import { fetchPersonas, createPersonas, api } from "../../../api";
 import { AuthContext } from '../../../AuthContext';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -64,7 +64,7 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(50);
+      setRecordsPerPage(100);
     }
   };
 
@@ -555,13 +555,13 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                           className="btn-accion"
                           onClick={() => handleEdit(persona)}
                         >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          <FontAwesomeIcon icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(persona)}
                         >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          <FontAwesomeIcon icon={faFileLines} />
                         </button>
                       </td>
                     </tr>
