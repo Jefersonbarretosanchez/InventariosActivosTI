@@ -54,7 +54,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(100);
+      setRecordsPerPage(150);
     }
   };
 
@@ -258,7 +258,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                     <th style={{ paddingLeft: '1vw' }}>Correo Institucional</th>
                     <th>Alianza</th>
                     <th>Equipo</th>
-                    <th>Accion</th>
+                    <th style={{ paddingLeft: '1vw' }}>Accion</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -279,13 +279,13 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                   ) : (
                     currentRecords.map((activo) => (
                       <tr key={activo.id}>
-                        <td style={{ whiteSpace: "nowrap" }}>
+                        <td style={{ whiteSpace: "nowrap", fontSize: "0.96rem" }}>
                           {activo.nombres.split(" ")[0]} {activo.apellidos.split(" ")[0]}
                         </td>
-                        <td>{activo.identificacion}</td>
-                        <td style={{ paddingLeft: '1vw' }}>{activo.correo_institucional}</td>
-                        <td>{activo.nombre_centro_costo}</td>
-                        <td style={{ color: activo.equipos.length === 0 ? 'red' : 'inherit', width: '100%' }}>
+                        <td style={{ fontSize: "0.96rem" }}>{activo.identificacion}</td>
+                        <td style={{ paddingLeft: '1vw', fontSize: "0.96rem" }}>{activo.correo_institucional}</td>
+                        <td style={{ fontSize: "0.9rem" }}>{activo.nombre_centro_costo}</td>
+                        <td style={{ color: activo.equipos.length === 0 ? 'red' : 'inherit', width: '100%', fontSize: "0.9rem" }}>
                           {activo.equipos.length === 0 ? (
                             "Sin equipo asignado"
                           ) : (
@@ -294,7 +294,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                             ))
                           )}
                         </td>
-                        <td>
+                        <td style={{ paddingLeft: '1vw' }}>
                           <button
                             className="btn-accion"
                             onClick={() =>

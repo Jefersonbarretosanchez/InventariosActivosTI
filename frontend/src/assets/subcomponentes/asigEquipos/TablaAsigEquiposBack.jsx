@@ -57,7 +57,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(100);
+      setRecordsPerPage(150);
     }
   };
 

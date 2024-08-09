@@ -511,8 +511,8 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
                   <th style={{ paddingLeft: "0vw" }}>ID Trabajador</th>
-                  <th style={{ paddingLeft: "3.2vw" }}>Nombre Completo</th>
-                  <th style={{ paddingLeft: "0vw" }}>Numero Identificación</th>
+                  <th style={{ paddingLeft: "3.2vw" }}>Nombres</th>
+                  <th style={{ paddingLeft: "3vw" }}>Numero Identificación</th>
                   <th style={{ paddingLeft: "5vw" }}>Correo Institucional</th>
                   <th style={{ paddingLeft: "2.5vw" }}>Estado</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
@@ -536,9 +536,9 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                 ) : (
                   currentRecords.map((persona) => (
                     <tr key={persona.id_trabajador}>
-                      <td>{persona.id_trabajador}</td>
-                      <td style={{ paddingLeft: "2vw" }}>{persona.nombres} {persona.apellidos}</td>
-                      <td>{persona.identificacion}</td>
+                      <td style={{ paddingLeft: "3vw" }}>{persona.id_trabajador}</td>
+                      <td>{persona.nombres.split(" ")[0]} {persona.apellidos.split(" ")[0]}</td>
+                      <td style={{ paddingLeft: "3vw" }}>{persona.identificacion}</td>
                       <td>{persona.correo_institucional}</td>
                       <td
                         style={{

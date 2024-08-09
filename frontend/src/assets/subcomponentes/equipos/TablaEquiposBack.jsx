@@ -63,7 +63,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(100);
+      setRecordsPerPage(150);
     }
   };
 
@@ -580,9 +580,9 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ paddingLeft: "0vw" }}>ID Equipo</th>
+                  <th style={{ paddingLeft: "2vw" }}>ID Equipo</th>
                   <th style={{ paddingLeft: "3.2vw" }}>Nombre Equipo</th>
-                  <th style={{ paddingLeft: "6vw" }}>Numero Serial</th>
+                  <th style={{ paddingLeft: "4vw" }}>Numero Serial</th>
                   <th style={{ paddingLeft: "2.6vw" }}>Modelo</th>
                   <th style={{ paddingLeft: "0.5vw" }}>Estado</th>
                   <th style={{ paddingLeft: "4vw" }}>Acciones</th>
@@ -606,10 +606,10 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
                 ) : (
                   currentRecords.map((equipo) => (
                     <tr key={equipo.id_equipo}>
-                      <td>{equipo.id_equipo}</td>
+                      <td style={{ paddingLeft: "4vw" }}>{equipo.id_equipo}</td>
                       <td style={{ paddingLeft: "4vw" }}>{equipo.nombre_equipo}</td>
-                      <td>{equipo.sereal}</td>
-                      <td>{equipo.modelo}</td>
+                      <td style={{ paddingLeft: "4vw" }}>{equipo.sereal}</td>
+                      <td style={{ paddingLeft: "0vw" }}>{equipo.modelo}</td>
                       <td
                         style={{
                           color:
