@@ -192,7 +192,13 @@ class PersonaListCreate(generics.ListCreateAPIView):
     # permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return Persona.objects.all().order_by('-id_trabajador')
+        return Persona.objects.select_related(
+        'id_centro_costo', 
+        'id_area', 
+        'id_region', 
+        'id_cargo', 
+        'id_estado_persona'
+    ).all()
 
     def perform_create(self, serializer):
         # Guardar la nueva persona
@@ -711,9 +717,8 @@ class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
 
 # modulo historicos
 class HistoricosList(generics.ListAPIView):
-    queryset = Historicos.objects.all().order_by('-fecha_registro')
+    queryset = Historicos.objects.select_related('usuario').order_by('-fecha_registro')
     serializer_class = historicoSerializer
-    permission_classes = [AllowAny]
 
 
 # activos general

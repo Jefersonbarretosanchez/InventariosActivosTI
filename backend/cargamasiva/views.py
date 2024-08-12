@@ -107,7 +107,7 @@ CATALOGOS = {
     },
     'asignacion_equipos':{
         'model':AsignacionEquipos,
-        'sequence':'18.885',
+        'sequence':'asignacion_equipos_id_asignacion_seq',
         'id_field':'id_asignacion'
     },
     'estado_licencias':{
@@ -142,6 +142,7 @@ def catalogos(request):
         {'name': 'Cargue Masivo Memoria Ram', 'slug': 'memoria_ram'},
         {'name': 'Cargue Masivo Disco Duro', 'slug': 'disco_duro'},
         {'name': 'Cargue Masivo Tipo Propiedad', 'slug': 'tipo_propiedad'},
+        {'name': 'Cargue Masivo Tipo Equipos', 'slug': 'tipo_equipo'},
         {'name': 'Cargue Masivo Estado Equipo', 'slug': 'estado_equipo'},
         {'name': 'Cargue Masivo Coordinadores', 'slug': 'coordinador'},
         {'name': 'Cargue Masivo Ubicaciones Bodegas', 'slug': 'ubicacion'},
@@ -215,23 +216,22 @@ class CargaMasivaView(LoginRequiredMixin, View):
                         }
                     elif catalogo == 'equipos':
                         data = {
-                            
                             'nombre_equipo': row['nombre_equipo'].upper(),
                             'modelo': row['modelo'].title(),
-                            'sereal': row['serial'].upper(),
-                            'id_marcaequipo': row['id_marcaequipo'],
-                            'id_so': row['id_so'],
-                            'id_ram': row['id_ram'],
-                            'id_discoduro': row['id_discoduro'],
+                            'sereal': row['sereal'].upper(),
+                            'id_marcaequipo': CatMarcaequipo.objects.get(id_marcaequipo=row['id_marcaequipo']),
+                            'id_so': CatSo.objects.get(id_so=row['id_so']),
+                            'id_ram': CatMemoriaram.objects.get(id_ram=row['id_ram']),
+                            'id_discoduro': CatDiscoduro.objects.get(id_discoduro=row['id_discoduro']),
                             'anydesk': row['anydesk'],
-                            'id_tipopropiedad': row['id_tipopropiedad'],
-                            'id_tipoequipo': row['id_tipoequipo'],
-                            'id_estadoequipo': row['id_estadoequipo'],
-                            'id_coordinadores': row['id_coordinadores'],
-                            'id_ubicacion': row['id_ubicacion'],
+                            'id_tipopropiedad': CatTipopropiedad.objects.get(id_tipopropiedad=row['id_tipopropiedad']),
+                            'id_tipoequipo': CatTipoequipo.objects.get(id_tipoequipo=row['id_tipoequipo']),
+                            'id_estadoequipo': CatEstadoequipo.objects.get(id_estadoequipo=row['id_estadoequipo']),
+                            # 'id_coordinadores': CatCoordinadores.objects.get(id_coordinadores=row['id_coordinadores']),
+                            # 'id_ubicacion': CatUbicacion.objects.get(id_ubicacion=row['id_ubicacion']),
                             'procesador': row['procesador'],
-                            'costo': row['costo'],
-                            'observacion': row.get('observacion',''),
+                            'costo': row.get('costo',0) if not pd.isna(row.get('costo',0)) else 0,
+                            'observacion': row.get('observacion','').title() if not pd.isna(row.get('observacion','')) else '',
                         }
                     elif catalogo =='perifericos':
                         data={
@@ -243,11 +243,11 @@ class CargaMasivaView(LoginRequiredMixin, View):
                         }
                     elif catalogo== 'asignacion_equipos':
                         data={
-                            'id_trabajador': row['id_trabajador'],
-                            'id_equipo': row['id_equipo'],
+                            'id_trabajador': Persona.objects.get(id_trabajador=row['id_trabajador']),
+                            'id_equipo': Equipo.objects.get(id_equipo=row['id_equipo']),
                             'fecha_entrega_equipo': row['fecha_entrega_equipo'],
-                            'fecha_devolucion_equipo': row['fecha_devolucion_equipo'],
-                            'id_kit_perifericos': row['id_kit_perifericos'],
+                            # 'fecha_devolucion_equipo': row['fecha_devolucion_equipo'],
+                            # 'id_kit_perifericos': row['id_kit_perifericos'],
                         }
                     elif catalogo == 'contratos' :
                         data = {
@@ -268,6 +268,10 @@ class CargaMasivaView(LoginRequiredMixin, View):
                         **{id_field: id_value},
                         defaults=data
                     )
+                    if created:
+                        print(f"Registro creado: {obj}")
+                    else:
+                        print(f"Registro actualizado: {obj}")
                     
                     if catalogo == 'personas':
                         if created:
@@ -279,16 +283,26 @@ class CargaMasivaView(LoginRequiredMixin, View):
                                 activo_modificado=obj.correo_institucional.lower(),
                                 descripcion=f'Se creó el trabajador "{obj.nombres} {obj.apellidos}"'
                             )
-                    else:
+                    elif catalogo == 'equipos':
                         if created:
                             Historicos.objects.create(
                                 usuario=usuario,
                                 correo_usuario=usuario.email if usuario else 'anonimo@example.com',
                                 tipo_cambio="Creacion Carga Masiva",
                                 tipo_activo=catalogo.title(),
-                                activo_modificado=obj.nombre,
-                                descripcion=f'Se creó el registro "{obj.nombre}".'
+                                activo_modificado=obj.nombre_equipo,
+                                descripcion=f'Se creó el registro "{obj.nombre_equipo}".'
                             )
+                    # else:
+                    #     if created:
+                    #         Historicos.objects.create(
+                    #             usuario=usuario,
+                    #             correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                    #             tipo_cambio="Creacion Carga Masiva",
+                    #             tipo_activo=catalogo.title(),
+                    #             activo_modificado=obj.nombre,
+                    #             descripcion=f'Se creó el registro "{obj.nombre}".'
+                    #         )
                     
                 except Exception as e:
                     messages.error(request, f"Error en la fila {index + 1}: {str(e)}")

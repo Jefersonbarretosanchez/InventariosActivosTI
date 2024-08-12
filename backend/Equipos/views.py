@@ -21,7 +21,17 @@ class EquipoListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return Equipo.objects.all().order_by('-id_equipo')
+        return Equipo.objects.select_related(
+        'id_marcaequipo', 
+        'id_so', 
+        'id_ram', 
+        'id_discoduro', 
+        'id_tipopropiedad',
+        'id_tipoequipo',
+        'id_estadoequipo',
+        'id_coordinadores',
+        'id_ubicacion'
+    ).all()
 
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -768,7 +778,11 @@ class EquiposAsignacionViewSet(generics.ListAPIView):
 
 
 class AsignarEquipoView(generics.ListCreateAPIView):
-    queryset = AsignacionEquipos.objects.all()
+    queryset = AsignacionEquipos.objects.select_related(
+        'id_trabajador', 
+        'id_equipo',
+        'id_kit_perifericos'
+    ).all()
     serializer_class = AsignacionEquiposSerializer
     permission_classes = [AllowAny]
 
