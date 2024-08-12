@@ -71,7 +71,7 @@ export const formFields = [
   },
   {
     id: "id_region",
-    label: "Region",
+    label: "Pais",
     type: "select",
     required: true,
     options: [],

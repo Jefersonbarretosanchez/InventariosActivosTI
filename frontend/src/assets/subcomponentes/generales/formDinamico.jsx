@@ -25,7 +25,8 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
   }, [initialValues.perifericos]);
 
   const validateField = (name, value) => {
-    if (!value && (name !== "costo" && name !== "observacion" && name !== "id_ubicacion" && name !== "id_coordinadores" && name !== "fecha_devolucion_equipo" && name !== "id_kit_perifericos")) {
+    if (!value && (name !== "costo" && name !== "observacion" && name !== "id_ubicacion" && name !== "id_coordinadores"
+      && name !== "fecha_devolucion_equipo" && name !== "id_kit_perifericos" && name !== "no_ticket" && name !== "id_contrato" && name !== "id_solicitante")) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Campo obligatorio' }));
     } else if ((name === "nombres" || name === "apellidos") && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Solo se permiten nombres en formato texto' }));

@@ -466,7 +466,7 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                 <tr>
                   <th style={{ paddingLeft: "2.7vw" }}>ID</th>
                   <th style={{ paddingLeft: "3.2vw" }}>Nombre Licencia</th>
-                  <th style={{ paddingLeft: "2.6vw" }}>Numero Serial</th>
+                  <th style={{ paddingLeft: "2.6vw" }}>Codigo Licencia</th>
                   <th style={{ paddingLeft: "0vw" }}>Contrato</th>
                   <th style={{ paddingLeft: "0vw" }}>Fecha de Vencimiento</th>
                   <th style={{ paddingLeft: "0vw" }}>Estado</th>
