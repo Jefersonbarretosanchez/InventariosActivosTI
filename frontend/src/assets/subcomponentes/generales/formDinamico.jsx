@@ -199,8 +199,8 @@ const Formulario = styled.form`
     box-sizing: border-box;
     font-size: 16px;
     height: 40px;
-    background-color: #fff; /* Fondo blanco fijo */
-    color: #000; /* Color de texto fijo negro */
+    background-color: #fff; 
+    color: #000;
   }
 
   .form-control:focus {
@@ -210,16 +210,16 @@ const Formulario = styled.form`
   }
 
   .form-control:disabled {
-    background-color: #e0e0e0; /* Fondo gris claro */
-    color: #6c757d; /* Color de texto gris medio */
-    border: 1px solid #ccc; /* Borde gris claro */
+    background-color: #e0e0e0;
+    color: #6c757d;
+    border: 1px solid #ccc; 
     cursor: not-allowed;
-    opacity: 1; /* Asegura que el texto sea completamente visible */
+    opacity: 1; 
   }
 
   .form-control::placeholder {
-    color: #6c757d; /* Color de texto del placeholder */
-    opacity: 1; /* Asegura que el placeholder sea completamente visible */
+    color: #6c757d;
+    opacity: 1; 
   }
 `;
 
@@ -242,23 +242,23 @@ const CostoWrapper = styled.div`
     font-size: 16px;
     padding: 0 5px;
     box-sizing: border-box;
-    background-color: #fff; /* Fondo blanco fijo */
-    color: #000; /* Color de texto negro */
+    background-color: #fff; 
+    color: #000; 
   }
 
   input:disabled {
-    background-color: #e0e0e0; /* Fondo gris claro */
-    color: #6c757d; /* Color de texto gris medio */
+    background-color: #e0e0e0; 
+    color: #6c757d; 
   }
 
   .currency {
     margin-right: 5px;
-    color: #000; /* Color de texto negro para el símbolo de la moneda */
+    color: #000; 
   }
 
   .currency-usd {
     margin-left: 5px;
-    color: #000; /* Color de texto negro para "USD" */
+    color: #000; 
   }
 `;
 
@@ -266,7 +266,7 @@ const CostoWrapper = styled.div`
 const StyledAutocomplete = styled(Autocomplete)`
   .MuiOutlinedInput-root {
     padding: 0 !important;
-    height: 40px; /* Asegura que la altura sea consistente */
+    height: 40px; 
     width: 100%;
   }
 
@@ -275,7 +275,7 @@ const StyledAutocomplete = styled(Autocomplete)`
   }
 
   .MuiInputBase-root {
-    height: 40px; /* Asegura que la altura sea consistente */
+    height: 40px; 
     padding: 0;
     width: 100%;
   }
@@ -286,14 +286,14 @@ const StyledAutocomplete = styled(Autocomplete)`
   }
 
   .MuiAutocomplete-popper {
-    z-index: 1300 !important; /* Asegura que el popper se sobreponga */
+    z-index: 1300 !important;
   }
 `;
 
 const StyledTextField = styled(TextField)`
   .MuiOutlinedInput-input {
-    padding: 10px; /* Ajusta el padding para que coincida con el input normal */
-    height: 20px; /* Ajusta la altura del contenido */
+    padding: 10px; 
+    height: 20px; 
     width: 100%;
   }
 

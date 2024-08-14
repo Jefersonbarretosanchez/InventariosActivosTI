@@ -97,12 +97,13 @@ const FormDinamicoActivos = ({ fields, disabledFields, initialValues, onInputCha
 
       {currentStep === 1 && (
         <div style={{ marginTop: '-6vh' }}>
-          <h3>Equipos</h3>
+          <h3>Equipo</h3>
           {equipos.length === 0 ? (
             <EmptyMessage>No tiene ningún equipo asignado</EmptyMessage>
           ) : (
             equipos.map((equipo, index) => (
               <div key={`equipo-${index}`}>
+                <h9>Nombre Equipo</h9>
                 <input
                   className="form-control"
                   type="text"
@@ -111,6 +112,7 @@ const FormDinamicoActivos = ({ fields, disabledFields, initialValues, onInputCha
                   disabled
                   placeholder="Nombre del Equipo"
                 />
+                <h9>Serial</h9>
                 <input
                   className="form-control"
                   type="text"

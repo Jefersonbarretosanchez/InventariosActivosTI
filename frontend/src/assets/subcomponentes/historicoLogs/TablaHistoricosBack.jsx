@@ -241,7 +241,7 @@ function TablaHistoricosBack() {
           <div className="asigPerifericos">
             <h1>Historicos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-19vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-18vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"

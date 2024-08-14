@@ -339,10 +339,10 @@ function TablaCatAlianzaBack() {
             <table style={{ width: "100%" }} className="table-personas">
               <thead>
                 <tr>
-                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Centro Costo</th>
+                  <th style={{ paddingLeft: '10vw' }}>ID</th>
                   <th>Nombre</th>
-                  <th>Fecha Registro</th>
-                  <th>Acciones</th>
+                  <th style={{ paddingLeft: "9vw" }}>Fecha Registro</th>
+                  <th style={{ paddingLeft: '5vw' }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -363,18 +363,23 @@ function TablaCatAlianzaBack() {
                 ) : (
                   currentRecords.map((alianza) => (
                     <tr key={alianza.id_centro_costo}>
+
                       <td style={{ paddingLeft: "10vw" }}>{alianza.id_centro_costo}</td>
-                      <td style={{ paddingLeft: "3.1vw" }}>{alianza.nombre}</td>
-                      <td style={{ paddingLeft: "4vw" }}>{alianza.fecha_registro}</td>
+
+                      <div style={{ width: '100%' }}>
+                        <td style={{ paddingLeft: "3.1vw" }}>{alianza.nombre}</td>
+                      </div>
+                      <td style={{ paddingLeft: "10vw", width: '100%' }}>{alianza.fecha_registro}</td>
                       <td>
                         <button
-                          style={{ marginLeft: '.8vw' }}
+                          style={{ marginLeft: '3vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(alianza)}
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                       </td>
+                      <td style={{ paddingLeft: '20vw' }} ></td>
                     </tr>
                   ))
                 )}

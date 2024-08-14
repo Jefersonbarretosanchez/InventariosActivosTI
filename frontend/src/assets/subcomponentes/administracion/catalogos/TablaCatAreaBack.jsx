@@ -307,7 +307,7 @@ function TablaCatAreaBack() {
           <div className="asigPerifericos">
             <h1>Catalogo Areas</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-14.5vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-13.5vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -328,7 +328,7 @@ function TablaCatAreaBack() {
               icon={faPlus}
             />
           </div>
-          <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+          <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>

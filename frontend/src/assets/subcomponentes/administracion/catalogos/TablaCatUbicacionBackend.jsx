@@ -307,7 +307,7 @@ function TablaCatUbicacionBackend() {
           <div className="asigPerifericos">
             <h1>Catalogo Ubicaciones</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-8.5vw' }}>
+          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-7.5vw' }}>
             <input
               className="contbuscador-asigLicenciasEquip"
               type="text"
@@ -328,7 +328,7 @@ function TablaCatUbicacionBackend() {
               icon={faPlus}
             />
           </div>
-          <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+          <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>

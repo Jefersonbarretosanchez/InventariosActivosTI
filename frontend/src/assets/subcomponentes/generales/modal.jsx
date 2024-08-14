@@ -134,8 +134,8 @@ const ContenedorModal = styled.div`
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
-  overflow: visible; /* Permitir el desbordamiento visible */
-  z-index: 1200; /* Asegura que el modal tenga un z-index menor que el popper */
+  overflow: visible; 
+  z-index: 1200; 
 `;
 
 
