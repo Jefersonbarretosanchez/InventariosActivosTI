@@ -203,10 +203,9 @@ class Persona(models.Model):
     identificacion = models.CharField(max_length=30,verbose_name='Numero Identificación')
     nombres = models.CharField(max_length=30, verbose_name='Nombres')
     apellidos = models.CharField(max_length=30, verbose_name='Apellidos')
-    correo_personal = models.CharField(
-        max_length=50, unique=True, verbose_name='Correo Personal')
+    correo_personal = models.CharField(max_length=50, verbose_name='Correo Personal', blank=True, null=True)
     correo_institucional = models.CharField(
-        max_length=50, unique=True, verbose_name='Correo Institucional')
+        max_length=50, verbose_name='Correo Institucional')
     id_centro_costo = models.ForeignKey(
         CatCentroCosto, models.DO_NOTHING, db_column='id_centro_costo', verbose_name='Centro De Costo')
     id_area = models.ForeignKey(

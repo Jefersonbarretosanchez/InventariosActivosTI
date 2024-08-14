@@ -267,7 +267,13 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = PersonaSerializer
     permission_classes = [AllowAny]
-    queryset = Persona.objects.all()
+    queryset = Persona.objects.select_related(
+        'id_centro_costo', 
+        'id_area', 
+        'id_region', 
+        'id_cargo', 
+        'id_estado_persona'
+    ).all()
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -285,10 +291,19 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
 
         if Persona.objects.filter(identificacion=identificacion).exclude(id_trabajador=instance.id_trabajador).exists():
             errors["Numero Identificación"] = identificacion
-        if Persona.objects.filter(correo_personal=correo_personal).exclude(id_trabajador=instance.id_trabajador).exists():
-            errors["Correo Personal"] = correo_personal
+        if correo_personal:  # Verifica si correo_personal no está vacío
+            if Persona.objects.filter(correo_personal=correo_personal).exclude(id_trabajador=instance.id_trabajador).exists():
+                errors["Correo Personal"] = correo_personal
         if Persona.objects.filter(correo_institucional=correo_institucional).exclude(id_trabajador=instance.id_trabajador).exists():
             errors["Correo Institucional"] = correo_institucional
+            
+        # Validación para inactivar la persona
+        nuevo_estado_id = request.data.get('id_estado_persona', instance.id_estado_persona.id_estado_persona)
+        if int(nuevo_estado_id) == CatEstadoPersona.objects.get(nombre="Inactivo").id_estado_persona:
+            if AsignacionEquipos.objects.filter(id_trabajador=instance).exists() or \
+               AsignacionLicenciaPersona.objects.filter(id_trabajador=instance).exists() or \
+               AsignacionAplicaciones.objects.filter(id_trabajador=instance).exists():
+                errors["Estado Persona"] = ["No se puede inactivar a esta persona porque tiene asignaciones activas de equipos, licencias y/o aplicaciones."]
 
         if errors:
             return Response({'message': 'Error Al Actualizar El Registro', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)

@@ -93,8 +93,18 @@ class EquipoListCreate(generics.ListCreateAPIView):
 class EquiposUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = EquipoSerializer
-    permission_classes = [AllowAny]
-    queryset = Equipo.objects.all()
+    # permission_classes = [AllowAny]
+    queryset = Equipo.objects.select_related(
+        'id_marcaequipo', 
+        'id_so', 
+        'id_ram', 
+        'id_discoduro', 
+        'id_tipopropiedad',
+        'id_tipoequipo',
+        'id_estadoequipo',
+        'id_coordinadores',
+        'id_ubicacion'
+    ).all()
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
