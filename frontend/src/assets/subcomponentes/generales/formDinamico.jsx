@@ -199,6 +199,8 @@ const Formulario = styled.form`
     box-sizing: border-box;
     font-size: 16px;
     height: 40px;
+    background-color: #fff; /* Fondo blanco fijo */
+    color: #000; /* Color de texto fijo negro */
   }
 
   .form-control:focus {
@@ -208,10 +210,19 @@ const Formulario = styled.form`
   }
 
   .form-control:disabled {
-    opacity: 0.5;
+    background-color: #e0e0e0; /* Fondo gris claro */
+    color: #6c757d; /* Color de texto gris medio */
+    border: 1px solid #ccc; /* Borde gris claro */
     cursor: not-allowed;
+    opacity: 1; /* Asegura que el texto sea completamente visible */
+  }
+
+  .form-control::placeholder {
+    color: #6c757d; /* Color de texto del placeholder */
+    opacity: 1; /* Asegura que el placeholder sea completamente visible */
   }
 `;
+
 
 const CostoWrapper = styled.div`
   display: flex;
@@ -231,16 +242,26 @@ const CostoWrapper = styled.div`
     font-size: 16px;
     padding: 0 5px;
     box-sizing: border-box;
+    background-color: #fff; /* Fondo blanco fijo */
+    color: #000; /* Color de texto negro */
+  }
+
+  input:disabled {
+    background-color: #e0e0e0; /* Fondo gris claro */
+    color: #6c757d; /* Color de texto gris medio */
   }
 
   .currency {
     margin-right: 5px;
+    color: #000; /* Color de texto negro para el símbolo de la moneda */
   }
 
   .currency-usd {
     margin-left: 5px;
+    color: #000; /* Color de texto negro para "USD" */
   }
 `;
+
 
 const StyledAutocomplete = styled(Autocomplete)`
   .MuiOutlinedInput-root {
