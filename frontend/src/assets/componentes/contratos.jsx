@@ -4,21 +4,18 @@ import Header from "../subcomponentes/generales/header";
 import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
-import "../Estilos/equipos.css"
-import TarjetasContratos from "../subcomponentes/contratos/tarjetasContratos";
-import TablaContratos from "../subcomponentes/contratos/TablaContratos";
+import "../Estilos/equipos.css";
 import TablaContratosBack from "../subcomponentes/contratos/TablaContratosBack";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../api";
 
 export default function Contratos() {
-
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
     const [totalLicenciasEquipos, setTotalLicenciasEquipos] = useState(0);
     const [totalLicenciasAreas, setTotalLicenciasAreas] = useState(0);
-
-    const API_URL = import.meta.env.VITE_API_URL
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // Estado para manejar la animación de logout
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         // Fetch total licenses data when the component mounts
@@ -39,9 +36,13 @@ export default function Contratos() {
         fetchTotalLicencias();
     }, []);
 
+    const handleLogoutAnimation = () => {
+        setIsLoggingOut(true);
+    };
+
     return (
-        <div className="EquiposBody">
-            <Header />
+        <div className={`EquiposBody ${isLoggingOut ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <TablaContratosBack
                 totalLicenciasEquipos={totalLicenciasEquipos}

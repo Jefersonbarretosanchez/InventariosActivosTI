@@ -5,7 +5,6 @@ import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/licencias.css";
-import TarjetasLicencias from '../subcomponentes/licencias/tarjetasLicencias';
 import TablaLicPersonasBack from '../subcomponentes/licencias/TablaLicPersonasBack';
 import TablaLicEquiposBack from '../subcomponentes/licencias/TablaLicEquiposBack';
 import TablaLicAreasBack from '../subcomponentes/licencias/TablaLicAreasBack';
@@ -18,8 +17,9 @@ export default function Licencias() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
     const [totalLicenciasEquipos, setTotalLicenciasEquipos] = useState(0);
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // Estado para manejar la animación de logout
 
-    const API_URL = import.meta.env.VITE_API_URL
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         // Fetch total licenses data when the component mounts
@@ -42,9 +42,13 @@ export default function Licencias() {
         setTablaActiva(tabla);
     };
 
+    const handleLogoutAnimation = () => {
+        setIsLoggingOut(true);
+    };
+
     return (
-        <div className="LicenciasBody">
-            <Header />
+        <div className={`LicenciasBody ${isLoggingOut ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <div style={{ marginTop: '20vh', position: 'fixed' }}>
                 <BarLicencias onClickTabla={handleTablaClick} />

@@ -5,6 +5,18 @@ import styled from "styled-components";
 
 const ModalFiltros = ({ children, estado, cambiarEstado, titulo, onClear }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [animateClass, setAnimateClass] = useState("");
+
+  useEffect(() => {
+    if (estado) {
+      setIsVisible(true);
+      setTimeout(() => setAnimateClass("modal-show"), 10); // Añade la clase para mostrar la animación al abrir
+    } else {
+      setAnimateClass("modal-hide");
+      setTimeout(() => setIsVisible(false), 500); // Esconde el modal después de la animación
+    }
+  }, [estado]);
 
   const handleClear = async () => {
     setIsLoading(true);
@@ -14,9 +26,9 @@ const ModalFiltros = ({ children, estado, cambiarEstado, titulo, onClear }) => {
 
   return (
     <>
-      {estado && (
+      {isVisible && (
         <Overlay>
-          <ContenedorModal>
+          <ContenedorModal className={animateClass}>
             <ModalHeader>
               <h3>{titulo}</h3>
               <BotonCerrar onClick={() => cambiarEstado(false)}>
@@ -68,8 +80,19 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
   overflow: hidden;
-  overflow: visible; /* Permitir el desbordamiento visible */
-  z-index: 1200; /* Asegura que el modal tenga un z-index menor que el popper */
+   overflow: visible; /* Permitir el desbordamiento visible */
+  z-index: 1200;
+  transition: all 0.5s ease;
+
+  &.modal-show {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  &.modal-hide {
+    transform: scale(0.9);
+    opacity: 0;
+  }
 `;
 
 const ModalHeader = styled.div`

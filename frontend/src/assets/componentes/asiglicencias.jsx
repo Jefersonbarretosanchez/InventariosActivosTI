@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useCallback } from 'react';
 import "../Estilos/activos.css";
 import Header from "../subcomponentes/generales/header";
@@ -7,10 +5,7 @@ import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/asiglicencias.css";
-import TarjetasAsigLicencias from '../subcomponentes/asigLicencias/tarjetasAsigLicencias';
 import BarAsigLicencias from '../subcomponentes/asigLicencias/barAsigLicencias';
-import TablaAsigLicPersonas from '../subcomponentes/asigLicencias/TablaAsigLicPersonas';
-import TablaAsigLicEquipos from '../subcomponentes/asigLicencias/TablaAsigLicEquipos';
 import TablaAsigLicPersonaBack from '../subcomponentes/asigLicencias/TablaAsigLicPersonaBack';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,35 +13,33 @@ import api from "../../api";
 import TablaAsigLicEquiposBack from '../subcomponentes/asigLicencias/TablaAsigLicEquiposBack';
 
 export default function Asiglicencias() {
-
     const [totalLicPersonasAsignadas, setTotalLicPersonasAsignadas] = useState(0);
     const [totalLicPersonasDisponibles, setTotalLicPersonasDisponibles] = useState(0);
     const [totalLicEquiposAsignados, setTotalLicEquiposAsignados] = useState(0);
     const [totalLicEquiposDisponibles, setTotalLicEquiposDisponibles] = useState(0);
-
     const [licpersonas, setLicPersonas] = useState([]);
     const [licequipos, setLicEquipos] = useState([]);
-
-    const API_URL = import.meta.env.VITE_API_URL
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // Estado para manejar la animación de logout
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const fetchLicPersona = async () => {
         try {
             const response = await api.get(`${API_URL}/api/licencias/persona/`);
             setLicPersonas(response.data);
-
         } catch (error) {
             console.error("Error fetching Licencias data:", error);
         }
     };
+
     const fetchLicEquipos = async () => {
         try {
             const response = await api.get(`${API_URL}/api/licencias/equipo/`);
             setLicEquipos(response.data);
-
         } catch (error) {
             console.error("Error fetching Licencias data:", error);
         }
     };
+
     const fetchData = useCallback(() => {
         fetchLicPersona();
         fetchLicEquipos();
@@ -81,9 +74,13 @@ export default function Asiglicencias() {
         setTablaActiva(tabla);
     };
 
+    const handleLogoutAnimation = () => {
+        setIsLoggingOut(true);
+    };
+
     return (
-        <div className="LicenciasBody">
-            <Header />
+        <div className={`LicenciasBody ${isLoggingOut ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <div style={{ marginTop: '20vh', position: 'fixed' }}>
                 <BarAsigLicencias onClickTabla={handleTablaClick} />

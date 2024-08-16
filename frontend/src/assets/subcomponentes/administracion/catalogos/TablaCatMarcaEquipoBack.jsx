@@ -37,7 +37,7 @@ function TablaCatMarcaEquipoBack() {
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(20);
+      setRecordsPerPage(150);
     }
   };
 
@@ -307,26 +307,27 @@ function TablaCatMarcaEquipoBack() {
           <div className="asigPerifericos">
             <h1>Catalogo Marcas Equipos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-4.9vw' }}>
-            <input
-              className="contbuscador-asigLicenciasEquip"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '40.5vw' }}
-              className="agregar-asigLicenciasEquip "
-              onClick={handleCreate}
-              icon={faPlus}
-            />
+          <div className="contenedor-principal">
+            <div style={{ marginLeft: '14vw' }} className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

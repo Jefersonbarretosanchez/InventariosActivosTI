@@ -4,6 +4,18 @@
     margin-top: 1.5vh;
 }
 
+
+.iconos-acciones {
+    display: flex;
+    align-items: center;
+}
+
+.contenedor-principal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .buscador-equipos {
     padding: 1.1vh;
     margin-bottom: 3vh;
@@ -18,15 +30,15 @@
 }
 
 .agregar-equipos {
-    position: absolute;
-    margin-left: 26.5vw;
-    margin-top: -6.5vh;
+    margin-right: 1vw;
+    margin-top: -1vh;
+    /* Espacio entre los iconos */
     cursor: pointer;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
 }
 
 .agregar-equipos:hover {
-    position: absolute;
-    cursor: pointer;
     transform: scale(1.6);
 }
 

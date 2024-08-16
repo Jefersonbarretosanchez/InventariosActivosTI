@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext} from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthContext';
 import { login } from '../../api';
@@ -12,11 +12,12 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser } = useContext(AuthContext); // Asegúrate de importar y usar setUser
+  const [animate, setAnimate] = useState(false);
+  const [registerClicked, setRegisterClicked] = useState(false);
+  const { setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const submitButtonRef = useRef(null);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -24,9 +25,17 @@ export default function Login() {
     try {
       const user = await login(username, password);
       if (user) {
-        console.log("Inicio de sesión OK"); // Mensaje de éxito
-        setUser(user); // Establece el usuario en el contexto
-        navigate("/activos"); // Redirige al usuario a la página principal después del inicio de sesión exitoso
+        setUser(user);
+
+        // Iniciar la animación después de un breve retardo
+        setTimeout(() => {
+          setAnimate(true);
+        }, 100);
+
+        // Deshabilitar la visualización del componente después de la animación
+        setTimeout(() => {
+          navigate("/activos");
+        }, 1000); // Asegúrate de que este tiempo coincida con la duración de la animación
       }
     } catch (error) {
       console.error("Login error:", error.response ? error.response.data : error.message);
@@ -47,8 +56,22 @@ export default function Login() {
     }
   };
 
+  const handleRegisterClick = () => {
+    setRegisterClicked(true);
+    setTimeout(() => {
+      setRegisterClicked(false);
+      alert('Navegando al registro...');
+    }, 400);
+  };
+  const handleLogout = () => {
+    setIsLoggingOut(true);
+    setTimeout(() => {
+      navigate('/logout');
+    }, 1000); // 1 second delay to allow the animation to play
+  };
+
   return (
-    <div className="contenedor-login">
+    <div className={`contenedor-login ${animate ? 'animacion-login' : ''}`}>
       <div>
         <img src={logo} alt="Logo Scala" className="logo-login" />
       </div>
@@ -92,13 +115,17 @@ export default function Login() {
         <div style={{ marginTop: '2vh' }} className="buttons-login">
           <button
             ref={submitButtonRef}
-            className="button1-login"
+            className={`button1-login ${loading ? 'loading' : ''}`}
             type="submit"
             disabled={loading}
           >
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
-          <button type="button" className="botonreg-login">
+          <button
+            type="button"
+            className={`botonreg-login ${registerClicked ? 'clicked' : ''}`}
+            onClick={handleRegisterClick}
+          >
             Registrar
           </button>
         </div>

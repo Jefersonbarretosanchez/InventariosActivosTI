@@ -37,7 +37,7 @@ function TablaCatPuestoBack() {
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(20);
+      setRecordsPerPage(150);
     }
   };
 
@@ -307,26 +307,27 @@ function TablaCatPuestoBack() {
           <div className="asigPerifericos">
             <h1>Catalogo Cargos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-12vw' }}>
-            <input
-              className="contbuscador-asigLicenciasEquip"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '33.5vw' }}
-              className="agregar-asigLicenciasEquip "
-              onClick={handleCreate}
-              icon={faPlus}
-            />
+          <div style={{ marginLeft: '7vw' }} className="contenedor-principal">
+            <div className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

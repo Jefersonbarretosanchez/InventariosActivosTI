@@ -245,7 +245,6 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
               icon={faMagnifyingGlass}
               className="buscador-icon-activos"
             />
-            <FontAwesomeIcon style={{ marginLeft: '1.5vw', marginTop: '2.5vh' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
           </div>
           <div className="contenedor-tabla-activos">

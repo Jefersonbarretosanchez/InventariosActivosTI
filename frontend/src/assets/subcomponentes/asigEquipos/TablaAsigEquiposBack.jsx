@@ -580,25 +580,28 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
           <div className="asigEquipos">
             <h1>Asignacion Equipos</h1>
           </div>
-          <div style={{ marginLeft: '0.5vw' }} className="contbuscador-asigEquipos">
-            <input
-              className="contbuscador-licenciasPer"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              className="agregar-licPersonas"
-              onClick={() => handleCreate()}
-              icon={faPlus}
-            />
+          <div style={{ marginLeft: '20vh' }} className="contenedor-principal">
+            <div className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                style={{ marginRight: '50vw' }}
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+            </div>
           </div>
 
           <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">

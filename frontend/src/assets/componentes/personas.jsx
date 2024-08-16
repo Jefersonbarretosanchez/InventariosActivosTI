@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "../Estilos/activos.css";
-import TarjetasPersonas from "../subcomponentes/personas/tarjetasPersonas";
-import TablaPersonas from "../subcomponentes/personas/tablaPersonas";
 import Header from "../subcomponentes/generales/header";
 import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
-import "../Estilos/personas.css"
+import "../Estilos/personas.css";
 import TablaPersonasBack from "../subcomponentes/personas/tablaPersonasBack";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +15,7 @@ export default function Personas() {
     const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
     const [equipos, setEquipos] = useState([]);
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // Estado para manejar la animación de logout
 
     const fetchEquipos = async () => {
         try {
@@ -56,9 +55,13 @@ export default function Personas() {
         fetchTotalLicencias();
     }, []);
 
+    const handleLogoutAnimation = () => {
+        setIsLoggingOut(true);
+    };
+
     return (
-        <div className="PersonasBody">
-            <Header />
+        <div className={`PersonasBody ${isLoggingOut ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <TablaPersonasBack
                 totalequiposAsignados={totalequiposAsignados}

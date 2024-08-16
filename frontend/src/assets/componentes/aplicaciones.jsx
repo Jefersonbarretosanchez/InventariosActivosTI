@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useCallback } from 'react';
 import "../Estilos/activos.css";
 import Header from "../subcomponentes/generales/header";
@@ -8,14 +6,7 @@ import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import { fetchPersonas } from "../../api";
 import "../Estilos/asiglicencias.css";
-import TarjetasAsigLicencias from '../subcomponentes/asigLicencias/tarjetasAsigLicencias';
-import BarAsigLicencias from '../subcomponentes/asigLicencias/barAsigLicencias';
-import TablaAsigLicPersonas from '../subcomponentes/asigLicencias/TablaAsigLicPersonas';
-import TablaAsigLicEquipos from '../subcomponentes/asigLicencias/TablaAsigLicEquipos';
-import TarjetasAplicaciones from '../subcomponentes/aplicaciones/tarjetasAplicaciones';
 import BarAplicaciones from '../subcomponentes/aplicaciones/barAplicaciones';
-import TablaAplicaciones from '../subcomponentes/aplicaciones/TablaAplicaciones';
-import TablaAsigAplicaciones from '../subcomponentes/aplicaciones/TablaAsigAplicaciones';
 import TablaAplicacionesBack from '../subcomponentes/aplicaciones/TablaAplicacionesBack';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,8 +23,8 @@ export default function Aplicaciones() {
     const [aplicaciones, setAplicaciones] = useState([]);
     const [aplicacionesasig, setAplicacionesAsig] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const API_URL = import.meta.env.VITE_API_URL
-
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // Estado para manejar la animación de logout
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const fetchAplicaciones = async () => {
         try {
@@ -51,13 +42,10 @@ export default function Aplicaciones() {
         fetchAplicaciones();
     }, []);
 
-
     useEffect(() => {
         const naplicaciones = aplicaciones.length;
         setTotalAplicaciones(naplicaciones);
     }, [aplicaciones]);
-
-
 
     useEffect(() => {
         const loadPersonas = async () => {
@@ -77,7 +65,6 @@ export default function Aplicaciones() {
     }, []);
 
     useEffect(() => {
-        // Calcula y actualiza los totales cada vez que cambie la lista de personas
         const totalActivas = personas.filter(
             persona => persona.nombre_estado_persona === "Activo"
         ).length;
@@ -87,8 +74,7 @@ export default function Aplicaciones() {
 
         setTotalPersonasActivas(totalActivas);
         setTotalPersonasInactivas(totalInactivas);
-    }, [personas]); // Dependencia en el estado 'personas'
-
+    }, [personas]);
 
     const fetchAplicacionesAsig = async () => {
         try {
@@ -111,9 +97,12 @@ export default function Aplicaciones() {
         setTotalAplicacionesAsig(naplicacionesAsig);
     }, [aplicacionesasig]);
 
-
     const handleTablaClick = (tabla) => {
         setTablaActiva(tabla);
+    };
+
+    const handleLogoutAnimation = () => {
+        setIsLoggingOut(true);
     };
 
     const fetchData = useCallback(() => {
@@ -126,8 +115,8 @@ export default function Aplicaciones() {
     }, [fetchData]);
 
     return (
-        <div className="LicenciasBody">
-            <Header />
+        <div className={`LicenciasBody ${isLoggingOut ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <div style={{ marginTop: '19.9vh', position: 'fixed' }}>
                 <BarAplicaciones onClickTabla={handleTablaClick} />

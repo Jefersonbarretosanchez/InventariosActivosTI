@@ -37,7 +37,7 @@ function TablaCatAlianzaBack() {
   const handleResize = () => {
     const width = window.innerWidth;
     if (width > 0) {
-      setRecordsPerPage(20);
+      setRecordsPerPage(150);
     }
   };
 
@@ -314,26 +314,27 @@ function TablaCatAlianzaBack() {
           <div className="asigPerifericos">
             <h1>Catalogo Centro de Costos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-3.5vw' }}>
-            <input
-              className="contbuscador-asigLicenciasEquip"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '41.8vw' }}
-              className="agregar-asigLicenciasEquip "
-              onClick={handleCreate}
-              icon={faPlus}
-            />
+          <div className="contenedor-principal">
+            <div style={{ marginLeft: '16vw' }} className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

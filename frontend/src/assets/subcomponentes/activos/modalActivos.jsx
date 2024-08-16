@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -18,6 +18,18 @@ const ModalActivos = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isVisible, setIsVisible] = useState(false);
+  const [animateClass, setAnimateClass] = useState("");
+
+  useEffect(() => {
+    if (estado) {
+      setIsVisible(true);
+      setTimeout(() => setAnimateClass("modal-show"), 10); // Iniciar la animación de entrada
+    } else {
+      setAnimateClass("modal-hide");
+      setTimeout(() => setIsVisible(false), 500); // Ocultar el modal después de la animación de salida
+    }
+  }, [estado]);
 
   const validateForm = () => {
     const formElements = document.querySelectorAll('.form-control, .form-select');
@@ -78,16 +90,15 @@ const ModalActivos = ({
     }
   };
 
-
   const handleStepClick = (stepIndex) => {
     setCurrentStep(stepIndex);
   };
 
   return (
     <>
-      {estado && (
+      {isVisible && (
         <Overlay>
-          <ContenedorModal>
+          <ContenedorModal className={animateClass}>
             <ModalHeader>
               <h3>{titulo}</h3>
               <BotonCerrar onClick={() => cambiarEstado(false)}>
@@ -167,6 +178,17 @@ const ContenedorModal = styled.div`
   padding: 20px;
   overflow: visible;
   z-index: 1200;
+  transition: all 0.5s ease;
+
+  &.modal-show {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  &.modal-hide {
+    transform: scale(0.9);
+    opacity: 0;
+  }
 `;
 
 const ModalHeader = styled.div`
@@ -221,7 +243,6 @@ const Step = styled.div`
   &:hover {
     transform: scale(1.05);
   }
-
 `;
 
 const ModalBody = styled.div`

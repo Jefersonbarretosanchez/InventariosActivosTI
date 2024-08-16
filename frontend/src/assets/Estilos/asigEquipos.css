@@ -6,6 +6,17 @@
 
 }
 
+.iconos-acciones {
+    display: flex;
+    align-items: center;
+}
+
+.contenedor-principal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .buscador-asigEquipos {
     padding: 1.1vh;
     margin-bottom: 3vh;
@@ -14,7 +25,7 @@
     border: 000.1vh solid #ccc;
     border-radius: 10px;
     position: relative;
-    margin-left: 46.5vh;
+    margin-left: 19.5vh;
     margin-top: 1.5vh;
     background: #f3f4f6 !important;
 }
@@ -34,28 +45,28 @@
 
 
 .agregar-asigEquipos {
-    position: absolute;
-    margin-left: 40.5vw;
-    margin-top: -6.5vh;
+    margin-right: 1vw;
+    margin-top: -1vh;
+    /* Espacio entre los iconos */
     cursor: pointer;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
 }
 
 .agregar-asigPerifericos {
-    position: absolute;
-    margin-left: 43vw;
-    margin-top: -6.2vh;
+    margin-right: 1vw;
+    margin-top: -1vh;
+    /* Espacio entre los iconos */
     cursor: pointer;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
 }
 
 .agregar-asigEquipos:hover {
-    position: absolute;
-    cursor: pointer;
     transform: scale(1.6);
 }
 
 .agregar-asigPerifericos:hover {
-    position: absolute;
-    cursor: pointer;
     transform: scale(1.6);
 }
 

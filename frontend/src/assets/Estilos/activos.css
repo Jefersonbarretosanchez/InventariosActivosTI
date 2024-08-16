@@ -21,6 +21,31 @@
     margin-left: 1.5vw;
 }
 
+@keyframes elegantZoomOut {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+}
+
+.fade-out {
+    animation: elegantZoomOut 0.8s ease-in-out forwards;
+}
+
+
+
+
+
 .menu-login {
     position: relative;
     display: inline-block;

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
-const modalDesasignacion = ({
+const ModalDesasignacion = ({
   children,
   estado,
   cambiarEstado,
@@ -16,6 +16,18 @@ const modalDesasignacion = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isVisible, setIsVisible] = useState(false);
+  const [animateClass, setAnimateClass] = useState("");
+
+  useEffect(() => {
+    if (estado) {
+      setIsVisible(true);
+      setTimeout(() => setAnimateClass("modal-show"), 10); // Iniciar la animación de entrada
+    } else {
+      setAnimateClass("modal-hide");
+      setTimeout(() => setIsVisible(false), 500); // Ocultar el modal después de la animación de salida
+    }
+  }, [estado]);
 
   const validateForm = () => {
     const formElements = document.querySelectorAll('.form-control, .form-select');
@@ -26,17 +38,12 @@ const modalDesasignacion = ({
       }
     });
 
-    // Validación adicional para Autocomplete
     const autocompleteElements = document.querySelectorAll('.autocomplete-control');
     autocompleteElements.forEach(element => {
-      console.log(`Validating autocomplete: ${element.getAttribute('data-name')}`);
-      console.log(`Data value: ${element.getAttribute('data-value')}`);
-
       if (!element.getAttribute('data-value')) {
         newErrors[element.getAttribute('data-name')] = 'Campo obligatorio';
       }
     });
-
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -48,6 +55,7 @@ const modalDesasignacion = ({
     await onCreate();
     setIsLoading(false);
   };
+
   const handleDegree = async () => {
     if (!validateForm()) return;
     setIsLoading(true);
@@ -70,9 +78,9 @@ const modalDesasignacion = ({
 
   return (
     <>
-      {estado && (
+      {isVisible && (
         <Overlay>
-          <ContenedorModal>
+          <ContenedorModal className={animateClass}>
             <ModalHeader>
               <h3>{titulo}</h3>
               <BotonCerrar onClick={() => cambiarEstado(false)}>
@@ -113,7 +121,7 @@ const modalDesasignacion = ({
   );
 };
 
-export default modalDesasignacion;
+export default ModalDesasignacion;
 
 const Overlay = styled.div`
   width: 100vw;
@@ -137,6 +145,18 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
   overflow: hidden;
+  z-index: 1200;
+  transition: all 0.5s ease;
+
+  &.modal-show {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  &.modal-hide {
+    transform: scale(0.9);
+    opacity: 0;
+  }
 `;
 
 const ModalHeader = styled.div`

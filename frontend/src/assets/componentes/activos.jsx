@@ -1,10 +1,7 @@
-
 import React, { useState, useEffect } from "react";
 import { fetchPersonas } from "../../api";
 import '../Estilos/activos.css'
 import '../Estilos/estilosGlobal.css'
-import TarjetasActivos from '../subcomponentes/activos/tarjetasActivos';
-import TablaActivos from '../subcomponentes/activos/tablaActivos';
 import Header from '../subcomponentes/generales/header';
 import Sidebar from '../subcomponentes/generales/sidebar';
 import Footer from '../subcomponentes/generales/footer';
@@ -19,9 +16,10 @@ export default function Activos() {
     const [equipos, setEquipos] = useState([]);
     const [totalequiposAsignados, setTotalequiposAsignados] = useState(0);
     const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
-
     const [totalLicenciasPersonas, setTotalLicenciasPersonas] = useState(0);
-    const API_URL = import.meta.env.VITE_API_URL
+    const [isAnimating, setIsAnimating] = useState(false); // Estado para manejar la animación
+
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const loadPersonas = async () => {
@@ -31,7 +29,6 @@ export default function Activos() {
                 setPersonas(data);
             } catch (error) {
                 console.error("Error loading persons:", error);
-                toast.error(`Hubo un error en la carga de datos de las personas: ${error.message}`);
             } finally {
                 setIsLoading(false);
             }
@@ -54,7 +51,6 @@ export default function Activos() {
     }, []);
 
     useEffect(() => {
-        // Fetch total licenses data when the component mounts
         const fetchTotalLicencias = async () => {
             try {
                 const responsePersonas = await api.get(`${API_URL}/api/licencias/persona/`);
@@ -69,7 +65,6 @@ export default function Activos() {
 
 
     useEffect(() => {
-        // Calcula y actualiza los totales cada vez que cambie la lista de personas
         const totalActivas = personas.filter(
             persona => persona.nombre_estado_persona === "Activo"
         ).length;
@@ -84,10 +79,13 @@ export default function Activos() {
         setTotalEquiposDisponibles(equiposDisponibles);
     }, [personas, equipos]);
 
+    const handleLogoutAnimation = () => {
+        setIsAnimating(true);
+    };
 
     return (
-        <div className='ActivosBody'>
-            <Header />
+        <div className={`ActivosBody ${isAnimating ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <TablaActivosBack
                 totalPersonasActivas={totalPersonasActivas}

@@ -436,26 +436,30 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
           <div className="asigEquipos">
             <h1>Licencias Personas</h1>
           </div>
-          <div className="contbuscador-asigEquipos">
-            <input
-              className="contbuscador-licenciasPer"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              className="agregar-licPersonas"
-              onClick={() => handleCreate()}
-              icon={faPlus}
-            />
-            <FontAwesomeIcon style={{ marginLeft: '38vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+          <div style={{ width: '5%' }} className="contenedor-principal">
+            <div style={{ marginLeft: '9vw' }} className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                style={{ marginLeft: '1vw' }}
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+              <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

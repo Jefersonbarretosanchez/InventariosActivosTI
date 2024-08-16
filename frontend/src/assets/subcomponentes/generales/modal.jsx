@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -15,6 +15,15 @@ const Modal = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [animationClass, setAnimationClass] = useState("");
+
+  useEffect(() => {
+    if (estado) {
+      setAnimationClass("modal-fade-in");
+    } else {
+      setAnimationClass("modal-fade-out");
+    }
+  }, [estado]);
 
   const validateForm = () => {
     const formElements = document.querySelectorAll('.form-control, .form-select');
@@ -70,14 +79,21 @@ const Modal = ({
     setIsLoading(false);
   };
 
+  const handleCloseModal = () => {
+    setAnimationClass("modal-fade-out");
+    setTimeout(() => {
+      cambiarEstado(false);
+    }, 400); // Duración de la animación de salida
+  };
+
   return (
     <>
       {estado && (
         <Overlay>
-          <ContenedorModal>
+          <ContenedorModal className={animationClass}>
             <ModalHeader>
               <h3>{titulo}</h3>
-              <BotonCerrar onClick={() => cambiarEstado(false)}>
+              <BotonCerrar onClick={handleCloseModal}>
                 <FontAwesomeIcon icon={faX} />
               </BotonCerrar>
             </ModalHeader>
@@ -86,7 +102,7 @@ const Modal = ({
             </ModalBody>
             <ModalFooter>
               {(actionType === "create" || actionType === "update") && (
-                <BtnCancelar onClick={() => cambiarEstado(false)} disabled={isLoading}>
+                <BtnCancelar onClick={handleCloseModal} disabled={isLoading}>
                   <span>Cancelar</span>
                 </BtnCancelar>
               )}
@@ -98,7 +114,7 @@ const Modal = ({
               )}
               {actionType === "Clear" && (
                 <>
-                  <BtnCancelar style={{ marginTop: '1vh' }} onClick={() => cambiarEstado(false)} disabled={isLoading}>
+                  <BtnCancelar style={{ marginTop: '1vh' }} onClick={handleCloseModal} disabled={isLoading}>
                     <span>Salir</span>
                   </BtnCancelar>
                   <BtnLimpiar style={{ marginTop: '1vh' }} onClick={handleClear} disabled={isLoading}>Limpiar Filtros</BtnLimpiar>
@@ -113,6 +129,7 @@ const Modal = ({
 };
 
 export default Modal;
+
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -125,6 +142,7 @@ const Overlay = styled.div`
   justify-content: center;
   overflow: visible; /* Permitir el desbordamiento visible */
 `;
+
 const ContenedorModal = styled.div`
   width: 25vw;
   height: auto;
@@ -135,9 +153,17 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
   overflow: visible; 
-  z-index: 1200; 
-`;
+  z-index: 1200;
+  animation: none;
 
+  &.modal-fade-in {
+    animation: bounceIn 0.5s ease-out forwards;
+  }
+
+  &.modal-fade-out {
+    animation: fadeOutZoom 0.4s ease-out forwards;
+  }
+`;
 
 const ModalHeader = styled.div`
   display: flex;

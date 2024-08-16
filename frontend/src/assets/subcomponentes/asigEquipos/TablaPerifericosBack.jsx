@@ -411,25 +411,28 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
           <div className="equipos">
             <h1>Perifericos</h1>
           </div>
-          <div style={{ marginLeft: '1vw' }} className="contbuscador-equipos">
-            <input
-              className="buscador-equipos"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              className="agregar-equipos"
-              onClick={() => handleCreate()}
-              icon={faPlus}
-            />
+          <div style={{ marginLeft: '1vw' }} className="contenedor-principal">
+            <div className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                style={{ marginRight: '58vw' }}
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "36.5vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

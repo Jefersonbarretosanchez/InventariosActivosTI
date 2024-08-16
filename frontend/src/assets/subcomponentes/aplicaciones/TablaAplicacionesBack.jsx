@@ -357,27 +357,27 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
           <div className="Personas">
             <h1>Aplicaciones</h1>
           </div>
-          <div style={{ marginLeft: '3vw' }} className="contbuscador-personas">
-            <input
-              className="buscador-personas"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-          </div>
-          <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '29vw' }}
-              className="agregar-personas"
-              onClick={() => handleCreate()}
-              icon={faPlus}
-            />
-            {/* <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon> */}
+          <div className="contenedor-principal">
+            <div style={{ marginLeft: '4vw' }} className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+              />
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "36.7vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

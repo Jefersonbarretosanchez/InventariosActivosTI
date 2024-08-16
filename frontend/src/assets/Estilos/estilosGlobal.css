@@ -48,3 +48,40 @@
     width: 100vw;
     height: 100vh;
 }
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.02);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutZoom {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+}
+
+.modal-fade-in {
+    animation: bounceIn 0.5s ease-out forwards;
+}
+
+.modal-fade-out {
+    animation: fadeOutZoom 0.4s ease-out forwards;
+}

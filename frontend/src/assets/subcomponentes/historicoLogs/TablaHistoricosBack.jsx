@@ -241,19 +241,24 @@ function TablaHistoricosBack() {
           <div className="asigPerifericos">
             <h1>Historicos</h1>
           </div>
-          <div className="contbuscador-asigEquipos" style={{ marginLeft: '-18vw' }}>
-            <input
-              className="contbuscador-asigLicenciasEquip"
-              type="text"
-              placeholder="Buscar"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="buscador-icon-activos"
-            />
-            <FontAwesomeIcon style={{ marginLeft: '2vw', marginTop: '2.8vh' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+          <div className="contenedor-principal">
+            <div className="contbuscador-personas">
+              <input
+                className="buscador-personas"
+                type="text"
+                placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                className="buscador-icon-activos"
+              />
+            </div>
+            <div className="iconos-acciones">
+              <FontAwesomeIcon style={{ marginLeft: '1vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+
+            </div>
           </div>
           <Divtabla style={{ maxHeight: "62.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">

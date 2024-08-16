@@ -5,10 +5,7 @@ import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/asigEquipos.css";
-import TablaAsigEquipos from "../subcomponentes/asigEquipos/TablaAsigEquipos";
-import TarjetasAsigEquipos from "../subcomponentes/asigEquipos/tarjetasAsigEquipos";
 import Bar from "../subcomponentes/asigEquipos/bar";
-import TablaAsigPerifericos from "../subcomponentes/asigEquipos/TablaAsigPerifericos";
 import TablaAsigEquiposBack from '../subcomponentes/asigEquipos/TablaAsigEquiposBack';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,10 +18,10 @@ export default function AsigEquipos() {
     const [totalEquiposDisponibles, setTotalEquiposDisponibles] = useState(0);
     const [totalperifericosAsignados, setTotalPerifericosAsignados] = useState(0);
     const [totalperifericosDisponibles, setTotalPerifericosDisponibles] = useState(0);
-
+    const [isLoggingOut, setIsLoggingOut] = useState(false); // Estado para manejar la animación de logout
     const [equipos, setEquipos] = useState([]);
     const [perifericos, setPerifericos] = useState([]);
-    const API_URL = import.meta.env.VITE_API_URL
+    const API_URL = import.meta.env.VITE_API_URL;
 
     const fetchEquipos = async () => {
         try {
@@ -78,9 +75,13 @@ export default function AsigEquipos() {
         setTablaActiva(tabla);
     };
 
+    const handleLogoutAnimation = () => {
+        setIsLoggingOut(true);
+    };
+
     return (
-        <div className="asigEquiposBody">
-            <Header />
+        <div className={`asigEquiposBody ${isLoggingOut ? 'fade-out' : ''}`}>
+            <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <div style={{ marginTop: '20vh', position: 'fixed' }}>
                 <Bar onClickTabla={handleTablaClick} />
@@ -92,13 +93,15 @@ export default function AsigEquipos() {
                 totalperifericosDisponibles={totalperifericosDisponibles}
                 fetchData={fetchData} // Propagar la función de actualización
             />
-                : tablaActiva === 'asignacionPerifericos' ? <TablaKitPerifericosBack totalequiposAsignados={totalequiposAsignados}
+                : tablaActiva === 'asignacionPerifericos' ? <TablaKitPerifericosBack
+                    totalequiposAsignados={totalequiposAsignados}
                     totalEquiposDisponibles={totalEquiposDisponibles}
                     totalperifericosAsignados={totalperifericosAsignados}
                     totalperifericosDisponibles={totalperifericosDisponibles}
                     fetchData={fetchData} // Propagar la función de actualización
                 />
-                    : <TablaPerifericosBack totalequiposAsignados={totalequiposAsignados}
+                    : <TablaPerifericosBack
+                        totalequiposAsignados={totalequiposAsignados}
                         totalEquiposDisponibles={totalEquiposDisponibles}
                         totalperifericosAsignados={totalperifericosAsignados}
                         totalperifericosDisponibles={totalperifericosDisponibles}
