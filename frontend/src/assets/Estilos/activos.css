@@ -121,9 +121,9 @@
 }
 
 .menu-lateral-gen {
-    width: 0;
+    width: 3.75vw;
     overflow-x: hidden;
-    transition: width 0.4s;
+    transition: width 0.4s ease, background-color 0.4s ease;
     position: fixed;
     height: 100vh;
     background-color: #ffffff;
@@ -132,48 +132,94 @@
     margin-top: -11.5vh;
 }
 
+.menu-lateral-gen.expanded {
+    width: 17vw;
+}
+
 .logo-menulateral {
     margin-top: 1.6vh;
+    text-align: center;
+    transition: margin-left 0.4s ease;
+}
+
+.sidebar-logo {
+    width: auto;
+    height: 9.5vh;
+    transition: width 0.4s ease, height 0.4s ease;
+}
+
+.menu-lateral-gen.expanded .sidebar-logo {
+    height: 9.5vh;
+    width: 13vw;
 }
 
 .menu-lateral-gen nav ul {
     list-style-type: none;
     padding: 0;
-    margin: 0;
-    margin-top: 2vh;
-    margin-left: -0.1vw;
+    margin-top: 1vh;
+    transition: margin-left 0.4s ease;
+}
+
+.menu-lateral-gen.expanded nav ul {
+    margin-left: 0vw;
 }
 
 .menu-lateral-gen nav ul li {
-    padding: 1.8vh 2vh;
+    padding: 1vh 1vw 0.6vw 0.8vw;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, padding 0.4s ease;
     display: flex;
     align-items: center;
+    white-space: nowrap;
+}
+
+.menu-lateral-gen nav ul li {
+    padding: 1vh 1vw 0.6vw 0vw;
+    /* Ajuste de padding */
+    cursor: pointer;
+    transition: background-color 0.3s ease, padding 0.4s ease;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .menu-lateral-gen nav ul li i {
-    margin-right: 3.5vh;
+    margin-right: .5vw;
+    /* Ajuste del margen derecho */
+    transition: margin-right 0.4s ease;
+    flex: 0 0 4vw;
+    /* Asignamos un ancho fijo al contenedor del ícono */
+    text-align: center;
+    /* Centramos el ícono dentro del contenedor */
+}
+
+.menu-text {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    font-size: 2.5vh;
+    flex: 1;
+    /* Aseguramos que el texto ocupe el espacio restante */
+}
+
+.icono {
+    font-size: 4vh;
+}
+
+.menu-lateral-gen.expanded .menu-text {
+    opacity: 1;
 }
 
 .menu-lateral-gen nav ul li:hover {
     background-color: #a4a5bc;
-    color: white
+    color: white;
 }
-
-.icono {
-    width: 3.1vh;
-    height: 3vh;
-    display: inline-block;
-    background-size: cover;
-    margin-top: -1.5vh;
-}
-
 
 .active-icono {
     background-color: #545c8c;
     color: #f96c15;
 }
+
+
 
 
 .estadisticas-activos {
