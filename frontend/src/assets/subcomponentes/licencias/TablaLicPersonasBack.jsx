@@ -12,6 +12,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasLicencias from './tarjetasLicencias';
 
+
 function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersonas, totalLicenciasEquipos }) {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
@@ -456,8 +457,9 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Licencia"
               />
-              <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              <FontAwesomeIcon title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -512,12 +514,14 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(licpersona)}
+                          title="Editar licencia"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(licpersona)}
+                          title="Detalle Licencia"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

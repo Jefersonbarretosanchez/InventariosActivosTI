@@ -600,6 +600,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Asignar Equipo"
               />
             </div>
           </div>
@@ -641,12 +642,14 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(asigequipo)}
+                          title="Editar Asignacion"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(asigequipo)}
+                          title="Detalle Asignacion"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>
@@ -654,7 +657,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
                         <button
                           className="btn-accion"
                           onClick={() => handleDesgree(asigequipo)}
-
+                          title="Desasignar Equipo"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faMinus} />
                         </button>

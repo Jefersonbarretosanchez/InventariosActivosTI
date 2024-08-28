@@ -326,6 +326,7 @@ function TablaCatRegionBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Region"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatRegionBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(region)}
+                          title="Editar Region"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

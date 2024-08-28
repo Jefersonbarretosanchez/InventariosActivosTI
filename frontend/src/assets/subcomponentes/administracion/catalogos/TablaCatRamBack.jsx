@@ -326,6 +326,7 @@ function TablaCatRamBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Ram"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatRamBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(ram)}
+                          title="Editar Ram"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

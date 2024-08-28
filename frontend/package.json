@@ -26,6 +26,7 @@
     "react-router-dom": "^6.23.0",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
+    "react-tooltip": "^5.28.0",
     "select2": "^4.1.0-rc.0",
     "styled-components": "^6.1.11"
   },

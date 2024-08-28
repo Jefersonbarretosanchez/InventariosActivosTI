@@ -376,6 +376,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Aplicacion"
               />
             </div>
           </div>
@@ -412,6 +413,7 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(aplicacion)}
+                          title="Editar Aplicacion"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

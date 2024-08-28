@@ -326,6 +326,7 @@ function TablaCatSOBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar SO"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatSOBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(so)}
+                          title="Editar SO"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

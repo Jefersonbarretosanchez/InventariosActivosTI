@@ -296,6 +296,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
                         <td style={{ paddingLeft: '1vw' }}>
                           <button
                             className="btn-accion"
+                            title="Detalle licencia"
                             onClick={() =>
                               abrirModal(`Detalle Activo`, formFields, ALL_INPUT_IDS, activo)
                             }

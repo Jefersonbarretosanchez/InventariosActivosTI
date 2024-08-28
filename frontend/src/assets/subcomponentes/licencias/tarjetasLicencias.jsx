@@ -9,7 +9,7 @@ function TarjetasLicencias({ totalActivos, totalInactivos, totalLicenciasPersona
   return (
     <div className="estadisticas-activos">
       <div className="tarjeta-estadisticas-equipos">
-        <Link to="/asigEquipos" style={{ color: "black", transform: "scale(1.2)" }}>
+        <Link to="/licencias" style={{ color: "black", transform: "scale(1.2)" }}>
           <div className="icono-estatisticas-activos">
             <Link to="/licencias">
               <img src={licencias} alt="Logo Scala" className="logo-activos" />

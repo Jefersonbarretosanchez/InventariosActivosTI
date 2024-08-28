@@ -326,6 +326,7 @@ function TablaCatCoordinadoresBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Coordinadores"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatCoordinadoresBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(coordinador)}
+                          title="Editar Coordinadores"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

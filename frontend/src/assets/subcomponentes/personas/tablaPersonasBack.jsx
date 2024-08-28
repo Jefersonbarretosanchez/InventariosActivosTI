@@ -505,8 +505,9 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Persona"
               />
-              <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              <FontAwesomeIcon title="Aplicar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -558,12 +559,14 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(persona)}
+                          title="Editar Persona"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(persona)}
+                          title="Detalle Persona"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

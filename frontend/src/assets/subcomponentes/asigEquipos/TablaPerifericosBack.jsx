@@ -431,6 +431,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Crear Periferico"
               />
             </div>
           </div>
@@ -483,12 +484,14 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(periferico)}
+                          title="Editar Periferico"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(periferico)}
+                          title="Detalle Periferico"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

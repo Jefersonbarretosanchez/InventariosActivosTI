@@ -326,6 +326,7 @@ function TablaCatMarcaEquipoBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Marca Equipo"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatMarcaEquipoBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(marca)}
+                          title="Editar Marca Equipo"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

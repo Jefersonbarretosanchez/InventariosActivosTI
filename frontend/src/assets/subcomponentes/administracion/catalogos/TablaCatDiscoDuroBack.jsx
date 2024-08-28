@@ -326,6 +326,7 @@ function TablaCatDiscoDuroBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Disco Duro"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatDiscoDuroBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(discoDuro)}
+                          title="Editar Disco Duro"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

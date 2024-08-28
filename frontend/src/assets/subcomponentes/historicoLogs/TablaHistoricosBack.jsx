@@ -256,7 +256,7 @@ function TablaHistoricosBack() {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon style={{ marginLeft: '1vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              <FontAwesomeIcon title="Agregar Filtros" style={{ marginLeft: '1vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -299,6 +299,7 @@ function TablaHistoricosBack() {
 
                           className="btn-accion"
                           onClick={() => handleInfo(historico)}
+                          title="Detalle"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

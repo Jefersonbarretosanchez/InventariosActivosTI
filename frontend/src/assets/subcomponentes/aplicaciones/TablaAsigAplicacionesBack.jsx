@@ -477,6 +477,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Asignar Aplicacion"
               />
             </div>
           </div>
@@ -516,6 +517,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
                         <button
                           className="btn-accion"
                           onClick={() => handleDesgree(asigaplicaciones)}
+                          title="desasignar Aplicacion"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faMinus}
                             style={{ marginLeft: '1.4vw' }} />

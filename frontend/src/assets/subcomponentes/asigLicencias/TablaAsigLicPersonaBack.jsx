@@ -475,6 +475,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Asignar Licencia"
               />
             </div>
           </div>
@@ -516,7 +517,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                         <button
                           className="btn-accion"
                           onClick={() => handleDesgree(asiglicpersona)}
-
+                          title="Desasignar Licencia"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faMinus}
                             style={{ marginLeft: '1.4vw' }} />

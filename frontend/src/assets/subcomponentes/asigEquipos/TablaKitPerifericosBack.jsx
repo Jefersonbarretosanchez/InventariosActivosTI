@@ -500,6 +500,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
               className="agregar-licPersonas"
               onClick={() => handleCreate()}
               icon={faPlus}
+              title="Crear Kit"
             />
           </div>
 
@@ -536,12 +537,14 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(kitperiferico)}
+                          title="Editar Kit"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(kitperiferico)}
+                          title="Detalle Kit"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

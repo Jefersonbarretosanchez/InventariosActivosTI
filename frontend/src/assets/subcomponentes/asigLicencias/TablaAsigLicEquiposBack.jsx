@@ -475,6 +475,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Asignar Licencia"
               />
 
             </div>
@@ -516,6 +517,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                         <button
                           className="btn-accion"
                           onClick={() => handleDesgree(asiglicequipo)}
+                          title="Desasignar Licencia"
 
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faMinus}

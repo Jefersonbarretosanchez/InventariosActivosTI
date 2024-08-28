@@ -326,6 +326,7 @@ function TablaCatAreaBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Area"
               />
             </div>
           </div>
@@ -365,6 +366,8 @@ function TablaCatAreaBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(area)}
+                          title="Editar Area"
+
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

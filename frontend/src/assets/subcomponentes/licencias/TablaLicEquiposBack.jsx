@@ -458,8 +458,9 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Licencia"
               />
-              <FontAwesomeIcon className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              <FontAwesomeIcon title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -514,12 +515,14 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(licequipo)}
+                          title="Editar licencia"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(licequipo)}
+                          title="Detalle licencia"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

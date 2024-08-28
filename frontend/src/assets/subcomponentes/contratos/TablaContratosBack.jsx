@@ -377,6 +377,7 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Contrato"
               />
             </div>
           </div>
@@ -419,12 +420,14 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
                         <button
                           className="btn-accion"
                           onClick={() => handleEdit(contrato)}
+                          title="Editar Contrato"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
                         <button
                           className="btn-accion"
                           onClick={() => handleInfo(contrato)}
+                          title="Detalle Contrato"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
                         </button>

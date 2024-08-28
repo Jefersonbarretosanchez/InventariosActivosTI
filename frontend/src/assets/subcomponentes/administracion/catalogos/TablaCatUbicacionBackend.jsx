@@ -326,6 +326,7 @@ function TablaCatUbicacionBackend() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Ubicacion"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatUbicacionBackend() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(ubicacion)}
+                          title="Editar Ubicacion"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

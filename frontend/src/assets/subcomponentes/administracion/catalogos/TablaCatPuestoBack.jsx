@@ -326,6 +326,7 @@ function TablaCatPuestoBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Cargo"
               />
             </div>
           </div>
@@ -365,6 +366,7 @@ function TablaCatPuestoBack() {
                           style={{ marginLeft: '.8vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(puesto)}
+                          title="Editar Cargo"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>

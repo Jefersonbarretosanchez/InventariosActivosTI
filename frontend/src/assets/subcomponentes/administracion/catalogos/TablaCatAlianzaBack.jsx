@@ -333,6 +333,7 @@ function TablaCatAlianzaBack() {
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
+                title="Agregar Alianza"
               />
             </div>
           </div>
@@ -376,6 +377,7 @@ function TablaCatAlianzaBack() {
                           style={{ marginLeft: '3vw' }}
                           className="btn-accion"
                           onClick={() => handleEdit(alianza)}
+                          title="Editar Alianza"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                         </button>
