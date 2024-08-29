@@ -239,7 +239,7 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTP_ONLY = True
 # Configuración para cookies
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173/",
+    "http://localhost:5173",
     'https://sigs-dev.scalahed.com',
 ]
 CORS_EXPOSE_HEADERS = ["Content-Type","X-CSRFToken"]

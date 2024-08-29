@@ -118,20 +118,20 @@ class Equipo(models.Model):
     modelo = models.CharField(max_length=30, verbose_name='Modelo')
     sereal = models.CharField(max_length=30, verbose_name='Serial')
     id_marcaequipo = models.ForeignKey(
-        CatMarcaequipo, models.DO_NOTHING, db_column='id_marcaequipo', verbose_name='Marca Equipo')
+        CatMarcaequipo, models.DO_NOTHING, db_column='id_marcaequipo', verbose_name='Marca Equipo',default=1)
     id_so = models.ForeignKey(
-        CatSo, models.DO_NOTHING, db_column='id_so', verbose_name='Sistema Operativo')
+        CatSo, models.DO_NOTHING, db_column='id_so', verbose_name='Sistema Operativo',default=1)
     id_ram = models.ForeignKey(
-        CatMemoriaram, models.DO_NOTHING, db_column='id_ram', verbose_name='Memoria RAM')
+        CatMemoriaram, models.DO_NOTHING, db_column='id_ram', verbose_name='Memoria RAM',default=1)
     id_discoduro = models.ForeignKey(
-        CatDiscoduro, models.DO_NOTHING, db_column='id_discoduro', verbose_name='Disco Duro')
+        CatDiscoduro, models.DO_NOTHING, db_column='id_discoduro', verbose_name='Disco Duro',default=1)
     anydesk = models.CharField(max_length=30, verbose_name='Anydesk')
     id_tipopropiedad = models.ForeignKey(
-        CatTipopropiedad, models.DO_NOTHING, db_column='id_tipopropiedad', verbose_name='Tipo Propiedad')
+        CatTipopropiedad, models.DO_NOTHING, db_column='id_tipopropiedad', verbose_name='Tipo Propiedad',default=1)
     id_tipoequipo = models.ForeignKey(
-        CatTipoequipo, models.DO_NOTHING, db_column='id_tipoequipo', verbose_name='Tipo Equipo')
+        CatTipoequipo, models.DO_NOTHING, db_column='id_tipoequipo', verbose_name='Tipo Equipo',default=1)
     id_estadoequipo = models.ForeignKey(
-        CatEstadoequipo, models.DO_NOTHING, db_column='id_estadoequipo', verbose_name='Estado')
+        CatEstadoequipo, models.DO_NOTHING, db_column='id_estadoequipo', verbose_name='Estado',default=1)
     id_coordinadores = models.ForeignKey(
         CatCoordinadores, models.DO_NOTHING, db_column='id_coordinadores', verbose_name='Coordinador', blank=True, null=True)
     id_ubicacion = models.ForeignKey(
@@ -142,7 +142,6 @@ class Equipo(models.Model):
         max_length=200, verbose_name='Observaciones', blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'equipo'
 
 

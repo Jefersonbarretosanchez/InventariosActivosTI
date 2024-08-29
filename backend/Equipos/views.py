@@ -185,6 +185,55 @@ class CatMarcaEquipoViewSet(generics.ListCreateAPIView):
     serializer_class = MarcaEquipoSerializer
     permission_classes = [AllowAny]
     
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        Marcaequipo = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Marca Equipo",
+                activo_modificado=Marcaequipo.nombre,
+                descripcion=f'Se creó la marca de equipo "{
+                    Marcaequipo.nombre}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error Al Crear La Marca De Equipo',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Marca de equipo creada exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear la marca de equipo',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear la marca de equipo'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class CatMarcaequipoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = MarcaEquipoSerializer
@@ -225,9 +274,9 @@ class CatMarcaequipoUpdate(generics.RetrieveUpdateAPIView):
                         usuario=self.request.user if self.request.user.is_authenticated else None,
                         correo_usuario=self.request.user.email if self.request.user.is_authenticated else 'anonimo@example.com',
                         tipo_cambio="Actualización",
-                        tipo_activo="Cat Marca Equipo",
-                        activo_modificado=verbose_name,
-                        descripcion=f'Cambio en {verbose_name}: de {original_value} a {current_value}'
+                        tipo_activo="Marca Equipo",
+                        activo_modificado=verbose_name.title(),
+                        descripcion=f'Cambio realizado en el {verbose_name}: de {original_value} a {current_value}'
                     )
 
             return Response(serializer.data)
@@ -249,6 +298,55 @@ class CatSoViewSet(generics.ListCreateAPIView):
     queryset = CatSo.objects.all()
     serializer_class = SoSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        So = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Sistema Operativo",
+                activo_modificado=So.nombre,
+                descripcion=f'Se creó el registro "{
+                    So.nombre}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el sistema operativo',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Sistema operativo creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el sistema operativo',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el sistema operativo'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class CatSoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -310,11 +408,59 @@ class CatSoUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el catalogo de sistemas operativos'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class CatMRamViewSet(generics.ListCreateAPIView):
     queryset = CatMemoriaram.objects.all()
     serializer_class = MRamSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        MemRam = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Memoria Ram",
+                activo_modificado=MemRam.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    MemRam.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CatMemoriaramUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -376,11 +522,59 @@ class CatMemoriaramUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el catalogo de memorias Ram'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class CatDiscoDuroViewSet(generics.ListCreateAPIView):
     queryset = CatDiscoduro.objects.all()
     serializer_class = DiscoDuroSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        DiscoDuro = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Disco Duro",
+                activo_modificado=DiscoDuro.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    DiscoDuro.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class CatDiscoduroUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -442,12 +636,59 @@ class CatDiscoduroUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el catalogo de discos duros'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
 class CatTipoPropiedadViewSet(generics.ListCreateAPIView):
     queryset = CatTipopropiedad.objects.all()
     serializer_class = TipoPropiedadSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        TipoPropiedad = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Tipo De Propiedad",
+                activo_modificado=TipoPropiedad.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    TipoPropiedad.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class CatTipopropiedadUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -509,11 +750,59 @@ class CatTipopropiedadUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el catalogo de tipo propiedad'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class CatTipoEquipoViewSet(generics.ListCreateAPIView):
     queryset = CatTipoequipo.objects.all()
     serializer_class = TipoEquipoSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        tipo_equipo = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Tipo De Equipo",
+                activo_modificado=tipo_equipo.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    tipo_equipo.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class CatTipoequipoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -575,11 +864,59 @@ class CatTipoequipoUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el catalogo de tipo equipo'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class CatEstadoEquipoViewSet(generics.ListCreateAPIView):
     queryset = CatEstadoequipo.objects.all()
     serializer_class = EstadoEquipoSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        estado_equipo = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Estado Equipo",
+                activo_modificado=estado_equipo.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    estado_equipo.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CatEstadoequipoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -645,6 +982,55 @@ class CatCoordinadoresViewSet(generics.ListCreateAPIView):
     queryset = CatCoordinadores.objects.all()
     serializer_class = CoordinadoresSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        coordinadores = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Coordinador",
+                activo_modificado=coordinadores.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    coordinadores.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CatCoordinadoresUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -706,11 +1092,60 @@ class CatCoordinadoresUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar el catalogo de coordinadores'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class CatUbicacionViewSet(generics.ListCreateAPIView):
     queryset = CatUbicacion.objects.all()
     serializer_class = UbicacionSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        ubicacion = serializer.save()
+
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Ubicacion",
+                activo_modificado=ubicacion.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    ubicacion.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     
 class CatUbicacionUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
@@ -773,19 +1208,15 @@ class CatUbicacionUpdate(generics.RetrieveUpdateAPIView):
             return Response({'message': 'Error inesperado al actualizar el catalogo de ubicaciones de bodega'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Vistas Modulo Asignaciones
-
-
 class PersonasAsigEquiposView(generics.ListAPIView):
     queryset = Persona.objects.all()
     serializer_class = PersonasAsigEquiposSerializer
     permission_classes = [AllowAny]
 
-
 class EquiposAsignacionViewSet(generics.ListAPIView):
     queryset = Equipo.objects.all()
     serializer_class = EquiposAsignacionSerializer
     permission_classes = [AllowAny]
-
 
 class AsignarEquipoView(generics.ListCreateAPIView):
     queryset = AsignacionEquipos.objects.select_related(
@@ -813,8 +1244,8 @@ class AsignarEquipoView(generics.ListCreateAPIView):
                 tipo_cambio="Asignación",
                 tipo_activo="Equipo",
                 activo_modificado=AsignacionEquipos.id_equipo.nombre_equipo,
-                descripcion=f'Se asigno el equipo "{AsignacionEquipos.id_equipo.nombre_equipo} a {
-                    AsignacionEquipos.id_trabajador.nombres}"'
+                descripcion=f'Se asigno el equipo {AsignacionEquipos.id_equipo.nombre_equipo} a {
+                    AsignacionEquipos.id_trabajador.nombres}'
             )
             print("Registro histórico creado exitosamente.")
         except Exception as e:
@@ -928,7 +1359,7 @@ class DesasignarEquipoView(generics.RetrieveUpdateAPIView):
             tipo_cambio="Desasignación",
             tipo_activo="Equipo",
             activo_modificado=equipo.nombre_equipo,
-            descripcion=f'Se elimino la asignación del equipo "{equipo.nombre_equipo}" a {
+            descripcion=f'Se elimino la asignación del equipo {equipo.nombre_equipo} a {
                 instance.id_trabajador.nombres} {instance.id_trabajador.apellidos}'
         )
 
@@ -944,13 +1375,109 @@ class EstadoPerifericosView(generics.ListCreateAPIView):
     queryset = CatEstadoPeriferico.objects.all()
     serializer_class = EstadoPerifericosSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        # Guardar la nueva Equipo
+        estado_periferico = serializer.save()
 
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Estado Periferico",
+                activo_modificado=estado_periferico.nombre.title(),
+                descripcion=f'Se creó el registro "{
+                    estado_periferico.nombre.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class PerifericosListCreate(generics.ListCreateAPIView):
     queryset = Perifericos.objects.all()
     serializer_class = PerifericosSerializer
     permission_classes = [AllowAny]
+    
+    def perform_create(self, serializer):
+        
+        periferico = serializer.save()
 
+        # Intentar crear un registro en la tabla de historicos
+        try:
+            # Obtener el usuario si está disponible
+            usuario = self.request.user if self.request.user.is_authenticated else None
+
+            # Crear el registro en la tabla de historicos
+            Historicos.objects.create(
+                usuario=usuario,
+                correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                tipo_cambio="Creacion",
+                tipo_activo="Periferico",
+                activo_modificado=periferico.nombre_periferico.title(),
+                descripcion=f'Se creó el registro "{
+                    periferico.nombre_periferico.title()}"'
+            )
+        except Exception as e:
+            # Manejar cualquier excepción aquí si es necesario
+            print(f'Error al crear el registro histórico: {e}')
+    
+    def create(self, request, *args, **kwargs):
+
+        errors = {}
+        if errors:
+            return Response({'message': 'Error al crear el registro',  'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            response = super().create(request, *args, **kwargs)
+            
+            customized_response = {
+                'message': 'Registro creado exitosamente'
+            }
+            return Response(customized_response, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            print(e)
+            # Construir la respuesta personalizada
+            errors = {field: [
+                str(message)] for field, messages in e.detail.items() for message in messages}
+            customized_response = {
+                'message': 'Error al crear el registro',
+                'errors': errors
+            }
+            return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class PerifericosUpdate(generics.RetrieveUpdateAPIView):
     queryset = Perifericos.objects.all()
@@ -967,12 +1494,6 @@ class KitPerifericosListCreateView(generics.ListCreateAPIView):
 class KitPerifericosUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = KitPerifericos.objects.all()
     serializer_class = KitPerifericosUpdateSerializer
-    permission_classes = [AllowAny]
-
-
-class PerifericosUpdate(generics.RetrieveUpdateAPIView):
-    queryset = Perifericos.objects.all()
-    serializer_class = PerifericosSerializer
     permission_classes = [AllowAny]
 
 

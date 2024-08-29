@@ -150,7 +150,7 @@ class PersonasAsigEquiposSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Persona
-        fields = ['id_trabajador', 'nombres','apellidos']
+        fields = ['id_trabajador', 'nombres','apellidos', 'correo_institucional']
         
 
 class EquiposAsignacionSerializer(serializers.ModelSerializer):
