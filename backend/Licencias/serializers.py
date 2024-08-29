@@ -14,7 +14,8 @@ class BaseModel(serializers.ModelSerializer):
 class PersonaLicenciasSerializers(serializers.ModelSerializer):
     class Meta:
         model = Persona
-        fields = ['id_trabajador', 'nombres', 'apellidos']
+        fields = ['id_trabajador', 'nombres',
+                  'apellidos', 'correo_institucional']
 
 
 class EstadoLicenciasSerializer(serializers.ModelSerializer):
@@ -84,7 +85,8 @@ class PersonaSinAsignacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Persona
         # Incluye los campos necesarios
-        fields = ['id_trabajador', 'nombres', 'apellidos', 'correo_institucional']
+        fields = ['id_trabajador', 'nombres',
+                  'apellidos', 'correo_institucional']
 
 
 class LicenciaPerSinAsignarSerializer(serializers.ModelSerializer):
@@ -95,6 +97,7 @@ class LicenciaPerSinAsignarSerializer(serializers.ModelSerializer):
             'nombre_licencia',
         ]
 
+
 class LicenciaEquSinAsignarSerializer(serializers.ModelSerializer):
     class Meta:
         model = LicenciasEquipo
@@ -102,6 +105,7 @@ class LicenciaEquSinAsignarSerializer(serializers.ModelSerializer):
             'id_licencia',
             'nombre_licencia',
         ]
+
 
 class EquipoSinAsignacionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -226,10 +230,12 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
         source='id_licencia.nombre_licencia', read_only=True)
     nombre_trabajador = serializers.CharField(
         source='id_trabajador.nombres', read_only=True)
+    apellidos_trabajador = serializers.CharField(
+        source='id_trabajador.apellidos', read_only=True)
 
     class Meta:
         model = AsignacionLicenciaPersona
-        fields = ['id', 'id_trabajador', 'nombre_trabajador',
+        fields = ['id', 'id_trabajador', 'nombre_trabajador', 'apellidos_trabajador',
                   'id_licencia', 'nombre_licencia']
 
     def validate(self, data):
@@ -239,7 +245,8 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
                 id_licencia=data['id_licencia']).first()
             if asignacion_existente:
                 usuario = asignacion_existente.id_trabajador
-                raise serializers.ValidationError({"id_licencia": f"la licencia ya está asignada a {usuario.nombres} {usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."})
+                raise serializers.ValidationError({"id_licencia": f"la licencia ya está asignada a {usuario.nombres} {
+                                                  usuario.apellidos} (ID: {usuario.id_trabajador}, Email: {usuario.correo_institucional})."})
 
         else:
             # En la actualización, verificar si id_licencia ha cambiado y si el nuevo valor ya está asignado
