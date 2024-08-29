@@ -84,7 +84,7 @@ class PersonaSinAsignacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Persona
         # Incluye los campos necesarios
-        fields = ['id_trabajador', 'nombres', 'apellidos']
+        fields = ['id_trabajador', 'nombres', 'apellidos', 'correo_institucional']
 
 
 class LicenciaPerSinAsignarSerializer(serializers.ModelSerializer):
