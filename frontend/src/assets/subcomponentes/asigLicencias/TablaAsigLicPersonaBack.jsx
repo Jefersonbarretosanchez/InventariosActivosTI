@@ -100,7 +100,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       setTrabajador(
         responseTrabajador.data.map((item) => ({
           value: item.id_trabajador,
-          label: item.nombres, // Mantener el nombre original en el valor
+          label: item.correo_institucional,
         }))
       );
 
@@ -115,12 +115,12 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       );
 
       const responseTrabajadorFiltrados = await api.get(
-        `${API_URL}/api/personas_sin_asignacion_licencia/`
+        `${API_URL}/api/licencias/responsables/`
       );
       setTrabajadorFiltrado(
         responseTrabajadorFiltrados.data.map((item) => ({
           value: item.id_trabajador,
-          label: item.nombres, // Mantener el nombre original en el valor
+          label: item.nombres + " " + item.apellidos, // Mantener el nombre original en el valor
         }))
       );
 
@@ -295,7 +295,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       if (field.id === "id_licencia") {
         return { ...field, options: action === "create" ? lienciaFiltrada : licencia };
       } else if (field.id === "id_trabajador") {
-        return { ...field, options: action === "create" ? trabajador : trabajador };
+        return { ...field, options: action === "create" ? trabajador : trabajadorFiltrado };
       }
       return field;
     });
@@ -510,7 +510,7 @@ function TablaAsigLicPersonaBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                     <tr key={asiglicpersona.id}>
                       <td style={{ paddingLeft: "9vw" }}>{asiglicpersona.id}</td>
                       <td style={{ paddingLeft: "0vw" }}>{asiglicpersona.nombre_licencia}</td>
-                      <td>{asiglicpersona.nombre_trabajador} {asiglicpersona.apellido_trabajador}</td>
+                      <td>{asiglicpersona.nombre_trabajador} {asiglicpersona.apellidos_trabajador}</td>
 
                       <td>
 

@@ -220,6 +220,10 @@ input {
     /* Cambia el color al hacer hover */
 }
 
+.button1-login:hover {
+    transform: scale(1.05);
+}
+
 .botonreg-login:active {
     transform: scale(1.1);
     transition: transform 0.1s ease;

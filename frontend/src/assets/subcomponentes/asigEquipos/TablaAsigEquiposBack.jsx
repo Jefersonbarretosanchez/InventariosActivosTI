@@ -103,7 +103,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       );
       const trabajadoresData = responseTrabajador.data.map((item) => ({
         value: item.id_trabajador,
-        label: item.nombres,
+        label: item.nombres + " " + item.apellidos,
       }));
       setTrabajador(trabajadoresData);
 
@@ -154,7 +154,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
       setTrabajadorFiltrado(
         responseTrabajadorFiltrados.data.map((item) => ({
           value: item.id_trabajador,
-          label: item.nombres,
+          label: item.correo_institucional,
         }))
       );
 
