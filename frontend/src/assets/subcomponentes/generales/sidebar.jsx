@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard, faDesktop, faFileContract, faFileSignature, faGlobe, faIdCard, faPaste, faRectangleList, faTruckRampBox, faUserGear, faUsers, faUsersLine, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
 import { faBoxesStacked, faUserTie } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation  } from 'react-router-dom';
 import logo from '../../imagenes/login.png';
 import nuevaimagen from '../../imagenes/logopeq.jpg';
 import { faMicrosoft } from '@fortawesome/free-brands-svg-icons';
+import { AuthContext } from '../../../AuthContext';
 
 function Sidebar() {
     const [expanded, setExpanded] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const handleMouseMovement = e => {
@@ -34,8 +37,11 @@ function Sidebar() {
         { name: 'Aplicaciones', icon: faMicrosoft, route: '/aplicaciones' },
         { name: 'Contratos', icon: faFileContract, route: '/contratos' },
         { name: 'Historico Logs', icon: faRectangleList, route: '/historicoLogs' },
-        { name: 'Administración', icon: faUserGear, route: '/administracion' },
+        { name: 'Administración', icon: faUserGear, route: '/administracion', requiredRole: 'Admin' },
     ];
+
+    // Filtrar el menú basado en el rol del usuario
+    const filteredMenuItems = menuItems.filter(item => !item.requiredRole || (user && user.role === item.requiredRole));
 
     return (
         <aside id="menu-lateral" className={`menu-lateral-gen ${expanded ? 'expanded' : ''}`}>
@@ -44,7 +50,7 @@ function Sidebar() {
             </div>
             <nav>
                 <ul>
-                    {menuItems.map(item => (
+                    {filteredMenuItems.map(item => (
                         <li key={item.name} className={location.pathname === item.route ? 'active-icono' : ''}
                             onClick={() => navigate(item.route)}>
                             <i className="icono"><FontAwesomeIcon icon={item.icon} /></i>

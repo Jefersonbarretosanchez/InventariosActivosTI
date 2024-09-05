@@ -14,8 +14,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # Add custom claims
-        # token['username'] = user.username
+        # Obtener el primer grupo del usuario como su rol
+        if user.groups.exists():
+            token['role'] = user.groups.first().name  # Asigna el primer grupo como rol
+        else:
+            token['role'] = 'No role assigned'
         return token
 
     def validate(self, attrs):
@@ -26,6 +29,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'email': self.user.email,
             'nombre': self.user.first_name,
             'apellidos': self.user.last_name,
+            'role': self.user.groups.first().name if self.user.groups.exists() else 'No role assigned'
         }})
 
         return data

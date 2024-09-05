@@ -16,6 +16,7 @@ import Aplicaciones from "./assets/componentes/aplicaciones.jsx";
 import Contratos from "./assets/componentes/contratos.jsx";
 import HistLogs from "./assets/componentes/histLogs.jsx";
 import Administracion from "./assets/componentes/administracion.jsx";
+import NotAuthorized from "./assets/paginas/NotAuthorized.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -40,7 +41,12 @@ root.render(
           <Route path="/aplicaciones" element={<ProtectedRoute><Aplicaciones /></ProtectedRoute>} />
           <Route path="/contratos" element={<ProtectedRoute><Contratos /></ProtectedRoute>} />
           <Route path="/historicoLogs" element={<ProtectedRoute><HistLogs /></ProtectedRoute>} />
-          <Route path="/administracion" element={<ProtectedRoute><Administracion /></ProtectedRoute>} />
+          <Route path="/administracion" element={
+          <ProtectedRoute requiredRole="Admin">
+            <Administracion />
+          </ProtectedRoute>
+        } />
+          <Route path="/no_autorizado" element={<NotAuthorized />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </BrowserRouter>
