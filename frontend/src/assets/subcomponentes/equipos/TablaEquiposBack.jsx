@@ -20,6 +20,7 @@ import Paginate from "../generales/paginate";
 import FiltroDinamico from "../generales/filtroDinamico";
 
 function TablaEquiposBack({ totalLicenciasEquipos }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -569,13 +570,14 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
+              {permisos && permisos.personas === 'rw' && (<FontAwesomeIcon
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
                 title="Agregar Equipo"
               />
-              <FontAwesomeIcon title="Aplicar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              )}
+              <FontAwesomeIcon style={{ marginLeft: '0.5vw' }} title="Aplicar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -625,20 +627,24 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
                         {equipo.nombre_estado_equipo}
                       </td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(equipo)}
-                          title="Editar Equipo"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(equipo)}
-                          title="Detalle equipo"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(equipo)}
+                            title="Editar Equipo"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.personas !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(equipo)}
+                            title="Detalle equipo"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

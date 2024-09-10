@@ -2,6 +2,7 @@
 import logging
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
@@ -23,6 +24,8 @@ from Licencias.models import AsignacionLicenciaPersona
 from ComplementosActivos.models import AsignacionAplicaciones
 from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
 from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
+from rest_framework.decorators import api_view
+
 # Create your views here.
 
 # Configuración del logger
@@ -193,12 +196,12 @@ class PersonaListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Persona.objects.select_related(
-        'id_centro_costo', 
-        'id_area', 
-        'id_region', 
-        'id_cargo', 
-        'id_estado_persona'
-    ).all()
+            'id_centro_costo',
+            'id_area',
+            'id_region',
+            'id_cargo',
+            'id_estado_persona'
+        ).all()
 
     def perform_create(self, serializer):
         # Guardar la nueva persona
@@ -268,10 +271,10 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
     serializer_class = PersonaSerializer
     permission_classes = [AllowAny]
     queryset = Persona.objects.select_related(
-        'id_centro_costo', 
-        'id_area', 
-        'id_region', 
-        'id_cargo', 
+        'id_centro_costo',
+        'id_area',
+        'id_region',
+        'id_cargo',
         'id_estado_persona'
     ).all()
 
@@ -296,14 +299,16 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
                 errors["Correo Personal"] = correo_personal
         if Persona.objects.filter(correo_institucional=correo_institucional).exclude(id_trabajador=instance.id_trabajador).exists():
             errors["Correo Institucional"] = correo_institucional
-            
+
         # Validación para inactivar la persona
-        nuevo_estado_id = request.data.get('id_estado_persona', instance.id_estado_persona.id_estado_persona)
+        nuevo_estado_id = request.data.get(
+            'id_estado_persona', instance.id_estado_persona.id_estado_persona)
         if int(nuevo_estado_id) == CatEstadoPersona.objects.get(nombre="Inactivo").id_estado_persona:
             if AsignacionEquipos.objects.filter(id_trabajador=instance).exists() or \
                AsignacionLicenciaPersona.objects.filter(id_trabajador=instance).exists() or \
                AsignacionAplicaciones.objects.filter(id_trabajador=instance).exists():
-                errors["Estado Persona"] = ["No se puede inactivar a esta persona porque tiene asignaciones activas de equipos, licencias y/o aplicaciones."]
+                errors["Estado Persona"] = [
+                    "No se puede inactivar a esta persona porque tiene asignaciones activas de equipos, licencias y/o aplicaciones."]
 
         if errors:
             return Response({'message': 'Error Al Actualizar El Registro', 'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -732,7 +737,8 @@ class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
 
 # modulo historicos
 class HistoricosList(generics.ListAPIView):
-    queryset = Historicos.objects.select_related('usuario').order_by('-fecha_registro')
+    queryset = Historicos.objects.select_related(
+        'usuario').order_by('-fecha_registro')
     serializer_class = historicoSerializer
 
 
@@ -747,3 +753,81 @@ class ActivosViewSet(generics.ListAPIView):
                  queryset=AsignacionAplicaciones.objects.select_related('id_aplicacion')),
     ).select_related('id_centro_costo', 'id_area', 'id_region', 'id_cargo', 'id_estado_persona')
     serializer_class = ActivosSerializer
+
+
+# Definimos los permisos de los roles directamente en el código
+PERMISOS_ROLES = {
+    'Administrador': {
+        'activos': 'rw',
+        'personas': 'rw',
+        'equipos': 'rw',
+        'asignacion_equipos': 'rw',
+        'licencias': 'rw',
+        'asignacion_licencias': 'rw',
+        'aplicaciones': 'rw',
+        'contratos': 'rw',
+        'logs': 'rw',
+        'administracion': 'rw',
+    },
+    'Agente Mesa de Servicios': {
+        'activos': 'rw',
+        'personas': 'rw',
+        'equipos': 'rw',
+        'asignacion_equipos': 'rw',
+        'licencias': 'rw',
+        'asignacion_licencias': 'rw',
+        'aplicaciones': 'rw',
+        'contratos': 'n/a',
+        'logs': 'rw',
+        'administracion': 'n/a',
+    },
+    'Agente RRHH': {
+        'activos': 'r',
+        'personas': 'rw',
+        'equipos': 'n/a',
+        'asignacion_equipos': 'n/a',
+        'licencias': 'n/a',
+        'asignacion_licencias': 'n/a',
+        'aplicaciones': 'n/a',
+        'contratos': 'n/a',
+        'logs': 'n/a',
+        'administracion': 'n/a',
+    },
+    'Agente Compras': {
+        'activos': 'r',
+        'personas': 'n/a',
+        'equipos': 'rw',
+        'asignacion_equipos': 'rw',
+        'licencias': 'rw',
+        'asignacion_licencias': 'r',
+        'aplicaciones': 'rw',
+        'contratos': 'rw',
+        'logs': 'n/a',
+        'administracion': 'n/a',
+    },
+    'Visitante': {
+        'activos': 'r',
+        'personas': 'r',
+        'equipos': 'r',
+        'asignacion_equipos': 'r',
+        'licencias': 'r',
+        'asignacion_licencias': 'r',
+        'aplicaciones': 'r',
+        'contratos': 'n/a',
+        'logs': 'n/a',
+        'administracion': 'n/a',
+    }
+}
+
+
+@api_view(['GET'])
+def obtener_permisos_usuario(request):
+    user = request.user
+    permisos = {}
+
+    # Verificamos a qué grupo (rol) pertenece el usuario
+    grupo = user.groups.first()  # Suponemos que el usuario solo pertenece a un grupo
+    if grupo:
+        permisos = PERMISOS_ROLES.get(grupo.name, {})
+
+    return Response({'permisos': permisos})

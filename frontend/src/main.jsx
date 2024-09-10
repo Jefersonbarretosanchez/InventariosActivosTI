@@ -27,23 +27,23 @@ function Logout() {
 root.render(
   <AuthProvider>
     {/* <React.StrictMode> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
-          <Route path="/personas" element={<ProtectedRoute><Personas /></ProtectedRoute>} />
-          <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
-          <Route path="/asigEquipos" element={<ProtectedRoute><AsigEquipos /></ProtectedRoute>} />
-          <Route path="/licencias" element={<ProtectedRoute><Licencias /></ProtectedRoute>} />
-          <Route path="/asiglicencias" element={<ProtectedRoute><Asiglicencias /></ProtectedRoute>} />
-          <Route path="/aplicaciones" element={<ProtectedRoute><Aplicaciones /></ProtectedRoute>} />
-          <Route path="/contratos" element={<ProtectedRoute><Contratos /></ProtectedRoute>} />
-          <Route path="/historicoLogs" element={<ProtectedRoute><HistLogs /></ProtectedRoute>} />
-          <Route path="/administracion" element={<ProtectedRoute><Administracion /></ProtectedRoute>} />
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
+        <Route path="/personas" element={<ProtectedRoute requiredPermission="personas"><Personas /></ProtectedRoute>} />
+        <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
+        <Route path="/asigEquipos" element={<ProtectedRoute><AsigEquipos /></ProtectedRoute>} />
+        <Route path="/licencias" element={<ProtectedRoute><Licencias /></ProtectedRoute>} />
+        <Route path="/asiglicencias" element={<ProtectedRoute><Asiglicencias /></ProtectedRoute>} />
+        <Route path="/aplicaciones" element={<ProtectedRoute><Aplicaciones /></ProtectedRoute>} />
+        <Route path="/contratos" element={<ProtectedRoute><Contratos /></ProtectedRoute>} />
+        <Route path="/historicoLogs" element={<ProtectedRoute><HistLogs /></ProtectedRoute>} />
+        <Route path="/administracion" element={<ProtectedRoute><Administracion /></ProtectedRoute>} />
+        <Route path="*" element={<NotFound />}></Route>
+      </Routes>
+    </BrowserRouter>
     {/* </React.StrictMode> */}
   </AuthProvider>
 );

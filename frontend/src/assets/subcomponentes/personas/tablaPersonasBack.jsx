@@ -23,6 +23,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 
 function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetchData }) {
   const { token } = useContext(AuthContext);
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -87,6 +88,8 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
       } finally {
         setIsLoading(false);
       }
+      console.log(localStorage.getItem('permisos'));
+
     };
 
     loadPersonas();
@@ -500,14 +503,17 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                 className="buscador-icon-activos"
               />
             </div>
+            {/* Mostrar botón de agregar solo si tiene permiso de escritura */}
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Persona"
-              />
-              <FontAwesomeIcon title="Aplicar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              {permisos && permisos.personas === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Persona"
+                />
+              )}
+              <FontAwesomeIcon style={{ marginLeft: '0.5vw' }} title="Aplicar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -556,20 +562,25 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
                         {persona.nombre_estado_persona}
                       </td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(persona)}
-                          title="Editar Persona"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(persona)}
-                          title="Detalle Persona"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(persona)}
+                            title="Editar Persona"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {/* Mostrar botón de ver detalles siempre que tenga permiso de lectura */}
+                        {permisos && permisos.personas !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(persona)}
+                            title="Detalle Persona"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))
