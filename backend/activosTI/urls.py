@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import obtener_permisos_usuario
 # from .views import PersonaViewSet,UserViewSet
 # from rest_framework.routers import DefaultRouter
 
@@ -26,4 +27,6 @@ urlpatterns = [
     path('estado_persona/<int:pk>/',
          views.CatEstadoPersonaUpdate.as_view(), name="estado_persona-update"),
     path('activos/', views.ActivosViewSet.as_view(), name="activos"),
+    path('api/permisos/', obtener_permisos_usuario,
+         name='obtener_permisos_usuario'),
 ]

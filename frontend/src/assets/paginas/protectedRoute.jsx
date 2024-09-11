@@ -2,17 +2,19 @@ import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthContext';
 
-const ProtectedRoute = ({ children, requiredRole  }) => {
+const ProtectedRoute = ({ children, requiredPermission }) => {
   const { user } = useContext(AuthContext);
 
-  // console.log('ProtectedRoute user:', user); // Verifica el estado del usuario
+  console.log('ProtectedRoute user:', user);
   if (!user) {
     return <Navigate to="/" />;
   }
 
-  // Verificar el rol del usuario
-  if (requiredRole && user.role !== requiredRole) {
-    return <Navigate to="/no_autorizado" />; // Redirigir a una página de acceso denegado o a otra ruta
+  const permisos = JSON.parse(localStorage.getItem('permisos'));
+
+  // Verificar si el usuario tiene el permiso requerido para acceder a la ruta
+  if (requiredPermission && (!permisos || permisos[requiredPermission] === 'n/a')) {
+    return <Navigate to="/not-authorized" />;
   }
 
   return children;

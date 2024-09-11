@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthContext';
-import { login } from '../../api';
+import { login, api } from '../../api';
 import logo from '../imagenes/login.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +27,17 @@ export default function Login() {
       if (user) {
         setUser(user);
 
+
+        const response = await api.get('api/api/permisos/', {
+          headers: {
+            Authorization: `Bearer ${user.token}`, // 'token' esté en el objeto user
+          },
+        });
+
+        const permisos = response.data.permisos;
+        // Guardamos los permisos en localStorage
+        localStorage.setItem('permisos', JSON.stringify(permisos));
+
         // Iniciar la animación después de un breve retardo
         setTimeout(() => {
           setAnimate(true);
@@ -35,7 +46,7 @@ export default function Login() {
         // Deshabilitar la visualización del componente después de la animación
         setTimeout(() => {
           navigate("/activos");
-        }, 1000); // Asegúrate de que este tiempo coincida con la duración de la animación
+        }, 1000);
       }
     } catch (error) {
       console.error("Login error:", error.response ? error.response.data : error.message);
@@ -67,7 +78,7 @@ export default function Login() {
     setIsLoggingOut(true);
     setTimeout(() => {
       navigate('/logout');
-    }, 1000); // 1 second delay to allow the animation to play
+    }, 1000);
   };
 
   return (
