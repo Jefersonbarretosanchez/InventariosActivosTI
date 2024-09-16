@@ -28,16 +28,17 @@ export default function Login() {
         setUser(user);
 
 
-        const response = await api.get('api/api/permisos/', {
+        const response = await api.get('api/permisos/', {
           headers: {
             Authorization: `Bearer ${user.token}`, // 'token' esté en el objeto user
           },
         });
 
         const permisos = response.data.permisos;
+        const rol = response.data.rol;
         // Guardamos los permisos en localStorage
         localStorage.setItem('permisos', JSON.stringify(permisos));
-
+        localStorage.setItem('rol', rol);
         // Iniciar la animación después de un breve retardo
         setTimeout(() => {
           setAnimate(true);
@@ -132,13 +133,13 @@ export default function Login() {
           >
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
-          <button
+          {/* <button
             type="button"
             className={`botonreg-login ${registerClicked ? 'clicked' : ''}`}
             onClick={handleRegisterClick}
           >
             Registrar
-          </button>
+          </button> */}
         </div>
       </form>
     </div>

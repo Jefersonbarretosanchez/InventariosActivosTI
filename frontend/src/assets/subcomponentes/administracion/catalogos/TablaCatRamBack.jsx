@@ -12,6 +12,7 @@ import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatRamBack() {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -322,12 +323,14 @@ function TablaCatRamBack() {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Ram"
-              />
+              {permisos && permisos.personas === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Ram"
+                />
+              )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -337,7 +340,9 @@ function TablaCatRamBack() {
                   <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Memoria RAM</th>
                   <th>Tipo Ram</th>
                   <th>Fecha Creación</th>
-                  <th>Acciones</th>
+                  {permisos && permisos.personas === 'rw' && (
+                    <th>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -362,14 +367,16 @@ function TablaCatRamBack() {
                       <td style={{ paddingLeft: '4vw' }}>{ram.nombre}</td>
                       <td style={{ paddingLeft: '4vw' }}>{ram.fecha_registro}</td>
                       <td>
-                        <button
-                          style={{ marginLeft: '.8vw' }}
-                          className="btn-accion"
-                          onClick={() => handleEdit(ram)}
-                          title="Editar Ram"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
+                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                          <button
+                            style={{ marginLeft: '.8vw' }}
+                            className="btn-accion"
+                            onClick={() => handleEdit(ram)}
+                            title="Editar Ram"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

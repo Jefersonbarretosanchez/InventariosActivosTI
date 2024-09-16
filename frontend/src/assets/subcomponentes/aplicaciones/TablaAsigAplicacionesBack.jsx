@@ -16,6 +16,7 @@ import TarjetasAplicaciones from "./tarjetasAplicaciones";
 
 
 function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones, totalAplicacionesAsig, fetchData }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -101,7 +102,7 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
       setTrabajador(
         responseTrabajador.data.map((item) => ({
           value: item.id_trabajador,
-          label: item.nombres, // Mantener el nombre original en el valor
+          label: item.correo_institucional, // Mantener el nombre original en el valor
         }))
       );
 
@@ -473,12 +474,14 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Asignar Aplicacion"
-              />
+              {permisos && permisos.aplicaciones === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Asignar Aplicacion"
+                />
+              )}
             </div>
           </div>
 
@@ -487,9 +490,11 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
                   <th style={{ paddingLeft: "5vw" }}>ID Asignacion</th>
-                  <th style={{ paddingLeft: "0vw" }}>Nombre Trabajador</th>
-                  <th style={{ paddingLeft: "3vw" }}>Aplicaciones</th>
-                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  <th style={{ paddingLeft: "3vw" }}>Nombre Trabajador</th>
+                  <th style={{ paddingLeft: "0vw" }}>Aplicaciones</th>
+                  {permisos && permisos.aplicaciones === 'rw' && (
+                    <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody >
@@ -514,14 +519,16 @@ function TablaAsigAplicacionesBack({ totalPersonasActivas, totalPersonasInactiva
                       <td>{asigaplicaciones.nombre_trabajador} {asigaplicaciones.apellido_trabajador}</td>
                       <td style={{ paddingLeft: "0vw" }}>{asigaplicaciones.nombre_aplicacion}</td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleDesgree(asigaplicaciones)}
-                          title="desasignar Aplicacion"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faMinus}
-                            style={{ marginLeft: '1.4vw' }} />
-                        </button>
+                        {permisos && permisos.aplicaciones && permisos.aplicaciones === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleDesgree(asigaplicaciones)}
+                            title="desasignar Aplicacion"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faMinus}
+                              style={{ marginLeft: '1.4vw' }} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

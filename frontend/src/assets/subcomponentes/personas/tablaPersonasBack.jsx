@@ -431,11 +431,14 @@ function TablaPersonasBack({ totalequiposAsignados, totalLicenciasPersonas, fetc
   };
 
   const handleEdit = (persona) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["identificacion", "correo_institucional", "correo_personal"];
+
     setPersonaSeleccionada(persona);
     abrirModal(
       `Actualizar ${persona.nombres}  ${persona.apellidos}`,
       formFields,
-      ["identificacion", "correo_institucional", "correo_personal"],
+      camposParaOcultar,
       persona,
       "update"
     );

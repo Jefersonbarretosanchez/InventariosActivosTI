@@ -97,11 +97,11 @@
 
 .contenido-desplegable-princ {
     display: none;
+    width: 10vw;
     position: absolute;
-    right: 0;
+    right: 0vw;
     background-color: #f9f9f9;
     min-width: 1vw;
-    box-shadow: 0vh 1vh 2vh 0vh rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 
@@ -130,6 +130,7 @@
     box-shadow: 2vh 0 20vh rgba(0, 0, 0, 0.1);
     z-index: 100;
     margin-top: -11.5vh;
+    align-items: center;
 }
 
 .menu-lateral-gen.expanded {
@@ -202,7 +203,7 @@
 }
 
 .icono {
-    font-size: 4vh;
+    font-size: 3.6vh;
 }
 
 .menu-lateral-gen.expanded .menu-text {

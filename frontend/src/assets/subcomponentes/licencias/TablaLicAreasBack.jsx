@@ -14,6 +14,7 @@ import TarjetasLicencias from './tarjetasLicencias';
 
 
 function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -396,11 +397,14 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
   };
 
   const handleEdit = (licarea) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["sereal"];
+
     setLicareaSeleccionada(licarea);
     abrirModal(
       `Actualizar ${licarea.nombre_licencia}`,
       formFields,
-      ["sereal"],
+      camposParaOcultar,
       licarea,
       "update"
     );
@@ -471,13 +475,15 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Licencia"
-              />
-              <FontAwesomeIcon title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              {permisos && permisos.licencias === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Licencia"
+                />
+              )}
+              <FontAwesomeIcon style={{ marginLeft: '0.5vw' }} title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -529,20 +535,25 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
                         {licarea.nombre_estado_licencia}
                       </td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(licarea)}
-                          title="Editar licencia"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(licarea)}
-                          title="Detalle licencia"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.licencias && permisos.licencias === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(licarea)}
+                            title="Editar licencia"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.licencias !== 'n/a' && (
+
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(licarea)}
+                            title="Detalle licencia"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

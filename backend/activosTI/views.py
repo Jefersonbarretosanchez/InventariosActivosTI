@@ -777,12 +777,12 @@ PERMISOS_ROLES = {
         'licencias': 'rw',
         'asignacion_licencias': 'rw',
         'aplicaciones': 'rw',
-        'contratos': 'n/a',
-        'logs': 'rw',
+        'contratos': 'rw',
+        'logs': 'n/a',
         'administracion': 'n/a',
     },
     'Agente RRHH': {
-        'activos': 'r',
+        'activos': 'n/a',
         'personas': 'rw',
         'equipos': 'n/a',
         'asignacion_equipos': 'n/a',
@@ -795,13 +795,13 @@ PERMISOS_ROLES = {
     },
     'Agente Compras': {
         'activos': 'r',
-        'personas': 'n/a',
+        'personas': 'r',
         'equipos': 'rw',
-        'asignacion_equipos': 'rw',
+        'asignacion_equipos': 'r',
         'licencias': 'rw',
         'asignacion_licencias': 'r',
-        'aplicaciones': 'rw',
-        'contratos': 'rw',
+        'aplicaciones': 'r',
+        'contratos': 'r',
         'logs': 'n/a',
         'administracion': 'n/a',
     },
@@ -813,7 +813,7 @@ PERMISOS_ROLES = {
         'licencias': 'r',
         'asignacion_licencias': 'r',
         'aplicaciones': 'r',
-        'contratos': 'n/a',
+        'contratos': 'r',
         'logs': 'n/a',
         'administracion': 'n/a',
     }
@@ -824,10 +824,16 @@ PERMISOS_ROLES = {
 def obtener_permisos_usuario(request):
     user = request.user
     permisos = {}
+    rol = None  # Variable para almacenar el rol del usuario
 
     # Verificamos a qué grupo (rol) pertenece el usuario
-    grupo = user.groups.first()  # Suponemos que el usuario solo pertenece a un grupo
+    grupo = user.groups.first()  # el usuario solo debe tener un grupo
     if grupo:
         permisos = PERMISOS_ROLES.get(grupo.name, {})
+        rol = grupo.name  # Guardamos el nombre del grupo como el rol
 
-    return Response({'permisos': permisos})
+    # Retornamos permisos y el rol del usuario
+    return Response({
+        'permisos': permisos,
+        'rol': rol  # Aquí añadimos el nombre del rol
+    })

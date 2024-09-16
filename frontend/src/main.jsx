@@ -16,6 +16,7 @@ import Aplicaciones from "./assets/componentes/aplicaciones.jsx";
 import Contratos from "./assets/componentes/contratos.jsx";
 import HistLogs from "./assets/componentes/histLogs.jsx";
 import Administracion from "./assets/componentes/administracion.jsx";
+import ConfigUsuarios from "./assets/componentes/configUsuarios.jsx";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -33,14 +34,15 @@ root.render(
         <Route path="/logout" element={<Logout />} />
         <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
         <Route path="/personas" element={<ProtectedRoute requiredPermission="personas"><Personas /></ProtectedRoute>} />
-        <Route path="/equipos" element={<ProtectedRoute><Equipos /></ProtectedRoute>} />
-        <Route path="/asigEquipos" element={<ProtectedRoute><AsigEquipos /></ProtectedRoute>} />
-        <Route path="/licencias" element={<ProtectedRoute><Licencias /></ProtectedRoute>} />
-        <Route path="/asiglicencias" element={<ProtectedRoute><Asiglicencias /></ProtectedRoute>} />
-        <Route path="/aplicaciones" element={<ProtectedRoute><Aplicaciones /></ProtectedRoute>} />
-        <Route path="/contratos" element={<ProtectedRoute><Contratos /></ProtectedRoute>} />
-        <Route path="/historicoLogs" element={<ProtectedRoute><HistLogs /></ProtectedRoute>} />
-        <Route path="/administracion" element={<ProtectedRoute><Administracion /></ProtectedRoute>} />
+        <Route path="/equipos" element={<ProtectedRoute requiredPermission="equipos"><Equipos /></ProtectedRoute>} />
+        <Route path="/asigEquipos" element={<ProtectedRoute requiredPermission="asignacion_equipos"><AsigEquipos /></ProtectedRoute>} />
+        <Route path="/licencias" element={<ProtectedRoute requiredPermission="licencias"><Licencias /></ProtectedRoute>} />
+        <Route path="/asiglicencias" element={<ProtectedRoute requiredPermission="asignacion_licencias"><Asiglicencias /></ProtectedRoute>} />
+        <Route path="/aplicaciones" element={<ProtectedRoute requiredPermission="aplicaciones"><Aplicaciones /></ProtectedRoute>} />
+        <Route path="/contratos" element={<ProtectedRoute requiredPermission="contratos"><Contratos /></ProtectedRoute>} />
+        <Route path="/historicoLogs" element={<ProtectedRoute requiredPermission="logs"><HistLogs /></ProtectedRoute>} />
+        <Route path="/administracion" element={<ProtectedRoute requiredPermission="administracion"><Administracion /></ProtectedRoute>} />
+        <Route path="/configUsuarios" element={<ProtectedRoute requiredPermission="configUsuarios"><ConfigUsuarios /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
