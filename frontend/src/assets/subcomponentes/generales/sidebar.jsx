@@ -37,7 +37,7 @@ function Sidebar() {
         { name: 'Contratos', icon: faFileContract, route: '/contratos', permiso: permisos?.contratos },
         { name: 'Historico Logs', icon: faRectangleList, route: '/historicoLogs', permiso: permisos?.logs },
         { name: 'Administración', icon: faGear, route: '/administracion', permiso: permisos?.administracion },
-        { name: 'Config Usuarios', icon: faUsersGear, route: '/configUsuarios', permiso: permisos?.configUsuarios },
+        // { name: 'Config Usuarios', icon: faUsersGear, route: '/configUsuarios', permiso: permisos?.configUsuarios },
     ];
 
     const filteredMenuItems = menuItems.filter(item => item.permiso !== 'n/a');
