@@ -18,6 +18,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
 function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -349,17 +350,20 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
   const handleCreate = () => {
     abrirModal("Registrar Periferico", formFields2, [], {}, "create");
   };
-
   const handleEdit = (periferico) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["nombre_periferico", "modelo", "sereal"];
+
     setPerifericoSeleccionado(periferico);
     abrirModal(
       `Actualizar ${periferico.nombre_periferico} `,
       formFields2,
-      ["modelo", "sereal"],
+      camposParaOcultar,
       periferico,
       "update"
     );
   };
+
 
   const handleInfo = (periferico) => {
     setPerifericoSeleccionado(periferico);
@@ -481,20 +485,24 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
                         {periferico.nombre_estado_periferico}
                       </td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(periferico)}
-                          title="Editar Periferico"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(periferico)}
-                          title="Detalle Periferico"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.asignacion_equipos && permisos.asignacion_equipos === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(periferico)}
+                            title="Editar Periferico"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.asignacion_equipos !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(periferico)}
+                            title="Detalle Periferico"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

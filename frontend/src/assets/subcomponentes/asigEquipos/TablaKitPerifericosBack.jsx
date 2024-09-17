@@ -14,6 +14,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
 function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -495,13 +496,15 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
             />
           </div>
           <div>
-            <FontAwesomeIcon
-              style={{ marginLeft: '60.5vh' }}
-              className="agregar-licPersonas"
-              onClick={() => handleCreate()}
-              icon={faPlus}
-              title="Crear Kit"
-            />
+            {permisos && permisos.asignacion_equipos === 'rw' && (
+              <FontAwesomeIcon
+                style={{ marginLeft: '60.5vh' }}
+                className="agregar-licPersonas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+                title="Crear Kit"
+              />
+            )}
           </div>
 
           <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -534,20 +537,24 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
                       <td style={{ paddingLeft: "15.5vw" }}>{kitperiferico.id_kit_perifericos}</td>
                       <td style={{ paddingLeft: "8vw" }}>{kitperiferico.perifericosNames.join(', ')}</td>
                       <td style={{ paddingLeft: "5vw" }}>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(kitperiferico)}
-                          title="Editar Kit"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(kitperiferico)}
-                          title="Detalle Kit"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.asignacion_equipos && permisos.asignacion_equipos === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(kitperiferico)}
+                            title="Editar Kit"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.asignacion_equipos !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(kitperiferico)}
+                            title="Detalle Kit"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                       <td style={{ paddingLeft: "17vw" }}></td>
                     </tr>

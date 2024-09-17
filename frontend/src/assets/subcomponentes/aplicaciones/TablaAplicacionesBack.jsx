@@ -20,6 +20,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAplicaciones from "./tarjetasAplicaciones";
 
 function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, totalAplicaciones, totalAplicacionesAsig, fetchData }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -372,12 +373,14 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Aplicacion"
-              />
+              {permisos && permisos.aplicaciones === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Aplicacion"
+                />
+              )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "36.7vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -386,7 +389,9 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
                 <tr>
                   <th style={{ paddingLeft: "11.8vw" }}>ID</th>
                   <th style={{ paddingLeft: "3vw" }}>Nombre Aplicativo</th>
-                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  {permisos && permisos.aplicaciones && permisos.aplicaciones === 'rw' && (
+                    <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody >
@@ -410,13 +415,15 @@ function TablaAplicacionesBack({ totalPersonasActivas, totalPersonasInactivas, t
                       <td style={{ paddingLeft: "12vw" }}>{aplicacion.id_aplicacion}</td>
                       <td style={{ paddingLeft: "3.3vw" }}>{aplicacion.nombre_aplicativo}</td>
                       <td style={{ paddingLeft: "4.5vw" }}>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(aplicacion)}
-                          title="Editar Aplicacion"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
+                        {permisos && permisos.aplicaciones && permisos.aplicaciones === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(aplicacion)}
+                            title="Editar Aplicacion"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

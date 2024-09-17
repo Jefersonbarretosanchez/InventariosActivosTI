@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faPenToSquare, faMagnifyingGlass, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../../generales/modal";
-import ModalFiltros from "../../generales/modalFiltros";
+import { faBarsProgress, faFileLines, faMagnifyingGlass, faPenToSquare, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import Modal from "../generales/modal";
+import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "../formConfig";
-import FormDinamico from "../../generales/formDinamico";
-import FiltroDinamico from "../../generales/filtroDinamico";
-import Paginate from "../../generales/paginate";
-import api from "../../../../api";
+import { formFields, filterFields, ALL_INPUT_IDS } from "../historicoLogs/formConfig";
+import FormDinamico from "../generales/formDinamico";
+import FiltroDinamico from "../generales/filtroDinamico";
+import Paginate from "../generales/paginate";
+import api from "../../../api";
 import { toast } from "react-toastify";
 
-function TablaCatMarcaEquipoBack() {
-  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
+function ModConfigUsuario() {
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
     contenido: null,
   });
-  const [marcas, setMarcas] = useState([]);
-  const [marcaSeleccionada, setMarcaSeleccionada] = useState(null);
+  const [historicos, setHistoricos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [newMarcaData, setNewMarcaData] = useState({});
-  const [actionType, setActionType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(15);
@@ -34,6 +30,38 @@ function TablaCatMarcaEquipoBack() {
   const [showFilterOptions, setShowFilterOptions] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL
+
+  const [filterFields, setFilterFields] = useState([
+    {
+      id: "nombre_usuario",
+      label: "Nombre de Usuario",
+      type: "select",
+      required: true,
+      options: [], // Opciones iniciales vacías
+    },
+    {
+      id: "correo_usuario",
+      label: "Correo de Usuario",
+      type: "select",
+      required: true,
+      options: [], // Opciones iniciales vacías
+    },
+    {
+      id: "tipo_cambio",
+      label: "Tipo de Cambio",
+      type: "select",
+      required: true,
+      options: [], // Opciones iniciales vacías
+    },
+    {
+      id: "tipo_activo",
+      label: "Tipo de Activo",
+      type: "select",
+      required: true,
+      options: [], // Opciones iniciales vacías
+    },
+  ]);
+
 
   const handleResize = () => {
     const width = window.innerWidth;
@@ -49,24 +77,61 @@ function TablaCatMarcaEquipoBack() {
   }, []);
 
   useEffect(() => {
-    fetchMarcas();
+    fetchHistoricos();
   }, []);
 
-  const fetchMarcas = async () => {
+  const fetchHistoricos = async () => {
     setIsLoading(true);
     try {
-      const response = await api.get(`${API_URL}/api/marca_equipo/`);
-      setMarcas(response.data);
+      const response = await api.get(`${API_URL}/api/log/`); // URL de la API
+      setHistoricos(response.data);
+
+      // Extraer las opciones de los campos de filtro
+      const nombresUsuarios = response.data.map(historico => historico.nombre_usuario).filter(n => n);
+      const correosUsuarios = response.data.map(historico => historico.correo_usuario).filter(n => n);
+      const tiposCambio = response.data.map(historico => historico.tipo_cambio);
+      const tiposActivo = response.data.map(historico => historico.tipo_activo);
+
+      const uniqueNombresUsuarios = [...new Set(nombresUsuarios)];
+      const uniqueCorreosUsuarios = [...new Set(correosUsuarios)];
+      const uniqueTiposCambio = [...new Set(tiposCambio)];
+      const uniqueTiposActivo = [...new Set(tiposActivo)];
+
+      // Asignar las opciones a los campos de filtro
+      const updatedFilterFields = filterFields.map(field => {
+        if (field.id === "nombre_usuario") {
+          return {
+            ...field,
+            options: uniqueNombresUsuarios.map(option => ({ value: option, label: option }))
+          };
+        }
+        if (field.id === "correo_usuario") {
+          return {
+            ...field,
+            options: uniqueCorreosUsuarios.map(option => ({ value: option, label: option }))
+          };
+        }
+        if (field.id === "tipo_cambio") {
+          return {
+            ...field,
+            options: uniqueTiposCambio.map(option => ({ value: option, label: option }))
+          };
+        }
+        if (field.id === "tipo_activo") {
+          return {
+            ...field,
+            options: uniqueTiposActivo.map(option => ({ value: option, label: option }))
+          };
+        }
+        return field;
+      });
+      setFilterFields(updatedFilterFields);
+
     } catch (error) {
-      toast.error("Error cargando las marcas");
+      toast.error("Error cargando los historicos");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setNewMarcaData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -77,139 +142,22 @@ function TablaCatMarcaEquipoBack() {
     }));
   };
 
-  const createMarca = async () => {
-    setIsLoading(true);
-    try {
-      const formattedData = {
-        ...newMarcaData,
-      };
-      const response = await api.post(`${API_URL}/api/marca_equipo/`, formattedData);
-      const nuevaMarca = response.data;
-      setMarcas([...marcas, nuevaMarca]);
-      setNewMarcaData({});
-      cambiarEstadoModal(false);
-      toast.success("Marca creada exitosamente!");
-    } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : error.message;
-      const statusCode = error.response ? error.response.status : 500;
-
-      if (error.response && error.response.data.errors) {
-        const specificErrors = error.response.data.errors;
-
-        const formattedErrors = Object.keys(specificErrors)
-          .map((key) => `${key}: ${specificErrors[key]}`)
-          .join("<br />");
-
-        toast.error(
-          <div>
-            {errorMessage} <br />
-            <br />
-            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
-            <br />
-            <strong>
-              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
-              <br />
-            </strong>
-            {/* (Código de error: {statusCode}) */}
-          </div>,
-          { position: "bottom-center" }
-        );
-      } else {
-        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
-      }
-      cambiarEstadoModal(false);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleInfo = (historico) => {
+    abrirModal(`Descripcion del Historico`, historico.descripcion);
   };
 
-  const updateMarca = async () => {
-    setIsLoading(true);
-    try {
-      const updatedData = {
-        ...marcaSeleccionada,
-        ...newMarcaData,
-      };
-
-      const formattedData = {
-        ...updatedData,
-      };
-
-      const response = await api.put(
-        `${API_URL}/api/marca_equipo/${marcaSeleccionada.id_marcaequipo}/`,
-        formattedData
-      );
-      const updatedMarca = response.data;
-      setMarcas(
-        marcas.map((marca) =>
-          marca.id_marcaequipo === updatedMarca.id_marcaequipo
-            ? updatedMarca
-            : marca
-        )
-      );
-      setNewMarcaData({});
-      cambiarEstadoModal(false);
-      toast.success("Marca actualizada exitosamente!");
-    } catch (error) {
-      const errorMessage = error.response
-        ? error.response.data.message
-        : error.message;
-      const statusCode = error.response ? error.response.status : 500;
-
-      if (error.response && error.response.data.errors) {
-        const specificErrors = error.response.data.errors;
-
-        const formattedErrors = Object.keys(specificErrors)
-          .map((key) => `${key}: ${specificErrors[key]}`)
-          .join("<br />");
-
-        toast.error(
-          <div>
-            {errorMessage} <br />
-            <br />
-            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
-            <br />
-            <strong>
-              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
-              <br />
-            </strong>
-            {/* (Código de error: {statusCode}) */}
-          </div>,
-          { position: "bottom-center", }
-        );
-      } else {
-        toast.error(`${errorMessage} (Código de error: {statusCode})`);
-      }
-      cambiarEstadoModal(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const abrirModal = (
-    titulo,
-    fields,
-    disabledFields = [],
-    initialValues = {},
-    action = ""
-  ) => {
-    setNewMarcaData(initialValues);
-    setActionType(action);
+  const abrirModal = (titulo, contenido) => {
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
-        <FormDinamico
-          fields={fields}
-          disabledFields={Array.isArray(disabledFields) ? disabledFields : []}
-          initialValues={initialValues}
-          onInputChange={handleInputChange}
-        />
+        <div>
+          <p style={{ width: '90%' }}>{contenido}</p>
+        </div>
       ),
     });
     cambiarEstadoModal(true);
   };
+
 
   const abrirModalFiltros = () => {
     cambiarModalConfig({
@@ -257,21 +205,6 @@ function TablaCatMarcaEquipoBack() {
     setTriggerUpdate((prev) => !prev);
   };
 
-  const handleCreate = () => {
-    abrirModal("Agregar Marca", formFields, [], {}, "create");
-  };
-
-  const handleEdit = (marca) => {
-    setMarcaSeleccionada(marca);
-    abrirModal(
-      `Editar ${marca.nombre}`,
-      formFields,
-      ["id"],
-      marca,
-      "update"
-    );
-  };
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -281,13 +214,13 @@ function TablaCatMarcaEquipoBack() {
     setCurrentPage(1);
   };
 
-  const filteredMarcas = marcas.filter((marca) => {
-    const searchString = `${marca.id_marcaequipo} ${marca.nombre} ${marca.fecha_registro}`.toLowerCase();
+  const filteredHistoricos = historicos.filter((historico) => {
+    const searchString = `${historico.fecha} ${historico.nombre_usuario} ${historico.correo_usuario} ${historico.tipo_cambio} ${historico.tipo_activo} ${historico.activo_modificado}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(marca[key]) === String(filtroValues[key]);
+      return String(historico[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -295,21 +228,21 @@ function TablaCatMarcaEquipoBack() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredMarcas.slice(
+  const currentRecords = filteredHistoricos.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredMarcas.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredHistoricos.length / recordsPerPage);
 
   return (
     <>
-      <div className="contenedor-activos">
+      <div className="contenedor-activos" style={{ marginTop: '0.8vh' }}>
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Catalogo Marcas Equipos</h1>
+            <h1>Configuracion de Usuarios</h1>
           </div>
-          <div className="contenedor-principal">
-            <div style={{ marginLeft: '14vw' }} className="contbuscador-personas">
+          <div className="contenedor-principal" style={{ paddingLeft: '15vw' }}>
+            <div className="contbuscador-personas">
               <input
                 className="buscador-personas"
                 type="text"
@@ -323,61 +256,57 @@ function TablaCatMarcaEquipoBack() {
               />
             </div>
             <div className="iconos-acciones">
-              {permisos && permisos.personas === 'rw' && (
-                <FontAwesomeIcon
-                  className="agregar-personas"
-                  onClick={() => handleCreate()}
-                  icon={faPlus}
-                  title="Agregar Marca Equipo"
-                />
-              )}
+              {/* {permisos && permisos.asignacion_licencias === 'rw' && ( */}
+              <FontAwesomeIcon
+                className="agregar-personas"
+                onClick={() => handleCreate()}
+                icon={faPlus}
+                title="Asignar Licencia"
+              />
+              {/* )} */}
             </div>
+            {/* <div className="iconos-acciones" style={{ width: '70%' }}>
+              <FontAwesomeIcon title="Agregar Filtros" style={{ paddingLeft: '1vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+
+            </div> */}
           </div>
-          <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
+          <Divtabla style={{ maxHeight: "62.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
-                  <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Marca</th>
-                  <th>Nombre</th>
-                  <th>Fecha Creación</th>
-                  {permisos && permisos.personas === 'rw' && (
-                    <th>Acciones</th>
-                  )}
+                  <th style={{ paddingLeft: '10vw' }}>Usuario</th>
+                  <th style={{ paddingLeft: '0vw' }}>Correo</th>
+                  <th style={{ paddingLeft: '2vw' }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoading ? (
                   <tr>
                     <td></td>
-                    <td style={{ paddingLeft: "5vw" }}></td>
-                    <td style={{ paddingLeft: "5vw" }}>
-                      <Loading>
-                        <Spinner />
-                        <span>Loading..</span>
-                      </Loading>
-                    </td>
-                    <td style={{ paddingLeft: "20vw" }}></td>
-                    <td></td>
-                    <td></td>
+                    <td style={{ paddingLeft: "0vw" }}></td>
+                    <td style={{ paddingLeft: "0vw" }}></td>
+                    <td style={{ paddingLeft: "10vw" }}><Loading>
+                      <Spinner />
+                      <span>Loading..</span>
+                    </Loading></td>
+                    <td style={{ paddingLeft: "8vw" }}></td>
                   </tr>
                 ) : (
-                  currentRecords.map((marca) => (
-                    <tr key={marca.id_marcaequipo}>
-                      <td style={{ paddingLeft: '8vw' }}>{marca.id_marcaequipo}</td>
-                      <td style={{ paddingLeft: '3.1vw' }}>{marca.nombre}</td>
-                      <td style={{ paddingLeft: '4.5vw' }}>{marca.fecha_registro}</td>
+                  currentRecords.map((historico) => (
+                    <tr key={historico.id}>
+                      <td style={{ paddingLeft: '10vw' }}>{historico.nombre_usuario}</td>
+                      <td style={{ paddingLeft: '0vw' }}>{historico.correo_usuario}</td>
                       <td>
-                        {permisos && permisos.personas && permisos.personas === 'rw' && (
-                          <button
-                            style={{ marginLeft: '.8vw' }}
-                            className="btn-accion"
-                            onClick={() => handleEdit(marca)}
-                            title="Editar Marca Equipo"
-                          >
-                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                          </button>
-                        )}
+                        <button
+
+                          className="btn-accion"
+                          onClick={() => handleInfo(historico)}
+                          title="Detalle"
+                        >
+                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                        </button>
                       </td>
+                      <td style={{ paddingRight: '10vw' }}></td>
                     </tr>
                   ))
                 )}
@@ -397,9 +326,6 @@ function TablaCatMarcaEquipoBack() {
         estado={estadoModal}
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
-        actionType={actionType}
-        onCreate={createMarca}
-        onUpdate={updateMarca}
       >
         {modalConfig.contenido}
       </Modal>
@@ -448,7 +374,7 @@ function TablaCatMarcaEquipoBack() {
   );
 }
 
-export default TablaCatMarcaEquipoBack;
+export default ModConfigUsuario;
 
 const Boton = styled.button`
   display: block;
@@ -510,7 +436,7 @@ const FilterOptions = styled.div`
 `;
 
 const FilterOptionButton = styled.button`
-  background: linear-gradient(to right, #14add6, #384295);
+  background: #545c8c;
   width: 20vw;
   color: white;
   border: none;
@@ -520,7 +446,6 @@ const FilterOptionButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(to right, #384295, #14add6);
     transform: scale(1.05);
   }
 `;
@@ -528,7 +453,7 @@ const FilterOptionButton = styled.button`
 const AgregarFiltroContainer = styled.div`
   display: flex;
   justify-content: center;
-  color: #384295;
+  color: #545c8c;
   cursor: pointer;
   transition: transform 0.3s ease;
   &:hover {

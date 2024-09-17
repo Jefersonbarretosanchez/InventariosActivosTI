@@ -496,11 +496,13 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
   };
 
   const handleEdit = (equipo) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["nombre_equipo", "sereal"];
     setEquipoSeleccionado(equipo);
     abrirModal(
       `Actualizar ${equipo.nombre_equipo} `,
       formFields,
-      ["nombre_equipo", "sereal"],
+      camposParaOcultar,
       equipo,
       "update"
     );
@@ -570,7 +572,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
               />
             </div>
             <div className="iconos-acciones">
-              {permisos && permisos.personas === 'rw' && (<FontAwesomeIcon
+              {permisos && permisos.equipos === 'rw' && (<FontAwesomeIcon
                 className="agregar-personas"
                 onClick={() => handleCreate()}
                 icon={faPlus}
@@ -627,7 +629,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
                         {equipo.nombre_estado_equipo}
                       </td>
                       <td>
-                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                        {permisos && permisos.equipos && permisos.equipos === 'rw' && (
                           <button
                             className="btn-accion"
                             onClick={() => handleEdit(equipo)}
@@ -636,7 +638,7 @@ function TablaEquiposBack({ totalLicenciasEquipos }) {
                             <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
                           </button>
                         )}
-                        {permisos && permisos.personas !== 'n/a' && (
+                        {permisos && permisos.equipos !== 'n/a' && (
                           <button
                             className="btn-accion"
                             onClick={() => handleInfo(equipo)}

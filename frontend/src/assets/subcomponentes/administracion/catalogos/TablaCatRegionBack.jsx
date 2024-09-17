@@ -12,6 +12,7 @@ import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatRegionBack() {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -322,12 +323,14 @@ function TablaCatRegionBack() {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Region"
-              />
+              {permisos && permisos.personas === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Region"
+                />
+              )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -337,7 +340,9 @@ function TablaCatRegionBack() {
                   <th style={{ padding: '0vw 0vw 0vw 12vh' }}>ID Región</th>
                   <th>Nombre</th>
                   <th>Fecha Creación</th>
-                  <th>Acciones</th>
+                  {permisos && permisos.personas === 'rw' && (
+                    <th>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -362,14 +367,16 @@ function TablaCatRegionBack() {
                       <td style={{ paddingLeft: '3vw' }}>{region.nombre}</td>
                       <td style={{ paddingLeft: '4vw' }}>{region.fecha_registro}</td>
                       <td>
-                        <button
-                          style={{ marginLeft: '.8vw' }}
-                          className="btn-accion"
-                          onClick={() => handleEdit(region)}
-                          title="Editar Region"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
+                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                          <button
+                            style={{ marginLeft: '.8vw' }}
+                            className="btn-accion"
+                            onClick={() => handleEdit(region)}
+                            title="Editar Region"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

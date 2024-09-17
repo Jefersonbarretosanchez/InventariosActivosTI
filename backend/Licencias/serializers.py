@@ -230,12 +230,12 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
         source='id_licencia.nombre_licencia', read_only=True)
     nombre_trabajador = serializers.CharField(
         source='id_trabajador.nombres', read_only=True)
-    apellidos_trabajador = serializers.CharField(
+    apellido_trabajador = serializers.CharField(
         source='id_trabajador.apellidos', read_only=True)
 
     class Meta:
         model = AsignacionLicenciaPersona
-        fields = ['id', 'id_trabajador', 'nombre_trabajador', 'apellidos_trabajador',
+        fields = ['id', 'id_trabajador', 'nombre_trabajador', 'apellido_trabajador'
                   'id_licencia', 'nombre_licencia']
 
     def validate(self, data):

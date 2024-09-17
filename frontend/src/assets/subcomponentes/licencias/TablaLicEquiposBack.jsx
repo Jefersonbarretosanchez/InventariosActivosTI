@@ -14,6 +14,7 @@ import TarjetasLicencias from './tarjetasLicencias';
 
 
 function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, setTotalLicenciasEquipos }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -379,11 +380,14 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
   };
 
   const handleEdit = (licequipo) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["sereal"];
+
     setLicequipoSeleccionado(licequipo);
     abrirModal(
       `Actualizar ${licequipo.nombre_licencia}`,
       formFields,
-      ["sereal"],
+      camposParaOcultar,
       licequipo,
       "update"
     );
@@ -454,13 +458,15 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Licencia"
-              />
-              <FontAwesomeIcon title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              {permisos && permisos.licencias === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Licencia"
+                />
+              )}
+              <FontAwesomeIcon style={{ marginLeft: '0.5vw' }} title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -512,20 +518,24 @@ function TablaLicEquiposBack({ totalLicenciasPersonas, totalLicenciasEquipos, se
                         {licequipo.nombre_estado_licencia}
                       </td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(licequipo)}
-                          title="Editar licencia"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(licequipo)}
-                          title="Detalle licencia"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.licencias && permisos.licencias === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(licequipo)}
+                            title="Editar licencia"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.licencias !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(licequipo)}
+                            title="Detalle licencia"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

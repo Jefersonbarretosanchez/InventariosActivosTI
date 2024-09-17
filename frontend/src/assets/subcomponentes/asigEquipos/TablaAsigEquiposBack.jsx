@@ -14,6 +14,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasAsigEquipos from "./tarjetasAsigEquipos";
 
 function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, totalperifericosAsignados, totalperifericosDisponibles, fetchData }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -595,14 +596,17 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                style={{ marginRight: '50vw' }}
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Asignar Equipo"
-              />
+              {permisos && permisos.asignacion_equipos === 'rw' && (
+                <FontAwesomeIcon
+                  style={{ marginRight: '50vw' }}
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Asignar Equipo"
+                />
+              )}
             </div>
+
           </div>
 
           <Divtabla style={{ maxHeight: "36.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -613,7 +617,7 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
                   <th style={{ paddingLeft: "6vw" }}>Empleado</th>
                   <th style={{ paddingLeft: "3vw" }}>Equipo</th>
                   <th style={{ paddingLeft: "1vw" }}>Fecha Entrega</th>
-                  <th style={{ paddingLeft: "5.8vw" }}>Acciones</th>
+                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody >
@@ -639,28 +643,33 @@ function TablaAsigEquiposBack({ totalequiposAsignados, totalEquiposDisponibles, 
                       <td style={{ paddingLeft: "1vw" }}>{asigequipo.nombre_equipo}</td>
                       <td style={{ paddingLeft: "2vw" }}>{asigequipo.fecha_entrega_equipo}</td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(asigequipo)}
-                          title="Editar Asignacion"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(asigequipo)}
-                          title="Detalle Asignacion"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
-
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleDesgree(asigequipo)}
-                          title="Desasignar Equipo"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faMinus} />
-                        </button>
+                        {permisos && permisos.asignacion_equipos && permisos.asignacion_equipos === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(asigequipo)}
+                            title="Editar Asignacion"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.asignacion_equipos !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(asigequipo)}
+                            title="Detalle Asignacion"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
+                        {permisos && permisos.asignacion_equipos && permisos.asignacion_equipos === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleDesgree(asigequipo)}
+                            title="Desasignar Equipo"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faMinus} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

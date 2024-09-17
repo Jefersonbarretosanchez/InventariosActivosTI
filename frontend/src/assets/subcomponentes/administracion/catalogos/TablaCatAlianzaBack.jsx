@@ -12,6 +12,7 @@ import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatAlianzaBack() {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -329,12 +330,14 @@ function TablaCatAlianzaBack() {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Alianza"
-              />
+              {permisos && permisos.personas === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Alianza"
+                />
+              )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "52.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -343,8 +346,10 @@ function TablaCatAlianzaBack() {
                 <tr>
                   <th style={{ paddingLeft: '10vw' }}>ID</th>
                   <th>Nombre</th>
-                  <th style={{ paddingLeft: "9vw" }}>Fecha Registro</th>
-                  <th style={{ paddingLeft: '5vw' }}>Acciones</th>
+                  <th style={{ paddingLeft: "19vw" }}>Fecha Registro</th>
+                  {permisos && permisos.personas === 'rw' && (
+                    <th style={{ paddingLeft: '5vw' }}>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -365,22 +370,22 @@ function TablaCatAlianzaBack() {
                 ) : (
                   currentRecords.map((alianza) => (
                     <tr key={alianza.id_centro_costo}>
-
                       <td style={{ paddingLeft: "10vw" }}>{alianza.id_centro_costo}</td>
-
-                      <div style={{ width: '100%' }}>
+                      <div style={{ width: '200%' }}>
                         <td style={{ paddingLeft: "3.1vw" }}>{alianza.nombre}</td>
                       </div>
-                      <td style={{ paddingLeft: "10vw", width: '100%' }}>{alianza.fecha_registro}</td>
+                      <td style={{ paddingLeft: "20vw", width: '100%' }}>{alianza.fecha_registro}</td>
                       <td>
-                        <button
-                          style={{ marginLeft: '3vw' }}
-                          className="btn-accion"
-                          onClick={() => handleEdit(alianza)}
-                          title="Editar Alianza"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
+                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                          <button
+                            style={{ marginLeft: '3vw' }}
+                            className="btn-accion"
+                            onClick={() => handleEdit(alianza)}
+                            title="Editar Alianza"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
                       </td>
                       <td style={{ paddingLeft: '20vw' }} ></td>
                     </tr>

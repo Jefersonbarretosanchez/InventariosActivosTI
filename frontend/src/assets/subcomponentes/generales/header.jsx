@@ -1,9 +1,10 @@
-import { faArrowRightToBracket, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightToBracket, faGears, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 
 function Header({ onLogout }) {
+    const rol = localStorage.getItem('rol');
     const today = new Date();
 
     const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -29,11 +30,20 @@ function Header({ onLogout }) {
 
     const handleLogout = () => {
         if (onLogout) {
-            onLogout();  // Llama a la función pasada como prop para iniciar la animación
+            onLogout();
         }
         setTimeout(() => {
             navigate('/logout');
-        }, 1000); // 1 segundo de retardo para permitir que se ejecute la animación
+        }, 1000);
+    };
+
+    const handleSettings = () => {
+        if (onLogout) {
+            onLogout();
+        }
+        setTimeout(() => {
+            navigate('/settings');
+        }, 1000);
     };
 
     return (
@@ -47,11 +57,14 @@ function Header({ onLogout }) {
                     <FontAwesomeIcon icon={faUserTie} size='2xl' style={{}} />
                     <div className="usuario-info-princ">
                         <div className="nombre-usuario-princ">{user ? `${user.nombre} ${user.apellidos}` : 'Usuario'}</div>
-                        <div className="cargo-usuario-princ" style={{ textAlign: "center" }}>Scala Learning TI</div>
+                        <div className="cargo-usuario-princ" style={{ textAlign: "center" }}>{rol}</div>
                     </div>
                     <i className="icono-desplegable-princ">▼</i>
                 </button>
                 <div className="contenido-desplegable-princ">
+                    {/* <Link to="#" onClick={handleSettings} style={{ color: '#545c8c' }}>
+                        <FontAwesomeIcon icon={faGears} style={{ width: '30px', color: '#545c8c' }} />Settings
+                    </Link> */}
                     <Link to="#" onClick={handleLogout} style={{ color: 'red' }}>
                         <FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout
                     </Link>

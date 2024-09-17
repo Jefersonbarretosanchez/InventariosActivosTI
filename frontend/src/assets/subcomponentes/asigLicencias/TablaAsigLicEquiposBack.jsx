@@ -15,6 +15,7 @@ import TarjetasAsigLicencias from "./tarjetasAsigLicencias";
 
 
 function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDisponibles, totalLicEquiposAsignados, totalLicEquiposDisponibles, fetchData }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -454,7 +455,7 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
       <div style={{ marginTop: '5.7vh' }} className="contenedor-activos">
         <div className="row-activos">
           <div className="asigEquipos">
-            <h1>Asignacion Licencias Persona</h1>
+            <h1>Asignacion Licencias Equipos</h1>
           </div>
           <div className="contenedor-principal">
             <div style={{ marginLeft: '19vw' }} className="contbuscador-personas">
@@ -471,13 +472,14 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Asignar Licencia"
-              />
-
+              {permisos && permisos.asignacion_licencias === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Asignar Licencia"
+                />
+              )}
             </div>
           </div>
 
@@ -488,7 +490,9 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                   <th style={{ paddingLeft: "5vw" }}>ID Asignacion</th>
                   <th style={{ paddingLeft: "0vw" }}>Licencia</th>
                   <th style={{ paddingLeft: "3vw" }}>Equipos</th>
-                  <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  {permisos && permisos.asignacion_licencias === 'rw' && (
+                    <th style={{ paddingLeft: "4vw" }}>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody >
@@ -514,15 +518,17 @@ function TablaAsigLicEquiposBack({ totalLicPersonasAsignadas, totalLicPersonasDi
                       <td>{asiglicequipo.nombre_equipo}</td>
 
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleDesgree(asiglicequipo)}
-                          title="Desasignar Licencia"
+                        {permisos && permisos.asignacion_licencias && permisos.asignacion_licencias === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleDesgree(asiglicequipo)}
+                            title="Desasignar Licencia"
 
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faMinus}
-                            style={{ marginLeft: '1.4vw' }} />
-                        </button>
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faMinus}
+                              style={{ marginLeft: '1.4vw' }} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

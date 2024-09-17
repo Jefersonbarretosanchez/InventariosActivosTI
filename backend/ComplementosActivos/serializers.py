@@ -7,7 +7,7 @@ from .models import *
 class AplicacionesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aplicaciones
-        fields =  '__all__'
+        fields = '__all__'
 
     def create(self, validated_data):
         return Aplicaciones.objects.create(**validated_data)
@@ -15,28 +15,33 @@ class AplicacionesSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.id_aplicacion = validated_data.get(
             'id_aplicacion', instance.id_aplicacion)
-        instance.nombre_aplicativo = validated_data.get('nombre_aplicativo', instance.nombre_aplicativo)
+        instance.nombre_aplicativo = validated_data.get(
+            'nombre_aplicativo', instance.nombre_aplicativo)
         instance.save()
         return instance
-    
+
 # Serilizadores para asignación de aplicaciones
-    
+
+
 class PersonaSinAsignacionAppSerializer(serializers.ModelSerializer):
     class Meta:
         model = Persona
         # Incluye los campos necesarios
         fields = ['id_trabajador', 'nombres', 'apellidos']
 
+
 class AsignacionAppsPersonasSerializer(serializers.ModelSerializer):
     nombre_aplicacion = serializers.CharField(
         source='id_aplicacion.nombre_aplicativo', read_only=True)
     nombre_trabajador = serializers.CharField(
         source='id_trabajador.nombres', read_only=True)
+    apellido_trabajador = serializers.CharField(
+        source='id_trabajador.apellidos', read_only=True)
 
     class Meta:
         model = AsignacionAplicaciones
-        fields = ['id', 'id_trabajador', 'nombre_trabajador',
-                  'id_aplicacion', 'nombre_aplicacion','fecha_instalacion']
+        fields = ['id', 'id_trabajador', 'nombre_trabajador', 'apellido_trabajador',
+                  'id_aplicacion', 'nombre_aplicacion', 'fecha_instalacion']
 
     def validate(self, data):
         if self.instance is None:
@@ -74,6 +79,7 @@ class AsignacionAppsPersonasSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
+
 
 class DesAsignacionAppsSerializer(serializers.ModelSerializer):
     class Meta:

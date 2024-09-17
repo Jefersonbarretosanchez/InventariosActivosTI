@@ -12,6 +12,7 @@ import api from "../../../../api";
 import { toast } from "react-toastify";
 
 function TablaCatUbicacionBackend() {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -322,12 +323,14 @@ function TablaCatUbicacionBackend() {
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Ubicacion"
-              />
+              {permisos && permisos.personas === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Ubicacion"
+                />
+              )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "51.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -337,7 +340,9 @@ function TablaCatUbicacionBackend() {
                   <th style={{ paddingLeft: '3vw' }}>ID Ubicación</th>
                   <th>Nombre</th>
                   <th style={{ paddingLeft: '0vw' }}>Fecha Registro</th>
-                  <th>Acciones</th>
+                  {permisos && permisos.personas === 'rw' && (
+                    <th>Acciones</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -362,14 +367,16 @@ function TablaCatUbicacionBackend() {
                       <td>{ubicacion.nombre}</td>
                       <td style={{ paddingLeft: '1vw' }}>{ubicacion.fecha_registro}</td>
                       <td>
-                        <button
-                          style={{ marginLeft: '.8vw' }}
-                          className="btn-accion"
-                          onClick={() => handleEdit(ubicacion)}
-                          title="Editar Ubicacion"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
+                        {permisos && permisos.personas && permisos.personas === 'rw' && (
+                          <button
+                            style={{ marginLeft: '.8vw' }}
+                            className="btn-accion"
+                            onClick={() => handleEdit(ubicacion)}
+                            title="Editar Ubicacion"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

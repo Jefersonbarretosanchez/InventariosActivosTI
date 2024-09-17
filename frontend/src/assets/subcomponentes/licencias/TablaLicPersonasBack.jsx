@@ -14,6 +14,7 @@ import TarjetasLicencias from './tarjetasLicencias';
 
 
 function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersonas, totalLicenciasEquipos }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -377,11 +378,14 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
   };
 
   const handleEdit = (licpersona) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["sereal"];
+
     setLicpersonaSeleccionada(licpersona);
     abrirModal(
       `Actualizar ${licpersona.nombre_licencia}`,
       formFields,
-      ["sereal"],
+      camposParaOcultar,
       licpersona,
       "update"
     );
@@ -452,14 +456,16 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                style={{ marginLeft: '1vw' }}
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Licencia"
-              />
-              <FontAwesomeIcon title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
+              {permisos && permisos.licencias === 'rw' && (
+                <FontAwesomeIcon
+                  style={{ marginLeft: '1vw' }}
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Licencia"
+                />
+              )}
+              <FontAwesomeIcon style={{ marginLeft: '0.5vw' }} title="Agregar Filtros" className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
 
             </div>
           </div>
@@ -511,20 +517,24 @@ function TablaLicPersonasBack({ setTotalLicenciasPersonas, totalLicenciasPersona
                         {licpersona.nombre_estado_licencia}
                       </td>
                       <td>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(licpersona)}
-                          title="Editar licencia"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(licpersona)}
-                          title="Detalle Licencia"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.licencias && permisos.licencias === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(licpersona)}
+                            title="Editar licencia"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.licencias !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(licpersona)}
+                            title="Detalle Licencia"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

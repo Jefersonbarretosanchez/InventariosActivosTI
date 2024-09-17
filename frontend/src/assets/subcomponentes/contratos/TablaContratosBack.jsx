@@ -20,6 +20,7 @@ import FiltroDinamico from "../generales/filtroDinamico";
 import TarjetasContratos from "./tarjetasContratos";
 
 function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, totalLicenciasAreas }) {
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
   const [estadoModal, cambiarEstadoModal] = useState(false);
   const [modalConfig, cambiarModalConfig] = useState({
     titulo: "",
@@ -300,11 +301,14 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
   };
 
   const handleEdit = (contrato) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["sereal"];
+
     setContratoSeleccionado(contrato);
     abrirModal(
       `Actualizar ${contrato.nombre}`,
       formFields,
-      ["sereal"],
+      camposParaOcultar,
       contrato,
       "update"
     );
@@ -373,12 +377,14 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
               />
             </div>
             <div className="iconos-acciones">
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Agregar Contrato"
-              />
+              {permisos && permisos.contratos === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Contrato"
+                />
+              )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "42.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
@@ -417,20 +423,24 @@ function TablaContratosBack({ totalLicenciasEquipos, totalLicenciasPersonas, tot
                       <td style={{ paddingLeft: "5vw" }}>{contrato.fecha_vencimiento}</td>
                       <td style={{ paddingLeft: "5vw" }}>{contrato.cantidad_licencias}</td>
                       <td style={{ paddingLeft: "4.5vw" }}>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleEdit(contrato)}
-                          title="Editar Contrato"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                        <button
-                          className="btn-accion"
-                          onClick={() => handleInfo(contrato)}
-                          title="Detalle Contrato"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
-                        </button>
+                        {permisos && permisos.contratos && permisos.contratos === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(contrato)}
+                            title="Editar Contrato"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        {permisos && permisos.contratos !== 'n/a' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleInfo(contrato)}
+                            title="Detalle Contrato"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faFileLines} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))
