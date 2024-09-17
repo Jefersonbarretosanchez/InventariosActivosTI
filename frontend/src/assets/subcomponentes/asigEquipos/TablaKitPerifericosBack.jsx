@@ -27,6 +27,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
   const [quitkitperifericosSeleccionado, setQuitKitPerifericosSeleccionado] = useState(null);
   const [kitperifericos2, setKitPerifericos2] = useState([]);
   const [perifericos, setPerifericos] = useState([]);
+  const [perifericosSinAsignar, setPerifericosSinAsignar] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCatalogsLoading, setIsCatalogsLoading] = useState(false);
   const [newKitPerifericoData, setnewKitPerifericoData] = useState({});
@@ -65,73 +66,84 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  const fetchKitPerifericos = async () => {
+    setIsLoading(true);
+    try {
+      const responseKitPerifericos = await api.get(
+        `${API_URL}/api/kit_perifericos/`
+      );
+      const kitsData = responseKitPerifericos.data;
+
+      // Transformar los datos para incluir los nombres de los periféricos
+      const transformedKitsData = kitsData.map(kit => {
+        const perifericosNames = kit.perifericos.map(id => perifericosMap[id] || "Desconocido");
+        return {
+          ...kit,
+          perifericosNames,
+        };
+      });
+
+      setKitPerifericos(transformedKitsData);
+    } catch (error) {
+      toast.error("Hubo un error en la carga de datos de los Kit de Perifericos");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchKitPerifericos = async () => {
-      setIsLoading(true);
-      try {
-        const responseKitPerifericos = await api.get(
-          `${API_URL}/api/kit_perifericos/`
-        );
-        const kitsData = responseKitPerifericos.data;
-
-        // Transformar los datos para incluir los nombres de los periféricos
-        const transformedKitsData = kitsData.map(kit => {
-          const perifericosNames = kit.perifericos.map(id => perifericosMap[id] || "Desconocido");
-          return {
-            ...kit,
-            perifericosNames,
-          };
-        });
-
-        setKitPerifericos(transformedKitsData);
-      } catch (error) {
-        toast.error("Hubo un error en la carga de datos de los Kit de Perifericos");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    fetchKitPerifericos();
 
     if (Object.keys(perifericosMap).length > 0) {
       fetchKitPerifericos();
     }
   }, [perifericosMap]);
 
+  const fetchCatalogos = async () => {
+    setIsLoading(true);
+    setIsCatalogsLoading(true);
+    try {
+      const responsePerifericos = await api.get(
+        `${API_URL}/api/perifericos/`
+      );
 
+      const perifData = responsePerifericos.data;
+      setPerifericos(
+        perifData.map((item) => ({
+          value: item.id_perifericos,
+          label: `${item.nombre_periferico} (${item.sereal})`, // Concatenar nombre y serial
+        }))
+      );
 
+      const responsePerifericos2 = await api.get(
+        `${API_URL}/api/perifericos_sin_asignar/`
+      );
 
+      const perifData2 = responsePerifericos2.data;
+      setPerifericosSinAsignar(
+        perifData2.map((item) => ({
+          value: item.id_perifericos,
+          label: `${item.nombre_periferico} (${item.sereal})`, // Concatenar nombre y serial
+        }))
+      );
+
+      // Crear un mapa para acceso rápido a los nombres de los periféricos
+      const perifMap = {};
+      perifData.forEach(item => {
+        perifMap[item.id_perifericos] = `${item.nombre_periferico} (${item.sereal})`;
+      });
+      setPerifericosMap(perifMap);
+
+    } catch (error) {
+      toast.error("Hubo un error en la carga de datos de los catalogos.");
+    } finally {
+      setIsLoading(false);
+      setIsCatalogsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCatalogos = async () => {
-      setIsLoading(true);
-      setIsCatalogsLoading(true);
-      try {
-        const responsePerifericos = await api.get(
-          `${API_URL}/api/perifericos/`
-        );
-
-        const perifData = responsePerifericos.data;
-        setPerifericos(
-          perifData.map((item) => ({
-            value: item.id_perifericos,
-            label: `${item.nombre_periferico} (${item.sereal})`, // Concatenar nombre y serial
-          }))
-        );
-
-        // Crear un mapa para acceso rápido a los nombres de los periféricos
-        const perifMap = {};
-        perifData.forEach(item => {
-          perifMap[item.id_perifericos] = `${item.nombre_periferico} (${item.sereal})`;
-        });
-        setPerifericosMap(perifMap);
-
-      } catch (error) {
-        toast.error("Hubo un error en la carga de datos de los catalogos.");
-      } finally {
-        setIsLoading(false);
-        setIsCatalogsLoading(false);
-      }
-    };
-
     fetchCatalogos();
   }, []);
 
@@ -183,6 +195,8 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       cambiarEstadoModal(false);
       toast.success("El Kit Fue Creado Exitosamente!");
       fetchData();
+      fetchKitPerifericos();
+      fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -257,6 +271,8 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
       cambiarEstadoModal(false);
       toast.success("El Kit Periferico fue actualizado exitosamente!");
       fetchData();
+      fetchKitPerifericos();
+      fetchCatalogos();
     } catch (error) {
       const errorMessage = error.response
         ? error.response.data.message
@@ -308,7 +324,7 @@ function TablaKitPerifericosBack({ totalequiposAsignados, totalEquiposDisponible
     }
     let fieldsWithOptions = fields.map((field) => {
       if (field.id === "id_perifericos") {
-        return { ...field, options: perifericos };
+        return { ...field, options: action === "create" || action == "update" ? perifericosSinAsignar : perifericos };
       }
       return field;
     });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBarsProgress, faFileLines, faMagnifyingGlass, faPenToSquare, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faBarsProgress, faFileLines, faKey, faMagnifyingGlass, faPenToSquare, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../generales/modal";
 import ModalFiltros from "../generales/modalFiltros";
 import styled from "styled-components";
@@ -275,7 +275,10 @@ function ModConfigUsuario() {
               <thead style={{ position: 'sticky', top: '0' }}>
                 <tr>
                   <th style={{ paddingLeft: '10vw' }}>Usuario</th>
+                  <th style={{ paddingLeft: '0vw' }}>Nombres</th>
+                  <th style={{ paddingLeft: '0vw' }}>Apellidos</th>
                   <th style={{ paddingLeft: '0vw' }}>Correo</th>
+                  <th style={{ paddingLeft: '0vw' }}>Rol</th>
                   <th style={{ paddingLeft: '2vw' }}>Acciones</th>
                 </tr>
               </thead>
@@ -295,7 +298,10 @@ function ModConfigUsuario() {
                   currentRecords.map((historico) => (
                     <tr key={historico.id}>
                       <td style={{ paddingLeft: '10vw' }}>{historico.nombre_usuario}</td>
+                      <td></td>
+                      <td></td>
                       <td style={{ paddingLeft: '0vw' }}>{historico.correo_usuario}</td>
+                      <td></td>
                       <td>
                         <button
 
@@ -304,6 +310,16 @@ function ModConfigUsuario() {
                           title="Detalle"
                         >
                           <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                        </button>
+                      </td>
+                      <td>
+                        <button
+
+                          className="btn-accion"
+                          onClick={() => handleInfo(historico)}
+                          title="Detalle"
+                        >
+                          <FontAwesomeIcon className="icon-accion" icon={faKey} />
                         </button>
                       </td>
                       <td style={{ paddingRight: '10vw' }}></td>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard, faDesktop, faFileContract, faFileSignature, faGear, faGlobe, faIdCard, faPaste, faRectangleList, faScrewdriverWrench, faTruckRampBox, faUserGear, faUserLock, faUsersGear, faUsersLine, faWindowRestore } from "@fortawesome/free-solid-svg-icons";
 import { faBoxesStacked, faUserTie } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate,useLocation  } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../imagenes/login.png';
 import nuevaimagen from '../../imagenes/logopeq.jpg';
 import { faMicrosoft } from '@fortawesome/free-brands-svg-icons';
