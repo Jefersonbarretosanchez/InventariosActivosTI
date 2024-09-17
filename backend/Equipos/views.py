@@ -1508,3 +1508,11 @@ class PersonasSinAsignacionViewSet(generics.ListAPIView):
         id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
     serializer_class = PersonasAsigEquiposSerializer
     permission_classes = [AllowAny]
+
+class PerifericosSinAsignarView(generics.ListAPIView):
+    serializer_class = PerifericosSinAsignarSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        estado_sin_asignar = CatEstadoPeriferico.objects.get(nombre="Sin Asignar")
+        return Perifericos.objects.filter(id_estado_periferico=estado_sin_asignar)

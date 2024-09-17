@@ -58,4 +58,6 @@ urlpatterns = [
          name="equipos_en_bodega"),
     path('personas_sin_asignacion/', views.PersonasSinAsignacionViewSet.as_view(),
          name="personas_sin_asignacion"),
+    
+    path('perifericos_sin_asignar/',views.PerifericosSinAsignarView.as_view(),name="perifericos_sin_asignar"),
 ]

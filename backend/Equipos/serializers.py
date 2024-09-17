@@ -269,6 +269,11 @@ class PerifericosSerializer(serializers.ModelSerializer):
         fields = ['id_perifericos', 'nombre_periferico',
                   'id_estado_periferico', 'modelo', 'sereal', 'costo','nombre_estado_periferico']
 
+class PerifericosSinAsignarSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Perifericos
+        fields = ['id_perifericos', 'nombre_periferico',
+                  'id_estado_periferico']
 
 class KitPerifericosSerializer(serializers.ModelSerializer):
     nombre_periferico = serializers.CharField(
