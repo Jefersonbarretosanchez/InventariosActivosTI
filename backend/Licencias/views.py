@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -11,13 +11,14 @@ from rest_framework.response import Response
 from .models import *
 from activosTI.models import Historicos
 from .serializers import *
+from activosTI.views import PermisosApis
 
 # Create your views here.
 
 
 class LicenciaPersonaListCreate(generics.ListCreateAPIView):
     serializer_class = LicenciaPersonasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return LicenciaPersona.objects.all().order_by('-id_licencia')
@@ -82,7 +83,7 @@ class LicenciaPersonaListCreate(generics.ListCreateAPIView):
 class LicenciaPersonaUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = LicenciaPersonasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = LicenciaPersona.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -151,7 +152,7 @@ class LicenciaPersonaUpdate(generics.RetrieveUpdateAPIView):
 
 class LicenciasEquiposListCreate(generics.ListCreateAPIView):
     serializer_class = LicenciaEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return LicenciasEquipo.objects.all().order_by('-id_licencia')
@@ -216,7 +217,7 @@ class LicenciasEquiposListCreate(generics.ListCreateAPIView):
 class LicenciasEquiposUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = LicenciaEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = LicenciasEquipo.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -285,7 +286,7 @@ class LicenciasEquiposUpdate(generics.RetrieveUpdateAPIView):
 
 class LicenciasAreasListCreate(generics.ListCreateAPIView):
     serializer_class = LicenciaAreasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return LicenciaArea.objects.all().order_by('-id_licencia')
@@ -347,7 +348,7 @@ class LicenciasAreasListCreate(generics.ListCreateAPIView):
 class LicenciasAreasUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = LicenciaAreasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = LicenciaArea.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -417,12 +418,12 @@ class LicenciasAreasUpdate(generics.RetrieveUpdateAPIView):
 class CatEstadoLicenciasListCreate(generics.ListCreateAPIView):
     queryset = CatEstadoLicencias.objects.all()
     serializer_class = EstadoLicenciasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class ContratosListCreate(generics.ListCreateAPIView):
     serializer_class = ContratosSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return Contratos.objects.all().order_by('-id_contrato')
@@ -487,7 +488,7 @@ class ContratosListCreate(generics.ListCreateAPIView):
 class ContratosUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = ContratosSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = Contratos.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -557,7 +558,7 @@ class ContratosUpdate(generics.RetrieveUpdateAPIView):
 class PersonasLicenciasList(generics.ListAPIView):
     queryset = Persona.objects.all()
     serializer_class = PersonaLicenciasSerializers
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 # Vistas Asignación Licencias
 
@@ -565,13 +566,13 @@ class PersonasLicenciasList(generics.ListAPIView):
 class LicenciasPersonasAsignacionViewSet(generics.ListAPIView):
     queryset = LicenciaPersona.objects.all()
     serializer_class = LicenciasPersonasAsigSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class AsignarLicenciaPersonaView(generics.ListCreateAPIView):
     queryset = AsignacionLicenciaPersona.objects.all()
     serializer_class = AsignacionLicenciasPersonasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def perform_create(self, serializer):
         # Guardar la nueva asignación
@@ -646,7 +647,7 @@ class AsignarLicenciaPersonaView(generics.ListCreateAPIView):
 class DesasignarLicPerView(generics.RetrieveUpdateAPIView):
     queryset = AsignacionLicenciaPersona.objects.all()
     serializer_class = DesAsignacionLicenciasPersonaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -704,7 +705,7 @@ class DesasignarLicPerView(generics.RetrieveUpdateAPIView):
 class AsignarLicenciaEquiposView(generics.ListCreateAPIView):
     queryset = AsignacionLicenciasEquipo.objects.all()
     serializer_class = AsignacionLicenciasEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def perform_create(self, serializer):
         # Guardar la nueva asignación
@@ -733,7 +734,7 @@ class AsignarLicenciaEquiposView(generics.ListCreateAPIView):
 class DesasignarLicEquipoView(generics.RetrieveUpdateAPIView):
     queryset = AsignacionLicenciasEquipo.objects.all()
     serializer_class = DesAsignacionLicEquSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -792,24 +793,24 @@ class LicenciasPersonasSinAsignarViewSet(generics.ListAPIView):
     queryset = LicenciaPersona.objects.filter(
         id_estado_licencia__nombre="Sin Asignar")
     serializer_class = LicenciaPerSinAsignarSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class PersonasSinAsignacionLicenciaViewSet(generics.ListAPIView):
     queryset = Persona.objects.exclude(
         id_trabajador__in=AsignacionLicenciaPersona.objects.values_list('id_trabajador', flat=True))
     serializer_class = PersonaSinAsignacionSerializer  # Usa el nuevo serializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 class LicenciasEquiposSinAsignarViewSet(generics.ListAPIView):
     queryset = LicenciasEquipo.objects.filter(
         id_estado_licencia__nombre="Sin Asignar")
     serializer_class = LicenciaEquSinAsignarSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class EquiposSinAsignacionLicenciaViewSet(generics.ListAPIView):
     queryset = Equipo.objects.exclude(
         id_equipo__in=AsignacionLicenciasEquipo.objects.values_list('id_equipo', flat=True))
     serializer_class = EquipoSinAsignacionSerializer  # Usa el nuevo serializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]

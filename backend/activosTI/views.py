@@ -10,9 +10,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status, permissions,viewsets
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -23,7 +23,7 @@ from Equipos.models import AsignacionEquipos
 from Licencias.models import AsignacionLicenciaPersona
 from ComplementosActivos.models import AsignacionAplicaciones
 from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
-from .serializers import UserSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserSerializer,CambioContraseñaUsuarioSerializer, CambioContraseñaAdminSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
 from rest_framework.decorators import api_view
 
 # Create your views here.
@@ -31,7 +31,223 @@ from rest_framework.decorators import api_view
 # Configuración del logger
 logger = logging.getLogger(__name__)
 
+# Definir un permiso personalizado para verificar los permisos del rol
 
+# Api Control Permisos Usuarios
+
+class PermisosApis(BasePermission):
+    def has_permission(self, request, view):
+        # Obtener el rol del usuario desde el grupo al que pertenece
+        user = request.user
+        grupo = user.groups.first()  # Suponemos que el usuario tiene un solo grupo
+
+        if not grupo:
+            return False  # Si el usuario no pertenece a un grupo, denegar acceso
+
+        # Obtener el nombre del rol del usuario
+        rol = grupo.name
+        permisos_usuario = PERMISOS_ROLES.get(rol, {})
+
+        # Obtener la URL solicitada para saber qué API está tratando de acceder
+        path = request.path
+
+        # Definir aquí la lógica de validación de permisos basada en la URL
+        permiso = None
+        if 'activos' in path:
+            permiso = permisos_usuario.get('activos', 'n/a')
+            
+        elif any(keyword in path for keyword in ['asig_equipo', 'asignar_equipo', 'actualizar_asignacion_equipo', 'desasignar_equipo', 'equipos_asignacion', 'perifericos', 'kit_perifericos', 'equipos_en_bodega', 'personas_sin_asignacion', 'perifericos_sin_asignar']):
+            permiso = permisos_usuario.get('asignacion_equipos', 'n/a')
+            
+        elif 'personas' in path:
+            permiso = permisos_usuario.get('personas', 'n/a')
+            
+        elif 'centro_costos' in path:
+            permiso_personas = permisos_usuario.get('personas', 'n/a')
+            permiso_licencias = permisos_usuario.get('licencias', 'n/a')
+            permiso_administracion = permisos_usuario.get('administracion', 'n/a')
+            
+            # Si el rol tiene acceso de administración, puede leer y escribir
+            if request.method == 'GET':
+                if permiso_personas in ['r', 'rw'] or permiso_licencias in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
+                    return True
+            elif request.method in ['POST', 'PUT', 'DELETE']:
+                if permiso_administracion == 'rw':  # Solo administración puede escribir
+                    return True
+            return False  # Si no tiene permisos adecuados, denegar acceso
+            
+        elif any(keyword in path for keyword in ['area', 'region', 'cargo', 'estado_persona']):
+            # Aquí controlamos los permisos de lectura y escritura para 'area'
+            permiso_personas = permisos_usuario.get('personas', 'n/a')
+            permiso_administracion = permisos_usuario.get(
+                'administracion', 'n/a')
+
+            # Si el rol tiene acceso de administración, puede leer y escribir
+            if request.method == 'GET':
+                if permiso_personas in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
+                    return True
+            elif request.method in ['POST', 'PUT', 'DELETE']:
+                if permiso_administracion == 'rw':  # Solo administración puede escribir
+                    return True
+            return False  # Si no tiene permisos adecuados, denegar acceso
+        
+        elif 'equipos' in path:
+            permiso = permisos_usuario.get('equipos', 'n/a')
+            
+        elif any(keyword in path for keyword in ['marca_equipo', 'so', 'memoria_ram', 'disco_duro', 'tipo_propiedad', 'tipo_equipo', 'estado_equipo', 'coordinadores', 'ubicaciones', 'estado_perifericos']):
+            permiso_equipos = permisos_usuario.get('equipos', 'n/a')
+            # permiso_administracion = permisos_usuario.get('administracion', 'n/a')
+
+            if request.method == 'GET':
+                if permiso_equipos in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
+                    return True
+                elif request.method in ['POST', 'PUT', 'DELETE']:
+                    if permiso_administracion == 'rw':
+                        return True
+                return False
+            
+        elif any(keyword in path for keyword in ['asignar_licencia_persona', 'desasignar_licencia_persona', 'asignar_licencia_equipo', 'desasignar_licencia_equipo','licencias_sin_asignar','personas_sin_asignacion_licencia','licencias_sin_asignar_equipos','equipos_sin_asignacion_licencia']):
+            permiso = permisos_usuario.get('asignacion_licencias', 'n/a')
+            
+        elif 'contratos' in path:
+            permiso_licencias = permisos_usuario.get('licencias','n/a')
+            permiso_contratos = permisos_usuario.get('contratos','n/a')
+            
+            if request.method == 'GET':
+                if permiso_licencias in ['r', 'rw'] or permiso_contratos in ['r', 'rw']:
+                    return True
+            elif request.method in ['POST', 'PUT', 'DELETE']:
+                if permiso_contratos == 'rw':
+                    return True
+            return False  # Si no tiene permisos adecuados, denegar acceso
+            
+        elif 'licencias' in path:
+            permiso = permisos_usuario.get('licencias','n/a')
+            
+        elif 'aplicaciones' in path:
+            permiso = permisos_usuario.get('aplicaciones','n/a')
+            
+        elif 'log' in path:
+            permiso = permisos_usuario.get('logs', 'n/a')
+            
+        elif 'usuarios' in path:
+            permiso = permisos_usuario.get('administracion', 'n/a')
+            
+        else:
+            return False  # Ruta no reconocida, denegar acceso
+
+        # Si el permiso es 'n/a', denegar acceso
+        if permiso == 'n/a':
+            return False
+
+        # Controlar los métodos de lectura (GET) y escritura (POST, PUT, DELETE)
+        if request.method == 'GET' and permiso in ['r', 'rw']:
+            return True
+        elif request.method in ['POST', 'PUT', 'DELETE'] and permiso == 'rw':
+            return True
+
+        # Si no se cumple ninguna condición, denegar acceso
+        return False
+    
+# Fin Api Permisos Usuarios
+
+# APIs gestión Usuarios
+class CreacionUsuariosView(generics.ListCreateAPIView):
+    queryset = User.objects.all().order_by('id')
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "Usuario creado con éxito.",
+                "data": serializer.data
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response({
+                "message": "Hubo un error al crear el usuario.",
+                "errors": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+class ActualizacionUsuariosView(generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        if serializer.is_valid():
+            # Realiza la actualización del usuario
+            instance = serializer.save()
+            group_name = serializer.validated_data.get('group')
+            
+            # Actualiza el grupo
+            if group_name:
+                group, created = Group.objects.get_or_create(name=group_name)
+                instance.groups.clear()  # Limpiar los grupos actuales
+                instance.groups.add(group)
+
+            return Response({
+                "message": "Usuario actualizado con éxito."
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                "message": "Error al actualizar el usuario.",
+                "errors": serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+ 
+class CambioContraseñaUsuarioView(generics.UpdateAPIView):
+    """API para el cambio de contraseña directamente del usuario"""
+    serializer_class = CambioContraseñaUsuarioSerializer
+    model = User
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, queryset=None):
+        return self.request.user  # Retorna el usuario autenticado
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            # Cambiar la contraseña
+            serializer.update(user, serializer.validated_data)
+            return Response({"detail": "Contraseña actualizada correctamente."}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CambioContraseñaAdminView(generics.UpdateAPIView):
+    """
+    API para que un administrador cambie la contraseña de un usuario.
+    """
+    serializer_class = CambioContraseñaAdminSerializer
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
+
+    def get_object(self):
+        # Obtener el usuario cuyo ID fue pasado en la URL
+        user_id = self.kwargs.get('pk')
+        return User.objects.get(pk=user_id)
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Cambiar la contraseña
+            serializer.update(user, serializer.validated_data)
+            return Response({"detail": f"La contraseña del usuario {user.username} ha sido actualizada correctamente."}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)              
+# Fin APIs Gestión Usuarios
+# --------------------------------------
+
+# Inicio APIs Tokenización Personalizada
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -60,7 +276,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         return response
 
-
 class MyTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Obtén el refresh token desde las cookies
@@ -83,116 +298,14 @@ class MyTokenRefreshView(TokenRefreshView):
 
         return response
 
-# class LoginView(APIView):
-#     def post(self, request):
-#         username = request.data.get('username')
-#         password = request.data.get('password')
+# Fin APIs Tokenización Personalizada
+# --------------------------------------
 
-#         if not username or not password:
-#             return Response({'detail': 'Username and password are required'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         try:
-#             user = authenticate(username=username, password=password)
-#             if user is not None:
-#                 refresh = RefreshToken.for_user(user)
-#                 access_token = str(refresh.access_token)
-
-#                 # Registro para depuración
-#                 logger.info(f"Generated Access Token: {access_token}")
-#                 logger.info(f"Generated Refresh Token: {str(refresh)}")
-
-#                 user_info = {
-#                     'userId': user.id,
-#                     'username': user.username,
-#                     'email': user.email,
-#                     'nombre': user.first_name,
-#                     'apellidos': user.last_name,
-#                 }
-
-#                 return Response({
-#                     'access': access_token,
-#                     'refresh': str(refresh),
-#                     'user': user_info
-#                 }, status=status.HTTP_200_OK)
-#             else:
-#                 return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-#         except Exception as e:
-#             logger.error(f"Error during authentication: {str(e)}")
-#             return Response({'detail': 'An error occurred during authentication'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# Vistas
-
-
-class PersonaCreate(LoginRequiredMixin, CreateView):
-    """"Vista Persona"""
-    model = Persona
-    form_class = PersonaCreacion
-    template_name = 'personaCreate.html'
-    context_object_name = 'personas'
-    success_url = reverse_lazy('list')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-
-        Historicos.objects.create(
-            usuario=self.request.user,
-            correo_usuario=self.request.user.email,
-            tipo_cambio="Creacion",
-            tipo_activo="Persona",
-            activo_modificado=form.instance.id_trabajador,  # id de la persona
-            descripcion=f'Se creo el "trabajador" "{
-                form.instance.nombres} {form.instance.apellidos}"'
-        )
-        return response
-
-    # print(fecha_actual)
-
-
-class PersonaLista(LoginRequiredMixin, ListView):
-    """Lista personas"""
-    model = Historicos
-    template_name = 'persona.html'
-    context_object_name = 'personas'
-    queryset = Historicos.objects.all().order_by('-fecha_registro')
-
-
-class PersonaUpdate(LoginRequiredMixin, UpdateView):
-    """Actualiza Requerimientos"""
-    model = Persona
-    form_class = PersonaActualizar
-    template_name = 'personaEdit.html'
-    context_object_name = 'reqs'
-    success_url = reverse_lazy('list')
-
-    def form_valid(self, form):
-        if form.has_changed():
-            for field in form.changed_data:
-                original_value = form.initial[field]
-                current_value = form.cleaned_data[field]
-                Historicos.objects.create(
-                    usuario=self.request.user,
-                    correo_usuario=self.request.user.email,
-                    tipo_cambio="Actualización",
-                    tipo_activo="Persona",
-                    activo_modificado=field,
-                    # updated_field,  # Desempaqueta el diccionario con los detalles del campo
-                    descripcion=f'Cambio en {field}: de {
-                        original_value} a {current_value}'
-                )
-        return super().form_valid(form)
-
-
-class PersonaDelete(LoginRequiredMixin, DeleteView):
-    """"Vista para eliminar Personas"""
-    model = Persona
-    template_name = 'persona_confirm_delete.html'
-    success_url = reverse_lazy('list')
-
+# Inicio APIs Personas
 
 class PersonaListCreate(generics.ListCreateAPIView):
     serializer_class = PersonaSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    # permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return Persona.objects.select_related(
@@ -265,11 +378,11 @@ class PersonaListCreate(generics.ListCreateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al crear la persona'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class PersonasUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = PersonaSerializer
     permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = Persona.objects.select_related(
         'id_centro_costo',
         'id_area',
@@ -361,40 +474,30 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar la persona'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class PersonasDelete(generics.DestroyAPIView):
     """ND"""
     serializer_class = PersonaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         user = self.request.user
         return Persona.objects.filter(nombres=user)
 
+# -----------------------------------------------------
 
-class CreateUserView(generics.ListCreateAPIView):
-    """CU"""
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class UserDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+# Inicio APIs Catalogos
 
 
 class CatCentroCostoViewSet(generics.ListCreateAPIView):
     queryset = CatCentroCosto.objects.all()
     serializer_class = CentroCostoSerializer
-    # permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class CatCentroCostoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = CentroCostoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatCentroCosto.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -458,13 +561,13 @@ class CatCentroCostoUpdate(generics.RetrieveUpdateAPIView):
 class CatAreaViewSet(generics.ListCreateAPIView):
     queryset = CatArea.objects.all()
     serializer_class = AreaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class CatAreaUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = AreaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatArea.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -528,13 +631,13 @@ class CatAreaUpdate(generics.RetrieveUpdateAPIView):
 class CatRegionViewSet(generics.ListCreateAPIView):
     queryset = CatRegion.objects.all()
     serializer_class = RegionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class CatRegionUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = RegionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatRegion.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -598,13 +701,13 @@ class CatRegionUpdate(generics.RetrieveUpdateAPIView):
 class CatCargoViewSet(generics.ListCreateAPIView):
     queryset = CatCargo.objects.all()
     serializer_class = CargoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class CatCargoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = CargoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatCargo.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -668,13 +771,13 @@ class CatCargoUpdate(generics.RetrieveUpdateAPIView):
 class CatEstadoPersonaViewSet(generics.ListCreateAPIView):
     queryset = CatEstadoPersona.objects.all()
     serializer_class = EstadoPersonaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class CatEstadoPersonaUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = EstadoPersonaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatEstadoPersona.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -740,6 +843,7 @@ class HistoricosList(generics.ListAPIView):
     queryset = Historicos.objects.select_related(
         'usuario').order_by('-fecha_registro')
     serializer_class = historicoSerializer
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 # activos general
@@ -753,6 +857,7 @@ class ActivosViewSet(generics.ListAPIView):
                  queryset=AsignacionAplicaciones.objects.select_related('id_aplicacion')),
     ).select_related('id_centro_costo', 'id_area', 'id_region', 'id_cargo', 'id_estado_persona')
     serializer_class = ActivosSerializer
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 # Definimos los permisos de los roles directamente en el código

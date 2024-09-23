@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.urls import reverse_lazy
 
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -11,12 +11,13 @@ from rest_framework.response import Response
 from .models import *
 from activosTI.models import Historicos
 from .serializers import *
+from activosTI.views import PermisosApis
 
 # Create your views here.
 
 class AplicacionesListCreate(generics.ListCreateAPIView):
     serializer_class = AplicacionesSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return Aplicaciones.objects.all().order_by('-id_aplicacion')
@@ -73,7 +74,7 @@ class AplicacionesListCreate(generics.ListCreateAPIView):
 class AplicacionesUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = AplicacionesSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = Aplicaciones.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -134,12 +135,12 @@ class PersonasSinAsignacionAppsViewSet(generics.ListAPIView):
     queryset = Persona.objects.exclude(
         id_trabajador__in=AsignacionAplicaciones.objects.values_list('id_trabajador', flat=True))
     serializer_class = PersonaSinAsignacionAppSerializer
-    permission_classes = [AllowAny]        
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]       
         
 class AsignarApssView(generics.ListCreateAPIView):
     queryset = AsignacionAplicaciones.objects.all()
     serializer_class = AsignacionAppsPersonasSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def perform_create(self, serializer):
         # Guardar la nueva asignación
@@ -168,7 +169,7 @@ class AsignarApssView(generics.ListCreateAPIView):
 class DesasignarAppsView(generics.RetrieveUpdateAPIView):
     queryset = AsignacionAplicaciones.objects.all()
     serializer_class = DesAsignacionAppsSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

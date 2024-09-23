@@ -2,13 +2,13 @@
 import locale
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth.models import User
-from Equipos.models import Equipo, AsignacionEquipos
-from ComplementosActivos.models import Aplicaciones, AsignacionAplicaciones
-from Licencias.models import LicenciaPersona, AsignacionLicenciaPersona
+from django.contrib.auth.models import User, Group
+from Equipos.models import Equipo
+from ComplementosActivos.models import Aplicaciones
+from Licencias.models import LicenciaPersona
 from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona, Historicos
 
-
+# Inicio Gestión Tokenización
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -34,21 +34,104 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return data
 
+# Fin Gestión Tokenización
+
+# /---------------------------//---------------------------/
+
+# Inicio Gestión Usuarios
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializador para el Usuario"""
+    password = serializers.CharField(write_only=True, required=False)  # No es necesario en la actualización
+    group = serializers.ChoiceField(choices=[], required=True, write_only=True)  # ChoiceField para mostrar grupos
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'password',
-                  'email', 'first_name', 'last_name']
+        fields = ('id','username', 'email', 'password', 'first_name', 'last_name', 'group')
 
-        extra_kwargs = {'password': {'write_only': True}}
+    def __init__(self, *args, **kwargs):
+        super(UserSerializer, self).__init__(*args, **kwargs)
+        # Cargar los grupos existentes como opciones para el ChoiceField
+        self.fields['group'].choices = [(group.name, group.name) for group in Group.objects.all()]
 
     def create(self, validated_data):
-        print(validated_data)
-        user = User.objects.create_user(**validated_data)
-        # Token.objects.create(user=user)
+        group_name = validated_data.pop('group')
+        password = validated_data.pop('password', None)
+
+        # Crear el usuario
+        user = User(**validated_data)
+        if password:
+            user.set_password(password)
+        user.save()
+
+        # Asignar el grupo
+        group = Group.objects.get(name=group_name)
+        user.groups.add(group)
+
         return user
+
+    def update(self, instance, validated_data):
+        group_name = validated_data.pop('group', None)
+
+        # Actualizar grupo si se proporciona
+        if group_name:
+            instance.groups.clear()  # Limpiar grupos actuales
+            group = Group.objects.get(name=group_name)
+            instance.groups.add(group)
+
+        # Actualizar campos de usuario
+        instance.username = validated_data.get('username', instance.username)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+
+        return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        # Agregar el nombre del grupo actual en la representación
+        group = instance.groups.first()
+        representation['group'] = group.name if group else None
+        return representation
+
+class CambioContraseñaUsuarioSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("La contraseña actual es incorrecta.")
+        return value
+
+    def validate_new_password(self, value):
+        # Aquí puedes agregar validaciones adicionales para la nueva contraseña (longitud, caracteres especiales, etc.)
+        if len(value) < 8:
+            raise serializers.ValidationError("La nueva contraseña debe tener al menos 8 caracteres.")
+        return value
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance
+
+class CambioContraseñaAdminSerializer(serializers.Serializer):
+    new_password = serializers.CharField(required=True, write_only=True)
+    confirm_password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError("Las contraseñas no coinciden.")
+        return data
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance
+
+# Fin Gestión Usuarios
+
+# /---------------------------//---------------------------/
 
 # Serializador Historicos
 

@@ -4,13 +4,14 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 
-from rest_framework import generics, status
+from rest_framework import generics, status,permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 
 from .models import *
 from activosTI.models import Historicos
+from activosTI.views import PermisosApis
 from .serializers import *
 
 # Create your views here.
@@ -18,7 +19,7 @@ from .serializers import *
 
 class EquipoListCreate(generics.ListCreateAPIView):
     serializer_class = EquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         return Equipo.objects.select_related(
@@ -93,7 +94,7 @@ class EquipoListCreate(generics.ListCreateAPIView):
 class EquiposUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
     serializer_class = EquipoSerializer
-    # permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = Equipo.objects.select_related(
         'id_marcaequipo', 
         'id_so', 
@@ -173,7 +174,7 @@ class EquiposUpdate(generics.RetrieveUpdateAPIView):
 class EquiposDelete(generics.DestroyAPIView):
     """ND"""
     serializer_class = EquipoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         user = self.request.user
@@ -183,7 +184,7 @@ class EquiposDelete(generics.DestroyAPIView):
 class CatMarcaEquipoViewSet(generics.ListCreateAPIView):
     queryset = CatMarcaequipo.objects.all()
     serializer_class = MarcaEquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -237,7 +238,7 @@ class CatMarcaEquipoViewSet(generics.ListCreateAPIView):
 class CatMarcaequipoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = MarcaEquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatMarcaequipo.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -297,7 +298,7 @@ class CatMarcaequipoUpdate(generics.RetrieveUpdateAPIView):
 class CatSoViewSet(generics.ListCreateAPIView):
     queryset = CatSo.objects.all()
     serializer_class = SoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -351,7 +352,7 @@ class CatSoViewSet(generics.ListCreateAPIView):
 class CatSoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = SoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatSo.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -411,7 +412,7 @@ class CatSoUpdate(generics.RetrieveUpdateAPIView):
 class CatMRamViewSet(generics.ListCreateAPIView):
     queryset = CatMemoriaram.objects.all()
     serializer_class = MRamSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -465,7 +466,7 @@ class CatMRamViewSet(generics.ListCreateAPIView):
 class CatMemoriaramUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = MRamSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatMemoriaram.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -525,7 +526,7 @@ class CatMemoriaramUpdate(generics.RetrieveUpdateAPIView):
 class CatDiscoDuroViewSet(generics.ListCreateAPIView):
     queryset = CatDiscoduro.objects.all()
     serializer_class = DiscoDuroSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -579,7 +580,7 @@ class CatDiscoDuroViewSet(generics.ListCreateAPIView):
 class CatDiscoduroUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = DiscoDuroSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatDiscoduro.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -639,7 +640,7 @@ class CatDiscoduroUpdate(generics.RetrieveUpdateAPIView):
 class CatTipoPropiedadViewSet(generics.ListCreateAPIView):
     queryset = CatTipopropiedad.objects.all()
     serializer_class = TipoPropiedadSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -693,7 +694,7 @@ class CatTipoPropiedadViewSet(generics.ListCreateAPIView):
 class CatTipopropiedadUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = TipoPropiedadSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatTipopropiedad.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -753,7 +754,7 @@ class CatTipopropiedadUpdate(generics.RetrieveUpdateAPIView):
 class CatTipoEquipoViewSet(generics.ListCreateAPIView):
     queryset = CatTipoequipo.objects.all()
     serializer_class = TipoEquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -807,7 +808,7 @@ class CatTipoEquipoViewSet(generics.ListCreateAPIView):
 class CatTipoequipoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = TipoEquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatTipoequipo.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -867,7 +868,7 @@ class CatTipoequipoUpdate(generics.RetrieveUpdateAPIView):
 class CatEstadoEquipoViewSet(generics.ListCreateAPIView):
     queryset = CatEstadoequipo.objects.all()
     serializer_class = EstadoEquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -921,7 +922,7 @@ class CatEstadoEquipoViewSet(generics.ListCreateAPIView):
 class CatEstadoequipoUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = EstadoEquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatEstadoequipo.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -981,7 +982,7 @@ class CatEstadoequipoUpdate(generics.RetrieveUpdateAPIView):
 class CatCoordinadoresViewSet(generics.ListCreateAPIView):
     queryset = CatCoordinadores.objects.all()
     serializer_class = CoordinadoresSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -1035,7 +1036,7 @@ class CatCoordinadoresViewSet(generics.ListCreateAPIView):
 class CatCoordinadoresUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = CoordinadoresSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatCoordinadores.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -1095,7 +1096,7 @@ class CatCoordinadoresUpdate(generics.RetrieveUpdateAPIView):
 class CatUbicacionViewSet(generics.ListCreateAPIView):
     queryset = CatUbicacion.objects.all()
     serializer_class = UbicacionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -1145,12 +1146,11 @@ class CatUbicacionViewSet(generics.ListCreateAPIView):
             return Response(customized_response, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'message': 'Error inesperado al crear el registro'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
     
 class CatUbicacionUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Centros de costo"""
     serializer_class = UbicacionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = CatUbicacion.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -1211,12 +1211,12 @@ class CatUbicacionUpdate(generics.RetrieveUpdateAPIView):
 class PersonasAsigEquiposView(generics.ListAPIView):
     queryset = Persona.objects.all()
     serializer_class = PersonasAsigEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 class EquiposAsignacionViewSet(generics.ListAPIView):
     queryset = Equipo.objects.all()
     serializer_class = EquiposAsignacionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 class AsignarEquipoView(generics.ListCreateAPIView):
     queryset = AsignacionEquipos.objects.select_related(
@@ -1225,7 +1225,7 @@ class AsignarEquipoView(generics.ListCreateAPIView):
         'id_kit_perifericos'
     ).all()
     serializer_class = AsignacionEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def perform_create(self, serializer):
         # Guardar la nueva asignación
@@ -1255,7 +1255,7 @@ class AsignarEquipoView(generics.ListCreateAPIView):
 
 class ActualizarAsignacionView(generics.RetrieveUpdateAPIView):
     serializer_class = AsignacionEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     queryset = AsignacionEquipos.objects.all()
 
     def update(self, request, *args, **kwargs):
@@ -1301,7 +1301,7 @@ class ActualizarAsignacionView(generics.RetrieveUpdateAPIView):
 class DesasignarEquipoView(generics.RetrieveUpdateAPIView):
     queryset = AsignacionEquipos.objects.all()
     serializer_class = DesAsignacionEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -1374,7 +1374,7 @@ class DesasignarEquipoView(generics.RetrieveUpdateAPIView):
 class EstadoPerifericosView(generics.ListCreateAPIView):
     queryset = CatEstadoPeriferico.objects.all()
     serializer_class = EstadoPerifericosSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -1428,7 +1428,7 @@ class EstadoPerifericosView(generics.ListCreateAPIView):
 class PerifericosListCreate(generics.ListCreateAPIView):
     queryset = Perifericos.objects.all()
     serializer_class = PerifericosSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
     
     def perform_create(self, serializer):
         
@@ -1488,30 +1488,30 @@ class PerifericosUpdate(generics.RetrieveUpdateAPIView):
 class KitPerifericosListCreateView(generics.ListCreateAPIView):
     queryset = KitPerifericos.objects.all()
     serializer_class = KitPerifericosSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class KitPerifericosUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = KitPerifericos.objects.all()
     serializer_class = KitPerifericosUpdateSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class EquiposEnBodegaViewSet(generics.ListAPIView):
     queryset = Equipo.objects.filter(id_estadoequipo__nombre="En Bodega")
     serializer_class = EquipoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 
 class PersonasSinAsignacionViewSet(generics.ListAPIView):
     queryset = Persona.objects.exclude(
         id_trabajador__in=AsignacionEquipos.objects.values_list('id_trabajador', flat=True))
     serializer_class = PersonasAsigEquiposSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
 class PerifericosSinAsignarView(generics.ListAPIView):
     serializer_class = PerifericosSinAsignarSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
         estado_sin_asignar = CatEstadoPeriferico.objects.get(nombre="Sin Asignar")
