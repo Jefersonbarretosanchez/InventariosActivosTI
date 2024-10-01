@@ -5,8 +5,12 @@ import Sidebar from "../subcomponentes/generales/sidebar";
 import Footer from "../subcomponentes/generales/footer";
 import Paginate from "../subcomponentes/generales/paginate";
 import "../Estilos/asiglicencias.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import TablaHistoricosBack from '../subcomponentes/historicoLogs/TablaHistoricosBack';
 import ModConfigUsuario from '../subcomponentes/configUsuarios/ModConfigUsuario';
+import api from "../../api";
+
 
 export default function ConfigUsuarios() {
     const [tablaActiva, setTablaActiva] = useState('licenciaPersonas'); // Estado para la tabla activa
@@ -25,6 +29,7 @@ export default function ConfigUsuarios() {
             <Header onLogout={handleLogoutAnimation} />
             <Sidebar />
             <ModConfigUsuario />
+            <ToastContainer />
             <Paginate />
             <Footer />
         </div>

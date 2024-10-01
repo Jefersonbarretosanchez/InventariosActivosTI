@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 
+
 function Header({ onLogout }) {
     const rol = localStorage.getItem('rol');
     const today = new Date();
@@ -62,9 +63,9 @@ function Header({ onLogout }) {
                     <i className="icono-desplegable-princ">▼</i>
                 </button>
                 <div className="contenido-desplegable-princ">
-                    {/* <Link to="#" onClick={handleSettings} style={{ color: '#545c8c' }}>
+                    <Link to="#" onClick={handleSettings} style={{ color: '#545c8c' }}>
                         <FontAwesomeIcon icon={faGears} style={{ width: '30px', color: '#545c8c' }} />Settings
-                    </Link> */}
+                    </Link>
                     <Link to="#" onClick={handleLogout} style={{ color: 'red' }}>
                         <FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Logout
                     </Link>

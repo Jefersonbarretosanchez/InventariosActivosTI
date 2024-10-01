@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { Autocomplete, TextField } from '@mui/material';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle, faMinusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faMinusCircle, faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors, showAddPerifericoButton, actionType }) => {
   const [perifericosFields, setPerifericosFields] = useState(initialValues.perifericos || [{ value: null, label: '' }]);
+  const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad de la contraseña
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevShowPassword => !prevShowPassword);  // Alterna el estado
+  };
   useEffect(() => {
     const initialErrors = {};
     fields.forEach(field => {
@@ -89,9 +93,34 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
   return (
     <Formulario>
       {fields.map((field) => (
-        <div key={field.id}>
+        <div key={field.id} style={{ position: 'relative' }}>
           <label>{field.label}</label>
-          {field.id === "costo" ? (
+          {field.type === "password" ? (
+            <>
+              <input
+                className="form-control"
+                type={showPassword ? "text" : "password"}  // Alterna entre "text" y "password"
+                name={field.id}
+                defaultValue={initialValues[field.id] || ''}
+                onChange={handleChange}
+                disabled={disabledFields.includes(field.id)}
+                required={field.required}
+              />
+              {/* Botón para alternar la visibilidad de la contraseña */}
+              <FontAwesomeIcon
+                icon={showPassword ? faEyeSlash : faEye}
+                onClick={togglePasswordVisibility}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '65%',
+                  transform: 'translateY(-50%)',
+                  cursor: 'pointer',
+                }}
+              />
+              {errors[field.id] && <ErrorMsg>{errors[field.id]}</ErrorMsg>}
+            </>
+          ) : field.id === "costo" ? (
             <CostoWrapper>
               <span className="currency">$</span>
               <input

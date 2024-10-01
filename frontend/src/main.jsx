@@ -32,7 +32,7 @@ root.render(
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/activos" element={<ProtectedRoute><Activos /></ProtectedRoute>} />
+        <Route path="/activos" element={<ProtectedRoute requiredPermission="activos"><Activos /></ProtectedRoute>} />
         <Route path="/personas" element={<ProtectedRoute requiredPermission="personas"><Personas /></ProtectedRoute>} />
         <Route path="/equipos" element={<ProtectedRoute requiredPermission="equipos"><Equipos /></ProtectedRoute>} />
         <Route path="/asigEquipos" element={<ProtectedRoute requiredPermission="asignacion_equipos"><AsigEquipos /></ProtectedRoute>} />
@@ -42,7 +42,7 @@ root.render(
         <Route path="/contratos" element={<ProtectedRoute requiredPermission="contratos"><Contratos /></ProtectedRoute>} />
         <Route path="/historicoLogs" element={<ProtectedRoute requiredPermission="logs"><HistLogs /></ProtectedRoute>} />
         <Route path="/administracion" element={<ProtectedRoute requiredPermission="administracion"><Administracion /></ProtectedRoute>} />
-        <Route path="/configUsuarios" element={<ProtectedRoute requiredPermission="configUsuarios"><ConfigUsuarios /></ProtectedRoute>} />
+        <Route path="/config_usuarios" element={<ProtectedRoute requiredPermission="config_usuarios"><ConfigUsuarios /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

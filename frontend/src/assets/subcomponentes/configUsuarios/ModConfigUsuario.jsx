@@ -1,137 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBarsProgress, faFileLines, faKey, faMagnifyingGlass, faPenToSquare, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
-import Modal from "../generales/modal";
-import ModalFiltros from "../generales/modalFiltros";
-import styled from "styled-components";
-import { formFields, filterFields, ALL_INPUT_IDS } from "../historicoLogs/formConfig";
-import FormDinamico from "../generales/formDinamico";
-import FiltroDinamico from "../generales/filtroDinamico";
-import Paginate from "../generales/paginate";
-import api from "../../../api";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
+import api from "../../../api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMagnifyingGlass,
+  faPlus,
+  faPenToSquare,
+  faKey,
+} from "@fortawesome/free-solid-svg-icons";
+import Modal from "../generales/modal";
+import FormDinamico from "../generales/formDinamico";
+import styled from "styled-components";
+import Paginate from "../generales/paginate";
+import { formFields, formFields2, passwordFields, ALL_INPUT_IDS } from "./formConfig";
 
 function ModConfigUsuario() {
-  const [estadoModal, cambiarEstadoModal] = useState(false);
-  const [modalConfig, cambiarModalConfig] = useState({
-    titulo: "",
-    contenido: null,
-  });
-  const [historicos, setHistoricos] = useState([]);
+  const permisos = JSON.parse(localStorage.getItem('permisos')); // Recuperamos los permisos
+  const [usuarios, setUsuarios] = useState([]);
+  const [rolesusuarios, setRolesUsuarios] = useState([]);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [rolesOptions, setRolesOptions] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, setRecordsPerPage] = useState(15);
-
-  const [estadoModalFiltros, cambiarEstadoModalFiltros] = useState(false);
+  const [newUserData, setNewUserData] = useState({});
+  const [actionType, setActionType] = useState("");
+  const [estadoModal, cambiarEstadoModal] = useState(false);
   const [filtroValues, setFiltroValues] = useState({});
-  const [activeFilters, setActiveFilters] = useState([]);
-  const [triggerUpdate, setTriggerUpdate] = useState(false);
-  const [showFilterOptions, setShowFilterOptions] = useState(false);
-
-  const API_URL = import.meta.env.VITE_API_URL
-
-  const [filterFields, setFilterFields] = useState([
-    {
-      id: "nombre_usuario",
-      label: "Nombre de Usuario",
-      type: "select",
-      required: true,
-      options: [], // Opciones iniciales vacías
-    },
-    {
-      id: "correo_usuario",
-      label: "Correo de Usuario",
-      type: "select",
-      required: true,
-      options: [], // Opciones iniciales vacías
-    },
-    {
-      id: "tipo_cambio",
-      label: "Tipo de Cambio",
-      type: "select",
-      required: true,
-      options: [], // Opciones iniciales vacías
-    },
-    {
-      id: "tipo_activo",
-      label: "Tipo de Activo",
-      type: "select",
-      required: true,
-      options: [], // Opciones iniciales vacías
-    },
-  ]);
+  const [modalConfig, cambiarModalConfig] = useState({ titulo: "", contenido: null });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(100);
 
 
-  const handleResize = () => {
-    const width = window.innerWidth;
-    if (width > 0) {
-      setRecordsPerPage(150);
-    }
-  };
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    fetchHistoricos();
-  }, []);
-
-  const fetchHistoricos = async () => {
+  // Obtener usuarios
+  const fetchUsuarios = async () => {
     setIsLoading(true);
     try {
-      const response = await api.get(`${API_URL}/api/log/`); // URL de la API
-      setHistoricos(response.data);
-
-      // Extraer las opciones de los campos de filtro
-      const nombresUsuarios = response.data.map(historico => historico.nombre_usuario).filter(n => n);
-      const correosUsuarios = response.data.map(historico => historico.correo_usuario).filter(n => n);
-      const tiposCambio = response.data.map(historico => historico.tipo_cambio);
-      const tiposActivo = response.data.map(historico => historico.tipo_activo);
-
-      const uniqueNombresUsuarios = [...new Set(nombresUsuarios)];
-      const uniqueCorreosUsuarios = [...new Set(correosUsuarios)];
-      const uniqueTiposCambio = [...new Set(tiposCambio)];
-      const uniqueTiposActivo = [...new Set(tiposActivo)];
-
-      // Asignar las opciones a los campos de filtro
-      const updatedFilterFields = filterFields.map(field => {
-        if (field.id === "nombre_usuario") {
-          return {
-            ...field,
-            options: uniqueNombresUsuarios.map(option => ({ value: option, label: option }))
-          };
-        }
-        if (field.id === "correo_usuario") {
-          return {
-            ...field,
-            options: uniqueCorreosUsuarios.map(option => ({ value: option, label: option }))
-          };
-        }
-        if (field.id === "tipo_cambio") {
-          return {
-            ...field,
-            options: uniqueTiposCambio.map(option => ({ value: option, label: option }))
-          };
-        }
-        if (field.id === "tipo_activo") {
-          return {
-            ...field,
-            options: uniqueTiposActivo.map(option => ({ value: option, label: option }))
-          };
-        }
-        return field;
-      });
-      setFilterFields(updatedFilterFields);
-
+      const response = await api.get(`${API_URL}/api/usuarios/crear/`);
+      setUsuarios(response.data);
     } catch (error) {
-      toast.error("Error cargando los historicos");
+      toast.error("Hubo un error al cargar los usuarios.");
     } finally {
       setIsLoading(false);
     }
+  };
+  const fetchData = useCallback(() => {
+    fetchUsuarios();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const fetchRoles = async () => {
+    try {
+      const response = await api.get(`${API_URL}/api/usuarios/roles/`);
+      setRolesUsuarios(response.data);
+    } catch (error) {
+      toast.error("Hubo un error al cargar los Roles.");
+    }
+  };
+  useEffect(() => {
+    fetchRoles();
+  }, [fetchRoles]);
+
+
+
+
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewUserData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleFiltroChange = (event) => {
@@ -142,39 +82,216 @@ function ModConfigUsuario() {
     }));
   };
 
-  const handleInfo = (historico) => {
-    abrirModal(`Descripcion del Historico`, historico.descripcion);
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
   };
 
-  const abrirModal = (titulo, contenido) => {
+
+  // Crear usuario
+  const createUsuario = async () => {
+    setIsLoading(true);
+
+    try {
+      const formattedData = {
+        ...newUserData,
+      }
+      const response = await api.post(
+        `${API_URL}/api/usuarios/crear/`,
+        formattedData
+      );
+      const nuevoUsuario = response.data;
+      setUsuarios([...usuarios, nuevoUsuario]);
+      setNewUserData({});
+      fetchData();
+      toast.success("Usuario creado exitosamente!");
+      cambiarEstadoModal(false);
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
+      const statusCode = error.response ? error.response.status : 500;
+
+      if (error.response && error.response.data.errors) {
+        const specificErrors = error.response.data.errors;
+
+        const formattedErrors = Object.keys(specificErrors)
+          .map((key) => `${key}: ${specificErrors[key]}`)
+          .join("<br />");
+
+        toast.error(
+          <div>
+            {errorMessage} <br />
+            <br />
+            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
+            <br />
+            <strong>
+              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
+              <br />
+            </strong>
+            {/* (Código de error: {statusCode}) */}
+          </div>,
+          { position: "bottom-center" }
+        );
+      } else {
+        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
+      }
+      cambiarEstadoModal(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Editar usuario
+  const updateUsuario = async () => {
+    setIsLoading(true);
+    try {
+      const updatedData = {
+        ...usuarioSeleccionado,
+        ...newUserData,
+      };
+
+      const formattedData = {
+        ...updatedData
+      };
+
+      const response = await api.put(
+        `${API_URL}/api/usuarios/actualizar/${usuarioSeleccionado.id}/`,
+        formattedData
+      );
+      const updatedUsuario = response.data;
+      setUsuarios(
+        usuarios.map((usuario) =>
+          usuario.id === updatedUsuario.id
+            ? updatedUsuario
+            : usuario
+        )
+      );
+      fetchData();
+      setNewUserData({});
+      cambiarEstadoModal(false);
+      toast.success("Usuario actualizado exitosamente!");
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
+      const statusCode = error.response ? error.response.status : 500;
+
+      if (error.response && error.response.data.errors) {
+        const specificErrors = error.response.data.errors;
+
+        const formattedErrors = Object.keys(specificErrors)
+          .map((key) => `${key}: ${specificErrors[key]}`)
+          .join("<br />");
+
+        toast.error(
+          <div>
+            {errorMessage} <br />
+            <br />
+            <div>Los siguientes datos ya se encuentran registrados en el sistema:</div>
+            <br />
+            <strong>
+              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
+              <br />
+            </strong>
+            {/* (Código de error: {statusCode}) */}
+          </div>,
+          { position: "bottom-center", }
+        );
+      } else {
+        toast.error(`${errorMessage} (Código de error: ${statusCode})`);
+      }
+      cambiarEstadoModal(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updatePassword = async () => {
+    setIsLoading(true);
+    try {
+      const passwordData = {
+        new_password: newUserData.new_password,
+        confirm_password: newUserData.confirm_password,
+      };
+
+      if (!passwordData.new_password || !passwordData.confirm_password) {
+        toast.error("Por favor, ingrese y confirme la nueva contraseña.");
+        setIsLoading(false);
+        return;
+      }
+
+      const response = await api.put(
+        `${API_URL}/api/usuarios/cambio/${usuarioSeleccionado.id}/`,
+        passwordData
+      );
+
+      toast.success(`Contraseña de ${usuarioSeleccionado.username} actualizada correctamente!`);
+      setNewUserData({});
+      cambiarEstadoModal(false); // Close the modal after success
+    } catch (error) {
+      const errorMessage = error.response
+        ? error.response.data.message
+        : error.message;
+      const statusCode = error.response ? error.response.status : 500;
+
+      if (error.response && error.response.data.errors) {
+        const specificErrors = error.response.data.errors;
+
+        const formattedErrors = Object.keys(specificErrors)
+          .map((key) => `${key}: ${specificErrors[key]}`)
+          .join("<br />");
+
+        toast.error(
+          <div>
+            {errorMessage} <br />
+            <br />
+            <div>Errores encontrados:</div>
+            <strong>
+              <div dangerouslySetInnerHTML={{ __html: formattedErrors }} />
+            </strong>
+          </div>,
+          { position: "bottom-center" }
+        );
+      } else {
+        toast.error(`las contraseñas no coinciden`);
+      }
+      cambiarEstadoModal(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
+  const abrirModal = (
+    titulo,
+    fields,
+    disabledFields = [],
+    initialValues = {},
+    action = ""
+  ) => {
+    let fieldsWithOptions = fields.map((field) => {
+      if (field.id === "group") {
+        return { ...field, options: rolesusuarios };
+      }
+      return field;
+    });
+    setNewUserData(initialValues);
+    setActionType(action);
     cambiarModalConfig({
       titulo: titulo,
       contenido: (
-        <div>
-          <p style={{ width: '90%' }}>{contenido}</p>
-        </div>
+        <FormDinamico
+          fields={fieldsWithOptions}
+          disabledFields={disabledFields}
+          initialValues={initialValues}
+          onInputChange={handleInputChange}
+        />
       ),
     });
     cambiarEstadoModal(true);
   };
 
-
-  const abrirModalFiltros = () => {
-    cambiarModalConfig({
-      titulo: "Agregar Filtros",
-      contenido: (
-        <FiltroDinamico
-          activeFilters={activeFilters}
-          onAddFilter={handleAddFilter}
-          onRemoveFilter={handleRemoveFilter}
-          onFiltroChange={handleFiltroChange}
-          filtroValues={filtroValues}
-          fieldsWithOptions={filterFields.map((field) => field)}
-        />
-      ),
-    });
-    cambiarEstadoModalFiltros(true);
-  };
 
   const applyFiltros = () => {
     cambiarEstadoModalFiltros(false);
@@ -189,7 +306,7 @@ function ModConfigUsuario() {
     if (!activeFilters.includes(filterId)) {
       setActiveFilters((prevFilters) => [...prevFilters, filterId]);
       setTriggerUpdate((prev) => !prev);
-      setShowFilterOptions(false);
+      setShowFilterOptions(false); // Ocultar opciones después de seleccionar una
     }
   };
 
@@ -205,22 +322,44 @@ function ModConfigUsuario() {
     setTriggerUpdate((prev) => !prev);
   };
 
+  const handleCreate = () => {
+    abrirModal("Registrar Usuario", formFields, [], {}, "create");
+  };
+
+  const handleEdit = (usuario) => {
+    const rol = localStorage.getItem('rol');
+    const camposParaOcultar = rol === 'Administrador' ? [] : ["sereal"];
+
+    setUsuarioSeleccionado(usuario);
+    abrirModal(
+      `Actualizar ${usuario.username}`,
+      formFields2,
+      camposParaOcultar,
+      usuario,
+      "update"
+    );
+  };
+  const handleEditPassword = (usuario) => {
+    setUsuarioSeleccionado(usuario);
+    abrirModal(`Cambiar Contraseña de ${usuario.username}`, passwordFields, [], usuario, "updatePassword");
+  };
+
+  // Cambiar contraseña
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
-  };
 
-  const filteredHistoricos = historicos.filter((historico) => {
-    const searchString = `${historico.fecha} ${historico.nombre_usuario} ${historico.correo_usuario} ${historico.tipo_cambio} ${historico.tipo_activo} ${historico.activo_modificado}`.toLowerCase();
+
+  // Filtro de búsqueda
+  const filteredUsuarios = usuarios.filter((usuario) => {
+    const searchString = `${usuario.id} ${usuario.username} ${usuario.email} ${usuario.first_name} ${usuario.last_name} ${usuario.group}`.toLowerCase();
     const matchesSearch = searchString.includes(searchTerm.toLowerCase());
 
     const matchesFilters = Object.keys(filtroValues).every((key) => {
       if (!filtroValues[key]) return true;
-      return String(historico[key]) === String(filtroValues[key]);
+      return String(usuario[key]) === String(filtroValues[key]);
     });
 
     return matchesSearch && matchesFilters;
@@ -228,20 +367,20 @@ function ModConfigUsuario() {
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredHistoricos.slice(
+  const currentRecords = filteredUsuarios.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
-  const totalPages = Math.ceil(filteredHistoricos.length / recordsPerPage);
+  const totalPages = Math.ceil(filteredUsuarios.length / recordsPerPage);
 
   return (
     <>
-      <div className="contenedor-activos" style={{ marginTop: '0.8vh' }}>
+      <div className="contenedor-activos" style={{ marginTop: "0.8vh" }}>
         <div className="row-activos">
           <div className="asigPerifericos">
-            <h1>Configuracion de Usuarios</h1>
+            <h1>Configuración de Usuarios</h1>
           </div>
-          <div className="contenedor-principal" style={{ paddingLeft: '15vw' }}>
+          <div className="contenedor-principal" style={{ paddingLeft: "15vw" }}>
             <div className="contbuscador-personas">
               <input
                 className="buscador-personas"
@@ -250,79 +389,63 @@ function ModConfigUsuario() {
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="buscador-icon-activos"
-              />
+              <FontAwesomeIcon icon={faMagnifyingGlass} className="buscador-icon-activos" />
             </div>
             <div className="iconos-acciones">
-              {/* {permisos && permisos.asignacion_licencias === 'rw' && ( */}
-              <FontAwesomeIcon
-                className="agregar-personas"
-                onClick={() => handleCreate()}
-                icon={faPlus}
-                title="Asignar Licencia"
-              />
-              {/* )} */}
+              {permisos && permisos.config_usuarios === 'rw' && (
+                <FontAwesomeIcon
+                  className="agregar-personas"
+                  onClick={() => handleCreate()}
+                  icon={faPlus}
+                  title="Agregar Usuario"
+                />
+              )}
             </div>
-            {/* <div className="iconos-acciones" style={{ width: '70%' }}>
-              <FontAwesomeIcon title="Agregar Filtros" style={{ paddingLeft: '1vw' }} className="agregar-filtros" icon={faBarsProgress} onClick={abrirModalFiltros}></FontAwesomeIcon>
-
-            </div> */}
           </div>
           <Divtabla style={{ maxHeight: "62.4vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">
             <table style={{ width: "100%" }} className="table-personas">
-              <thead style={{ position: 'sticky', top: '0' }}>
+              <thead style={{ position: "sticky", top: "0" }}>
                 <tr>
-                  <th style={{ paddingLeft: '10vw' }}>Usuario</th>
-                  <th style={{ paddingLeft: '0vw' }}>Nombres</th>
-                  <th style={{ paddingLeft: '0vw' }}>Apellidos</th>
-                  <th style={{ paddingLeft: '0vw' }}>Correo</th>
-                  <th style={{ paddingLeft: '0vw' }}>Rol</th>
-                  <th style={{ paddingLeft: '2vw' }}>Acciones</th>
+                  <th style={{ paddingLeft: "2vw" }}>Usuario</th>
+                  <th style={{ paddingLeft: "4vw" }}>Nombres</th>
+                  <th style={{ paddingLeft: "7vw" }}>Apellidos</th>
+                  <th style={{ paddingLeft: "7vw" }}>Correo</th>
+                  <th style={{ paddingLeft: "5vw" }}>Rol</th>
+                  <th style={{ paddingLeft: "9.2vw" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {isLoading ? (
                   <tr>
-                    <td></td>
-                    <td style={{ paddingLeft: "0vw" }}></td>
-                    <td style={{ paddingLeft: "0vw" }}></td>
-                    <td style={{ paddingLeft: "10vw" }}><Loading>
-                      <Spinner />
-                      <span>Loading..</span>
-                    </Loading></td>
-                    <td style={{ paddingLeft: "8vw" }}></td>
+                    <td colSpan="6">
+                      <Loading>
+                        <Spinner />
+                        <span>Loading..</span>
+                      </Loading>
+                    </td>
                   </tr>
                 ) : (
-                  currentRecords.map((historico) => (
-                    <tr key={historico.id}>
-                      <td style={{ paddingLeft: '10vw' }}>{historico.nombre_usuario}</td>
-                      <td></td>
-                      <td></td>
-                      <td style={{ paddingLeft: '0vw' }}>{historico.correo_usuario}</td>
-                      <td></td>
-                      <td>
-                        <button
-
-                          className="btn-accion"
-                          onClick={() => handleInfo(historico)}
-                          title="Detalle"
-                        >
-                          <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
-                        </button>
-                      </td>
-                      <td>
-                        <button
-
-                          className="btn-accion"
-                          onClick={() => handleInfo(historico)}
-                          title="Detalle"
-                        >
+                  currentRecords.map((usuario) => (
+                    <tr key={usuario.id}>
+                      <td style={{ paddingLeft: "2vw" }}>{usuario.username}</td>
+                      <td style={{ paddingLeft: "4vw" }}>{usuario.first_name}</td>
+                      <td style={{ paddingLeft: "7vw" }}>{usuario.last_name}</td>
+                      <td style={{ paddingLeft: "7vw" }}>{usuario.email}</td>
+                      <td>{usuario.group}</td>
+                      <td style={{ paddingLeft: "8vw" }}>
+                        {permisos && permisos.config_usuarios && permisos.config_usuarios === 'rw' && (
+                          <button
+                            className="btn-accion"
+                            onClick={() => handleEdit(usuario)}
+                            title="Actualizar Usuario"
+                          >
+                            <FontAwesomeIcon className="icon-accion" icon={faPenToSquare} />
+                          </button>
+                        )}
+                        <button className="btn-accion" onClick={() => handleEditPassword(usuario)} title="Cambiar Contraseña">
                           <FontAwesomeIcon className="icon-accion" icon={faKey} />
                         </button>
                       </td>
-                      <td style={{ paddingRight: '10vw' }}></td>
                     </tr>
                   ))
                 )}
@@ -342,140 +465,19 @@ function ModConfigUsuario() {
         estado={estadoModal}
         cambiarEstado={cambiarEstadoModal}
         titulo={modalConfig.titulo}
+        actionType={actionType}
+        onCreate={createUsuario}
+        onUpdate={updateUsuario}
+        onUpdatePassword={updatePassword}
       >
         {modalConfig.contenido}
       </Modal>
-
-      <ModalFiltros
-        estado={estadoModalFiltros}
-        cambiarEstado={cambiarEstadoModalFiltros}
-        titulo="Agregar Filtros"
-        onCreate={applyFiltros}
-        onClear={clearFiltros}
-        actionType={"Clear"}
-      >
-        <FiltroDinamico
-          activeFilters={activeFilters}
-          onAddFilter={handleAddFilter}
-          onRemoveFilter={handleRemoveFilter}
-          onFiltroChange={handleFiltroChange}
-          filtroValues={filtroValues}
-          fieldsWithOptions={filterFields.map((field) => field)}
-        />
-        {showFilterOptions && (
-          <FilterOptions>
-            {filterFields
-              .filter((field) => !activeFilters.includes(field.id))
-              .map((field) => (
-                <FilterOptionButton
-                  style={{ marginLeft: "1vw" }}
-                  key={field.id}
-                  onClick={() => handleAddFilter(field.id)}
-                >
-                  {field.label}
-                </FilterOptionButton>
-              ))}
-          </FilterOptions>
-        )}
-        <AgregarFiltroContainer>
-          <FontAwesomeIcon
-            icon={faPlusCircle}
-            style={{ width: "4vw", height: "4vh", marginLeft: "-3.5vw" }}
-            className="add-filter-icon"
-            onClick={() => setShowFilterOptions((prev) => !prev)}
-          />
-        </AgregarFiltroContainer>
-      </ModalFiltros>
     </>
   );
 }
 
 export default ModConfigUsuario;
 
-const Boton = styled.button`
-  display: block;
-  padding: 10px 30px;
-  border-radius: 100px;
-  color: #fff;
-  background: #1766dc;
-  cursor: pointer;
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  transition: 0.3s ease all;
-`;
-
-const Contenido = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-`;
-
-const Loading = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Spinner = styled.div`
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border-left-color: #545c8c;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  animation: spin 1s ease infinite;
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;
-
-const FilterOptions = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
-`;
-
-const FilterOptionButton = styled.button`
-  background: #545c8c;
-  width: 20vw;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 9px;
-  margin: 4px 0;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const AgregarFiltroContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  color: #545c8c;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
 
 const Divtabla = styled.div`
   overflow-x: hidden;
@@ -485,11 +487,6 @@ const Divtabla = styled.div`
     width: 8px;
   }
 
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-
   &::-webkit-scrollbar-thumb {
     background: #545c8c;
     border-radius: 10px;
@@ -497,5 +494,29 @@ const Divtabla = styled.div`
 
   &::-webkit-scrollbar-thumb:hover {
     background: #3a9ee1;
+  }
+`;
+
+const Loading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Spinner = styled.div`
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #545c8c;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  animation: spin 1s ease infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;

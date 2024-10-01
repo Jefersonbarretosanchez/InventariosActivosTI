@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from rest_framework import generics, status, permissions,viewsets
+from rest_framework import generics, status, permissions, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission
 from rest_framework.response import Response
@@ -23,7 +23,7 @@ from Equipos.models import AsignacionEquipos
 from Licencias.models import AsignacionLicenciaPersona
 from ComplementosActivos.models import AsignacionAplicaciones
 from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
-from .serializers import UserSerializer,CambioContraseñaUsuarioSerializer, CambioContraseñaAdminSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
+from .serializers import UserSerializer, CambioContraseñaUsuarioSerializer, CambioContraseñaAdminSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
 from rest_framework.decorators import api_view
 
 # Create your views here.
@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 # Definir un permiso personalizado para verificar los permisos del rol
 
 # Api Control Permisos Usuarios
+
 
 class PermisosApis(BasePermission):
     def has_permission(self, request, view):
@@ -55,18 +56,19 @@ class PermisosApis(BasePermission):
         permiso = None
         if 'activos' in path:
             permiso = permisos_usuario.get('activos', 'n/a')
-            
+
         elif any(keyword in path for keyword in ['asig_equipo', 'asignar_equipo', 'actualizar_asignacion_equipo', 'desasignar_equipo', 'equipos_asignacion', 'perifericos', 'kit_perifericos', 'equipos_en_bodega', 'personas_sin_asignacion', 'perifericos_sin_asignar']):
             permiso = permisos_usuario.get('asignacion_equipos', 'n/a')
-            
+
         elif 'personas' in path:
             permiso = permisos_usuario.get('personas', 'n/a')
-            
+
         elif 'centro_costos' in path:
             permiso_personas = permisos_usuario.get('personas', 'n/a')
             permiso_licencias = permisos_usuario.get('licencias', 'n/a')
-            permiso_administracion = permisos_usuario.get('administracion', 'n/a')
-            
+            permiso_administracion = permisos_usuario.get(
+                'administracion', 'n/a')
+
             # Si el rol tiene acceso de administración, puede leer y escribir
             if request.method == 'GET':
                 if permiso_personas in ['r', 'rw'] or permiso_licencias in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
@@ -75,7 +77,7 @@ class PermisosApis(BasePermission):
                 if permiso_administracion == 'rw':  # Solo administración puede escribir
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
-            
+
         elif any(keyword in path for keyword in ['area', 'region', 'cargo', 'estado_persona']):
             # Aquí controlamos los permisos de lectura y escritura para 'area'
             permiso_personas = permisos_usuario.get('personas', 'n/a')
@@ -90,10 +92,10 @@ class PermisosApis(BasePermission):
                 if permiso_administracion == 'rw':  # Solo administración puede escribir
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
-        
+
         elif 'equipos' in path:
             permiso = permisos_usuario.get('equipos', 'n/a')
-            
+
         elif any(keyword in path for keyword in ['marca_equipo', 'so', 'memoria_ram', 'disco_duro', 'tipo_propiedad', 'tipo_equipo', 'estado_equipo', 'coordinadores', 'ubicaciones', 'estado_perifericos']):
             permiso_equipos = permisos_usuario.get('equipos', 'n/a')
             # permiso_administracion = permisos_usuario.get('administracion', 'n/a')
@@ -105,14 +107,14 @@ class PermisosApis(BasePermission):
                     if permiso_administracion == 'rw':
                         return True
                 return False
-            
-        elif any(keyword in path for keyword in ['asignar_licencia_persona', 'desasignar_licencia_persona', 'asignar_licencia_equipo', 'desasignar_licencia_equipo','licencias_sin_asignar','personas_sin_asignacion_licencia','licencias_sin_asignar_equipos','equipos_sin_asignacion_licencia']):
+
+        elif any(keyword in path for keyword in ['asignar_licencia_persona', 'desasignar_licencia_persona', 'asignar_licencia_equipo', 'desasignar_licencia_equipo', 'licencias_sin_asignar', 'personas_sin_asignacion_licencia', 'licencias_sin_asignar_equipos', 'equipos_sin_asignacion_licencia']):
             permiso = permisos_usuario.get('asignacion_licencias', 'n/a')
-            
+
         elif 'contratos' in path:
-            permiso_licencias = permisos_usuario.get('licencias','n/a')
-            permiso_contratos = permisos_usuario.get('contratos','n/a')
-            
+            permiso_licencias = permisos_usuario.get('licencias', 'n/a')
+            permiso_contratos = permisos_usuario.get('contratos', 'n/a')
+
             if request.method == 'GET':
                 if permiso_licencias in ['r', 'rw'] or permiso_contratos in ['r', 'rw']:
                     return True
@@ -120,19 +122,19 @@ class PermisosApis(BasePermission):
                 if permiso_contratos == 'rw':
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
-            
+
         elif 'licencias' in path:
-            permiso = permisos_usuario.get('licencias','n/a')
-            
+            permiso = permisos_usuario.get('licencias', 'n/a')
+
         elif 'aplicaciones' in path:
-            permiso = permisos_usuario.get('aplicaciones','n/a')
-            
+            permiso = permisos_usuario.get('aplicaciones', 'n/a')
+
         elif 'log' in path:
             permiso = permisos_usuario.get('logs', 'n/a')
-            
+
         elif 'usuarios' in path:
             permiso = permisos_usuario.get('administracion', 'n/a')
-            
+
         else:
             return False  # Ruta no reconocida, denegar acceso
 
@@ -148,10 +150,12 @@ class PermisosApis(BasePermission):
 
         # Si no se cumple ninguna condición, denegar acceso
         return False
-    
+
 # Fin Api Permisos Usuarios
 
 # APIs gestión Usuarios
+
+
 class CreacionUsuariosView(generics.ListCreateAPIView):
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
@@ -171,6 +175,15 @@ class CreacionUsuariosView(generics.ListCreateAPIView):
                 "errors": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ListaRolesView(APIView):
+    def get(self, request):
+        grupos = Group.objects.all()
+        roles = [{"value": grupo.name, "label": grupo.name}
+                 for grupo in grupos]
+        return Response(roles, status=200)
+
+
 class ActualizacionUsuariosView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -179,13 +192,14 @@ class ActualizacionUsuariosView(generics.RetrieveUpdateAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(
+            instance, data=request.data, partial=partial)
 
         if serializer.is_valid():
             # Realiza la actualización del usuario
             instance = serializer.save()
             group_name = serializer.validated_data.get('group')
-            
+
             # Actualiza el grupo
             if group_name:
                 group, created = Group.objects.get_or_create(name=group_name)
@@ -200,7 +214,8 @@ class ActualizacionUsuariosView(generics.RetrieveUpdateAPIView):
                 "message": "Error al actualizar el usuario.",
                 "errors": serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
- 
+
+
 class CambioContraseñaUsuarioView(generics.UpdateAPIView):
     """API para el cambio de contraseña directamente del usuario"""
     serializer_class = CambioContraseñaUsuarioSerializer
@@ -212,7 +227,8 @@ class CambioContraseñaUsuarioView(generics.UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
         user = self.get_object()
-        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer = self.get_serializer(
+            data=request.data, context={'request': request})
 
         if serializer.is_valid():
             # Cambiar la contraseña
@@ -220,6 +236,7 @@ class CambioContraseñaUsuarioView(generics.UpdateAPIView):
             return Response({"detail": "Contraseña actualizada correctamente."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CambioContraseñaAdminView(generics.UpdateAPIView):
     """
@@ -243,11 +260,13 @@ class CambioContraseñaAdminView(generics.UpdateAPIView):
             serializer.update(user, serializer.validated_data)
             return Response({"detail": f"La contraseña del usuario {user.username} ha sido actualizada correctamente."}, status=status.HTTP_200_OK)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)              
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 # Fin APIs Gestión Usuarios
 # --------------------------------------
 
 # Inicio APIs Tokenización Personalizada
+
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -276,6 +295,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         return response
 
+
 class MyTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Obtén el refresh token desde las cookies
@@ -302,6 +322,7 @@ class MyTokenRefreshView(TokenRefreshView):
 # --------------------------------------
 
 # Inicio APIs Personas
+
 
 class PersonaListCreate(generics.ListCreateAPIView):
     serializer_class = PersonaSerializer
@@ -377,6 +398,7 @@ class PersonaListCreate(generics.ListCreateAPIView):
         except Exception as e:
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al crear la persona'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class PersonasUpdate(generics.RetrieveUpdateAPIView):
     """Actualización Personas"""
@@ -473,6 +495,7 @@ class PersonasUpdate(generics.RetrieveUpdateAPIView):
             # Manejar cualquier otra excepción aquí si es necesario
             print(f'Error inesperado: {e}')
             return Response({'message': 'Error inesperado al actualizar la persona'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class PersonasDelete(generics.DestroyAPIView):
     """ND"""
@@ -873,6 +896,7 @@ PERMISOS_ROLES = {
         'contratos': 'rw',
         'logs': 'rw',
         'administracion': 'rw',
+        'config_usuarios': 'rw',
     },
     'Agente Mesa de Servicios': {
         'activos': 'rw',
@@ -885,6 +909,7 @@ PERMISOS_ROLES = {
         'contratos': 'rw',
         'logs': 'n/a',
         'administracion': 'n/a',
+        'config_usuarios': 'n/a',
     },
     'Agente RRHH': {
         'activos': 'n/a',
@@ -897,6 +922,7 @@ PERMISOS_ROLES = {
         'contratos': 'n/a',
         'logs': 'n/a',
         'administracion': 'n/a',
+        'config_usuarios': 'n/a',
     },
     'Agente Compras': {
         'activos': 'r',
@@ -909,6 +935,7 @@ PERMISOS_ROLES = {
         'contratos': 'r',
         'logs': 'n/a',
         'administracion': 'n/a',
+        'config_usuarios': 'n/a',
     },
     'Visitante': {
         'activos': 'r',
@@ -921,6 +948,7 @@ PERMISOS_ROLES = {
         'contratos': 'r',
         'logs': 'n/a',
         'administracion': 'n/a',
+        'config_usuarios': 'n/a',
     }
 }
 

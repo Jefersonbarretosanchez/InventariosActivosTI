@@ -11,6 +11,7 @@ const Modal = ({
   actionType,
   onCreate,
   onUpdate,
+  onUpdatePassword,
   onClear
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,11 +68,17 @@ const Modal = ({
   };
 
   const handleUpdate = async () => {
-    if (!validateForm()) return;
     setIsLoading(true);
     await onUpdate();
     setIsLoading(false);
   };
+
+  const handleUpdatePassword = async () => {
+    setIsLoading(true);
+    await onUpdatePassword();
+    setIsLoading(false);
+  };
+
 
   const handleClear = async () => {
     setIsLoading(true);
@@ -101,7 +108,7 @@ const Modal = ({
               {React.cloneElement(children, { errors, setErrors })}
             </ModalBody>
             <ModalFooter>
-              {(actionType === "create" || actionType === "update") && (
+              {(actionType === "create" || actionType === "update" || actionType === "updatePassword") && (
                 <BtnCancelar onClick={handleCloseModal} disabled={isLoading}>
                   <span>Cancelar</span>
                 </BtnCancelar>
@@ -111,6 +118,9 @@ const Modal = ({
               )}
               {actionType === "update" && (
                 <Boton onClick={handleUpdate} disabled={isLoading}>Actualizar</Boton>
+              )}
+              {actionType === "updatePassword" && (
+                <Boton onClick={handleUpdatePassword} disabled={isLoading}>Actualizar</Boton>
               )}
               {actionType === "Clear" && (
                 <>

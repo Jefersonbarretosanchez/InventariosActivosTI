@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
 from .views import obtener_permisos_usuario
@@ -29,9 +29,14 @@ urlpatterns = [
     path('activos/', views.ActivosViewSet.as_view(), name="activos"),
     path('permisos/', obtener_permisos_usuario,
          name='obtener_permisos_usuario'),
-    
-    path('usuarios/crear/', views.CreacionUsuariosView.as_view(), name="crear_usuario"),
-    path('usuarios/actualizar/<int:pk>/', views.ActualizacionUsuariosView.as_view(), name="actualizar_usuario"),
-    path('usuarios/cambio/', views.CambioContraseñaUsuarioView.as_view(), name="cambio_contraseña"),
-    path('usuarios/cambio/<int:pk>/', views.CambioContraseñaAdminView.as_view(), name="cambio_contraseña_admin"),
+
+    path('usuarios/crear/', views.CreacionUsuariosView.as_view(),
+         name="crear_usuario"),
+    path('usuarios/actualizar/<int:pk>/',
+         views.ActualizacionUsuariosView.as_view(), name="actualizar_usuario"),
+    path('usuarios/cambio/', views.CambioContraseñaUsuarioView.as_view(),
+         name="cambio_contraseña"),
+    path('usuarios/cambio/<int:pk>/', views.CambioContraseñaAdminView.as_view(),
+         name="cambio_contraseña_admin"),
+    path('usuarios/roles/', views.ListaRolesView.as_view(), name='lista_roles'),
 ]
