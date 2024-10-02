@@ -54,11 +54,50 @@ class PermisosApis(BasePermission):
 
         # Definir aquí la lógica de validación de permisos basada en la URL
         permiso = None
+
         if 'activos' in path:
             permiso = permisos_usuario.get('activos', 'n/a')
 
         elif any(keyword in path for keyword in ['asig_equipo', 'asignar_equipo', 'actualizar_asignacion_equipo', 'desasignar_equipo', 'equipos_asignacion', 'perifericos', 'kit_perifericos', 'equipos_en_bodega', 'personas_sin_asignacion', 'perifericos_sin_asignar']):
             permiso = permisos_usuario.get('asignacion_equipos', 'n/a')
+        
+        elif any(keyword in path for keyword in ['marca_equipo', 'so', 'memoria_ram', 'disco_duro', 'tipo_propiedad', 'tipo_equipo', 'estado_equipo', 'coordinadores', 'ubicaciones', 'estado_perifericos']):
+            permiso_equipos = permisos_usuario.get('equipos', 'n/a')
+            permiso_administracion = permisos_usuario.get(
+                'administracion', 'n/a')
+
+            if request.method == 'GET':
+                if permiso_equipos in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
+                    print(permiso_equipos, "GET Equipos")
+                    print(permiso_administracion, "GET Adm")
+                    return True
+            elif request.method in ['POST', 'PUT', 'DELETE']:
+                if permiso_administracion == 'rw':
+                    print(permiso_equipos, "POST Equipos")
+                    print(permiso_administracion, "POST Adm")
+                    return True
+            return False
+        
+        elif any(keyword in path for keyword in ['area', 'region', 'cargo', 'estado_persona']):
+            # Aquí controlamos los permisos de lectura y escritura para 'area'
+            permiso_personas = permisos_usuario.get('personas', 'n/a')
+            permiso_administracion = permisos_usuario.get(
+                'administracion', 'n/a')
+
+            # Si el rol tiene acceso de administración, puede leer y escribir
+            if request.method == 'GET':
+                if permiso_personas in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
+                    return True
+            elif request.method in ['POST', 'PUT', 'DELETE']:
+                if permiso_administracion == 'rw':  # Solo administración puede escribir
+                    return True
+            return False  # Si no tiene permisos adecuados, denegar acceso
+
+        elif any(keyword in path for keyword in ['asignar_licencia_persona', 'desasignar_licencia_persona', 'asignar_licencia_equipo', 'desasignar_licencia_equipo', 'licencias_sin_asignar', 'personas_sin_asignacion_licencia', 'licencias_sin_asignar_equipos', 'equipos_sin_asignacion_licencia']):
+            permiso = permisos_usuario.get('asignacion_licencias', 'n/a')
+
+        elif 'licencias' in path:
+            permiso = permisos_usuario.get('licencias', 'n/a')
 
         elif 'personas' in path:
             permiso = permisos_usuario.get('personas', 'n/a')
@@ -78,38 +117,8 @@ class PermisosApis(BasePermission):
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
 
-        elif any(keyword in path for keyword in ['area', 'region', 'cargo', 'estado_persona']):
-            # Aquí controlamos los permisos de lectura y escritura para 'area'
-            permiso_personas = permisos_usuario.get('personas', 'n/a')
-            permiso_administracion = permisos_usuario.get(
-                'administracion', 'n/a')
-
-            # Si el rol tiene acceso de administración, puede leer y escribir
-            if request.method == 'GET':
-                if permiso_personas in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
-                    return True
-            elif request.method in ['POST', 'PUT', 'DELETE']:
-                if permiso_administracion == 'rw':  # Solo administración puede escribir
-                    return True
-            return False  # Si no tiene permisos adecuados, denegar acceso
-
         elif 'equipos' in path:
             permiso = permisos_usuario.get('equipos', 'n/a')
-
-        elif any(keyword in path for keyword in ['marca_equipo', 'so', 'memoria_ram', 'disco_duro', 'tipo_propiedad', 'tipo_equipo', 'estado_equipo', 'coordinadores', 'ubicaciones', 'estado_perifericos']):
-            permiso_equipos = permisos_usuario.get('equipos', 'n/a')
-            # permiso_administracion = permisos_usuario.get('administracion', 'n/a')
-
-            if request.method == 'GET':
-                if permiso_equipos in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
-                    return True
-                elif request.method in ['POST', 'PUT', 'DELETE']:
-                    if permiso_administracion == 'rw':
-                        return True
-                return False
-
-        elif any(keyword in path for keyword in ['asignar_licencia_persona', 'desasignar_licencia_persona', 'asignar_licencia_equipo', 'desasignar_licencia_equipo', 'licencias_sin_asignar', 'personas_sin_asignacion_licencia', 'licencias_sin_asignar_equipos', 'equipos_sin_asignacion_licencia']):
-            permiso = permisos_usuario.get('asignacion_licencias', 'n/a')
 
         elif 'contratos' in path:
             permiso_licencias = permisos_usuario.get('licencias', 'n/a')
@@ -123,9 +132,6 @@ class PermisosApis(BasePermission):
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
 
-        elif 'licencias' in path:
-            permiso = permisos_usuario.get('licencias', 'n/a')
-
         elif 'aplicaciones' in path:
             permiso = permisos_usuario.get('aplicaciones', 'n/a')
 
@@ -133,7 +139,7 @@ class PermisosApis(BasePermission):
             permiso = permisos_usuario.get('logs', 'n/a')
 
         elif 'usuarios' in path:
-            permiso = permisos_usuario.get('administracion', 'n/a')
+            permiso = permisos_usuario.get('config_usuarios', 'n/a')
 
         else:
             return False  # Ruta no reconocida, denegar acceso

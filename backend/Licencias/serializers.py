@@ -235,7 +235,7 @@ class AsignacionLicenciasPersonasSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AsignacionLicenciaPersona
-        fields = ['id', 'id_trabajador', 'nombre_trabajador', 'apellido_trabajador'
+        fields = ['id', 'id_trabajador', 'nombre_trabajador', 'apellido_trabajador',
                   'id_licencia', 'nombre_licencia']
 
     def validate(self, data):

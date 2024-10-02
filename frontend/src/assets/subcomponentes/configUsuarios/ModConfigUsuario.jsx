@@ -63,7 +63,7 @@ function ModConfigUsuario() {
   };
   useEffect(() => {
     fetchRoles();
-  }, [fetchRoles]);
+  }, []);
 
 
 
