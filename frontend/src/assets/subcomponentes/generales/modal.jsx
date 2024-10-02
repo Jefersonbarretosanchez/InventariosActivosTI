@@ -146,11 +146,12 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);  /* Fondo semitransparente */
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible; /* Permitir el desbordamiento visible */
+  overflow: visible;
+  z-index: 9999; /* Asegúrate de que el modal esté por encima de todo */
 `;
 
 const ContenedorModal = styled.div`
@@ -163,7 +164,7 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
   overflow: visible; 
-  z-index: 1200;
+  z-index: 10000; /* Asegúrate de que el modal en sí tenga un z-index alto */
   animation: none;
 
   &.modal-fade-in {

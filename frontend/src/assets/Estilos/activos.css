@@ -78,7 +78,6 @@
 .usuario-info-princ {
     display: flex;
     flex-direction: column;
-    text-align: left;
 }
 
 .nombre-usuario-princ {
@@ -97,7 +96,7 @@
 
 .contenido-desplegable-princ {
     display: none;
-    width: 10vw;
+    width: 13vw;
     position: absolute;
     right: 0vw;
     background-color: #f9f9f9;
