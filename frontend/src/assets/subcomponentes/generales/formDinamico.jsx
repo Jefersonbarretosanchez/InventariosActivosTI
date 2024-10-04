@@ -6,10 +6,10 @@ import { faPlusCircle, faMinusCircle, faEyeSlash, faEye } from "@fortawesome/fre
 
 const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors, showAddPerifericoButton, actionType }) => {
   const [perifericosFields, setPerifericosFields] = useState(initialValues.perifericos || [{ value: null, label: '' }]);
-  const [showPassword, setShowPassword] = useState(false); // Estado para alternar visibilidad de la contraseña
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    setShowPassword(prevShowPassword => !prevShowPassword);  // Alterna el estado
+    setShowPassword(prevShowPassword => !prevShowPassword); 
   };
   useEffect(() => {
     const initialErrors = {};
@@ -20,7 +20,7 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
   }, [fields, setErrors]);
 
   useEffect(() => {
-    console.log("actionType:", actionType); // Agregar esta línea para depuración
+    console.log("actionType:", actionType); 
   }, [actionType]);
 
 
@@ -36,7 +36,8 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Solo se permiten nombres en formato texto' }));
     } else if ((name === "correo_personal" || name === "correo_institucional") && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Formato de correo inválido' }));
-    } else {
+    }
+    else {
       setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
     }
   };

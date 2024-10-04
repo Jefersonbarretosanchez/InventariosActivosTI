@@ -40,6 +40,12 @@ const Modal = ({
       if ((element.name === 'correo_personal' || element.name === 'correo_institucional') && element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
         newErrors[element.name] = 'Formato de correo inválido';
       }
+      if (element.name === "new_password" || element.name === "confirm_password") {
+        const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+        if (!passwordPattern.test(element.value)) {
+          newErrors[element.name] =  'La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial.';
+        } 
+      }
     });
 
     // Validación adicional para Autocomplete
@@ -74,12 +80,15 @@ const Modal = ({
   };
 
   const handleUpdatePassword = async () => {
+    // Validar formulario antes de proceder
+    if (!validateForm()) {
+      return; // Si no pasa la validación, no hacer nada
+    }
+
     setIsLoading(true);
     await onUpdatePassword();
     setIsLoading(false);
   };
-
-
   const handleClear = async () => {
     setIsLoading(true);
     await onClear();
@@ -146,12 +155,12 @@ const Overlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);  /* Fondo semitransparente */
+  background: rgba(0, 0, 0, 0.5); 
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: visible;
-  z-index: 9999; /* Asegúrate de que el modal esté por encima de todo */
+  z-index: 9999; 
 `;
 
 const ContenedorModal = styled.div`
@@ -164,7 +173,7 @@ const ContenedorModal = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
   padding: 20px;
   overflow: visible; 
-  z-index: 10000; /* Asegúrate de que el modal en sí tenga un z-index alto */
+  z-index: 10000;
   animation: none;
 
   &.modal-fade-in {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchPersonas } from "../../api";
+import { ToastContainer } from 'react-toastify';
 import '../Estilos/activos.css'
 import '../Estilos/estilosGlobal.css'
 import Header from '../subcomponentes/generales/header';
@@ -92,6 +93,7 @@ export default function Activos() {
                 totalequiposAsignados={totalequiposAsignados}
                 totalEquiposDisponibles={totalEquiposDisponibles}
                 totalLicenciasPersonas={totalLicenciasPersonas} />
+                <ToastContainer />
             <Paginate />
             <Footer />
         </div>

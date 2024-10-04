@@ -14,12 +14,10 @@ const ProtectedRoute = ({ children, requiredPermission }) => {
 
   const permisos = JSON.parse(localStorage.getItem('permisos'));
 
-  // Si el usuario tiene el rol "Agente RRHH" y está intentando acceder al módulo de Activos
   if (user?.role === 'Agente RRHH' && requiredPermission === 'activos' && permisos?.activos === 'n/a') {
     return <Navigate to="/personas" replace />;
   }
 
-  // Verificar si el usuario tiene el permiso requerido para acceder a la ruta
   if (requiredPermission && (!permisos || permisos[requiredPermission] === 'n/a')) {
     return <Navigate to="/not-authorized" />;
   }

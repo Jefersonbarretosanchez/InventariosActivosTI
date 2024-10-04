@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '../generales/modal'; // Suponiendo que Modal está en el mismo directorio
 import FormDinamico from '../generales/formDinamico'; // Importar el formulario dinámico
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRightToBracket, faGears, faLock, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightToBracket, faLock, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from "../../../api";  // Ajustar según cómo estés importando el cliente API
 
 function Header({ onLogout }) {
     const rol = localStorage.getItem('rol');
@@ -24,7 +26,8 @@ function Header({ onLogout }) {
     const navigate = useNavigate();
 
     const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
-    const [formData, setFormData] = useState({ old_password: '', new_password: '' }); // Estado del formulario
+    const [newUserData, setNewUserData] = useState({}); // Estado del formulario
+    const [isLoading, setIsLoading] = useState(false); // Estado de carga
     const [errors, setErrors] = useState({}); // Estado para los errores
 
     useEffect(() => {
@@ -45,51 +48,57 @@ function Header({ onLogout }) {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormData(prevState => ({
-            ...prevState,
+        setNewUserData(prevData => ({
+            ...prevData,
             [name]: value
         }));
     };
 
-    const validateForm = () => {
-        const newErrors = {};
-        if (!formData.old_password) {
-            newErrors.old_password = 'La contraseña actual es obligatoria';
-        }
-        if (!formData.new_password) {
-            newErrors.new_password = 'La nueva contraseña es obligatoria';
-        }
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+    const handleEditPassword = (usuario) => {
+        setUser(usuario);
+        setNewUserData({
+            old_password: "",
+            new_password: "",
+            confirm_password: ""
+        });
+        setIsModalOpen(true);
     };
 
-    // Función para manejar el cambio de contraseña
-    const handlePasswordChange = async () => {
-        if (!validateForm()) return; // Valida los campos antes de continuar
+
+    const updatePassword = async () => {
+        setIsLoading(true);
+
+        const passwordData = {
+            old_password: newUserData.old_password,
+            new_password: newUserData.new_password,
+            confirm_password: newUserData.confirm_password,
+        };
+
+        if (!passwordData.old_password || !passwordData.new_password || !passwordData.confirm_password) {
+            toast.error("Por favor, complete todos los campos.");
+            setIsLoading(false);
+            return;
+        }
+
+        if (passwordData.new_password !== passwordData.confirm_password) {
+            toast.error("Las contraseñas no coinciden.");
+            setIsLoading(false);
+            return;
+        }
 
         try {
-            const response = await fetch('/api/usuarios/cambio/', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Asumiendo que usas autenticación por token
-                },
-                body: JSON.stringify({
-                    old_password: formData.old_password,
-                    new_password: formData.new_password
-                })
-            });
+            const response = await api.put(`/api/usuarios/cambio/`, passwordData);
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || 'Error al cambiar la contraseña');
-            }
-
-            // Manejo exitoso
-            alert('Contraseña cambiada con éxito');
-            setIsModalOpen(false); // Cierra el modal
+            toast.success("Contraseña actualizada correctamente!");
+            setIsModalOpen(false);
         } catch (error) {
-            alert(error.message); // Mostrar error en caso de fallo
+            const errorMessage = error.response
+                ? error.response.data.message
+                : error.message;
+
+            toast.error(`La Contraseña Anterior es Incorrecta`);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -109,9 +118,9 @@ function Header({ onLogout }) {
                     <i className="icono-desplegable-princ">▼</i>
                 </button>
                 <div className="contenido-desplegable-princ">
-                    {/* <Link to="#" onClick={() => setIsModalOpen(true)} style={{ color: '#545c8c' }}>
+                    <Link to="#" onClick={() => handleEditPassword(user)} style={{ color: '#545c8c' }}>
                         <FontAwesomeIcon icon={faLock} style={{ width: '30px', color: '#545c8c' }} />Cambio Contraseña
-                    </Link> */}
+                    </Link>
                     <Link to="#" onClick={handleLogout} style={{ color: 'red' }}>
                         <FontAwesomeIcon icon={faArrowRightToBracket} style={{ width: '30px', color: 'red' }} />Salir
                     </Link>
@@ -124,15 +133,16 @@ function Header({ onLogout }) {
                 cambiarEstado={setIsModalOpen}
                 titulo="Cambiar Mi Contraseña"
                 actionType="updatePassword"
-                onUpdatePassword={handlePasswordChange}
+                onUpdatePassword={updatePassword}
             >
                 <FormDinamico
                     fields={[
                         { id: 'old_password', label: 'Contraseña Anterior', type: 'password' },
-                        { id: 'new_password', label: 'Nueva Contraseña', type: 'password' }
+                        { id: 'new_password', label: 'Nueva Contraseña', type: 'password' },
+                        { id: 'confirm_password', label: 'Confirmar Nueva Contraseña', type: 'password' }
                     ]}
                     disabledFields={[]}
-                    initialValues={{ old_password: '', new_password: '' }}
+                    initialValues={newUserData}
                     onInputChange={handleInputChange}
                     errors={errors}
                     setErrors={setErrors}
