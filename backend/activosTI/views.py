@@ -52,33 +52,31 @@ class PermisosApis(BasePermission):
         # Obtener la URL solicitada para saber qué API está tratando de acceder
         path = request.path
 
+
+
         # Definir aquí la lógica de validación de permisos basada en la URL
         permiso = None
 
-        if 'activos' in path:
+        if '/activos' in path:
             permiso = permisos_usuario.get('activos', 'n/a')
 
-        elif any(keyword in path for keyword in ['asig_equipo', 'asignar_equipo', 'actualizar_asignacion_equipo', 'desasignar_equipo', 'equipos_asignacion', 'perifericos', 'kit_perifericos', 'equipos_en_bodega', 'personas_sin_asignacion', 'perifericos_sin_asignar']):
+        elif any(keyword in path for keyword in ['/asig_equipo', '/asignar_equipo', '/actualizar_asignacion_equipo', '/desasignar_equipo', '/equipos_asignacion', '/perifericos', '/kit_perifericos', '/equipos_en_bodega', '/personas_sin_asignacion', '/perifericos_sin_asignar']):
             permiso = permisos_usuario.get('asignacion_equipos', 'n/a')
         
-        elif any(keyword in path for keyword in ['marca_equipo', 'so', 'memoria_ram', 'disco_duro', 'tipo_propiedad', 'tipo_equipo', 'estado_equipo', 'coordinadores', 'ubicaciones', 'estado_perifericos']):
+        elif any(keyword in path for keyword in ['/marca_equipo', '/so', '/memoria_ram', '/disco_duro', '/tipo_propiedad', '/tipo_equipo', '/estado_equipo', '/coordinadores', '/ubicaciones', '/estado_perifericos']):
             permiso_equipos = permisos_usuario.get('equipos', 'n/a')
             permiso_administracion = permisos_usuario.get(
                 'administracion', 'n/a')
 
             if request.method == 'GET':
                 if permiso_equipos in ['r', 'rw'] or permiso_administracion in ['r', 'rw']:
-                    print(permiso_equipos, "GET Equipos")
-                    print(permiso_administracion, "GET Adm")
                     return True
             elif request.method in ['POST', 'PUT', 'DELETE']:
                 if permiso_administracion == 'rw':
-                    print(permiso_equipos, "POST Equipos")
-                    print(permiso_administracion, "POST Adm")
                     return True
             return False
         
-        elif any(keyword in path for keyword in ['area', 'region', 'cargo', 'estado_persona']):
+        elif any(keyword in path for keyword in ['/area', '/region', '/cargo', '/estado_persona']):
             # Aquí controlamos los permisos de lectura y escritura para 'area'
             permiso_personas = permisos_usuario.get('personas', 'n/a')
             permiso_administracion = permisos_usuario.get(
@@ -93,16 +91,16 @@ class PermisosApis(BasePermission):
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
 
-        elif any(keyword in path for keyword in ['asignar_licencia_persona', 'desasignar_licencia_persona', 'asignar_licencia_equipo', 'desasignar_licencia_equipo', 'licencias_sin_asignar', 'personas_sin_asignacion_licencia', 'licencias_sin_asignar_equipos', 'equipos_sin_asignacion_licencia']):
+        elif any(keyword in path for keyword in ['/asignar_licencia_persona', '/desasignar_licencia_persona', '/asignar_licencia_equipo', '/desasignar_licencia_equipo', '/licencias_sin_asignar', '/personas_sin_asignacion_licencia', '/licencias_sin_asignar_equipos', '/equipos_sin_asignacion_licencia']):
             permiso = permisos_usuario.get('asignacion_licencias', 'n/a')
 
-        elif 'licencias' in path:
+        elif '/licencias' in path:
             permiso = permisos_usuario.get('licencias', 'n/a')
 
-        elif 'personas' in path:
+        elif '/personas' in path:
             permiso = permisos_usuario.get('personas', 'n/a')
 
-        elif 'centro_costos' in path:
+        elif '/centro_costos' in path:
             permiso_personas = permisos_usuario.get('personas', 'n/a')
             permiso_licencias = permisos_usuario.get('licencias', 'n/a')
             permiso_administracion = permisos_usuario.get(
@@ -117,10 +115,10 @@ class PermisosApis(BasePermission):
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
 
-        elif 'equipos' in path:
+        elif '/equipos' in path:
             permiso = permisos_usuario.get('equipos', 'n/a')
 
-        elif 'contratos' in path:
+        elif '/contratos' in path:
             permiso_licencias = permisos_usuario.get('licencias', 'n/a')
             permiso_contratos = permisos_usuario.get('contratos', 'n/a')
 
@@ -132,13 +130,13 @@ class PermisosApis(BasePermission):
                     return True
             return False  # Si no tiene permisos adecuados, denegar acceso
 
-        elif 'aplicaciones' in path:
+        elif '/aplicaciones' in path:
             permiso = permisos_usuario.get('aplicaciones', 'n/a')
 
-        elif 'log' in path:
+        elif '/log' in path:
             permiso = permisos_usuario.get('logs', 'n/a')
 
-        elif 'usuarios' in path:
+        elif '/usuarios' in path:
             permiso = permisos_usuario.get('config_usuarios', 'n/a')
 
         else:
@@ -170,11 +168,32 @@ class CreacionUsuariosView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            usuario_creado=serializer.save()
+            
+            # Intentar crear un registro en la tabla de historicos
+            try:
+                # Obtener el usuario si está disponible
+                usuario = self.request.user if self.request.user.is_authenticated else None
+
+                # Crear el registro en la tabla de historicos
+                Historicos.objects.create(
+                    usuario=usuario,
+                    correo_usuario=usuario.email if usuario else 'anonimo@example.com',
+                    tipo_cambio="Creacion",
+                    tipo_activo="Usuario",
+                    activo_modificado=usuario_creado.username,
+                    descripcion=f'Se creó el usuario "{
+                        usuario_creado.username} asignado a {usuario_creado.first_name} {usuario_creado.last_name}"'
+                )
+                print("Registro histórico creado exitosamente.")
+            except Exception as e:
+                # Manejar cualquier excepción aquí si es necesario
+                print(f'Error al crear el registro histórico: {e}')
+            
             return Response({
                 "message": "Usuario creado con éxito.",
                 "data": serializer.data
-            }, status=status.HTTP_201_CREATED)
+            }, status=status.HTTP_201_CREATED)            
         else:
             return Response({
                 "message": "Hubo un error al crear el usuario.",
