@@ -37,16 +37,23 @@ const Modal = ({
       if ((element.name === 'nombres' || element.name === 'apellidos') && element.value && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(element.value)) {
         newErrors[element.name] = 'Solo se permiten nombres en formato texto';
       }
-      if ((element.name === 'correo_personal' || element.name === 'correo_institucional') && element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
+      if ((element.name === 'correo_personal' || element.name === 'correo_institucional'|| element.name === 'email') && element.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(element.value)) {
         newErrors[element.name] = 'Formato de correo inválido';
       }
-      if (element.name === "new_password" || element.name === "confirm_password") {
+      if (element.name === "new_password" || element.name === "confirm_password"|| element.name === "password"|| element.name === "confirm_password1") {
         const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
         if (!passwordPattern.test(element.value)) {
           newErrors[element.name] =  'La contraseña debe contener al menos una letra mayúscula, un número y un carácter especial.';
         } 
       }
+      
     });
+
+    const passwordElement = document.querySelector('[name="password"]');
+    const confirmPasswordElement = document.querySelector('[name="confirm_password1"]');
+    if (passwordElement && confirmPasswordElement && passwordElement.value !== confirmPasswordElement.value) {
+      newErrors["confirm_password1"] = "Las contraseñas no coinciden";
+    }
 
     // Validación adicional para Autocomplete
     const autocompleteElements = document.querySelectorAll('.autocomplete-control');

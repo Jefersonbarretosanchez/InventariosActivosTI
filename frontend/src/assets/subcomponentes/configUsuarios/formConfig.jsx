@@ -5,6 +5,7 @@ export const ALL_INPUT_IDS = [
   "fecha_vencimiento",
   "email",
   "password",
+  "confirm_password1",
   "group",
 
 
@@ -18,6 +19,7 @@ export const formFields = [
   { id: "last_name", label: "Apellidos", type: "text", required: true },
   { id: "email", label: "Correo electrónico", type: "text", required: true },
   { id: "password", label: "Contraseña", type: "password", required: true },
+  { id: "confirm_password1", label: "Confirmar Contraseña", type: "password", required: true },
   { id: "group", label: "Rol", required: true, type: "select", options: [], }
 ];
 

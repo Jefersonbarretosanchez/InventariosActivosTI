@@ -34,7 +34,7 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Campo obligatorio' }));
     } else if ((name === "nombres" || name === "apellidos") && !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Solo se permiten nombres en formato texto' }));
-    } else if ((name === "correo_personal" || name === "correo_institucional") && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+    } else if ((name === "correo_personal" || name === "correo_institucional"|| name === "email") && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       setErrors(prevErrors => ({ ...prevErrors, [name]: 'Formato de correo inválido' }));
     }
     else {
@@ -100,14 +100,13 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
             <>
               <input
                 className="form-control"
-                type={showPassword ? "text" : "password"}  // Alterna entre "text" y "password"
+                type={showPassword ? "text" : "password"} 
                 name={field.id}
                 defaultValue={initialValues[field.id] || ''}
                 onChange={handleChange}
                 disabled={disabledFields.includes(field.id)}
                 required={field.required}
               />
-              {/* Botón para alternar la visibilidad de la contraseña */}
               <FontAwesomeIcon
                 icon={showPassword ? faEyeSlash : faEye}
                 onClick={togglePasswordVisibility}
