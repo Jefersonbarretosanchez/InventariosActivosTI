@@ -94,7 +94,10 @@ class PermisosApis(BasePermission):
 
         elif any(keyword in path for keyword in ['/asignar_licencia_persona', '/desasignar_licencia_persona', '/asignar_licencia_equipo', '/desasignar_licencia_equipo', '/licencias_sin_asignar', '/personas_sin_asignacion_licencia', '/licencias_sin_asignar_equipos', '/equipos_sin_asignacion_licencia']):
             permiso = permisos_usuario.get('asignacion_licencias', 'n/a')
-
+        
+        elif '/licencias/area' in path:
+            permiso = permisos_usuario.get('licencias', 'n/a')
+        
         elif '/licencias' in path:
             permiso = permisos_usuario.get('licencias', 'n/a')
 
