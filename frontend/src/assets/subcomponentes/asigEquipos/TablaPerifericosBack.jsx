@@ -430,6 +430,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
               />
             </div>
             <div className="iconos-acciones">
+            {permisos && permisos.asignacion_equipos && permisos.asignacion_equipos === 'rw' && (
               <FontAwesomeIcon
                 style={{ marginRight: '58vw' }}
                 className="agregar-personas"
@@ -437,6 +438,7 @@ function TablaPerifericosBack({ totalequiposAsignados, totalEquiposDisponibles, 
                 icon={faPlus}
                 title="Crear Periferico"
               />
+            )}
             </div>
           </div>
           <Divtabla style={{ maxHeight: "36.5vh", overflowY: "auto", display: "block" }} className="contenedor-tabla-activos">

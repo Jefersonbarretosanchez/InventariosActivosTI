@@ -21,6 +21,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .forms import PersonaCreacion, PersonaActualizar
 from Equipos.models import AsignacionEquipos
 from Licencias.models import AsignacionLicenciaPersona
+from Licencias.models import AsignacionLicenciasEquipo
 from ComplementosActivos.models import AsignacionAplicaciones
 from .models import Historicos, Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona
 from .serializers import UserSerializer, CambioContraseñaUsuarioSerializer, CambioContraseñaAdminSerializer, PersonaSerializer, CentroCostoSerializer, AreaSerializer, RegionSerializer, CargoSerializer, EstadoPersonaSerializer, historicoSerializer, ActivosSerializer, CustomTokenObtainPairSerializer
@@ -903,6 +904,8 @@ class ActivosViewSet(generics.ListAPIView):
                  queryset=AsignacionLicenciaPersona.objects.select_related('id_licencia')),
         Prefetch('asignacionaplicaciones_set',
                  queryset=AsignacionAplicaciones.objects.select_related('id_aplicacion')),
+        Prefetch('asignacionequipos_set__id_equipo__asignacionlicenciasequipo_set',
+                 queryset=AsignacionLicenciasEquipo.objects.select_related('id_licencia'))
     ).select_related('id_centro_costo', 'id_area', 'id_region', 'id_cargo', 'id_estado_persona')
     serializer_class = ActivosSerializer
     permission_classes = [permissions.IsAuthenticated, PermisosApis]

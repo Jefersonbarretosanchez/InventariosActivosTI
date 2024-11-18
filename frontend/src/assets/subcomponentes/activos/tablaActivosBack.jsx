@@ -126,6 +126,7 @@ function TablaActivosBack({ totalPersonasActivas, totalequiposAsignados, totalEq
       nombre_equipo: initialValues.equipos[0]?.nombre_equipo || "",
       anydesk: initialValues.equipos[0]?.anydesk || "",
       licencias: initialValues.licencias || [],
+      licencias_equipos: initialValues.licencias_equipos || [],
       aplicaciones: initialValues.aplicaciones || [],
     };
 

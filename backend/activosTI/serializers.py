@@ -6,6 +6,7 @@ from django.contrib.auth.models import User, Group
 from Equipos.models import Equipo
 from ComplementosActivos.models import Aplicaciones
 from Licencias.models import LicenciaPersona
+from Licencias.models import LicenciasEquipo
 from .models import Persona, CatCentroCosto, CatArea, CatRegion, CatCargo, CatEstadoPersona, Historicos
 
 # Inicio Gestión Tokenización
@@ -249,7 +250,7 @@ class PersonaSerializer(serializers.ModelSerializer):
 class EquipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipo
-        fields = ['nombre_equipo', 'anydesk']
+        fields = ['nombre_equipo', 'anydesk', 'modelo', 'sereal', 'procesador']
 
 
 class LicenciaPersonaSerializer(serializers.ModelSerializer):
@@ -264,9 +265,15 @@ class AplicacionesSerializer(serializers.ModelSerializer):
         fields = ['nombre_aplicativo']
 
 
+class LicenciaEquipoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LicenciasEquipo
+        fields = ['nombre_licencia', 'fecha_vencimiento']
+
 class ActivosSerializer(serializers.ModelSerializer):
     equipos = serializers.SerializerMethodField()
     licencias = serializers.SerializerMethodField()
+    licencias_equipos = serializers.SerializerMethodField()
     aplicaciones = serializers.SerializerMethodField()
     nombre_centro_costo = serializers.CharField(
         source='id_centro_costo.nombre', read_only=True)
@@ -282,8 +289,9 @@ class ActivosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Persona
         fields = ['identificacion', 'nombres', 'apellidos', 'correo_institucional',
-                  'nombre_centro_costo', 'nombre_area', 'nombre_region', 'nombre_cargo', 'fecha_ingreso_empresa', 'nombre_estado_persona',
-                  'equipos', 'licencias', 'aplicaciones']
+                  'nombre_centro_costo', 'nombre_area', 'nombre_region', 'nombre_cargo',
+                  'fecha_ingreso_empresa', 'nombre_estado_persona',
+                  'equipos', 'licencias', 'licencias_equipos', 'aplicaciones']
 
     def get_equipos(self, obj):
         equipos = [asignacion.id_equipo for asignacion in obj.asignacionequipos_set.all()]
@@ -292,6 +300,15 @@ class ActivosSerializer(serializers.ModelSerializer):
     def get_licencias(self, obj):
         licencias = [asignacion.id_licencia for asignacion in obj.asignacionlicenciapersona_set.all()]
         return LicenciaPersonaSerializer(licencias, many=True).data
+
+    def get_licencias_equipos(self, obj):
+        equipos = [asignacion.id_equipo for asignacion in obj.asignacionequipos_set.all()]
+        licencias = []
+        for equipo in equipos:
+            licencias.extend(
+                [asignacion.id_licencia for asignacion in equipo.asignacionlicenciasequipo_set.all()]
+            )
+        return LicenciaEquipoSerializer(licencias, many=True).data
 
     def get_aplicaciones(self, obj):
         aplicaciones = [asignacion.id_aplicacion for asignacion in obj.asignacionaplicaciones_set.all()]

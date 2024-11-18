@@ -4,6 +4,7 @@ import { Autocomplete, TextField } from '@mui/material';
 
 const FormDinamicoActivos = ({ fields, disabledFields, initialValues, onInputChange, errors, setErrors, currentStep }) => {
   const [licencias, setLicencias] = useState(initialValues.licencias || []);
+  const [licencias_equipos, setLicencias_Equipos] = useState(initialValues.licencias_equipos || []);
   const [aplicaciones, setAplicaciones] = useState(initialValues.aplicaciones || []);
   const [equipos, setEquipos] = useState(initialValues.equipos || []);
 
@@ -17,6 +18,7 @@ const FormDinamicoActivos = ({ fields, disabledFields, initialValues, onInputCha
 
   useEffect(() => {
     setLicencias(initialValues.licencias || []);
+    setLicencias_Equipos(initialValues.licencias_equipos || []);
     setAplicaciones(initialValues.aplicaciones || []);
     setEquipos(initialValues.equipos || []);
   }, [initialValues]);
@@ -127,39 +129,72 @@ const FormDinamicoActivos = ({ fields, disabledFields, initialValues, onInputCha
         </div>
       )}
 
-      {currentStep === 2 && (
-        <div style={{ marginTop: '-6vh' }}>
+    {currentStep === 2 && (
+      <div style={{ marginTop: '-6vh' }}>
+        {/* Licencias de Personas */}
+        <SectionTitle>Licencias Persona</SectionTitle>
+        {licencias.length === 0 ? (
+          <EmptyMessage>No tiene ninguna licencia persona asignada</EmptyMessage>
+        ) : (
+          licencias.map((licencia, index) => (
+            <div key={`licencia-persona-${index}`} style={{ marginBottom: '2vh' }}>
+              <h4>Licencia {index + 1}</h4>
+              <Label>Nombre de la Licencia</Label>
+              <input
+                className="form-control"
+                type="text"
+                name={`nombre_licencia_${index}`}
+                value={licencia.nombre_licencia}
+                disabled
+                placeholder="Nombre de la Licencia"
+              />
+              <Label>Fecha de Vencimiento</Label>
+              <input
+                className="form-control"
+                type="date"
+                name={`fecha_vencimiento_${index}`}
+                value={licencia.fecha_vencimiento}
+                disabled
+                placeholder="Fecha de Vencimiento"
+              />
+            </div>
+          ))
+        )}
 
-          {licencias.length === 0 ? (
-            <EmptyMessage style={{ marginTop: '3vh' }}>No tiene ninguna licencia asignada</EmptyMessage>
-          ) : (
-            licencias.map((licencia, index) => (
-              <div key={`licencia-${index}`}>
-                <h4>Licencia {index + 1}</h4>
-                <h9>Licencia</h9>
-                <input
-                  className="form-control"
-                  type="text"
-                  name={`nombre_licencia_${index}`}
-                  value={licencia.nombre_licencia}
-                  disabled
-                  placeholder="Nombre de la Licencia"
-                />
-                <h8>Fecha de vencimiento</h8>
-                <input
-                  className="form-control"
-                  type="date"
-                  name={`fecha_vencimiento_${index}`}
-                  label="fecha de vencimiento"
-                  value={licencia.fecha_vencimiento}
-                  disabled
-                  placeholder="Fecha de Vencimiento"
-                />
-              </div>
-            ))
-          )}
-        </div>
-      )}
+        <Divider />
+
+        <SectionTitle>Licencias Equipo</SectionTitle>
+        {licencias_equipos.length === 0 ? (
+          <EmptyMessage>No tiene ninguna licencia equipo asignada</EmptyMessage>
+        ) : (
+          licencias_equipos.map((licenciaEquipo, index) => (
+            <div key={`licencia-equipo-${index}`} style={{ marginBottom: '2vh' }}>
+              <h4>Licencia {index + 1}</h4>
+              <Label>Nombre de la Licencia</Label>
+              <input
+                className="form-control"
+                type="text"
+                name={`nombre_licencia_equipo_${index}`}
+                value={licenciaEquipo.nombre_licencia}
+                disabled
+                placeholder="Nombre de la Licencia del Equipo"
+              />
+              <Label>Fecha de Vencimiento</Label>
+              <input
+                className="form-control"
+                type="date"
+                name={`fecha_vencimiento_equipo_${index}`}
+                value={licenciaEquipo.fecha_vencimiento}
+                disabled
+                placeholder="Fecha de Vencimiento"
+              />
+            </div>
+          ))
+        )}
+      </div>
+    )}
+
+
 
       {currentStep === 3 && (
         <div style={{ marginTop: '-6vh' }}>
@@ -270,8 +305,34 @@ const ErrorMsg = styled.span`
   font-size: 12px;
 `;
 
+
+const SectionTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #545c8c;
+  margin-bottom: 1.5vh;
+  text-align: center;
+`;
+
+const Divider = styled.div`
+  width: 110%;
+  height: 2px;
+  background: linear-gradient(to left, #384295, #4f60c4);
+  margin: 2vh 0;
+`;
+
+const Label = styled.label`
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #545c8c;
+  margin-top: 1vh;
+  display: block;
+`;
+
 const EmptyMessage = styled.p`
   color: red;
   font-size: 14px;
   margin-top: 10px;
+  text-align: center;
 `;
+

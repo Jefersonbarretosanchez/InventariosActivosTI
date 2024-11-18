@@ -113,7 +113,7 @@ const FormDinamico = ({ fields, disabledFields, initialValues, onInputChange, er
                 style={{
                   position: 'absolute',
                   right: '10px',
-                  top: '65%',
+                  top: '6vh',
                   transform: 'translateY(-50%)',
                   cursor: 'pointer',
                 }}

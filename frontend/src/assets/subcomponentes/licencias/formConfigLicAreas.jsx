@@ -33,7 +33,7 @@ export const formFields = [
   {
     id: "no_ticket",
     label: "N° Ticket",
-    type: "number",
+    type: "text",
     required: true,
   },
   {
