@@ -114,12 +114,39 @@ const FormDinamicoActivos = ({ fields, disabledFields, initialValues, onInputCha
                   disabled
                   placeholder="Nombre del Equipo"
                 />
-                <h9>Serial</h9>
+                <h9>Modelo</h9>
+                <input
+                  className="form-control"
+                  type="text"
+                  name={`anydesk_${index}`}
+                  value={equipo.modelo}
+                  disabled
+                  placeholder="AnyDesk"
+                />
+                <h9>AnyDesk</h9>
                 <input
                   className="form-control"
                   type="text"
                   name={`anydesk_${index}`}
                   value={equipo.anydesk}
+                  disabled
+                  placeholder="AnyDesk"
+                />
+                <h9>Serial</h9>
+                <input
+                  className="form-control"
+                  type="text"
+                  name={`anydesk_${index}`}
+                  value={equipo.sereal}
+                  disabled
+                  placeholder="AnyDesk"
+                />
+                <h9>Procesador</h9>
+                <input
+                  className="form-control"
+                  type="text"
+                  name={`anydesk_${index}`}
+                  value={equipo.procesador}
                   disabled
                   placeholder="AnyDesk"
                 />

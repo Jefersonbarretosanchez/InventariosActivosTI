@@ -312,7 +312,7 @@ function TablaLicAreasBack({ totalLicenciasEquipos, totalLicenciasPersonas }) {
     });
 
     if (action === "create") {
-      initialValues.id_estado_licencia = estadoLicencia.find(e => e.label === "Activa")?.value || "";
+      initialValues.id_estado_licencia = estadoLicencia.find(e => e.label === "Asignada")?.value || "";
       fieldsWithOptions = fieldsWithOptions.filter(field => field.id !== "id_estado_licencia");
     }
 
