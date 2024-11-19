@@ -21,7 +21,11 @@ class LicenciaPersonaListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
-        return LicenciaPersona.objects.all().order_by('-id_licencia')
+        return LicenciaPersona.objects.select_related(
+            'id_estado_licencia',
+            'id_contrato',
+            'id_solicitante',
+        ).all().order_by('-id_licencia')
 
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -155,7 +159,11 @@ class LicenciasEquiposListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
     def get_queryset(self):
-        return LicenciasEquipo.objects.all().order_by('-id_licencia')
+        return LicenciasEquipo.objects.select_related(
+            'id_estado_licencia',
+            'id_contrato',
+            'id_solicitante',
+        ).all().order_by('-id_licencia')
 
     def perform_create(self, serializer):
         # Guardar la nueva Equipo
@@ -570,7 +578,10 @@ class LicenciasPersonasAsignacionViewSet(generics.ListAPIView):
 
 
 class AsignarLicenciaPersonaView(generics.ListCreateAPIView):
-    queryset = AsignacionLicenciaPersona.objects.all()
+    queryset = AsignacionLicenciaPersona.objects.select_related(
+            'id_trabajador',
+            'id_licencia',
+        ).all().order_by('id')
     serializer_class = AsignacionLicenciasPersonasSerializer
     permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
@@ -703,7 +714,10 @@ class DesasignarLicPerView(generics.RetrieveUpdateAPIView):
         return Response({"detail": "La licencia ha sido desasignado y el registro ha sido eliminado."}, status=status.HTTP_204_NO_CONTENT)
 # vistas APIs asignación licencias Equipos
 class AsignarLicenciaEquiposView(generics.ListCreateAPIView):
-    queryset = AsignacionLicenciasEquipo.objects.all()
+    queryset = AsignacionLicenciasEquipo.objects.select_related(
+            'id_equipo',
+            'id_licencia',
+        ).all().order_by('id')
     serializer_class = AsignacionLicenciasEquiposSerializer
     permission_classes = [permissions.IsAuthenticated, PermisosApis]
 
