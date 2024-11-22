@@ -5,3 +5,5 @@ package-lock.json
 package.json
 backend/*.pyc
 *.pyc
+backend/backend/settings.py
+frontend/.env
